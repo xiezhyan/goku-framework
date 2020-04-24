@@ -14,6 +14,7 @@
     <modules>
         <module>tools-boot-starter</module>
         <module>upload-boot-starter</module>
+        <module>lock-boot-starter</module>
     </modules>
 
     <groupId>top.zopx.starter</groupId>
@@ -37,10 +38,14 @@
         <cab.junit.version>4.12</cab.junit.version>
 
         <!--upload starter-->
-
         <oss.version>3.8.0</oss.version>
         <fastdfs.version>1.27.2</fastdfs.version>
         <!--upload starter-->
+
+        <!--lock starter-->
+        <cab.curator.version>4.2.0</cab.curator.version>
+        <cab.zookeeper.version>3.5.6</cab.zookeeper.version>
+        <!--lock end-->
     </properties>
 
     <dependencyManagement>
@@ -109,8 +114,49 @@
                 <artifactId>fastdfs-client</artifactId>
                 <version>${fastdfs.version}</version>
             </dependency>
-
             <!--upload starter-->
+
+            <!--lock starter-->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${cab.curator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${cab.curator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-client</artifactId>
+                <version>${cab.curator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${cab.zookeeper.version}</version>
+            </dependency>
+            <!--lock end-->
         </dependencies>
     </dependencyManagement>
 
