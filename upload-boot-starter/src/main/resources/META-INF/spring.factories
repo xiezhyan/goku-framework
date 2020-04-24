@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.zopx.starter.upload.auto.UploadAutoConfig
