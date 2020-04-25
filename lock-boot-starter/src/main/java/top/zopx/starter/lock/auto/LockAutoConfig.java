@@ -20,12 +20,11 @@ import top.zopx.starter.lock.service.impl.ZookeeperLockService;
  */
 @Configuration
 @EnableConfigurationProperties(LockProperties.class)
-@ConditionalOnBean(LockService.class)
 public class LockAutoConfig {
 
     @Bean
     @ConditionalOnClass(CuratorFramework.class)
-    public LockService fileManageService() {
+    public LockService zookeeperLockService() {
         return new ZookeeperLockService();
     }
 }

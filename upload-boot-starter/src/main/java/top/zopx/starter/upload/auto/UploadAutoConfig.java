@@ -20,12 +20,11 @@ import top.zopx.starter.upload.service.impl.OssUploadManage;
  */
 @Configuration
 @EnableConfigurationProperties(UploadProperties.class)
-@ConditionalOnBean(FileManageService.class)
 public class UploadAutoConfig {
 
     @Bean
     @ConditionalOnClass(OSS.class)
-    public FileManageService fileManageService() {
+    public FileManageService ossFileManageService() {
         return new OssUploadManage();
     }
 }

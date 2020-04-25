@@ -48,7 +48,7 @@ public class UploadProperties {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = UploadProperties.PREFIX + "." + OssProperties.PREFIX, name = {"endpoint", "accessKeyId", "accessKeySecret", "bucketName"})
+        @ConditionalOnProperty(prefix = UploadProperties.PREFIX + "." + OssProperties.PREFIX, name = {"endpoint", "access-key-id", "access-key-secret", "bucket-name"})
         public OSS ossClient() {
             return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         }

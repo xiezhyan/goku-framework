@@ -11,5 +11,4 @@ public interface LockService {
     void lock(String key);
 
     void unLock();
-
 }
