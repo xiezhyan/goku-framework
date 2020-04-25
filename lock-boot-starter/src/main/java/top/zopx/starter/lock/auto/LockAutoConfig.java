@@ -1,6 +1,7 @@
 package top.zopx.starter.lock.auto;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,10 +18,9 @@ import top.zopx.starter.lock.service.impl.ZookeeperLockService;
  * @author sanq.Yan
  * @date 2020/4/24
  */
-@Order(1)
 @Configuration
 @EnableConfigurationProperties(LockProperties.class)
-@ConditionalOnMissingBean(LockService.class)
+@ConditionalOnBean(LockService.class)
 public class LockAutoConfig {
 
     @Bean

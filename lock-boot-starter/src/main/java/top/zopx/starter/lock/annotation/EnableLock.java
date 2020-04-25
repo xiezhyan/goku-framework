@@ -1,5 +1,6 @@
 package top.zopx.starter.lock.annotation;
 
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.annotation.Import;
 import top.zopx.starter.lock.auto.LockAutoConfig;
 

@@ -1,5 +1,6 @@
 package top.zopx.starter.upload.annotation;
 
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.annotation.Import;
 import top.zopx.starter.upload.auto.UploadAutoConfig;
 
