@@ -2,9 +2,11 @@ package top.zopx.starter.upload.auto;
 
 import com.aliyun.oss.OSS;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.service.FileManageService;
 import top.zopx.starter.upload.service.impl.OssUploadManage;
@@ -15,8 +17,10 @@ import top.zopx.starter.upload.service.impl.OssUploadManage;
  * @author sanq.Yan
  * @date 2020/4/24
  */
+@Order(2)
 @Configuration
 @EnableConfigurationProperties(UploadProperties.class)
+@ConditionalOnMissingBean(FileManageService.class)
 public class UploadAutoConfig {
 
     @Bean
