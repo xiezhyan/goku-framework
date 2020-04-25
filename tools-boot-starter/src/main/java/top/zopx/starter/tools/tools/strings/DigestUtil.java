@@ -1,11 +1,7 @@
 package top.zopx.starter.tools.tools.strings;
 
 import lombok.SneakyThrows;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import org.springframework.util.Base64Utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -56,9 +52,8 @@ public class DigestUtil {
     /**
      * base64加密
      */
-    public String base64Encode(String msg){
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(msg.getBytes(StandardCharsets.UTF_8));
+    public String base64Encode(String msg) {
+        return Base64Utils.encodeToString(msg.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -66,7 +61,6 @@ public class DigestUtil {
      */
     @SneakyThrows
     public String base64Decode(String msg) {
-        BASE64Decoder decoder = new BASE64Decoder();
-        return new String(decoder.decodeBuffer(msg), StandardCharsets.UTF_8);
+        return new String(Base64Utils.decodeFromString(msg));
     }
 }
