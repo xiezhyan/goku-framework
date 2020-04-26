@@ -15,6 +15,7 @@
         <module>tools-boot-starter</module>
         <module>upload-boot-starter</module>
         <module>lock-boot-starter</module>
+        <module>sms-boot-starter</module>
     </modules>
 
     <groupId>top.zopx.starter</groupId>
@@ -37,8 +38,10 @@
 
         <cab.junit.version>4.12</cab.junit.version>
 
+        <cab.lang3.version>3.9</cab.lang3.version>
+
         <!--upload starter-->
-        <oss.version>3.8.0</oss.version>
+        <aliyun.oss.version>3.8.0</aliyun.oss.version>
         <fastdfs.version>1.27.2</fastdfs.version>
         <!--upload starter-->
 
@@ -46,6 +49,11 @@
         <cab.curator.version>4.2.0</cab.curator.version>
         <cab.zookeeper.version>3.5.6</cab.zookeeper.version>
         <!--lock end-->
+
+        <!--sms starter-->
+        <aliyun.sms.version>4.1.0</aliyun.sms.version>
+        <aliyun.sms.dysmsapi.version>1.1.0</aliyun.sms.dysmsapi.version>
+        <!--sms starter-->
     </properties>
 
     <dependencyManagement>
@@ -106,7 +114,7 @@
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
-                <version>${oss.version}</version>
+                <version>${aliyun.oss.version}</version>
             </dependency>
 
             <dependency>
@@ -157,6 +165,25 @@
                 <version>${cab.zookeeper.version}</version>
             </dependency>
             <!--lock end-->
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${cab.lang3.version}</version>
+            </dependency>
+
+            <!--sms starter-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.sms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun.sms.dysmsapi.version}</version>
+            </dependency>
+            <!--sms starter-->
         </dependencies>
     </dependencyManagement>
 
