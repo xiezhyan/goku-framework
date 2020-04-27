@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @date 2020/1/26
  */
 public class MatcherUtil {
-    public static final String EMAIL_REGEX = "[\\\\w!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[\\\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\\\w](?:[\\\\w-]*[\\\\w])?\\\\.)+[\\\\w](?:[\\\\w-]*[\\\\w])?";
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     public static final String URL_REGEX = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
     public static final String PHONE_REGEX = "^(\\d{3,4}-)?\\d{6,8}$";
     public static final String PASSWORD_REGEX = "(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}";

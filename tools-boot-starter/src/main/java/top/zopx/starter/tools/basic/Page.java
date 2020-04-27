@@ -23,10 +23,10 @@ public class Page<T> implements Serializable {
     private List<T> datas;
 
     //页码列表的开始索引
-    private int beginPageIndex;
+    private long beginPageIndex;
 
     //页码列表的结束索引
-    private int endPageIndex;
+    private long endPageIndex;
 
     public Page(Pagination pagination, List<T> datas) {
         this.datas = datas;
