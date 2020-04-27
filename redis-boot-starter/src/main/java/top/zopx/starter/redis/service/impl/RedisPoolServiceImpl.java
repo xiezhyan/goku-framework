@@ -284,10 +284,11 @@ public class RedisPoolServiceImpl implements RedisPoolService {
     @Override
     public GeoResults<RedisGeoCommands.GeoLocation<Object>> getGeo(String key,
                                                                    Object member,
-                                                                   double radius,
+                                                                   double radius,    // 不超过尺寸
                                                                    Long limit,
                                                                    Order order) {
-        Distance distance = new Distance(radius);
+        Distance distance = new Distance(radius,
+                RedisGeoCommands.DistanceUnit.KILOMETERS);
 
         return redisTemplate.opsForGeo()
                 .radius(key,
@@ -300,10 +301,12 @@ public class RedisPoolServiceImpl implements RedisPoolService {
     @Override
     public GeoResults<RedisGeoCommands.GeoLocation<Object>> getGeo(String key,
                                                                    Point center,
-                                                                   double radius,
+                                                                   double radius,   // 不超过尺寸
                                                                    Long limit,
                                                                    Order order) {
-        Circle circle = new Circle(center, radius);
+        Circle circle = new Circle(center,
+                new Distance(radius,
+                        RedisGeoCommands.DistanceUnit.KILOMETERS));
 
         return redisTemplate.opsForGeo()
                 .radius(key,
@@ -314,7 +317,7 @@ public class RedisPoolServiceImpl implements RedisPoolService {
     @Override
     public Distance getDist(String key, Object member1, Object member2) {
         return redisTemplate.opsForGeo()
-                .distance(key, member1, member2);
+                .distance(key, member1, member2, RedisGeoCommands.DistanceUnit.KILOMETERS);
     }
 
     @Override
@@ -358,7 +361,7 @@ public class RedisPoolServiceImpl implements RedisPoolService {
         }
 
         String lua = "local time = tonumber(redis.call('TTL', KEYS[1]) or '0') " +
-                "if time < ARGV[2] then " +
+                "if time < tonumber(ARGV[2]) then " +
                 "redis.call('EXPIRE', KEYS[1], ARGV[1])" +
                 "end";
 
@@ -425,9 +428,13 @@ public class RedisPoolServiceImpl implements RedisPoolService {
 
     private RedisGeoCommands.GeoRadiusCommandArgs getGeoRadiusCommandArgs(Long limit, Order order) {
 
-        RedisGeoCommands.GeoRadiusCommandArgs geoRadiusCommandArgs = RedisGeoCommands.GeoRadiusCommandArgs
-                .newGeoRadiusArgs()
-                .limit(limit);
+        ;
+
+        RedisGeoCommands.GeoRadiusCommandArgs geoRadiusCommandArgs =
+                RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs().
+                        includeDistance().
+                        includeCoordinates().
+                        limit(limit);
 
         switch (order) {
             case ASC:
