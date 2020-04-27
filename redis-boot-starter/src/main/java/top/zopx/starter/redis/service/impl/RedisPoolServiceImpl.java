@@ -288,7 +288,7 @@ public class RedisPoolServiceImpl implements RedisPoolService {
                                                                    Long limit,
                                                                    Order order) {
         Distance distance = new Distance(radius,
-                RedisGeoCommands.DistanceUnit.KILOMETERS);
+                RedisGeoCommands.DistanceUnit.METERS);
 
         return redisTemplate.opsForGeo()
                 .radius(key,
@@ -306,7 +306,7 @@ public class RedisPoolServiceImpl implements RedisPoolService {
                                                                    Order order) {
         Circle circle = new Circle(center,
                 new Distance(radius,
-                        RedisGeoCommands.DistanceUnit.KILOMETERS));
+                        RedisGeoCommands.DistanceUnit.METERS));
 
         return redisTemplate.opsForGeo()
                 .radius(key,
@@ -317,7 +317,7 @@ public class RedisPoolServiceImpl implements RedisPoolService {
     @Override
     public Distance getDist(String key, Object member1, Object member2) {
         return redisTemplate.opsForGeo()
-                .distance(key, member1, member2, RedisGeoCommands.DistanceUnit.KILOMETERS);
+                .distance(key, member1, member2, RedisGeoCommands.DistanceUnit.METERS);
     }
 
     @Override
