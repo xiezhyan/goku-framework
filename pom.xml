@@ -17,6 +17,7 @@
         <module>lock-boot-starter</module>
         <module>sms-boot-starter</module>
         <module>redis-boot-starter</module>
+        <module>step-up-boot-starter</module>
     </modules>
 
     <groupId>top.zopx.starter</groupId>
