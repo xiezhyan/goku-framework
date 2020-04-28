@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import top.zopx.starter.step.up.constant.StepUpType;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * top.zopx.starter.step.up.config.StepUpProperties
@@ -14,13 +16,13 @@ import java.io.File;
  * @author sanq.Yan
  * @date 2020/4/28
  */
-@ConfigurationProperties(prefix = "step.up")
+@ConfigurationProperties(StepUpProperties.PREFIX)
 @Configuration
 @Component
 @Data
 public class StepUpProperties {
 
-    private Boolean overrided = false;
+    public static final String PREFIX = "step.up";
 
     private String packageName;
 
@@ -32,7 +34,13 @@ public class StepUpProperties {
 
     private String projectName;
 
+    private Boolean overrided = false;
+
+    private List<String> tableList = new ArrayList<>();
+
+
     public String getRootPath() {
         return System.getProperty("user.dir") + File.separator + projectName;
     }
+
 }

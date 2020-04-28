@@ -28,7 +28,6 @@ public class TableDataDao {
     @Resource
     private StepUpProperties stepUpProperties;
 
-    @PostConstruct
     public void init() {
         getTable().forEach(
                 table -> TableData.MAP.put(

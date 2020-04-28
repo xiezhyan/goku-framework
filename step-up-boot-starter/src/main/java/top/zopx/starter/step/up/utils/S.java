@@ -1,6 +1,8 @@
 package top.zopx.starter.step.up.utils;
 
 import freemarker.template.Template;
+import org.springframework.util.CollectionUtils;
+import top.zopx.starter.step.up.config.OverrideProperties;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,16 +49,27 @@ public class S {
         return basePath + File.separator + path;
     }
 
-    public static File createFile(String path, String fileName) {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static File createFile(String path, String fileName, OverrideProperties overrided, String tableName) {
         File file = new File(getFilePath(path, fileName));
 
-        new File(path).mkdirs();
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        boolean isOverride = CollectionUtils.isEmpty(overrided.getTableList()) ?
+                                overrided.getOverrided() :
+                                (overrided.getTableList().contains(tableName) && overrided.getOverrided());
+
+
+        if (!file.exists() || isOverride) {
+
+            new File(path).mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return file;
         }
-        return file;
+        return null;
     }
 
     public static void write(Template template, String path, File file, Map<String, Object> map) throws Exception {

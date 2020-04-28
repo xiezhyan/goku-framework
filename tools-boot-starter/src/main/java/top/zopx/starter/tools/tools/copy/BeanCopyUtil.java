@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * com.wj.product.adx.utils.BeanCopyUtil
- *
  * @author sanq.Yan
  * @date 2020/4/28
  */

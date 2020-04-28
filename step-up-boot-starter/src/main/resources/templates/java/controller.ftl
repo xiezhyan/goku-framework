@@ -32,12 +32,10 @@ public class ${table.javaName?cap_first}Controller {
 
 	@GetMapping("/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:get"})
-	public Response get(@PathVariable("id")
-							<#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
+	public Response get(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
 
 		// 查询详情
-		${table.javaName?cap_first}Vo ${table.javaName}Vo =
-				${table.javaName}Service.findById(<#list fields as field><#if field.priKey>${field.javaColumnName}</#if></#list>);
+		${table.javaName?cap_first}Vo ${table.javaName}Vo = ${table.javaName}Service.findById(<#list fields as field><#if field.priKey>${field.javaColumnName}</#if></#list>);
 
 		return ${table.javaName}Vo != null ?
                     Response.builder().build().success(${table.javaName}Vo) :
@@ -48,6 +46,10 @@ public class ${table.javaName?cap_first}Controller {
 	@GetMapping(value="/")
 	@AuthorityAnnotation(keys={"${table.javaName}:list"})
 	public Response findList(${table.javaName?cap_first}Vo ${table.javaName}Vo, Pagination pagination) {
+
+		<#if type == "jpa">
+		pagination.setCurrentIndex(pagination.getCurrentIndex() - 1);
+		</#if>
 
 		if (null != pagination && 0 < pagination.getCurrentIndex()) {
 			// 分页查询列表
@@ -71,7 +73,9 @@ public class ${table.javaName?cap_first}Controller {
 
 		int result = ${table.javaName}Service.delete(${table.javaName}Vo);
 
-		return result != 0 ? Response.builder().build().success() : Response.builder().build().failure(String.format("删除ID：%s出错", <#list fields as field><#if field.columnKey == "PRI">${field.javaColumnName}</#if></#list>));
+		return result != 0 ?
+					Response.builder().build().success() :
+					Response.builder().build().failure(String.format("删除ID：%s出错", <#list fields as field><#if field.columnKey == "PRI">${field.javaColumnName}</#if></#list>));
 	}
 
 	@PostMapping(value="/")
@@ -80,13 +84,15 @@ public class ${table.javaName?cap_first}Controller {
 
 		int result = ${table.javaName}Service.save(${table.javaName}Vo);
 
-		return result != 0 ? Response.builder().build().success() : Response.builder().build().failure();
+		return result != 0 ?
+					Response.builder().build().success() :
+					Response.builder().build().failure();
 	}
 
 	@PutMapping(value = "/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:update"})
 	public Response updateByKey(@RequestBody ${table.javaName?cap_first}Vo ${table.javaName}Vo,
-                                    @PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
+								@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
 
 		int result = ${table.javaName}Service.update(${table.javaName}Vo, <#list fields as field><#if field.priKey>${field.javaColumnName}</#if></#list>);
 

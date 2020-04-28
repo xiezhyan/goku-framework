@@ -4,60 +4,57 @@
 
     <resultMap type="${table.javaName?cap_first}" id="${table.javaName}Map">
 <#list fields as field>
-    <#if field.columnKey == "PRI">
-        <id column="${field.columnName}" property="${field.javaField}"/>
+    <#if field.priKey>
+        <id column="${field.columnName}" property="${field.javaColumnName}"/>
     <#else>
-        <result column="${field.columnName}" property="${field.javaField}"/>
+        <result column="${field.columnName}" property="${field.javaColumnName}"/>
     </#if>
 </#list>
     </resultMap>
 
-    <sql id="${table.name}_columns">
-        <#list fields as field> ${table.name}.${field.columnName}<#if field_index + 1 != fields?size>,</#if></#list>
+    <sql id="${table.tableName}_columns">
+        <#list fields as field> ${table.tableName}.${field.columnName}<#if field_index + 1 != fields?size>,</#if></#list>
     </sql>
 
-    <sql id="${table.name}_where">
-        <if test="query != null">
+    <sql id="${table.tableName}_where">
+        <if test="${table.javaName} != null">
     <#list fields as field>
         <#if (field.javaType!"") == "String">
-            <if test="query.${field.javaField} !=null and query.${field.javaField} != ''">
-                <#if field_index != 0>AND </#if>${table.name}.${field.columnName} LIKE
-                CONCAT('%',${r"#{query" + "." + field.javaField + "}"},'%')
+            <if test="${table.javaName}.${field.javaColumnName} !=null and ${table.javaName}.${field.javaColumnName} != ''">
+                <#if field_index != 0>AND </#if>${table.tableName}.${field.columnName} LIKE CONCAT('%',${r"#{" + "${table.javaName}." + field.javaColumnName + "}"},'%')
             </if>
         <#else>
-            <if test="query.${field.javaField} !=null ">
-                <#if field_index != 0>AND </#if>${table.name}.${field.columnName}
-                = ${r"#{query" + "." + field.javaField + "}"}
+            <if test="${table.javaName}.${field.javaColumnName} !=null ">
+                <#if field_index != 0>AND </#if>${table.tableName}.${field.columnName} = ${r"#{" + "${table.javaName}." + field.javaColumnName + "}"}
             </if>
         </#if>
     </#list>
         </if>
     </sql>
 
-    <sql id="${table.name}_del_where">
+    <sql id="${table.tableName}_del_where">
 <#list fields as field>
     <#if (field.javaType!"") == "String">
-        <if test="${field.javaField} !=null and ${field.javaField} != ''">
-            <#if field_index != 0>AND </#if>${field.columnName} LIKE CONCAT('%',${r"#{" + field.javaField + "}"}
-            ,'%')
+        <if test="${field.javaColumnName} !=null and ${field.javaColumnName} != ''">
+            <#if field_index != 0>AND </#if>${field.columnName} LIKE CONCAT('%',${r"#{" + field.javaColumnName + "}"},'%')
         </if>
     <#else>
-        <if test="${field.javaField} !=null ">
-            <#if field_index != 0>AND </#if>${field.columnName} = ${r"#{" + field.javaField + "}"}
+        <if test="${field.javaColumnName} !=null ">
+            <#if field_index != 0>AND </#if>${field.columnName} = ${r"#{" + field.javaColumnName + "}"}
         </if>
     </#if>
 </#list>
     </sql>
 
     <select id="findById" resultMap="${table.javaName}Map"
-            parameterType="<#list fields as field><#if field.columnKey == "PRI">${field.javaType}</#if></#list>">
+            parameterType="<#list fields as field><#if field.priKey>${field.javaType}</#if></#list>">
         SELECT
-        <include refid="${table.name}_columns"/>
-        FROM ${table.name} ${table.name}
+        <include refid="${table.tableName}_columns"/>
+        FROM ${table.tableName} ${table.tableName}
         WHERE
     <#list fields as field>
-        <#if field.columnKey == "PRI">
-            ${table.name}.${field.columnName} = ${r"#{id}"}
+        <#if field.priKey>
+            ${table.tableName}.${field.columnName} = ${r"#{id}"}
         </#if>
     </#list>
         LIMIT 1
@@ -65,19 +62,19 @@
 
     <select id="findList" resultMap="${table.javaName}Map">
         SELECT
-        <include refid="${table.name}_columns"/>
-        FROM ${table.name} ${table.name}
+        <include refid="${table.tableName}_columns"/>
+        FROM ${table.tableName} ${table.tableName}
         <where>
-            <include refid="${table.name}_where"/>
+            <include refid="${table.tableName}_where"/>
         </where>
     </select>
 
     <select id="findListByPage" resultMap="${table.javaName}Map">
         SELECT
-        <include refid="${table.name}_columns"/>
-        FROM ${table.name}  ${table.name}
+        <include refid="${table.tableName}_columns"/>
+        FROM ${table.tableName}  ${table.tableName}
         <where>
-            <include refid="${table.name}_where"/>
+            <include refid="${table.tableName}_where"/>
         </where>
         LIMIT ${r"#{startPage}"},${r"#{pageSize}"}
     </select>
@@ -85,66 +82,66 @@
     <select id="findCount" resultType="java.lang.Integer">
         SELECT
         COUNT(*)
-        FROM ${table.name} ${table.name}
+        FROM ${table.tableName} ${table.tableName}
         <where>
-            <include refid="${table.name}_where"/>
+            <include refid="${table.tableName}_where"/>
         </where>
     </select>
 
     <delete id="delete">
-        DELETE FROM ${table.name}
+        DELETE FROM ${table.tableName}
         <where>
-            <include refid="${table.name}_del_where"/>
+            <include refid="${table.tableName}_del_where"/>
         </where>
     </delete>
 
     <update id="update" parameterType="${table.javaName?cap_first}">
-        UPDATE ${table.name}
+        UPDATE ${table.tableName}
         <set>
         <#list fields as field>
-            <if test="entity.${field.javaField} !=null ">
-                ${field.columnName} = ${r"#{" + "entity." + field.javaField + "}"},
+            <if test="${table.javaName}.${field.javaColumnName} !=null ">
+                ${field.columnName} = ${r"#{" + "${table.javaName}." + field.javaColumnName + "}"},
             </if>
         </#list>
         </set>
         WHERE
     <#list fields as field>
-        <#if field.columnKey == "PRI">
-            ${field.columnName} = ${r"#{" + field.javaField + "}"}
+        <#if field.priKey>
+            ${field.columnName} = ${r"#{" + field.javaColumnName + "}"}
         </#if>
     </#list>
     </update>
 
     <insert id="save" parameterType="${table.javaName?cap_first}">
-        INSERT INTO ${table.name}
+        INSERT INTO ${table.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list fields as field>
-            <if test="${field.javaField} !=null ">
+            <if test="${field.javaColumnName} !=null ">
                 ${field.columnName},
             </if>
         </#list>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         <#list fields as field>
-            <if test="${field.javaField} !=null ">
-                ${r"#{" + field.javaField + "}"},
+            <if test="${field.javaColumnName} !=null ">
+                ${r"#{" + field.javaColumnName + "}"},
             </if>
         </#list>
         </trim>
     </insert>
 
     <insert id="saveByList">
-        INSERT INTO ${table.name}
+        INSERT INTO ${table.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list fields as field>
             ${field.columnName},
         </#list>
         </trim>
         VALUES
-        <foreach collection="saves" item="${table.javaName}Vo" separator=",">
+        <foreach collection="${table.javaName}List" item="${table.javaName}" separator=",">
         (
         <#list fields as field>
-            ${r"#{" + table.javaName + "Vo." + field.javaField + "}"}<#if field_index + 1 != fields?size>,</#if>
+            ${r"#{" + table.javaName + "." + field.javaColumnName + "}"}<#if field_index + 1 != fields?size>,</#if>
         </#list>
         )
         </foreach>
