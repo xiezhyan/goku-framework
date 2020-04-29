@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import top.zopx.starter.step.up.constant.StepUpType;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class StepUpProperties {
 
     private StepUpType type = StepUpType.MYBATIS;
 
-    private String projectName;
+    private String projectName = "";
 
     private Boolean overrided = false;
 
@@ -40,7 +41,10 @@ public class StepUpProperties {
 
 
     public String getRootPath() {
-        return System.getProperty("user.dir") + File.separator + projectName;
+        if (!StringUtils.isEmpty(projectName))
+            return System.getProperty("user.dir") + File.separator + projectName;
+
+        return System.getProperty("user.dir");
     }
 
 }

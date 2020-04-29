@@ -28,6 +28,8 @@ public class Table {
 
     public void updateJavaName(String prefix) {
 
+        this.javaName = this.tableName;
+
         if (!StringUtils.isEmpty(prefix)) {
             this.javaName = this.tableName.replace(prefix, "");
         }
