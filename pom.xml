@@ -14,7 +14,6 @@
     <modules>
         <module>tools-boot-starter</module>
         <module>upload-boot-starter</module>
-        <module>lock-boot-starter</module>
         <module>sms-boot-starter</module>
         <module>redis-boot-starter</module>
         <module>step-up-boot-starter</module>
