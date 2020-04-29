@@ -2,7 +2,6 @@ package top.zopx.starter.tools.interceptors;
 
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,8 +15,6 @@ import top.zopx.starter.tools.tools.web.ParamUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -65,14 +62,16 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             //是否忽略token验证
             IgnoreTokenSecurity s = hm.getMethodAnnotation(IgnoreTokenSecurity.class);
 
-            if (s == null) {
-                Object o = objectMap.get(SecurityField.TOKEN.getName());
-                if (o == null)
-                    throw new BusException(String.format("参数%s不存在", SecurityField.TOKEN.getName()), BusCode.PARAM_CODE);
+            if (s != null)
+                return true;
 
-                if (!checkIsAllowToken(request, (String) o))
-                    throw new BusException(String.format("%s已过期，请重新登录", SecurityField.TOKEN.getName()), BusCode.TOKEN_CODE);
-            }
+            Object o = objectMap.get(SecurityField.TOKEN.getName());
+            if (o == null)
+                throw new BusException(String.format("参数%s不存在", SecurityField.TOKEN.getName()), BusCode.PARAM_CODE);
+
+            if (!checkIsAllowToken(request, (String) o))
+                throw new BusException(String.format("%s已过期，请重新登录", SecurityField.TOKEN.getName()), BusCode.TOKEN_CODE);
+
             return true;
         }
         throw new Exception("访问被限制");
@@ -88,7 +87,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
             case "POST":
             case "PUT":
             case "DELETE":
-                return ParamUtil.getInstance().json2Map(StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8));
+                return ParamUtil.getInstance().json2Map(ParamUtil.getInstance().get());
         }
 
         return Collections.emptyMap();
