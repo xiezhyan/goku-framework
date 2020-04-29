@@ -82,6 +82,27 @@ public class StepupService {
             mapperTemplate(_rootPath, entry, map);
 
             mapperXmlTemplate(entry, map);
+
+            apiTemplate(entry, map);
+        }
+    }
+
+    @SneakyThrows
+    private void apiTemplate(Map.Entry<Table, List<Column>> entry, Map<String, Object> map) {
+        File rootFile = new File(stepUpProperties.getRootPath() + File.separator);
+
+        String _rootPath = rootFile.getAbsolutePath();
+
+        Template template = configuration.getTemplate("views/api/Api.ftl");
+
+        String path = S.getFilePath(_rootPath, "views" + File.separator + "api");
+
+        String tableName = S.firstUpperCase(entry.getKey().getJavaName());
+
+        File file = S.createFile(path, tableName + "Api.js", buildOver(), entry.getKey().getTableName());
+        if (null != file) {
+            S.write(template, path, file, map);
+            log.info("{}: api 生成, path:{}", tableName, path);
         }
     }
 
