@@ -41,6 +41,7 @@
         <cab.junit.version>4.12</cab.junit.version>
 
         <cab.lang3.version>3.9</cab.lang3.version>
+        <cab.pool2.version>2.8.0</cab.pool2.version>
 
         <!--upload starter-->
         <aliyun.oss.version>3.8.0</aliyun.oss.version>
@@ -172,6 +173,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${cab.lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${cab.pool2.version}</version>
             </dependency>
 
             <!--sms starter-->

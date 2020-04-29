@@ -28,6 +28,10 @@ public class JsonUtil {
         return JSON.parseObject(jsonStr, clazz);
     }
 
+    public static <T> T json2Object (JSON json, Class<T> clazz) {
+        return JSON.toJavaObject(json, clazz);
+    }
+
     public static <T> List<T> json2ObjList(String jsonStr, Class<T> clazz) {
 
         return JSON.parseArray(jsonStr, clazz);

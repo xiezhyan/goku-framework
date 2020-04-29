@@ -38,17 +38,12 @@ public class RedisProperties extends CachingConfigurerSupport {
 
         FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
         template.setValueSerializer(fastJsonRedisSerializer);
+        template.setHashValueSerializer(fastJsonRedisSerializer);
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        //使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(stringRedisSerializer);
-        template.setKeySerializer(stringRedisSerializer);
-        // hash的key也采用String的序列化方式
         template.setHashKeySerializer(stringRedisSerializer);
-        // value序列化方式采用jackson
-        template.setValueSerializer(fastJsonRedisSerializer);
-        // hash的value序列化方式采用jackson
-        template.setHashValueSerializer(fastJsonRedisSerializer);
+
         template.afterPropertiesSet();
         return template;
     }

@@ -37,7 +37,7 @@ public abstract class BaseInterceptor implements HandlerInterceptor {
 
         if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
             response.setStatus(HttpStatus.OK.value());
-            return false;
+            return true;
         }
 
         if (handler instanceof HandlerMethod) {
