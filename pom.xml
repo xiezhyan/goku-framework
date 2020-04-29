@@ -33,6 +33,7 @@
         <cab.spring.cloud.version>Hoxton.SR3</cab.spring.cloud.version>
 
         <mybatis.version>2.1.1</mybatis.version>
+        <druid.version>1.1.21</druid.version>
 
         <cab.fastjson.version>1.2.62</cab.fastjson.version>
         <cab.uasparser.version>0.6.2</cab.uasparser.version>
@@ -77,6 +78,12 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
             </dependency>
 
             <dependency>
