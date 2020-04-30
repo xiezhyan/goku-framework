@@ -84,6 +84,25 @@ public class StepupService {
             mapperXmlTemplate(entry, map);
 
             apiTemplate(entry, map);
+
+            vueTemplate(entry, map);
+        }
+    }
+
+    @SneakyThrows
+    private void vueTemplate(Map.Entry<Table, List<Column>> entry, Map<String, Object> map) {
+        File rootFile = new File(stepUpProperties.getRootPath() + File.separator);
+
+        String _rootPath = rootFile.getAbsolutePath();
+
+        Template template = configuration.getTemplate("views/vue/List.ftl");
+
+        String path = S.getFilePath(_rootPath, "views" + File.separator + "vue" + File.separator + entry.getKey().getJavaName());
+
+        File file = S.createFile(path, "List.vue", buildOver(), entry.getKey().getTableName());
+        if (null != file) {
+            S.write(template, path, file, map);
+            log.info("{}: vue 生成, path:{}", entry.getKey().getJavaName(), path);
         }
     }
 
@@ -95,7 +114,7 @@ public class StepupService {
 
         Template template = configuration.getTemplate("views/api/Api.ftl");
 
-        String path = S.getFilePath(_rootPath, "views" + File.separator + "api");
+        String path = S.getFilePath(_rootPath, "views" + File.separator + "api" + File.separator + entry.getKey().getJavaName());
 
         String tableName = S.firstUpperCase(entry.getKey().getJavaName());
 

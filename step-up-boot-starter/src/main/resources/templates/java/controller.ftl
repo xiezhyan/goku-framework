@@ -33,7 +33,6 @@ public class ${table.javaName?cap_first}Controller {
 	@GetMapping("/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:get"})
 	public Response get(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
-
 		// 查询详情
 		${table.javaName?cap_first}Vo ${table.javaName}Vo = ${table.javaName}Service.findById(<#list fields as field><#if field.priKey>${field.javaColumnName}</#if></#list>);
 
@@ -46,10 +45,6 @@ public class ${table.javaName?cap_first}Controller {
 	@GetMapping(value="/")
 	@AuthorityAnnotation(keys={"${table.javaName}:list"})
 	public Response findList(${table.javaName?cap_first}Vo ${table.javaName}Vo, Pagination pagination) {
-
-		<#if type == "jpa">
-		pagination.setCurrentIndex(pagination.getCurrentIndex() - 1);
-		</#if>
 
 		if (null != pagination && 0 < pagination.getCurrentIndex()) {
 			// 分页查询列表
