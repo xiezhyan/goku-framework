@@ -30,6 +30,7 @@ public class ${table.javaName?cap_first}Controller {
 	@Resource
 	private ${table.javaName?cap_first}Service ${table.javaName}Service;
 
+	@LogAnnotation(description = "通过ID查询详情-${table.tableComment!""}")
 	@GetMapping("/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:get"})
 	public Response get(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
@@ -41,7 +42,7 @@ public class ${table.javaName?cap_first}Controller {
                     Response.builder().build().failure(String.format("ID：%s no data ", <#list fields as field><#if field.priKey>${field.javaColumnName}</#if></#list>));
 	}
 
-
+	@LogAnnotation(description = "查询列表-${table.tableComment!""}")
 	@GetMapping(value="/")
 	@AuthorityAnnotation(keys={"${table.javaName}:list"})
 	public Response findList(${table.javaName?cap_first}Vo ${table.javaName}Vo, Pagination pagination) {
@@ -58,7 +59,7 @@ public class ${table.javaName?cap_first}Controller {
 		return Response.builder().build().success(list);
 	}
 
-
+	@LogAnnotation(description = "通过ID删除-${table.tableComment!""}")
 	@DeleteMapping(value="/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:delete"})
 	public Response deleteById(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
@@ -73,6 +74,7 @@ public class ${table.javaName?cap_first}Controller {
 					Response.builder().build().failure(String.format("删除ID：%s出错", <#list fields as field><#if field.columnKey == "PRI">${field.javaColumnName}</#if></#list>));
 	}
 
+	@LogAnnotation(description = "新增-${table.tableComment!""}")
 	@PostMapping(value="/")
 	@AuthorityAnnotation(keys={"${table.javaName}:save"})
 	public Response add(@RequestBody ${table.javaName?cap_first}Vo ${table.javaName}Vo) {
@@ -84,6 +86,7 @@ public class ${table.javaName?cap_first}Controller {
 					Response.builder().build().failure();
 	}
 
+	@LogAnnotation(description = "通过ID修改-${table.tableComment!""}")
 	@PutMapping(value = "/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:update"})
 	public Response updateByKey(@RequestBody ${table.javaName?cap_first}Vo ${table.javaName}Vo,

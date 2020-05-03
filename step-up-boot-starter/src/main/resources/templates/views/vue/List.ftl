@@ -5,6 +5,9 @@
                 <a-form-model-item>
                     <a-button type="primary" @click="get${table.javaName?cap_first}List()">搜索</a-button>
                 </a-form-model-item>
+                <a-form-model-item>
+                    <a-button @click="resetSearch">重置</a-button>
+                </a-form-model-item>
             </a-form-model>
         </template>
 
@@ -155,6 +158,12 @@
             };
         },
         methods: {
+            resetSearch () {
+                clearForm(this.search);
+                this.search.currentIndex = 1;
+
+                this.get${table.javaName?cap_first}List();
+            },
             get${table.javaName?cap_first}List() {
                 get${table.javaName?cap_first}List(this.search).then(res => {
                     if (res) {
