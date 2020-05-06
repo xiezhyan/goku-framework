@@ -57,7 +57,7 @@
             >
                 <a-form-model :model="form" :rules="rules" ref="${table.javaName}Form">
                     <#list fields as field>
-                    <#if !field.priKey && field.javaType !== "Date">
+                    <#if !field.priKey && field.javaType != "Date">
                     <a-form-model-item label="${field.columnComment}" prop="${field.javaColumnName}">
                         <a-input v-model="form.${field.javaColumnName}" allowClear />
                     </a-form-model-item>
@@ -142,7 +142,7 @@
                 visible: false,
                 form: {
                 <#list fields as field>
-                <#if field.javaType !== "Date">
+                <#if field.javaType != "Date">
                     ${field.javaColumnName}: '' <#if field_index + 1 != fields?size>,</#if>
                 </#if>
                 </#list>
@@ -150,7 +150,7 @@
                 common_status: Status,
                 rules: {
                 <#list fields as field>
-                <#if field.javaType !== "Date">
+                <#if field.javaType != "Date">
                     ${field.javaColumnName}: [{ required: true, message: "请输入${field.columnComment}"}] <#if field_index + 1 != fields?size>,</#if>
                 </#if>
                 </#list>
