@@ -18,6 +18,9 @@ import java.io.InputStream;
 public class UploadFile {
 
     private String fileName;
+
+    private long fileSize;
+
     private InputStream stream;
 
     public String getFileName() {

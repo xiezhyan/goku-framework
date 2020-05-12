@@ -4,14 +4,17 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.DeleteObjectsRequest;
 import com.aliyun.oss.model.DeleteObjectsResult;
 import com.aliyun.oss.model.PutObjectRequest;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.util.CollectionUtils;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
 import top.zopx.starter.upload.service.FileManageService;
+import top.zopx.starter.upload.util.Async;
+import top.zopx.starter.upload.util.Dir;
 
 import javax.annotation.Resource;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -27,11 +30,6 @@ public class OssUploadManage implements FileManageService {
     @Resource
     private UploadProperties.OssProperties ossProperties;
 
-    private static final ThreadLocal<String> THREAD_LOCAL = ThreadLocal.withInitial(() -> {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        return simpleDateFormat.format(new Date());
-    });
-
     @Override
     public Result uploadFile(UploadFile uploadFile) {
         return uploadFile(Collections.singletonList(uploadFile)).get(0);
@@ -39,35 +37,43 @@ public class OssUploadManage implements FileManageService {
 
     @Override
     public List<Result> uploadFile(List<UploadFile> uploadFiles) {
+        if (CollectionUtils.isEmpty(uploadFiles))
+            return Collections.emptyList();
+
         List<Result> resultList = new ArrayList<>(uploadFiles.size());
 
         uploadFiles.forEach(uploadFile -> {
-            String path = THREAD_LOCAL.get() + "/" + uploadFile.getFileName();
+            Result result = Async.get(() -> {
+                String path = Dir.get() + "/" + uploadFile.getFileName();
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucketName(), path, uploadFile.getStream());
+                PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucketName(), path, uploadFile.getStream());
 
-            oss.putObject(putObjectRequest);
+                oss.putObject(putObjectRequest);
+                return Result.builder()
+                        .showFileUrl(getUrl(path))
+                        .uploadFileUrl(path)
+                        .build();
+            });
 
-            resultList.add(
-                    Result.builder()
-                            .showFileUrl(getUrl(path))
-                            .uploadFileUrl(path)
-                            .build()
-            );
+            resultList.add(result);
         });
 
+        Async.shutdown();
         return resultList;
     }
 
     @Override
     public List<String> deleteFile(String... keys) {
-        List<String> keyList = new ArrayList<>(keys.length);
+        if (!ArrayUtils.isEmpty(keys)) {
+            List<String> keyList = new ArrayList<>(keys.length);
 
-        keyList.addAll(Arrays.asList(keys));
+            keyList.addAll(Arrays.asList(keys));
 
-        DeleteObjectsResult deleteObjectsResult = oss.deleteObjects(new DeleteObjectsRequest(ossProperties.getBucketName()).withKeys(keyList));
+            DeleteObjectsResult deleteObjectsResult = oss.deleteObjects(new DeleteObjectsRequest(ossProperties.getBucketName()).withKeys(keyList));
 
-        return deleteObjectsResult.getDeletedObjects();
+            return deleteObjectsResult.getDeletedObjects();
+        }
+        return Collections.emptyList();
     }
 
     private String getUrl(String key) {
