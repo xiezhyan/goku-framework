@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * version: 分页
@@ -23,6 +24,9 @@ public class Pagination implements Serializable {
 
     //当前显示的页数
     private int currentIndex;
+
+    // 排序方式
+    private List<Sort> sorts;
 
     //查询结果总条数
     private int totalCount;
