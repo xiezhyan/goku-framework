@@ -4,7 +4,7 @@ import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.CollectionUtils;
-import top.zopx.starter.upload.config.NginxProperties;
+import top.zopx.starter.upload.config.FastDfsProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
 import top.zopx.starter.upload.service.FileManageService;
@@ -26,7 +26,7 @@ import java.util.List;
 public class FastDFSManageService implements FileManageService {
 
     @Resource
-    private NginxProperties nginxProperties;
+    private FastDfsProperties.NginxProperties nginxProperties;
     @Resource
     private FastFileStorageClient fastFileStorageClient;
 

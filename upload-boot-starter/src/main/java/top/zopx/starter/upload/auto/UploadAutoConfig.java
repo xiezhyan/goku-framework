@@ -1,12 +1,12 @@
 package top.zopx.starter.upload.auto;
 
-import com.aliyun.oss.OSS;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import top.zopx.starter.upload.config.FastDFSConfig;
-import top.zopx.starter.upload.config.NginxProperties;
+import top.zopx.starter.upload.conditional.FastDFSConditional;
+import top.zopx.starter.upload.conditional.OssConditional;
+import top.zopx.starter.upload.config.FastDfsProperties;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.service.FileManageService;
 import top.zopx.starter.upload.service.impl.FastDFSManageService;
@@ -19,20 +19,23 @@ import top.zopx.starter.upload.service.impl.OssUploadManage;
  * @date 2020/4/24
  */
 @Configuration
+@EnableConfigurationProperties({
+        UploadProperties.class,
+        FastDfsProperties.class
+})
 public class UploadAutoConfig {
 
-    @Bean
-    @ConditionalOnClass(value = {
-            OSS.class
+    @Bean(name = "fileManageService")
+    @Conditional(value = {
+            OssConditional.class
     })
     public FileManageService ossFileManageService() {
         return new OssUploadManage();
     }
 
-    @Bean
-    @ConditionalOnClass(value = {
-            FastDFSConfig.class,
-            NginxProperties.class
+    @Bean(name = "fileManageService")
+    @Conditional(value = {
+            FastDFSConditional.class
     })
     public FileManageService fastDfsManageService() {
         return new FastDFSManageService();

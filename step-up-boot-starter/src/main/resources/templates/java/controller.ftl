@@ -24,7 +24,7 @@ import java.util.List;
  * 	date: ${nowDate?string("yyyy-MM-dd")}
  */
 @RestController
-@RequestMapping("/api/${table.javaName}")
+@RequestMapping("/v1/api/${table.javaName}")
 public class ${table.javaName?cap_first}Controller {
 
 	@Resource

@@ -3,12 +3,12 @@ package top.zopx.starter.upload.config;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import lombok.Data;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import top.zopx.starter.upload.conditional.OssConditional;
 
 /**
  * top.zopx.starter.upload.config
@@ -28,10 +28,10 @@ public class UploadProperties {
 
     @Data
     @Component
-    @ConfigurationProperties(prefix = UploadProperties.PREFIX + "." + OssProperties.PREFIX)
+    @ConfigurationProperties(prefix = OssProperties.PREFIX)
     public static class OssProperties {
 
-        public static final String PREFIX = "oss";
+        public static final String PREFIX = UploadProperties.PREFIX + "." + "oss";
 
         private String endpoint;
         private String accessKeyId;
@@ -48,7 +48,9 @@ public class UploadProperties {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = UploadProperties.PREFIX + "." + OssProperties.PREFIX, name = {"endpoint", "access-key-id", "access-key-secret"})
+        @Conditional(value = {
+                OssConditional.class
+        })
         public OSS ossClient() {
             return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         }

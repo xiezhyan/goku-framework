@@ -3,7 +3,7 @@ import $axios from 'utils/Request.js'
 //数据列表
 export const get${table.javaName?cap_first}List = data => {
     return $axios({
-        url: '/api/${table.javaName}/',
+        url: '/v1/api/${table.javaName}/',
         method: 'get',
         data
     });
@@ -12,7 +12,7 @@ export const get${table.javaName?cap_first}List = data => {
 //获取详情
 export const get${table.javaName?cap_first} = data => {
     return $axios({
-        url: '/api/${table.javaName}/' + data.id,
+        url: '/v1/api/${table.javaName}/' + data.id,
         method: 'get',
         data
     });
@@ -21,7 +21,7 @@ export const get${table.javaName?cap_first} = data => {
 //保存
 export const save${table.javaName?cap_first} = data => {
     return $axios({
-        url: '/api/${table.javaName}/',
+        url: '/v1/api/${table.javaName}/',
         method: 'post',
         data
     });
@@ -30,7 +30,7 @@ export const save${table.javaName?cap_first} = data => {
 //删除数据
 export const delete${table.javaName?cap_first} = data => {
     return $axios({
-        url: '/api/${table.javaName}/' + data.id,
+        url: '/v1/api/${table.javaName}/' + data.id,
         method: 'delete',
         data
     });
@@ -39,7 +39,7 @@ export const delete${table.javaName?cap_first} = data => {
 //修改数据
 export const update${table.javaName?cap_first}ById = data => {
     return $axios({
-        url: '/api/${table.javaName}/' + data.id,
+        url: '/v1/api/${table.javaName}/' + data.id,
         method: 'put',
         data
     });
