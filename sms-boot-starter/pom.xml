@@ -41,6 +41,13 @@
             <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
         </dependency>
         <!-- aliyun starter -->
+
+        <!--邮件-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <!--邮件-->
     </dependencies>
 
     <build>
