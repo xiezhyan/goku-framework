@@ -1,7 +1,9 @@
 package top.zopx.starter.upload.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * top.zopx.starter.upload.entity.Result
@@ -10,6 +12,8 @@ import lombok.Data;
  * @date 2020/4/24
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Result {
 

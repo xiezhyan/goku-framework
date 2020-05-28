@@ -1,7 +1,9 @@
 package top.zopx.starter.upload.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 
@@ -14,6 +16,8 @@ import java.io.InputStream;
  * @date 2020/4/24
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class UploadFile {
 

@@ -122,6 +122,16 @@ public class RedisPoolServiceImpl implements RedisPoolService {
     }
 
     @Override
+    public Object getPopFLeft(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    @Override
+    public Object getPopFRight(String key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
+    @Override
     public void deleteList(String key, Long start, Long end) {
         redisTemplate.opsForList()
                 .trim(key, start, end);

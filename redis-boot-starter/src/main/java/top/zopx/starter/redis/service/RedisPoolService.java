@@ -65,6 +65,10 @@ public interface RedisPoolService {
     void deleteList(String key, Long start, Long end);
 
     void deleteListByItem(String key, Object item);
+
+    Object getPopFLeft(String key);
+
+    Object getPopFRight(String key);
     // --- List end
 
     // --- Set start
