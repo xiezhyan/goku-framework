@@ -43,22 +43,20 @@ public class OssUploadManage implements FileManageService {
         List<Result> resultList = new ArrayList<>(uploadFiles.size());
 
         uploadFiles.forEach(uploadFile -> {
-            Result result = Async.get(() -> {
-                String path = Dir.get() + "/" + uploadFile.getFileName();
+            String path = Dir.get() + "/" + uploadFile.getFileName();
 
-                PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucketName(), path, uploadFile.getStream());
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucketName(), path, uploadFile.getStream());
 
-                oss.putObject(putObjectRequest);
-                return Result.builder()
-                        .showFileUrl(getUrl(path))
-                        .uploadFileUrl(path)
-                        .build();
-            });
+            oss.putObject(putObjectRequest);
 
-            resultList.add(result);
+            resultList.add(
+                    Result.builder()
+                            .showFileUrl(getUrl(path))
+                            .uploadFileUrl(path)
+                            .build()
+            );
         });
 
-        Async.shutdown();
         return resultList;
     }
 

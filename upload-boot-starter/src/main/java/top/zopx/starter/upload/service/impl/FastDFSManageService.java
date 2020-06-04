@@ -8,7 +8,6 @@ import top.zopx.starter.upload.config.FastDfsProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
 import top.zopx.starter.upload.service.FileManageService;
-import top.zopx.starter.upload.util.Async;
 import top.zopx.starter.upload.util.Dir;
 
 import javax.annotation.Resource;
@@ -44,21 +43,18 @@ public class FastDFSManageService implements FileManageService {
         List<Result> list = new ArrayList<>(uploadFiles.size());
 
         uploadFiles.forEach(uploadFile -> {
-            Result result = Async.get(() -> {
-                String path = Dir.get() + "/" + uploadFile.getFileName();
+            String path = Dir.get() + "/" + uploadFile.getFileName();
 
-                StorePath storePath = fastFileStorageClient.uploadFile(uploadFile.getStream(), uploadFile.getFileSize(), path, null);
+            StorePath storePath = fastFileStorageClient.uploadFile(uploadFile.getStream(), uploadFile.getFileSize(), path, null);
 
-                return Result.builder()
-                        .uploadFileUrl(storePath.getFullPath())
-                        .showFileUrl(getUrl(storePath.getFullPath()))
-                        .build();
-            });
-
-            list.add(result);
+            list.add(
+                    Result.builder()
+                            .uploadFileUrl(storePath.getFullPath())
+                            .showFileUrl(getUrl(storePath.getFullPath()))
+                            .build()
+            );
         });
 
-        Async.shutdown();
         return list;
     }
 
@@ -69,15 +65,10 @@ public class FastDFSManageService implements FileManageService {
             List<String> keyList = new ArrayList<>(keys.length);
 
             Arrays.stream(keys).forEach(key -> {
-                String result = Async.get(() -> {
-                    fastFileStorageClient.deleteFile(key);
-                    return key;
-                });
-
-                keyList.add(result);
+                fastFileStorageClient.deleteFile(key);
+                keyList.add(key);
             });
 
-            Async.shutdown();
             return keyList;
         }
 
