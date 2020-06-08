@@ -16,9 +16,8 @@ public class MatcherUtil {
     public static final String EMAIL_REGEX = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
     public static final String URL_REGEX = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
     public static final String PHONE_REGEX = "^(\\d{3,4}-)?\\d{6,8}$";
-    public static final String PASSWORD_REGEX = "(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}";
     public static final String POSTAL_CODE_REGEX = "^\\d{6}$";
-    public static final String TEL_REGEX = "^[1](([3][0-9])|([4][5,7,9])|([5][^4,6,9])|([6][6])|([7][3,5,6,7,8])|([8][0-9])|([9][8,9]))[0-9]{8}$";
+    public static final String TEL_REGEX = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
     public static final String NUMBER_REGEX = "^[0-9]*$";
     public static final String INT_REGEX = "^\\+?[1-9][0-9]*$";
     public static final String UP_CHAR_REGEX = "^[A-Z]+$";
@@ -65,16 +64,6 @@ public class MatcherUtil {
      */
     public static boolean isPhone(String str) {
         String regex = PHONE_REGEX;
-        return match(regex, str);
-    }
-
-    /**
-     * 验证输入密码条件(字符与数据同时出现)
-     *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
-     */
-    public static boolean isPassword(String str) {
-        String regex = PASSWORD_REGEX;
         return match(regex, str);
     }
 
