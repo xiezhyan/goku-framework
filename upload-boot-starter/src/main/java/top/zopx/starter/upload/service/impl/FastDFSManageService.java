@@ -11,6 +11,7 @@ import top.zopx.starter.upload.service.FileManageService;
 import top.zopx.starter.upload.util.Dir;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,9 +44,14 @@ public class FastDFSManageService implements FileManageService {
         List<Result> list = new ArrayList<>(uploadFiles.size());
 
         uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getFileName();
+            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
 
-            StorePath storePath = fastFileStorageClient.uploadFile(uploadFile.getStream(), uploadFile.getFileSize(), path, null);
+            StorePath storePath = fastFileStorageClient.uploadFile(
+                    new ByteArrayInputStream(uploadFile.getBytes()),
+                    uploadFile.getFileSize(),
+                    path,
+                    null
+            );
 
             list.add(
                     Result.builder()
@@ -56,6 +62,24 @@ public class FastDFSManageService implements FileManageService {
         });
 
         return list;
+    }
+
+    @Override
+    public Result resumeUploadFile(UploadFile uploadFile) {
+        return resumeUploadFile(Collections.singletonList(uploadFile)).get(0);
+    }
+
+    @Override
+    public List<Result> resumeUploadFile(List<UploadFile> uploadFiles) {
+        if (CollectionUtils.isEmpty(uploadFiles))
+            return Collections.emptyList();
+
+        List<Result> resultList = new ArrayList<>(uploadFiles.size());
+
+        // 在这里操作文件上传
+
+
+        return resultList;
     }
 
     @Override

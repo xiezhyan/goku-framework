@@ -1,19 +1,18 @@
 package top.zopx.starter.upload.service.impl;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.model.DeleteObjectsRequest;
-import com.aliyun.oss.model.DeleteObjectsResult;
-import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.CollectionUtils;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
 import top.zopx.starter.upload.service.FileManageService;
-import top.zopx.starter.upload.util.Async;
 import top.zopx.starter.upload.util.Dir;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -23,6 +22,7 @@ import java.util.*;
  * @author sanq.Yan
  * @date 2020/4/24
  */
+@Slf4j
 public class OssUploadManage implements FileManageService {
 
     @Resource
@@ -35,6 +35,12 @@ public class OssUploadManage implements FileManageService {
         return uploadFile(Collections.singletonList(uploadFile)).get(0);
     }
 
+    /**
+     * 简单上传
+     *
+     * @param uploadFiles 上传文件集合
+     * @return 文件上传链接集合
+     */
     @Override
     public List<Result> uploadFile(List<UploadFile> uploadFiles) {
         if (CollectionUtils.isEmpty(uploadFiles))
@@ -43,9 +49,12 @@ public class OssUploadManage implements FileManageService {
         List<Result> resultList = new ArrayList<>(uploadFiles.size());
 
         uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getFileName();
+            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(ossProperties.getBucketName(), path, uploadFile.getStream());
+            PutObjectRequest putObjectRequest = new PutObjectRequest(
+                    ossProperties.getBucketName(),
+                    path,
+                    new ByteArrayInputStream(uploadFile.getBytes()));
 
             oss.putObject(putObjectRequest);
 
@@ -72,6 +81,48 @@ public class OssUploadManage implements FileManageService {
             return deleteObjectsResult.getDeletedObjects();
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public Result resumeUploadFile(UploadFile uploadFile) {
+        return resumeUploadFile(Collections.singletonList(uploadFile)).get(0);
+    }
+
+    @Override
+    public List<Result> resumeUploadFile(List<UploadFile> uploadFiles) {
+        if (CollectionUtils.isEmpty(uploadFiles))
+            return Collections.emptyList();
+
+        List<Result> resultList = new ArrayList<>(uploadFiles.size());
+
+        uploadFiles.forEach(uploadFile -> {
+            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
+
+            // 上传文件
+            UploadFileRequest uploadFileRequest = new UploadFileRequest(ossProperties.getBucketName(), path);
+            // 需要上传的本地文件
+            uploadFileRequest.setUploadFile(uploadFile.getLocalFilePath());
+            // 上传并发线程
+            uploadFileRequest.setTaskNum(5);
+            // 上传分片大小
+            uploadFileRequest.setPartSize(1024 * 1024 * 3);
+            // 开启断点续传
+            uploadFileRequest.setEnableCheckpoint(true);
+
+            try {
+                oss.uploadFile(uploadFileRequest);
+
+                resultList.add(
+                        Result.builder()
+                                .showFileUrl(getUrl(path))
+                                .uploadFileUrl(path)
+                                .build()
+                );
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+        return resultList;
     }
 
     private String getUrl(String key) {

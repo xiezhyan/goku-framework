@@ -13,10 +13,29 @@ import java.util.List;
  */
 public interface FileManageService {
 
+    /**
+     * 简单上传
+     */
     Result uploadFile(UploadFile uploadFile);
 
+    /**
+     * 简单上传
+     */
     List<Result> uploadFile(List<UploadFile> uploadFiles);
 
+    /**
+     * 删除文件
+     */
     List<String> deleteFile(String... keys);
+
+    /**
+     * 断点续传
+     */
+    Result resumeUploadFile(UploadFile uploadFile);
+
+    /**
+     * 断点续传
+     */
+    List<Result> resumeUploadFile(List<UploadFile> uploadFiles);
 
 }

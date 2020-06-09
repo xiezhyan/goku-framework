@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 
-import java.io.InputStream;
+import java.io.File;
 
 /**
  * top.zopx.starter.upload.entity.UploadFile
@@ -21,19 +21,40 @@ import java.io.InputStream;
 @Builder
 public class UploadFile {
 
+    /**
+     * 上传文件本地路径
+     */
+    private String localFilePath;
+
+    /**
+     * 文件名称
+     */
     private String fileName;
 
+    /**
+     * 文件大小
+     */
     private long fileSize;
 
-    private InputStream stream;
+    /**
+     * 文件二进制数组
+     */
+    private byte[] bytes;
 
-    public String getFileName() {
+    /**
+     * 是否重命名
+     */
+    private boolean isRename = false;
+
+    public String getRemoteFileName() {
 
         if (StringUtils.isEmpty(fileName))
             return StringUtil.uuid();
 
-        String suffix = fileName.substring(fileName.lastIndexOf("."));
-
-        return StringUtil.uuid() + suffix;
+        if (isRename) {
+            String suffix = fileName.substring(fileName.lastIndexOf("."));
+            return StringUtil.uuid() + suffix;
+        }
+        return fileName;
     }
 }
