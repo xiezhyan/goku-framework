@@ -38,4 +38,13 @@ public interface FileManageService {
      */
     List<Result> resumeUploadFile(List<UploadFile> uploadFiles);
 
+    /**
+     * 分片上传
+     */
+    Result multipartUploadFile(UploadFile uploadFile);
+
+    /**
+     * 分片上传
+     */
+    List<Result> multipartUploadFile(List<UploadFile> uploadFiles);
 }

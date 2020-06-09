@@ -5,6 +5,7 @@ import com.aliyun.oss.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.CollectionUtils;
+import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
@@ -13,8 +14,13 @@ import top.zopx.starter.upload.util.Dir;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * top.zopx.starter.upload.service.impl.OssUploadManage
@@ -34,6 +40,10 @@ public class OssUploadManage implements FileManageService {
     public Result uploadFile(UploadFile uploadFile) {
         return uploadFile(Collections.singletonList(uploadFile)).get(0);
     }
+
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(5);
+    private static final List<PartETag> PART_E_TAGS = Collections.synchronizedList(new ArrayList<>());
+    private static final long PART_SIZE = 5L * 1024 * 1024;
 
     /**
      * 简单上传
@@ -125,6 +135,97 @@ public class OssUploadManage implements FileManageService {
         return resultList;
     }
 
+    @Override
+    public Result multipartUploadFile(UploadFile uploadFile) {
+        return multipartUploadFile(Collections.singletonList(uploadFile)).get(0);
+    }
+
+    @Override
+    public List<Result> multipartUploadFile(List<UploadFile> uploadFiles) {
+        if (CollectionUtils.isEmpty(uploadFiles))
+            return Collections.emptyList();
+
+        List<Result> resultList = new ArrayList<>(uploadFiles.size());
+
+        uploadFiles.forEach(uploadFile -> {
+            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
+
+            // 分片对象
+            String uploadId = createUploadId(path);
+            log.debug("uploadId: {}", uploadId);
+
+            // 计算分片数量
+            long partCount = uploadFile.getFileSize() / PART_SIZE;
+            if (uploadFile.getFileSize() % PART_SIZE != 0)
+                partCount++;
+
+            log.debug("Total parts count：{}", partCount);
+            if (partCount > 10000) {
+                throw new BusException("Total parts count should not exceed 10000");
+            }
+
+            for (int i = 0; i < partCount; i++) {
+                long startPos = i * PART_SIZE;
+                long curPartSize = (i + 1 == partCount) ? (uploadFile.getFileSize() - startPos) : PART_SIZE;
+
+                EXECUTOR_SERVICE.execute(
+                        new PartUploader(
+                                uploadFile.getBytes(),
+                                startPos,
+                                curPartSize,
+                                i + 1,
+                                uploadId,
+                                path)
+                );
+            }
+
+            EXECUTOR_SERVICE.shutdown();
+            while (!EXECUTOR_SERVICE.isTerminated()) {
+                try {
+                    EXECUTOR_SERVICE.awaitTermination(5, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // 验证
+            if (PART_E_TAGS.size() != partCount) {
+                throw new BusException("Upload multiparts fail due to some parts are not finished yet");
+            }
+
+            // 创建CompleteMultipartUploadRequest对象。
+            // 在执行完成分片上传操作时，需要提供所有有效的partETags。
+            // OSS收到提交的partETags后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。
+            completeMultipartUpload(uploadId, path);
+
+            PART_E_TAGS.clear();
+
+            resultList.add(
+                    Result.builder()
+                            .showFileUrl(getUrl(path))
+                            .uploadFileUrl(path)
+                            .uploadId(uploadId)
+                            .build()
+            );
+        });
+        return resultList;
+    }
+
+    private void completeMultipartUpload(String uploadId, String key) {
+        PART_E_TAGS.sort(Comparator.comparingInt(PartETag::getPartNumber));
+
+        log.debug("Completing to upload multiparts");
+        CompleteMultipartUploadRequest completeMultipartUploadRequest =
+                new CompleteMultipartUploadRequest(ossProperties.getBucketName(), key, uploadId, PART_E_TAGS);
+        oss.completeMultipartUpload(completeMultipartUploadRequest);
+    }
+
+    private String createUploadId(String path) {
+        InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(ossProperties.getBucketName(), path);
+        InitiateMultipartUploadResult result = oss.initiateMultipartUpload(request);
+        return result.getUploadId();
+    }
+
     private String getUrl(String key) {
         if (null != ossProperties.getPresign()) {
             if (ossProperties.getPresign().getPresigned()) {
@@ -137,5 +238,59 @@ public class OssUploadManage implements FileManageService {
             }
         }
         return ossProperties.getShowImgUrlPrefix() + "/" + key;
+    }
+
+    private class PartUploader implements Runnable {
+
+        private byte[] bytes;
+        private long startPos;
+        private long curPartSize;
+        private int index;
+        private String uploadId;
+        private String key;
+
+        PartUploader(byte[] bytes, long startPos, long curPartSize, int index, String uploadId, String key) {
+            this.bytes = bytes;
+            this.startPos = startPos;
+            this.curPartSize = curPartSize;
+            this.index = index;
+            this.uploadId = uploadId;
+            this.key = key;
+        }
+
+        @Override
+        public void run() {
+            InputStream instream = null;
+            try {
+                instream = new ByteArrayInputStream(bytes);
+                long skip = instream.skip(this.startPos);
+                log.debug("skip {} start", skip);
+
+                UploadPartRequest uploadPartRequest = new UploadPartRequest();
+                uploadPartRequest.setBucketName(ossProperties.getBucketName());
+                uploadPartRequest.setKey(key);
+                uploadPartRequest.setUploadId(this.uploadId);
+                uploadPartRequest.setInputStream(instream);
+                uploadPartRequest.setPartSize(curPartSize);
+                uploadPartRequest.setPartNumber(index);
+
+                UploadPartResult uploadPartResult = oss.uploadPart(uploadPartRequest);
+                log.debug("Part# {} done", this.index);
+
+                synchronized (PART_E_TAGS) {
+                    PART_E_TAGS.add(uploadPartResult.getPartETag());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (instream != null) {
+                    try {
+                        instream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }

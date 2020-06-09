@@ -20,4 +20,6 @@ public class Result {
     private String uploadFileUrl;
 
     private String showFileUrl;
+
+    private String uploadId;
 }

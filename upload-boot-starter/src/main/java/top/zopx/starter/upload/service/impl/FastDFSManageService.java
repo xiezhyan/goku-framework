@@ -83,6 +83,16 @@ public class FastDFSManageService implements FileManageService {
     }
 
     @Override
+    public Result multipartUploadFile(UploadFile uploadFile) {
+        return null;
+    }
+
+    @Override
+    public List<Result> multipartUploadFile(List<UploadFile> uploadFiles) {
+        return null;
+    }
+
+    @Override
     public List<String> deleteFile(String... keys) {
 
         if (!ArrayUtils.isEmpty(keys)) {
