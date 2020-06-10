@@ -21,7 +21,6 @@ public class SmsRequest {
 
     private String toTel;
 
-    //sms1086使用
     private String message;
 
     //阿里云短信使用
