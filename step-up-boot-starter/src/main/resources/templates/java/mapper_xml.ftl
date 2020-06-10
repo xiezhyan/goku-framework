@@ -21,7 +21,7 @@
     <#list fields as field>
         <#if (field.javaType!"") == "String">
             <if test="${table.javaName}.${field.javaColumnName} !=null and ${table.javaName}.${field.javaColumnName} != ''">
-                <#if field_index != 0>AND </#if>${table.tableName}.${field.columnName} LIKE CONCAT('%',${r"#{" + "${table.javaName}." + field.javaColumnName + "}"},'%')
+                <#if field_index != 0>AND </#if>${table.tableName}.${field.columnName} LIKE CONCAT(${r"#{" + "${table.javaName}." + field.javaColumnName + "}"},'%')
             </if>
         <#else>
             <if test="${table.javaName}.${field.javaColumnName} !=null ">
@@ -36,7 +36,7 @@
 <#list fields as field>
     <#if (field.javaType!"") == "String">
         <if test="${field.javaColumnName} !=null and ${field.javaColumnName} != ''">
-            <#if field_index != 0>AND </#if>${field.columnName} LIKE CONCAT('%',${r"#{" + field.javaColumnName + "}"},'%')
+            <#if field_index != 0>AND </#if>${field.columnName} LIKE CONCAT(${r"#{" + field.javaColumnName + "}"},'%')
         </if>
     <#else>
         <if test="${field.javaColumnName} !=null ">
