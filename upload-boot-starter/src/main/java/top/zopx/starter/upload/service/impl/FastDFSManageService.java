@@ -3,7 +3,6 @@ package top.zopx.starter.upload.service.impl;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.util.CollectionUtils;
 import top.zopx.starter.upload.config.FastDfsProperties;
 import top.zopx.starter.upload.entity.Result;
 import top.zopx.starter.upload.entity.UploadFile;
@@ -32,64 +31,30 @@ public class FastDFSManageService implements FileManageService {
 
     @Override
     public Result uploadFile(UploadFile uploadFile) {
-        return uploadFile(Collections.singletonList(uploadFile)).get(0);
-    }
 
-    @Override
-    public List<Result> uploadFile(List<UploadFile> uploadFiles) {
+        String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
 
-        if (CollectionUtils.isEmpty(uploadFiles))
-            return Collections.emptyList();
+        StorePath storePath = fastFileStorageClient.uploadFile(
+                new ByteArrayInputStream(uploadFile.getBytes()),
+                uploadFile.getFileSize(),
+                path,
+                null
+        );
 
-        List<Result> list = new ArrayList<>(uploadFiles.size());
-
-        uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
-
-            StorePath storePath = fastFileStorageClient.uploadFile(
-                    new ByteArrayInputStream(uploadFile.getBytes()),
-                    uploadFile.getFileSize(),
-                    path,
-                    null
-            );
-
-            list.add(
-                    Result.builder()
-                            .uploadFileUrl(storePath.getFullPath())
-                            .showFileUrl(getUrl(storePath.getFullPath()))
-                            .build()
-            );
-        });
-
-        return list;
+        return Result.builder()
+                .uploadFileUrl(storePath.getFullPath())
+                .showFileUrl(getUrl(storePath.getFullPath()))
+                .build();
     }
 
     @Override
     public Result resumeUploadFile(UploadFile uploadFile) {
-        return resumeUploadFile(Collections.singletonList(uploadFile)).get(0);
-    }
-
-    @Override
-    public List<Result> resumeUploadFile(List<UploadFile> uploadFiles) {
-        if (CollectionUtils.isEmpty(uploadFiles))
-            return Collections.emptyList();
-
-        List<Result> resultList = new ArrayList<>(uploadFiles.size());
-
-        // 在这里操作文件上传
-
-
-        return resultList;
+        return Result.builder().build();
     }
 
     @Override
     public Result multipartUploadFile(UploadFile uploadFile) {
-        return null;
-    }
-
-    @Override
-    public List<Result> multipartUploadFile(List<UploadFile> uploadFiles) {
-        return null;
+        return Result.builder().build();
     }
 
     @Override

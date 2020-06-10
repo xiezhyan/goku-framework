@@ -4,7 +4,6 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.util.CollectionUtils;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.entity.Result;
@@ -38,46 +37,26 @@ public class OssUploadManage implements FileManageService {
 
     @Override
     public Result uploadFile(UploadFile uploadFile) {
-        return uploadFile(Collections.singletonList(uploadFile)).get(0);
+        if (null == uploadFile)
+            return Result.builder().build();
+
+        String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(
+                ossProperties.getBucketName(),
+                path,
+                new ByteArrayInputStream(uploadFile.getBytes()));
+
+        oss.putObject(putObjectRequest);
+
+        return Result.builder()
+                .showFileUrl(getUrl(path))
+                .uploadFileUrl(path)
+                .build();
     }
 
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(5);
     private static final List<PartETag> PART_E_TAGS = Collections.synchronizedList(new ArrayList<>());
     private static final long PART_SIZE = 5L * 1024 * 1024;
-
-    /**
-     * 简单上传
-     *
-     * @param uploadFiles 上传文件集合
-     * @return 文件上传链接集合
-     */
-    @Override
-    public List<Result> uploadFile(List<UploadFile> uploadFiles) {
-        if (CollectionUtils.isEmpty(uploadFiles))
-            return Collections.emptyList();
-
-        List<Result> resultList = new ArrayList<>(uploadFiles.size());
-
-        uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
-
-            PutObjectRequest putObjectRequest = new PutObjectRequest(
-                    ossProperties.getBucketName(),
-                    path,
-                    new ByteArrayInputStream(uploadFile.getBytes()));
-
-            oss.putObject(putObjectRequest);
-
-            resultList.add(
-                    Result.builder()
-                            .showFileUrl(getUrl(path))
-                            .uploadFileUrl(path)
-                            .build()
-            );
-        });
-
-        return resultList;
-    }
 
     @Override
     public List<String> deleteFile(String... keys) {
@@ -95,121 +74,100 @@ public class OssUploadManage implements FileManageService {
 
     @Override
     public Result resumeUploadFile(UploadFile uploadFile) {
-        return resumeUploadFile(Collections.singletonList(uploadFile)).get(0);
+        if (null == uploadFile)
+            return Result.builder().build();
+
+        String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
+
+        // 上传文件
+        UploadFileRequest uploadFileRequest = new UploadFileRequest(ossProperties.getBucketName(), path);
+        // 需要上传的本地文件
+        uploadFileRequest.setUploadFile(uploadFile.getLocalFilePath());
+        // 上传并发线程
+        uploadFileRequest.setTaskNum(5);
+        // 上传分片大小
+        uploadFileRequest.setPartSize(1024 * 1024 * 3);
+        // 开启断点续传
+        uploadFileRequest.setEnableCheckpoint(true);
+
+        try {
+            oss.uploadFile(uploadFileRequest);
+        } catch (Throwable throwable) {
+            throw new BusException(throwable.getMessage());
+        }
+
+        return Result.builder()
+                .showFileUrl(getUrl(path))
+                .uploadFileUrl(path)
+                .build();
     }
 
-    @Override
-    public List<Result> resumeUploadFile(List<UploadFile> uploadFiles) {
-        if (CollectionUtils.isEmpty(uploadFiles))
-            return Collections.emptyList();
-
-        List<Result> resultList = new ArrayList<>(uploadFiles.size());
-
-        uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
-
-            // 上传文件
-            UploadFileRequest uploadFileRequest = new UploadFileRequest(ossProperties.getBucketName(), path);
-            // 需要上传的本地文件
-            uploadFileRequest.setUploadFile(uploadFile.getLocalFilePath());
-            // 上传并发线程
-            uploadFileRequest.setTaskNum(5);
-            // 上传分片大小
-            uploadFileRequest.setPartSize(1024 * 1024 * 3);
-            // 开启断点续传
-            uploadFileRequest.setEnableCheckpoint(true);
-
-            try {
-                oss.uploadFile(uploadFileRequest);
-
-                resultList.add(
-                        Result.builder()
-                                .showFileUrl(getUrl(path))
-                                .uploadFileUrl(path)
-                                .build()
-                );
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
-        return resultList;
-    }
 
     @Override
     public Result multipartUploadFile(UploadFile uploadFile) {
-        return multipartUploadFile(Collections.singletonList(uploadFile)).get(0);
-    }
+        if (null == uploadFile)
+            return Result.builder().build();
 
-    @Override
-    public List<Result> multipartUploadFile(List<UploadFile> uploadFiles) {
-        if (CollectionUtils.isEmpty(uploadFiles))
-            return Collections.emptyList();
+        ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(5);
+        String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
 
-        List<Result> resultList = new ArrayList<>(uploadFiles.size());
+        // 分片对象
+        String uploadId = createUploadId(path);
+        log.debug("uploadId: {}", uploadId);
 
-        uploadFiles.forEach(uploadFile -> {
-            String path = Dir.get() + "/" + uploadFile.getRemoteFileName();
+        // 计算分片数量
+        long partCount = uploadFile.getFileSize() / PART_SIZE;
+        if (uploadFile.getFileSize() % PART_SIZE != 0)
+            partCount++;
 
-            // 分片对象
-            String uploadId = createUploadId(path);
-            log.debug("uploadId: {}", uploadId);
+        log.debug("Total parts count：{}", partCount);
+        if (partCount > 10000) {
+            throw new BusException("Total parts count should not exceed 10000");
+        }
 
-            // 计算分片数量
-            long partCount = uploadFile.getFileSize() / PART_SIZE;
-            if (uploadFile.getFileSize() % PART_SIZE != 0)
-                partCount++;
+        for (int i = 0; i < partCount; i++) {
+            long startPos = i * PART_SIZE;
+            long curPartSize = (i + 1 == partCount) ? (uploadFile.getFileSize() - startPos) : PART_SIZE;
 
-            log.debug("Total parts count：{}", partCount);
-            if (partCount > 10000) {
-                throw new BusException("Total parts count should not exceed 10000");
-            }
-
-            for (int i = 0; i < partCount; i++) {
-                long startPos = i * PART_SIZE;
-                long curPartSize = (i + 1 == partCount) ? (uploadFile.getFileSize() - startPos) : PART_SIZE;
-
-                EXECUTOR_SERVICE.execute(
-                        new PartUploader(
-                                uploadFile.getBytes(),
-                                startPos,
-                                curPartSize,
-                                i + 1,
-                                uploadId,
-                                path)
-                );
-            }
-
-            EXECUTOR_SERVICE.shutdown();
-            while (!EXECUTOR_SERVICE.isTerminated()) {
-                try {
-                    EXECUTOR_SERVICE.awaitTermination(5, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // 验证
-            if (PART_E_TAGS.size() != partCount) {
-                throw new BusException("Upload multiparts fail due to some parts are not finished yet");
-            }
-
-            // 创建CompleteMultipartUploadRequest对象。
-            // 在执行完成分片上传操作时，需要提供所有有效的partETags。
-            // OSS收到提交的partETags后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。
-            completeMultipartUpload(uploadId, path);
-
-            PART_E_TAGS.clear();
-
-            resultList.add(
-                    Result.builder()
-                            .showFileUrl(getUrl(path))
-                            .uploadFileUrl(path)
-                            .uploadId(uploadId)
-                            .build()
+            EXECUTOR_SERVICE.execute(
+                    new PartUploader(
+                            uploadFile.getBytes(),
+                            startPos,
+                            curPartSize,
+                            i + 1,
+                            uploadId,
+                            path)
             );
-        });
-        return resultList;
+        }
+
+        EXECUTOR_SERVICE.shutdown();
+        while (!EXECUTOR_SERVICE.isTerminated()) {
+            try {
+                EXECUTOR_SERVICE.awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                throw new BusException(e.getMessage());
+            }
+        }
+
+        // 验证
+        if (PART_E_TAGS.size() != partCount) {
+            throw new BusException("Upload multiparts fail due to some parts are not finished yet");
+        }
+
+        // 创建CompleteMultipartUploadRequest对象。
+        // 在执行完成分片上传操作时，需要提供所有有效的partETags。
+        // OSS收到提交的partETags后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。
+        completeMultipartUpload(uploadId, path);
+
+        PART_E_TAGS.clear();
+
+        return Result.builder()
+                .showFileUrl(getUrl(path))
+                .uploadFileUrl(path)
+                .uploadId(uploadId)
+                .build();
     }
+
 
     private void completeMultipartUpload(String uploadId, String key) {
         PART_E_TAGS.sort(Comparator.comparingInt(PartETag::getPartNumber));
