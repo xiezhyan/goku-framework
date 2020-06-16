@@ -17,7 +17,8 @@ import top.zopx.starter.tools.tools.date.LocalDateUtils;
 class SnowflakeWorker {
 
     /** 开始时间截 */
-    private final long twepoch = LocalDateUtils.monthStartTime().getTime();
+//    private final long twepoch = LocalDateUtils.monthStartTime().getTime();
+    private final long twepoch = 1420041600000L;
 
     /** 机器id所占的位数 */
     private final long workerIdBits = 5L;
