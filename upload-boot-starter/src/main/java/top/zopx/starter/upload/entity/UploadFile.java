@@ -52,8 +52,10 @@ public class UploadFile {
             return StringUtil.uuid();
 
         if (isRename) {
-            String suffix = fileName.substring(fileName.lastIndexOf("."));
-            return StringUtil.uuid() + suffix;
+            if (fileName.lastIndexOf(".") != -1) {
+                String suffix = fileName.substring(fileName.lastIndexOf("."));
+                return StringUtil.uuid() + suffix;
+            }
         }
         return fileName;
     }
