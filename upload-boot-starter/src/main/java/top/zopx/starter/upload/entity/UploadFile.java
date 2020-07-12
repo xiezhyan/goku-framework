@@ -56,6 +56,7 @@ public class UploadFile {
                 String suffix = fileName.substring(fileName.lastIndexOf("."));
                 return StringUtil.uuid() + suffix;
             }
+            return StringUtil.uuid();
         }
         return fileName;
     }
