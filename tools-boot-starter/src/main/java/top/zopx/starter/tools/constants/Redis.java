@@ -13,7 +13,7 @@ public class Redis {
         /**
          * 用户登录
          */
-        static final String MEMBER_TOKEN = "USER:TOKEN:%s";
+        static final String USER_TOKEN = "USER:TOKEN:%s";
 
         /**
          * 验证码
@@ -50,7 +50,7 @@ public class Redis {
          */
         public static String getTokenKey(String token) {
 
-            return  String.format(RedisKey.MEMBER_TOKEN, token);
+            return  String.format(RedisKey.USER_TOKEN, token);
         }
 
         /**

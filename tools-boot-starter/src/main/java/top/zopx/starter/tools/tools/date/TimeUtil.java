@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class TimeUtil {
 
     public static long getTime(double time) {
-        return StringUtil.toInteger((time + RandomUtils.nextLong(0, 180)));
+        return StringUtil.toLong((time + RandomUtils.nextLong(0, 180)));
     }
 
     public static long to24() {

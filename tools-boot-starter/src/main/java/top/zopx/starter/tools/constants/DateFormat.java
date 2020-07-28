@@ -14,12 +14,12 @@ import lombok.Getter;
 public enum DateFormat {
 
     YYYY("yyyy"),
-    YYYYMM("yyyy-MM"),
-    YYYYMMDD("yyyy-MM-dd"),
-    MMDD("MM-dd"),
-    YYYYMMDDHHMMSS("yyyy-MM-dd HH:mm:ss"),
-    HHMM("HH:mm"),
-    HHMMSS("HH:mm:ss"),
+    YYYY_MM("yyyy-MM"),
+    YYYY_MM_DD("yyyy-MM-dd"),
+    MM_DD("MM-dd"),
+    YYYY_MM_DD_HH_MM_SS("yyyy-MM-dd HH:mm:ss"),
+    HH_MM("HH:mm"),
+    HH_MM_SS("HH:mm:ss"),
     ;
 
     private String format;
