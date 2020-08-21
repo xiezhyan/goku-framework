@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
  * @date 2020/1/26
  */
 public class MatcherUtil {
-    public static final String EMAIL_REGEX = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+    public static final String EMAIL_REGEX = "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$";
     public static final String URL_REGEX = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
     public static final String PHONE_REGEX = "^(\\d{3,4}-)?\\d{6,8}$";
     public static final String POSTAL_CODE_REGEX = "^\\d{6}$";
-    public static final String TEL_REGEX = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$";
+    public static final String TEL_REGEX = "^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$";
     public static final String NUMBER_REGEX = "^[0-9]*$";
     public static final String INT_REGEX = "^\\+?[1-9][0-9]*$";
     public static final String UP_CHAR_REGEX = "^[A-Z]+$";
@@ -85,10 +85,6 @@ public class MatcherUtil {
     public static boolean isTelephone(String str) {
         String regex = TEL_REGEX;
         return match(regex, str);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(isTelephone("15110148609"));
     }
 
     /**

@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public interface RedisPoolService {
 
-    static enum Order {
+    enum Order {
         ASC,
         DESC,
         ;

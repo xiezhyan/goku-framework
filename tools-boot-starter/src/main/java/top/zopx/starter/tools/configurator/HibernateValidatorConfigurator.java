@@ -22,17 +22,25 @@ public class HibernateValidatorConfigurator {
 
     @Bean
     public Validator validator() {
+        return getValidator();
+    }
+
+    private Validator getValidator() {
+
         return Validation.byProvider(HibernateValidator.class)
                 .configure()
                 .addProperty("hibernate.validator.fail_fast", "true")
-                .buildValidatorFactory().getValidator();
+                .buildValidatorFactory()
+                .getValidator();
     }
 
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         MethodValidationPostProcessor postProcessor = new MethodValidationPostProcessor();
-        /**设置validator模式为快速失败返回*/
-        postProcessor.setValidator(validator());
+        /*
+         * 设置validator模式为快速失败返回
+         * */
+        postProcessor.setValidator(getValidator());
         return postProcessor;
     }
 
