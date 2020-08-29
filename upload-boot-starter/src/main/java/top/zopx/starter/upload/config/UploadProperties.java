@@ -26,6 +26,8 @@ public class UploadProperties {
 
     private OssProperties oss;
 
+    private LocalProperties local;
+
     @Data
     @Component
     @ConfigurationProperties(prefix = OssProperties.PREFIX)
@@ -54,5 +56,19 @@ public class UploadProperties {
         public OSS ossClient() {
             return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
         }
+    }
+
+
+    @Data
+    @Component
+    @ConfigurationProperties(prefix = LocalProperties.PREFIX)
+    public static class LocalProperties {
+
+        public static final String PREFIX = UploadProperties.PREFIX + "." + "local";
+
+        // 存放文件夹
+        private String localDir;
+        // 访问连接
+        private String showImgUrlPrefix;
     }
 }

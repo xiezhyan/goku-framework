@@ -5,11 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import top.zopx.starter.upload.conditional.FastDFSConditional;
+import top.zopx.starter.upload.conditional.LocalConditional;
 import top.zopx.starter.upload.conditional.OssConditional;
 import top.zopx.starter.upload.config.FastDfsProperties;
 import top.zopx.starter.upload.config.UploadProperties;
 import top.zopx.starter.upload.service.FileManageService;
 import top.zopx.starter.upload.service.impl.FastDFSManageService;
+import top.zopx.starter.upload.service.impl.LocalUploadManage;
 import top.zopx.starter.upload.service.impl.OssUploadManage;
 
 /**
@@ -39,6 +41,14 @@ public class UploadAutoConfig {
     })
     public FileManageService fastDfsManageService() {
         return new FastDFSManageService();
+    }
+
+    @Bean(name = "fileManageService")
+    @Conditional(value = {
+            LocalConditional.class
+    })
+    public FileManageService localUploadManageService() {
+        return new LocalUploadManage();
     }
 
 }
