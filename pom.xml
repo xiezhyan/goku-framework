@@ -56,6 +56,8 @@
         <!--validator start-->
         <validator.version>6.1.5.Final</validator.version>
         <!--validator end-->
+
+        <org.mapstruct.version>1.4.0.Final</org.mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -201,6 +203,22 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
                 <version>${cab.pool2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-jdk8</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
             </dependency>
 
         </dependencies>
