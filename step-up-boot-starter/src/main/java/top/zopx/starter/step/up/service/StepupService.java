@@ -81,6 +81,8 @@ public class StepupService {
 
             mapperTemplate(_rootPath, entry, map);
 
+            structTemplate(_rootPath, entry, map);
+
             mapperXmlTemplate(entry, map);
 
             apiTemplate(entry, map);
@@ -148,6 +150,21 @@ public class StepupService {
         if (null != file) {
             S.write(template, path, file, map);
             log.info("{}:mapper xml 生成, path:{}", tableName, path);
+        }
+    }
+
+    @SneakyThrows
+    private void structTemplate(String _rootPath, Map.Entry<Table, List<Column>> entry, Map<String, Object> map) {
+        Template template = configuration.getTemplate("java/struct.ftl");
+
+        String path = S.getFilePath(_rootPath, "service" + File.separator + "struct");
+
+        String tableName = S.firstUpperCase(entry.getKey().getJavaName());
+
+        File file = S.createFile(path, tableName + "Struct.java", buildOver(), entry.getKey().getTableName());
+        if (null != file) {
+            S.write(template, path, file, map);
+            log.info("{}:mapper 生成, path:{}", tableName, path);
         }
     }
 
