@@ -23,8 +23,6 @@ public interface ${table.javaName?cap_first}Mapper {
 
    List<${table.javaName?cap_first}> findList(@Param("${table.javaName}") ${table.javaName?cap_first}Vo ${table.javaName});
 
-   List<${table.javaName?cap_first}> findListByPage(@Param("${table.javaName}") ${table.javaName?cap_first}Vo ${table.javaName}, @Param("startPage") int startPage, @Param("pageSize") int pageSize);
-
    int findCount(@Param("${table.javaName}") ${table.javaName?cap_first}Vo ${table.javaName});
 
    void saveByList(@Param("${table.javaName}List") List<${table.javaName?cap_first}> ${table.javaName}List);

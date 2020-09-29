@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import com.github.pagehelper.*;
+
 /**
  *	version: ${table.tableComment!""}
  * ----------------------
@@ -24,14 +26,14 @@ import java.util.List;
  * 	date: ${nowDate?string("yyyy-MM-dd")}
  */
 @RestController
-@RequestMapping("/v1/api/${table.javaName}")
+@RequestMapping("/api/${table.javaName}")
 public class ${table.javaName?cap_first}Controller {
 
 	@Resource
 	private ${table.javaName?cap_first}Service ${table.javaName}Service;
 
 	@LogAnnotation(description = "通过ID查询详情-${table.tableComment!""}")
-	@GetMapping("/{id}")
+	@GetMapping("/v1/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:get"})
 	public Response get(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
 		// 查询详情
@@ -43,24 +45,27 @@ public class ${table.javaName?cap_first}Controller {
 	}
 
 	@LogAnnotation(description = "查询列表-${table.tableComment!""}")
-	@GetMapping(value="/")
+	@GetMapping(value="/v1/")
 	@AuthorityAnnotation(keys={"${table.javaName}:list"})
 	public Response findList(${table.javaName?cap_first}Vo ${table.javaName}Vo, Pagination pagination) {
 
 		if (null != pagination && 0 < pagination.getCurrentIndex()) {
-			// 分页查询列表
-			Page<${table.javaName?cap_first}Vo> page = ${table.javaName}Service.findListByPage(${table.javaName}Vo, pagination);
-
-			return Response.builder().build().success(page);
+			// 分页
+			PageHelper.startPage(pagination.getCurrentIndex(), pagination.getPageSize());
 		}
-
 		List<${table.javaName?cap_first}Vo> list = ${table.javaName}Service.findList(${table.javaName}Vo);
+
+		// 返回PageInfo信息
+		if (null != pagination && 0 < pagination.getCurrentIndex()) {
+			PageInfo<${table.javaName?cap_first}Vo> pageInfo = PageInfo.of(list);
+			return Response.builder().build().success(pageInfo);
+		}
 
 		return Response.builder().build().success(list);
 	}
 
 	@LogAnnotation(description = "通过ID删除-${table.tableComment!""}")
-	@DeleteMapping(value="/{id}")
+	@DeleteMapping(value="/v1/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:delete"})
 	public Response deleteById(@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {
 
@@ -75,7 +80,7 @@ public class ${table.javaName?cap_first}Controller {
 	}
 
 	@LogAnnotation(description = "新增-${table.tableComment!""}")
-	@PostMapping(value="/")
+	@PostMapping(value="/v1/")
 	@AuthorityAnnotation(keys={"${table.javaName}:save"})
 	public Response add(@RequestBody ${table.javaName?cap_first}Vo ${table.javaName}Vo) {
 
@@ -87,7 +92,7 @@ public class ${table.javaName?cap_first}Controller {
 	}
 
 	@LogAnnotation(description = "通过ID修改-${table.tableComment!""}")
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/v1/{id}")
 	@AuthorityAnnotation(keys={"${table.javaName}:update"})
 	public Response updateByKey(@RequestBody ${table.javaName?cap_first}Vo ${table.javaName}Vo,
 								@PathVariable("id") <#list fields as field><#if field.priKey>${field.javaType} ${field.javaColumnName}</#if></#list>) {

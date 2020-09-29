@@ -23,8 +23,6 @@ public interface ${table.javaName?cap_first}Service {
 
       List<${table.javaName?cap_first}Vo> findList(${table.javaName?cap_first}Vo ${table.javaName}Vo);
 
-      Page<${table.javaName?cap_first}Vo> findListByPage(${table.javaName?cap_first}Vo ${table.javaName}Vo, Pagination pagination);
-
       int findCount(${table.javaName?cap_first}Vo ${table.javaName}Vo);
 
 }

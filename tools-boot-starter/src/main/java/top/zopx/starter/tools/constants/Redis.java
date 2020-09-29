@@ -96,5 +96,4 @@ public class Redis {
             return String.format(RedisKey.MEMBER_BUTTON_PERMISSION, memberId);
         }
     }
-
 }

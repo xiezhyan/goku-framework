@@ -69,16 +69,6 @@
         </where>
     </select>
 
-    <select id="findListByPage" resultMap="${table.javaName}Map">
-        SELECT
-        <include refid="${table.tableName}_columns"/>
-        FROM ${table.tableName}  ${table.tableName}
-        <where>
-            <include refid="${table.tableName}_where"/>
-        </where>
-        LIMIT ${r"#{startPage}"},${r"#{pageSize}"}
-    </select>
-
     <select id="findCount" resultType="java.lang.Integer">
         SELECT
         COUNT(*)

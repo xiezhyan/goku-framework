@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.zopx.starter.tools.constants.Sorted;
 
 /**
  * top.zopx.starter.tools.basic.Sort

@@ -1,7 +1,7 @@
-package top.zopx.starter.tools.basic;
+package top.zopx.starter.tools.constants;
 
 /**
- * top.zopx.starter.tools.basic.Sorted
+ * top.zopx.starter.tools.constants.Sorted
  *
  * @author sanq.Yan
  * @date 2020/5/12

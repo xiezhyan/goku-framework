@@ -25,35 +25,6 @@ public class Pagination implements Serializable {
     //当前显示的页数
     private int currentIndex;
 
-    // 排序方式
+    // 排序
     private List<Sort> sorts;
-
-    //查询结果总条数
-    private int totalCount;
-
-    public Pagination(int pageSize, int currentIndex) {
-        this.pageSize = pageSize;
-        this.currentIndex = currentIndex;
-    }
-
-    public int getStartPage() {
-        if (this.currentIndex <= 0)
-            this.currentIndex = 1;
-        if (this.currentIndex >= getTotalPage())
-            this.currentIndex = getTotalPage();
-        int startPage = (this.currentIndex - 1) * this.pageSize;
-        return startPage < 0 ? 0 : startPage;
-    }
-
-    public int getTotalPage() {
-        return this.totalCount % this.pageSize != 0 ?    //
-                this.totalCount / this.pageSize + 1 :            //
-                this.totalCount / this.pageSize;
-    }
-
-    public int getPageSize() {
-        if (pageSize > 200)
-            return 200;
-        return pageSize;
-    }
 }

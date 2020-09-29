@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ${table.javaName?cap_first!""}Vo implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * version: ${table.tableComment!""}
 	 *----------------------

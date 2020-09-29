@@ -1,5 +1,8 @@
 package top.zopx.starter.tools.tools.date;
 
+import org.apache.commons.lang3.RandomUtils;
+import top.zopx.starter.tools.tools.strings.StringUtil;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -168,6 +171,10 @@ public class LocalDateUtils {
         LocalTime time = LocalTime.now().withNano(0);
         LocalTime time1 = LocalTime.of(23, 59, 59);
         return time1.toSecondOfDay() - time.toSecondOfDay();
+    }
+
+    public static long getTime(double time) {
+        return StringUtil.toLong((time + RandomUtils.nextLong(0, 180)));
     }
 
     public static void main(String[] args) {

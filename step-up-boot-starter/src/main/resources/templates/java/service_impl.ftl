@@ -89,15 +89,6 @@ public class ${table.javaName?cap_first}ServiceImpl implements ${table.javaName?
 	}
 
 	@Override
-	public Page<${table.javaName?cap_first}Vo> findListByPage(${table.javaName?cap_first}Vo ${table.javaName}Vo,Pagination pagination) {
-		pagination.setTotalCount(findCount(${table.javaName}Vo));
-
-		List<${table.javaName?cap_first}> datas = ${table.javaName}Mapper.findListByPage(${table.javaName}Vo, pagination.getStartPage(), pagination.getPageSize());
-
-		return new Page<${table.javaName?cap_first}Vo>(pagination,convertList(datas));
-	}
-
-	@Override
 	public int findCount(${table.javaName?cap_first}Vo ${table.javaName}Vo) {
 		return ${table.javaName}Mapper.findCount(${table.javaName}Vo);
 	}
