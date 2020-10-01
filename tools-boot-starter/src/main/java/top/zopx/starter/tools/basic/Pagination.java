@@ -1,5 +1,7 @@
 package top.zopx.starter.tools.basic;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,16 +17,21 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Pagination implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //当前显示的条数,默认显示20条
-    private int pageSize = 20;
+    // 当前显示的条数,默认显示20条
+    private long pageSize = 20L;
 
-    //当前显示的页数
-    private int currentIndex;
+    // 当前显示的页数
+    private long currentIndex;
 
     // 排序
     private List<Sort> sorts;
+
+    // 查询总数
+    private long totalCount;
 }
