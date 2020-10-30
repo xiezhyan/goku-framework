@@ -3,10 +3,8 @@ package top.zopx.starter.tools.tools.browser;
 import cz.mallat.uasparser.OnlineUpdater;
 import cz.mallat.uasparser.UASparser;
 import cz.mallat.uasparser.UserAgentInfo;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * version: 对提交的UserAgent进行操作， 获取系统
@@ -29,8 +27,7 @@ public class UserAgentUtil {
     /**
      * 得到 UserAgentInfo
      */
-    @SneakyThrows
-    public static UserAgentInfo getUserAgentInfo(String userAgent) {
+    public static UserAgentInfo getUserAgentInfo(String userAgent) throws IOException {
         UASparser sparser = LOCAL.get();
         if (sparser == null)
             return null;
@@ -42,7 +39,7 @@ public class UserAgentUtil {
      * 得到设备
      *  android， ios， window
      */
-    public static String getOs(String userAgent) {
+    public static String getOs(String userAgent) throws IOException {
         UserAgentInfo userAgentInfo = getUserAgentInfo(userAgent);
         if (null == userAgentInfo)
             return "";

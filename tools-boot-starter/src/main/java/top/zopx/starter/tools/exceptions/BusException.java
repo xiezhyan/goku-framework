@@ -1,8 +1,5 @@
 package top.zopx.starter.tools.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import top.zopx.starter.tools.constants.BusCode;
 
 /**
@@ -12,9 +9,6 @@ import top.zopx.starter.tools.constants.BusCode;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class BusException extends RuntimeException {
 
     private String msg;
@@ -30,5 +24,21 @@ public class BusException extends RuntimeException {
         super();
         this.msg = busExceptionEnum.getMsg();
         this.code = busExceptionEnum.getCode();
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 }

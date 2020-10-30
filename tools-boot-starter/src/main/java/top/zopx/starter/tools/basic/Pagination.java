@@ -1,10 +1,5 @@
 package top.zopx.starter.tools.basic;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,10 +10,6 @@ import java.util.List;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Pagination implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,4 +25,45 @@ public class Pagination implements Serializable {
 
     // 查询总数
     private long totalCount;
+
+    public Pagination() {
+    }
+
+    public Pagination(long pageSize, long currentIndex, long totalCount) {
+        this.pageSize = pageSize;
+        this.currentIndex = currentIndex;
+        this.totalCount = totalCount;
+    }
+
+    public long getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(long pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public long getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(long currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
+    public List<Sort> getSorts() {
+        return sorts;
+    }
+
+    public void setSorts(List<Sort> sorts) {
+        this.sorts = sorts;
+    }
+
+    public long getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
+    }
 }

@@ -1,6 +1,5 @@
 package top.zopx.starter.tools.tools.strings;
 
-import lombok.SneakyThrows;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.util.Base64Utils;
 
@@ -48,7 +47,6 @@ public class DigestUtil {
     /**
      * base64解密
      */
-    @SneakyThrows
     public String base64Decode(String msg) {
         return new String(Base64Utils.decodeFromString(msg));
     }

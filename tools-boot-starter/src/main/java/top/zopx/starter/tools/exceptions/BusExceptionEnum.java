@@ -1,9 +1,6 @@
 package top.zopx.starter.tools.exceptions;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import top.zopx.starter.tools.constants.BusCode;
 
 /**
@@ -13,9 +10,6 @@ import top.zopx.starter.tools.constants.BusCode;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
 public enum BusExceptionEnum {
     TOKEN("用户Token不存在或以过期", BusCode.TOKEN_CODE),
     IP("访问被限制-黑名单", BusCode.IP_CODE),
@@ -29,4 +23,17 @@ public enum BusExceptionEnum {
 
     private String msg;
     private Integer code;
+
+    BusExceptionEnum(String msg, Integer code) {
+        this.msg = msg;
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
 }

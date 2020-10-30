@@ -140,14 +140,6 @@
             </dependency>
             <!--处理userAgent-->
 
-            <!--lombak 工具-->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
-            <!--lombak 工具-->
-
             <!--http请求-->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -161,13 +153,19 @@
             </dependency>
             <!--http请求-->
 
-            <!--集合工具类-->
+            <!--工具类-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${collections.version}</version>
             </dependency>
-            <!--集合工具类-->
+            <!--工具类-->
 
 
             <!--lock starter-->
@@ -219,12 +217,6 @@
                 <version>${validator.version}</version>
             </dependency>
             <!--validator end-->
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${lang3.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>

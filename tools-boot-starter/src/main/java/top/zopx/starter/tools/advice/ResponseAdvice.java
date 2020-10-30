@@ -48,10 +48,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
                                   ServerHttpResponse serverHttpResponse) {
 
         if (null == o) {
-            return Response.builder().build().failure();
+            return new Response().failure();
         }
 
-        Response response = Response.builder().build();
+        Response response = new Response();
 
         if (o instanceof Response) {
             response = (Response) o;

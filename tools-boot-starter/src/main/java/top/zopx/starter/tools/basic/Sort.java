@@ -1,9 +1,5 @@
 package top.zopx.starter.tools.basic;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import top.zopx.starter.tools.constants.Sorted;
 
 /**
@@ -12,13 +8,31 @@ import top.zopx.starter.tools.constants.Sorted;
  * @author sanq.Yan
  * @date 2020/5/12
  */
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Sort {
-
     private String field;
-
     private Sorted sorted = Sorted.ASC;
+
+    public Sort() {
+    }
+
+    public Sort(String field, Sorted sorted) {
+        this.field = field;
+        this.sorted = sorted;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public Sorted getSorted() {
+        return sorted;
+    }
+
+    public void setSorted(Sorted sorted) {
+        this.sorted = sorted;
+    }
 }

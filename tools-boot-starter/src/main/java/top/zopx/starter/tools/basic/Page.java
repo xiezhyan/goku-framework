@@ -1,9 +1,5 @@
 package top.zopx.starter.tools.basic;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,13 +10,34 @@ import java.util.List;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Page<T> implements Serializable {
 
+    // 分页参数
     private Pagination pagination;
-
     //结果集
     private List<T> datas;
+
+    public Page() {
+    }
+
+    public Page(Pagination pagination, List<T> datas) {
+        this.pagination = pagination;
+        this.datas = datas;
+    }
+
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
+    }
+
+    public List<T> getDatas() {
+        return datas;
+    }
+
+    public void setDatas(List<T> datas) {
+        this.datas = datas;
+    }
 }
