@@ -58,18 +58,18 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Response handleValidationException(MethodArgumentNotValidException e) {
         e.printStackTrace();
-        return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.VALIDATION_CODE);
+        return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public Response handleValidationException(ConstraintViolationException e) {
         e.printStackTrace();
-        return new Response().failure(e.getConstraintViolations().iterator().next().getMessage(), BusCode.VALIDATION_CODE);
+        return new Response().failure(e.getConstraintViolations().iterator().next().getMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 
     @ExceptionHandler(BindException.class)
     public Response handleValidationException(BindException e) {
         e.printStackTrace();
-        return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.VALIDATION_CODE);
+        return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 }

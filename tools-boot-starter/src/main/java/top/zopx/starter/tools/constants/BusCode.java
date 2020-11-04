@@ -9,15 +9,23 @@ package top.zopx.starter.tools.constants;
  */
 public class BusCode {
 
+
     public static final Integer RESULT_OK = 200;    //成功
-    public static final Integer RESULT_ERROR = 1005;    //失败
+    public static final Integer RESULT_ERROR = 500;
 
-    public static final Integer TOKEN_CODE = 1001;      // token失效
-    public static final Integer IP_CODE = 1002;         // IP被加入黑名单/ 被屏蔽/ 被限流
-    public static final Integer PARAM_CODE = 1003;      // 参数异常
-    public static final Integer AUTH_CODE = 1004;       // 权限拦截异常
-    public static final Integer VALIDATION_CODE = 1006; // 字段校验异常
-    public static final Integer COPY_CODE = 1007;       // 通过工具copy bean异常
-    public static final Integer LIMIT_CODE = 1009;       // 限流
+    /** 参数错误码 */
+    /** 参数错误 1001 ~ 1999 */
+    public static final Integer PARAM_IS_INVALID = 1001; //
+    public static final Integer PARAM_IS_BLANK = 1002; //
+    public static final Integer PARAM_TYPE_BIND_ERROR = 1003; //
+    public static final Integer PARAM_NOT_COMPLETE = 1004; //
+    public static final Integer PARAM_VALIDATE_ERROR = 1054; //
 
+    /** 用户错误码 */
+    /** 用户错误 2001 ~ 2999*/
+    public static final Integer USER_NOT_LOGIN = 2001; //
+    public static final Integer USER_LOGIN_ERROR = 2002; //
+    public static final Integer USER_ACCOUNT_FORBIDDEN = 2003; //
+    public static final Integer USER_NOT_EXIST = 2004; //
+    public static final Integer USER_HAS_EXISTED = 2005; //
 }
