@@ -15,8 +15,8 @@
         <module>tools-boot-starter</module>
     </modules>
 
-    <groupId>top.zopx.starter</groupId>
-    <artifactId>boot-starter</artifactId>
+    <groupId>top.zopx</groupId>
+    <artifactId>square-boot-starter</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
