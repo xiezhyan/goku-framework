@@ -7,7 +7,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import top.zopx.starter.tools.annotations.IgnoreResponseAdvice;
+import top.zopx.starter.tools.annotations.PassResponseAdviceAnnotation;
 import top.zopx.starter.tools.basic.Response;
 
 /**
@@ -23,7 +23,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
                             Class<? extends HttpMessageConverter<?>> aClass) {
         if (
                 methodParameter.getDeclaringClass().isAnnotationPresent(
-                        IgnoreResponseAdvice.class
+                        PassResponseAdviceAnnotation.class
                 )
         ) {
             return false;
@@ -31,7 +31,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
         if (
                 methodParameter.getMethod().isAnnotationPresent(
-                        IgnoreResponseAdvice.class
+                        PassResponseAdviceAnnotation.class
                 )
         ) {
             return false;

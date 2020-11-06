@@ -3,7 +3,7 @@ package top.zopx.starter.tools.annotations;
 import java.lang.annotation.*;
 
 /**
- * top.zopx.wisdom.edu.tool.common.configurator.advice.IgnoreResponseAdvice
+ * top.zopx.wisdom.edu.tool.common.configurator.advice.PassResponseAdviceAnnotation
  *
  * @author sanq.Yan
  * @date 2020/8/11
@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface IgnoreResponseAdvice {
+public @interface PassResponseAdviceAnnotation  {
 }

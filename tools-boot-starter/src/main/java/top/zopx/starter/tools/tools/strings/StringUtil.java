@@ -1,6 +1,8 @@
 package top.zopx.starter.tools.tools.strings;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.UUID;
 
 /**
@@ -10,7 +12,7 @@ import java.util.UUID;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-public class StringUtil {
+public class StringUtil extends StringUtils {
 
     /**
      * 转换为Double类型

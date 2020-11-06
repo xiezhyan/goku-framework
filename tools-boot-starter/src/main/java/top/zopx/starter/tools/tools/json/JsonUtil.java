@@ -20,37 +20,40 @@ public class JsonUtil {
     }
 
     /**
-     * 将对象转成字符串
+     * 序列化对象为JSON
+     * @param obj 需要序列化的对象
+     * @return JSON字符串
      */
-    public static String obj2Json(Object obj) {
+    public static String toJson(Object obj) {
         return JSON.toJSONString(obj);
     }
 
     /**
-     * 将json字符串转成对象
+     * 反序列化JSON为对象
+     * @param json  需要反序列化的JSON字符串
+     * @param clazz 需要返回的对象类的class
+     * @return      返回对象
      */
-    public static <T> T json2Obj(String jsonStr, Class<T> clazz) {
-        return JSON.parseObject(jsonStr, clazz);
-    }
-
-    /**
-     * 将JSON转成Java对象
-     */
-    public static <T> T json2Object (JSON json, Class<T> clazz) {
-        return JSON.toJavaObject(json, clazz);
+    public static <T> T toObject(String json, Class<T> clazz) {
+        return JSON.parseObject(json, clazz);
     }
 
     /**
      * 转成List类型对象
+     * @param json   需要反序列化的JSON字符串
+     * @param clazz  需要返回的对象类的class
+     * @return       返回的List对象
      */
-    public static <T> List<T> json2ObjList(String jsonStr, Class<T> clazz) {
-        return JSON.parseArray(jsonStr, clazz);
+    public static <T> List<T> toObjList(String json, Class<T> clazz) {
+        return JSON.parseArray(json, clazz);
     }
 
     /**
      * 将字符串转成Map
+     * @param json  需要转换的JSON字符串
+     * @return      返回Map对象
      */
-    public static <K, V> Map<K, V> json2Map (String entity) {
-        return JSON.parseObject(entity,new TypeReference<Map<K,V>>() {});
+    public static <K, V> Map<K, V> toMap (String json) {
+        return JSON.parseObject(json,new TypeReference<Map<K,V>>() {});
     }
 }
