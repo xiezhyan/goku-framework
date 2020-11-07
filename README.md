@@ -17,3 +17,22 @@
 
 
 
+### 依赖
+
+```xml
+<!--parent-->
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-boot-starter</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+
+<!--实现依赖-->
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>tools-boot-starter</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
