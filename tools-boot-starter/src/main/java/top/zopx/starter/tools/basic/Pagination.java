@@ -15,21 +15,21 @@ public class Pagination implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // 当前显示的条数,默认显示20条
-    private long pageSize = 20L;
+    private int pageSize = 20;
 
     // 当前显示的页数
-    private long currentIndex;
+    private int currentIndex;
 
     // 排序
     private List<Sort> sorts;
 
     // 查询总数
-    private long totalCount;
+    private int totalCount;
 
     public Pagination() {
     }
 
-    public Pagination(long pageSize, long currentIndex, long totalCount) {
+    public Pagination(int pageSize, int currentIndex, int totalCount) {
         this.pageSize = pageSize;
         this.currentIndex = currentIndex;
         this.totalCount = totalCount;
@@ -39,7 +39,7 @@ public class Pagination implements Serializable {
         return pageSize;
     }
 
-    public void setPageSize(long pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -47,7 +47,7 @@ public class Pagination implements Serializable {
         return currentIndex;
     }
 
-    public void setCurrentIndex(long currentIndex) {
+    public void setCurrentIndex(int currentIndex) {
         this.currentIndex = currentIndex;
     }
 
@@ -63,7 +63,7 @@ public class Pagination implements Serializable {
         return totalCount;
     }
 
-    public void setTotalCount(long totalCount) {
+    public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
 }
