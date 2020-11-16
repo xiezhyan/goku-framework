@@ -84,7 +84,7 @@
         <validator.version>6.1.5.Final</validator.version>
         <!--validator end-->
 
-        <square.boot.starter.version>1.0.1</square.boot.starter.version>
+        <square.boot.starter.version>${version}</square.boot.starter.version>
     </properties>
 
     <dependencyManagement>
