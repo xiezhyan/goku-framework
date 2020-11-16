@@ -6,8 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.UUID;
 
 /**
- * version: 常用字符串操作
- * ---------------------
+ * 常用字符串操作
  *
  * @author sanq.Yan
  * @date 2020/1/26

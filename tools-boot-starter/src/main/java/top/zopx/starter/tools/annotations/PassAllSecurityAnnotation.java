@@ -3,13 +3,13 @@ package top.zopx.starter.tools.annotations;
 import java.lang.annotation.*;
 
 /**
- * version: 忽略全部的验证
- * ---------------------
+ * 跳过全部验证
+ *
  * @author sanq.Yan
- * @date 2020/1/26
+ * @date 2020/11/16
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface IgnoreAllSecurityAnnotation {
+public @interface PassAllSecurityAnnotation {
 }

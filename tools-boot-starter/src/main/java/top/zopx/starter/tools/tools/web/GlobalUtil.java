@@ -3,10 +3,10 @@ package top.zopx.starter.tools.tools.web;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
- * version: 获取用户访问IP等
- * ---------------------
+ * 获取用户访问IP等
  * @author sanq.Yan
  * @date 2020/1/26
  */

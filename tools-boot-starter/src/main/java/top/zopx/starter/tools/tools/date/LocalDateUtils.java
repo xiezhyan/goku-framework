@@ -9,8 +9,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 
 /**
- * version: 整天时间获取
- * ---------------------
+ * 整天时间获取
  *
  * @author sanq.Yan
  * @date 2020/1/26

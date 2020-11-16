@@ -1,8 +1,7 @@
 package top.zopx.starter.tools.tools.worker;
 
 /**
- * version: 生成ID
- * ---------------------
+ * 雪花ID
  *
  * @author sanq.Yan
  * @date 2020/1/26

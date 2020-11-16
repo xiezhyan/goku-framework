@@ -13,6 +13,11 @@ import java.util.Set;
  */
 public class BeanCopyUtil extends BeanUtils {
 
+    /**
+     * 忽略为null的字段的复制
+     * @param source 源
+     * @param target 目标
+     */
     public static void copyPropertiesIgnoreNull(Object source, Object target) {
         copyProperties(source, target, getNullPropertyNames(source));
     }

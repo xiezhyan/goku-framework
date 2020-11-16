@@ -10,8 +10,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 /**
- * version: 验证框架验证
- * ---------------------
+ * 验证框架验证
  *
  * @author sanq.Yan
  * @date 2020/1/26

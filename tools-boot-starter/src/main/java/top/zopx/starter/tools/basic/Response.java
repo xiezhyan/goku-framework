@@ -5,8 +5,7 @@ import top.zopx.starter.tools.constants.BusCode;
 import java.io.Serializable;
 
 /**
- * version: 统一json返回格式
- * ---------------------
+ *  统一json返回格式
  *
  * @author sanq.Yan
  * @date 2020/1/26

@@ -7,8 +7,7 @@ import cz.mallat.uasparser.UserAgentInfo;
 import java.io.IOException;
 
 /**
- * version: 对提交的UserAgent进行操作， 获取系统
- * ---------------------
+ * 对提交的UserAgent进行操作， 获取系统
  *
  * @author sanq.Yan
  * @date 2020/1/26

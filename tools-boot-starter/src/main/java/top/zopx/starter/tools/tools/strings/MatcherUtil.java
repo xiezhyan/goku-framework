@@ -6,8 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * version: 正则验证
- * ---------------------
+ *  正则验证
  *
  * @author sanq.Yan
  * @date 2020/1/26

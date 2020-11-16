@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * version: 分页
- * ---------------------
+ * 分页对象
  *
  * @author sanq.Yan
  * @date 2020/1/26
@@ -27,6 +26,10 @@ public class Pagination implements Serializable {
     private int totalCount;
 
     public Pagination() {
+    }
+
+    public Pagination(int totalCount) {
+        this.totalCount = totalCount;
     }
 
     public Pagination(int pageSize, int currentIndex, int totalCount) {

@@ -1,8 +1,7 @@
 package top.zopx.starter.tools.constants;
 
 /**
- * version: Redis Key
- * ---------------------
+ * 特定Redis Key
  *
  * @author sanq.Yan
  * @date 2020/1/27

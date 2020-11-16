@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * version: 返回分页查询后的数据
- * ---------------------
+ * 返回分页查询后的数据
  *
  * @author sanq.Yan
  * @date 2020/1/26

@@ -14,8 +14,7 @@ import top.zopx.starter.tools.exceptions.BusException;
 import javax.validation.ConstraintViolationException;
 
 /**
- * version: 统一异常处理
- * ---------------------
+ * 统一异常处理
  *
  * @author sanq.Yan
  * @date 2020/1/26
@@ -27,7 +26,7 @@ public class ExceptionAdvice {
     public Response handleHttpMessageNotReadableException(
             HttpMessageNotReadableException e) {
         e.printStackTrace();
-        return new Response().failure(e.getMessage());
+        return new Response().failure(e.getMessage(), BusCode.PARAM_NOT_READABLE);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

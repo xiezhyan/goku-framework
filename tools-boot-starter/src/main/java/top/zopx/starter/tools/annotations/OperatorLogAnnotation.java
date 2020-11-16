@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * version: 日志记录内容
- * ---------------------
+ * 日志记录内容
  *
  * @author sanq.Yan
  * @date 2020/1/26

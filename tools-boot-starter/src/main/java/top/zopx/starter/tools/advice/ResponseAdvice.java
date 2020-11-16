@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import top.zopx.starter.tools.annotations.PassResponseAdviceAnnotation;
 import top.zopx.starter.tools.basic.Response;
+import top.zopx.starter.tools.exceptions.BusException;
 
 /**
  * @author sanq.Yan
@@ -58,7 +59,6 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         } else {
             response.success(o);
         }
-
         return response;
     }
 }

@@ -13,8 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * version: 解析IP
- * ---------------------
+ * 解析IP
  *
  * @author sanq.Yan
  * @date 2020/1/26

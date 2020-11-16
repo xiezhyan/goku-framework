@@ -8,8 +8,7 @@ import java.util.Map;
 
 
 /**
- * version: 方便json操作
- * ---------------------
+ * 基于FastJson方便JSON的使用
  *
  * @author sanq.Yan
  * @date 2020/1/26

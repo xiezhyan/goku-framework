@@ -3,8 +3,7 @@ package top.zopx.starter.tools.exceptions;
 import top.zopx.starter.tools.constants.BusCode;
 
 /**
- * version: 错误信息
- * ---------------------
+ * 自定义异常信息
  *
  * @author sanq.Yan
  * @date 2020/1/26
