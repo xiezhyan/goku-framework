@@ -40,7 +40,6 @@
 
 
     <artifactId>tools-boot-starter</artifactId>
-    <version>${square.boot.starter.version}</version>
     <packaging>jar</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>tools-boot-starter</description>
@@ -88,6 +87,24 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!--spring boot web-->
+
+        <!--spring boot test-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <!--spring boot test-->
+
+        <!--配置-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!--配置-->
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>
