@@ -23,7 +23,7 @@ public class Pagination implements Serializable {
     private List<Sort> sorts;
 
     // 查询总数
-    private int totalCount;
+    private long totalCount;
 
     public Pagination() {
     }
@@ -62,11 +62,11 @@ public class Pagination implements Serializable {
         this.sorts = sorts;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 }

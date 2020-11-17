@@ -44,7 +44,7 @@
 
     <groupId>top.zopx</groupId>
     <artifactId>square-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>square-boot-starter</description>
