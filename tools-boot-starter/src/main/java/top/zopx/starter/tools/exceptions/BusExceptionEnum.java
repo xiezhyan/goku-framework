@@ -23,6 +23,7 @@ public enum BusExceptionEnum {
     USER_ACCOUNT_FORBIDDEN("账号不可用", BusCode.USER_ACCOUNT_FORBIDDEN),
     USER_NOT_EXIST("用户不存在", BusCode.USER_NOT_EXIST),
     USER_HAS_EXISTED("用户已存在", BusCode.USER_HAS_EXISTED),
+    USER_NOT_ACCESS("用户拒绝访问", BusCode.USER_NOT_ACCESS),
     ;
     private String msg;
     private Integer code;
