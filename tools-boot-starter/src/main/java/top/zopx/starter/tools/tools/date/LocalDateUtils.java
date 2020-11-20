@@ -22,6 +22,158 @@ public class LocalDateUtils {
         return formatter.format(LocalDateTime.now().withNano(0));
     }
 
+    public static LocalDateTime nowDateTime() {
+        return LocalDateTime.now();
+    }
+
+    /**
+     * 向后加 yyyy-MM-dd HH:mm:ss
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  星期
+     * @param day   日
+     * @return LocalDateTime
+     */
+    public static LocalDateTime nowDateTimePlus(long year, long month, long week, long day) {
+        return nowDateTime()
+                .plusYears(year)
+                .plusMonths(month)
+                .plusWeeks(week)
+                .plusDays(day);
+    }
+
+    /**
+     * 向前减 yyyy-MM-dd HH:mm:ss
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDateTime
+     */
+    public static LocalDateTime nowDateTimeMinus(long year, long month, long week, long day) {
+        return nowDateTime()
+                .minusYears(year)
+                .minusMonths(month)
+                .minusWeeks(week)
+                .minusDays(day);
+    }
+
+    public static LocalDate nowDate() {
+        return LocalDate.now();
+    }
+
+    /**
+     * 向后加 yyyy-MM-dd
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  星期
+     * @param day   日
+     * @return LocalDate
+     */
+    public static LocalDate nowDatePlus(long year, long month, long week, long day) {
+        return nowDate()
+                .plusYears(year)
+                .plusMonths(month)
+                .plusWeeks(week)
+                .plusDays(day);
+    }
+
+    /**
+     * 向前减 yyyy-MM-dd
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDate
+     */
+    public static LocalDate nowDateMinus(long year, long month, long week, long day) {
+        return nowDate()
+                .minusYears(year)
+                .minusMonths(month)
+                .minusWeeks(week)
+                .minusDays(day);
+    }
+
+    /**
+     * 向前开始时间
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDateTime
+     */
+    public static LocalDateTime lastStartDateTime(long year, long month, long week, long day) {
+        return nowDate()
+                .atTime(0, 0, 0)
+                .minusYears(year)
+                .minusMonths(month)
+                .minusWeeks(week)
+                .minusDays(day)
+                .withNano(0);
+    }
+
+    /**
+     * 向前结束时间
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDateTime
+     */
+    public static LocalDateTime lastEndDateTime(long year, long month, long week, long day) {
+        return nowDate()
+                .atTime(23, 59, 59)
+                .minusYears(year)
+                .minusMonths(month)
+                .minusWeeks(week)
+                .minusDays(day)
+                .withNano(0);
+    }
+
+    /**
+     * 向前开始时间
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDateTime
+     */
+    public static LocalDateTime startDateTime(long year, long month, long week, long day) {
+        return nowDate()
+                .atTime(0, 0, 0)
+                .plusYears(year)
+                .plusMonths(month)
+                .plusWeeks(week)
+                .plusDays(day)
+                .withNano(0);
+    }
+
+    /**
+     * 向前结束时间
+     *
+     * @param year  年
+     * @param month 月
+     * @param week  日
+     * @param day   天
+     * @return LocalDateTime
+     */
+    public static LocalDateTime endDateTime(long year, long month, long week, long day) {
+        return nowDate()
+                .atTime(23, 59, 59)
+                .plusYears(year)
+                .plusMonths(month)
+                .plusWeeks(week)
+                .plusDays(day)
+                .withNano(0);
+    }
+
     public static Date nowTime() {
         return localDateTimeToDate(LocalDateTime.now());
     }
@@ -203,5 +355,16 @@ public class LocalDateUtils {
         System.out.println("上月开始时间" + lastMonthStartTime());
         System.out.println("上月结束时间" + lastMonthEndTimeStr());
         System.out.println("上月结束时间" + lastMonthEndTime());
+
+        System.out.println("===========================================");
+
+        System.out.println("当前时间：" + nowDate());
+        System.out.println("当前时间" + nowDateTime());
+        System.out.println("当前开始时间" + startDateTime(0, 0, 0, 0));
+        System.out.println("当前结束时间" + endDateTime(0, 0, 0, 0));
+
+        System.out.println("昨天开始时间"+ lastStartDateTime(0,0,0, 1));
+        System.out.println("昨天开始时间"+ lastEndDateTime(0,0,0, 1));
+
     }
 }
