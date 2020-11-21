@@ -137,7 +137,7 @@ public class LocalDateUtils {
     }
 
     /**
-     * 向前开始时间
+     * 向后开始时间
      *
      * @param year  年
      * @param month 月
@@ -156,7 +156,7 @@ public class LocalDateUtils {
     }
 
     /**
-     * 向前结束时间
+     * 向后结束时间
      *
      * @param year  年
      * @param month 月

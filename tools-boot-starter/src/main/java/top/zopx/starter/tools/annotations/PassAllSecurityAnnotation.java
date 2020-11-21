@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * @author sanq.Yan
  * @date 2020/11/16
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface PassAllSecurityAnnotation {
