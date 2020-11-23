@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: square-web
+
+sms:
+  sms-li:
+    open: true
+    access-key-id: kkk
+    access-secret: kkk
