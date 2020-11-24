@@ -40,4 +40,5 @@ public enum BusExceptionEnum {
     public Integer getCode() {
         return code;
     }
+
 }

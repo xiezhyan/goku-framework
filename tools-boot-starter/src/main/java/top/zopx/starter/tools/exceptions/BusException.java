@@ -19,6 +19,12 @@ public class BusException extends RuntimeException {
         this.code = BusCode.RESULT_ERROR;
     }
 
+    public BusException(String msg, Integer code) {
+        super();
+        this.msg = msg;
+        this.code = code;
+    }
+
     public BusException(BusExceptionEnum busExceptionEnum) {
         super();
         this.msg = busExceptionEnum.getMsg();
