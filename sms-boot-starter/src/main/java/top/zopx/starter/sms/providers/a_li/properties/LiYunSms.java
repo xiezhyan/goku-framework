@@ -1,8 +1,10 @@
-package top.zopx.starter.sms.properties;
+package top.zopx.starter.sms.providers.a_li.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import top.zopx.starter.sms.properties.BaseSms;
+import top.zopx.starter.sms.properties.SmsProperties;
 
 import java.io.Serializable;
 
@@ -14,16 +16,27 @@ import java.io.Serializable;
  */
 @Configuration
 @Component
-@ConfigurationProperties(prefix = ALiYunSms.PREFIX)
-public class ALiYunSms extends BaseSms implements Serializable {
+@ConfigurationProperties(prefix = LiYunSms.PREFIX)
+public class LiYunSms extends BaseSms implements Serializable {
 
-    static final String PREFIX = SmsProperties.PREFIX + ".sms-li";
+    public static final String PREFIX = SmsProperties.PREFIX + ".sms-li";
 
     private String regionId = "cn-hangzhou";
 
+    /**
+     * 私钥
+     */
     private String accessKeyId;
 
+    /**
+     * 私钥
+     */
     private String accessSecret;
+
+    /**
+     * 签名,批量发送无关
+     */
+    private String signName;
 
     public String getRegionId() {
         return regionId;
@@ -47,5 +60,13 @@ public class ALiYunSms extends BaseSms implements Serializable {
 
     public void setAccessSecret(String accessSecret) {
         this.accessSecret = accessSecret;
+    }
+
+    public String getSignName() {
+        return signName;
+    }
+
+    public void setSignName(String signName) {
+        this.signName = signName;
     }
 }

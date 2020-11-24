@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import top.zopx.starter.sms.providers.a_li.properties.LiYunSms;
 
 /**
  * @author sanq.Yan
@@ -17,24 +18,24 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = SmsProperties.PREFIX)
 public class SmsProperties {
-    static final String PREFIX = "sms";
+    public static final String PREFIX = "sms";
 
     /**
      * 阿里云短信配置
      */
-    private ALiYunSms smsLi;
+    private LiYunSms smsLi;
 
-    public ALiYunSms getSmsLi() {
+    public LiYunSms getSmsLi() {
         return smsLi;
     }
 
-    public void setSmsLi(ALiYunSms smsLi) {
+    public void setSmsLi(LiYunSms smsLi) {
         this.smsLi = smsLi;
     }
 
 
     @Bean
-    @ConditionalOnProperty(prefix = ALiYunSms.PREFIX, name = {"open"}, havingValue = "true")
+    @ConditionalOnProperty(prefix = LiYunSms.PREFIX, name = {"open"}, havingValue = "true")
     public IAcsClient acsClient() {
         DefaultProfile profile = DefaultProfile.getProfile(
                 smsLi.getRegionId(),

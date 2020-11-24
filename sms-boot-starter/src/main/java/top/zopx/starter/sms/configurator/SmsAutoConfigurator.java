@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.zopx.starter.sms.properties.SmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
-import top.zopx.starter.sms.service.impl.ALiYunSmsServiceImpl;
+import top.zopx.starter.sms.providers.a_li.service.impl.ALiYunSmsServiceImpl;
 
 /**
  * 自动配置

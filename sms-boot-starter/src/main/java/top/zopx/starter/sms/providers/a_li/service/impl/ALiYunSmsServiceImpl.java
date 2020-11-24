@@ -1,4 +1,4 @@
-package top.zopx.starter.sms.service.impl;
+package top.zopx.starter.sms.providers.a_li.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.CommonRequest;
@@ -6,6 +6,7 @@ import com.aliyuncs.CommonResponse;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.http.MethodType;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import top.zopx.starter.sms.entity.SmsRequest;
 import top.zopx.starter.sms.entity.SmsResponse;
 import top.zopx.starter.sms.properties.SmsProperties;
@@ -33,8 +34,14 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
         if (smsProperties.getSmsLi().getOpen()) {
 
-            if (null == request || null == request.getSmsALiYunRequest())
+            if (null == request || null == request.getSmsLiYunRequest())
                 return SmsResponse.error();
+
+            String signName = smsProperties.getSmsLi().getSignName();
+
+            if (!StringUtils.hasText(signName)) {
+                signName = request.getSmsLiYunRequest().getSignName();
+            }
 
             CommonRequest req = new CommonRequest();
             // 固定参数
@@ -44,10 +51,10 @@ public class ALiYunSmsServiceImpl implements ISmsService {
             req.setSysAction("SendSms");
 
             req.putQueryParameter("RegionId", smsProperties.getSmsLi().getRegionId());
-            req.putQueryParameter("PhoneNumbers", request.getSmsALiYunRequest().getPhoneNumber());
-            req.putQueryParameter("SignName", request.getSmsALiYunRequest().getSignName());
-            req.putQueryParameter("TemplateCode", request.getSmsALiYunRequest().getTemplateCode());
-            req.putQueryParameter("TemplateParam", JSON.toJSONString(request.getSmsALiYunRequest().getTemplateParam()));
+            req.putQueryParameter("PhoneNumbers", request.getSmsLiYunRequest().getPhoneNumber());
+            req.putQueryParameter("SignName", signName);
+            req.putQueryParameter("TemplateCode", request.getSmsLiYunRequest().getTemplateCode());
+            req.putQueryParameter("TemplateParam", JSON.toJSONString(request.getSmsLiYunRequest().getTemplateParam()));
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
@@ -70,11 +77,11 @@ public class ALiYunSmsServiceImpl implements ISmsService {
             List<Map<String, Object>> templateParamJson = new ArrayList<>(requests.size());
 
             requests.forEach(request -> {
-                if (null != request.getSmsALiYunRequest()) {
-                    phoneNumberJson.add(request.getSmsALiYunRequest().getPhoneNumber());
-                    signNameJson.add(request.getSmsALiYunRequest().getSignName());
-                    templateCode.add(request.getSmsALiYunRequest().getTemplateCode());
-                    templateParamJson.add(request.getSmsALiYunRequest().getTemplateParam());
+                if (null != request.getSmsLiYunRequest()) {
+                    phoneNumberJson.add(request.getSmsLiYunRequest().getPhoneNumber());
+                    signNameJson.add(request.getSmsLiYunRequest().getSignName());
+                    templateCode.add(request.getSmsLiYunRequest().getTemplateCode());
+                    templateParamJson.add(request.getSmsLiYunRequest().getTemplateParam());
                 }
             });
 

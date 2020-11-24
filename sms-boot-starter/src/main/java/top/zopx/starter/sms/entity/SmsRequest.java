@@ -1,5 +1,7 @@
 package top.zopx.starter.sms.entity;
 
+import top.zopx.starter.sms.providers.a_li.entity.SmsLiYunRequest;
+
 import java.io.Serializable;
 
 /**
@@ -8,13 +10,17 @@ import java.io.Serializable;
  */
 public class SmsRequest implements Serializable {
 
-    private SmsALiYunRequest smsALiYunRequest;
+    private SmsLiYunRequest smsLiYunRequest;
 
-    public SmsALiYunRequest getSmsALiYunRequest() {
-        return smsALiYunRequest;
+    public SmsLiYunRequest getSmsLiYunRequest() {
+        return smsLiYunRequest;
     }
 
-    public void setSmsALiYunRequest(SmsALiYunRequest smsALiYunRequest) {
-        this.smsALiYunRequest = smsALiYunRequest;
+    public void setSmsLiYunRequest(SmsLiYunRequest smsLiYunRequest) {
+        this.smsLiYunRequest = smsLiYunRequest;
+    }
+
+    public static SmsRequest create() {
+        return new SmsRequest();
     }
 }
