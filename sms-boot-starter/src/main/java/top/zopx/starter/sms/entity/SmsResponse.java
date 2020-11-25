@@ -21,7 +21,7 @@ public class SmsResponse implements Serializable {
     }
 
     public static SmsResponse error() {
-        return new SmsResponse("参数为空", 500);
+        return new SmsResponse("", 500);
     }
 
     public String getDesc() {

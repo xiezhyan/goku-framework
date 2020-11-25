@@ -88,14 +88,14 @@ public class LogUtil {
     }
 
     public static void trace(String msg) {
-        if (!isTrace())
+        if (isTrace())
             return;
 
         LOGGER.trace(msg);
     }
 
     public static void trace(String msg, Object... args) {
-        if (!isTrace())
+        if (isTrace())
             return;
 
         LOGGER.trace(msg, args);
