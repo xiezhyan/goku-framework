@@ -5,6 +5,7 @@ spring:
 sms:
   sms-li:
     open: true
-    access-secret: kkkk
-    access-key-id: kkkk
+    access-key-id: kk
+    access-secret: kk
     sign-name: 精彩试玩
+    region-id: cn-hangzhou

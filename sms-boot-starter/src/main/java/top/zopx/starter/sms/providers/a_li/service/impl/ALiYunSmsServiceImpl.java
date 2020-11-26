@@ -34,13 +34,13 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
         if (smsProperties.getSmsLi().getOpen()) {
 
-            if (null == request || null == request.getSmsLiYunRequest())
+            if (null == request)
                 return SmsResponse.error();
 
             String signName = smsProperties.getSmsLi().getSignName();
 
             if (!StringUtils.hasText(signName)) {
-                signName = request.getSmsLiYunRequest().getSignName();
+                signName = request.getSignName();
             }
 
             CommonRequest req = new CommonRequest();
@@ -51,10 +51,10 @@ public class ALiYunSmsServiceImpl implements ISmsService {
             req.setSysAction("SendSms");
 
             req.putQueryParameter("RegionId", smsProperties.getSmsLi().getRegionId());
-            req.putQueryParameter("PhoneNumbers", request.getSmsLiYunRequest().getPhoneNumber());
+            req.putQueryParameter("PhoneNumbers", request.getPhoneNumber());
             req.putQueryParameter("SignName", signName);
-            req.putQueryParameter("TemplateCode", request.getSmsLiYunRequest().getTemplateCode());
-            req.putQueryParameter("TemplateParam", JSON.toJSONString(request.getSmsLiYunRequest().getTemplateParam()));
+            req.putQueryParameter("TemplateCode", request.getTemplate());
+            req.putQueryParameter("TemplateParam", JSON.toJSONString(request.getTemplateParam()));
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
@@ -77,11 +77,11 @@ public class ALiYunSmsServiceImpl implements ISmsService {
             List<Map<String, Object>> templateParamJson = new ArrayList<>(requests.size());
 
             requests.forEach(request -> {
-                if (null != request.getSmsLiYunRequest()) {
-                    phoneNumberJson.add(request.getSmsLiYunRequest().getPhoneNumber());
-                    signNameJson.add(request.getSmsLiYunRequest().getSignName());
-                    templateCode.add(request.getSmsLiYunRequest().getTemplateCode());
-                    templateParamJson.add(request.getSmsLiYunRequest().getTemplateParam());
+                if (null != request) {
+                    phoneNumberJson.add(request.getPhoneNumber());
+                    signNameJson.add(request.getSignName());
+                    templateCode.add(request.getTemplate());
+                    templateParamJson.add(request.getTemplateParam());
                 }
             });
 

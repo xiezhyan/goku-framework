@@ -33,11 +33,6 @@ public class LiYunSms extends BaseSms implements Serializable {
      */
     private String accessSecret;
 
-    /**
-     * 签名,批量发送无关
-     */
-    private String signName;
-
     public String getRegionId() {
         return regionId;
     }
@@ -60,13 +55,5 @@ public class LiYunSms extends BaseSms implements Serializable {
 
     public void setAccessSecret(String accessSecret) {
         this.accessSecret = accessSecret;
-    }
-
-    public String getSignName() {
-        return signName;
-    }
-
-    public void setSignName(String signName) {
-        this.signName = signName;
     }
 }
