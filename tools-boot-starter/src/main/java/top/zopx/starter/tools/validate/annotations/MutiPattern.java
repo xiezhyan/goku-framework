@@ -10,10 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 多正则匹配
  * @author sanq.Yan
  * @date 2020/11/19
  */
-@Target(value = ElementType.FIELD)
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(value = RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = MutiPatternValidator.class)
 public @interface MutiPattern {

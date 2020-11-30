@@ -1,5 +1,6 @@
 package top.zopx.starter.tools.advice;
 
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import top.zopx.starter.tools.annotations.PassResponseAdviceAnnotation;
 import top.zopx.starter.tools.basic.Response;
-import top.zopx.starter.tools.exceptions.BusException;
+import top.zopx.starter.tools.tools.strings.StringUtil;
+
+import java.util.LinkedHashMap;
 
 /**
  * @author sanq.Yan
@@ -56,6 +59,13 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
         if (o instanceof Response) {
             response = (Response) o;
+        } else if (o instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) o;
+            if (MapUtils.isNotEmpty(map)) {
+                Integer code = StringUtil.toInteger(map.get("status"));
+                String message = String.format("%s:%s", map.get("path"), map.get("error"));
+                response.failure(message, code);
+            }
         } else {
             response.success(o);
         }
