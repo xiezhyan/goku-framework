@@ -3,6 +3,7 @@ package top.zopx.starter.tools.configurator;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
@@ -15,7 +16,7 @@ import javax.validation.Validator;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@Configurable
+@Configuration
 @Component
 public class HibernateValidatorConfigurator {
 
