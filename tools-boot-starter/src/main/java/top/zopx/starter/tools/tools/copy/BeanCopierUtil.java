@@ -1,0 +1,211 @@
+package top.zopx.starter.tools.tools.copy;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.cglib.core.Converter;
+
+import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+/**
+ * 复制对象
+ *
+ * @author sanq.Yan
+ * @date 2020/12/12
+ */
+public class BeanCopierUtil {
+
+
+    private static final ConcurrentHashMap<String, BeanCopier> CONCURRENT_HASH_MAP = new ConcurrentHashMap<>(16);
+
+    private static boolean useConverter;
+
+    private BeanCopierUtil() {
+    }
+
+    private static BeanCopierUtil INSTANCE = null;
+
+    public static BeanCopierUtil getInstance() {
+        if (null == INSTANCE) {
+            synchronized (BeanCopierUtil.class) {
+                if (null == INSTANCE) {
+                    INSTANCE = new BeanCopierUtil();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    public BeanCopierUtil setConverter(boolean useConverter) {
+        this.useConverter = useConverter;
+        return this;
+    }
+
+    /**
+     * 得到key
+     *
+     * @param source 源对象
+     * @param target 目标对象
+     * @return String
+     */
+    private <K, T> String getKey(Class<K> source, Class<T> target) {
+        return source.getName() + "_" + target.getName();
+    }
+
+    /**
+     * 得到BeanCopier对象
+     *
+     * @param source 源对象
+     * @param target 目标对象
+     * @return BeanCopier
+     */
+    private <K, T> BeanCopier getCopier(Class<K> source, Class<T> target) {
+        BeanCopier copier = null;
+
+        String key = "";
+        if (!CONCURRENT_HASH_MAP.containsKey((key = getKey(source, target)))) {
+            // 如果不存在当前值，那么就创建并存储在MAP中
+            copier = BeanCopier.create(source, target, useConverter);
+            CONCURRENT_HASH_MAP.put(key, copier);
+        } else {
+            // 存在，直接取出
+            copier = CONCURRENT_HASH_MAP.get(key);
+        }
+
+        return copier;
+    }
+
+
+    /**
+     * 复制对象 定义转换器
+     *
+     * @param source    源对象
+     * @param target    目标对象
+     * @param converter 转换器
+     */
+    public void copy(Object source, Object target, Converter converter) {
+        /**
+         * 这里为了防止在外部设置忘记该配置，所以在这里提前加上，不影响
+         */
+        copy(source, target, converter, null);
+    }
+
+    /**
+     * 复制对象 如果还存在后续操作，可以通过该方式来进行操作
+     *
+     * @param source    源对象
+     * @param target    目标对象
+     * @param converter 转换器
+     * @param consumer  通用操作
+     */
+    public void copy(Object source, Object target, Converter converter, BiConsumer<Object, Object> consumer) {
+        if (null != converter)
+            this.setConverter(true);
+
+        BeanCopier copier = getCopier(source.getClass(), target.getClass());
+
+        copier.copy(source, target, converter);
+
+        if (null != consumer) {
+            consumer.accept(source, target);
+        }
+    }
+
+
+    /**
+     * 复制对象 空值定义转换
+     *
+     * @param source   源对象
+     * @param target   目标对象
+     * @param consumer 通用操作
+     */
+    public void copyPropertiesIgnoreNull(Object source, Object target, BiConsumer<Object, Object> consumer) {
+        copy(source, target, new DealNullPropertiesConverter(target), consumer);
+    }
+
+    /**
+     * 复制集合对象
+     *
+     * @param source       源对象
+     * @param target       目标对象
+     * @param consumer     通用操作
+     * @param isIgnoreNull 是否对空对象进行设置
+     * @return List<T>
+     */
+    public <S, T> List<T> copyList(List<S> source, Supplier<T> target, BiConsumer<S, T> consumer, boolean isIgnoreNull) {
+        return CollectionUtils.isNotEmpty(source) ? source.stream().map(item -> {
+            T t = target.get();
+            if (isIgnoreNull) {
+                copyPropertiesIgnoreNull(item, t, null);
+            } else {
+                copy(item, t, null);
+            }
+
+            if (null != consumer) {
+                consumer.accept(item, t);
+            }
+            return t;
+        }).collect(Collectors.toList()) : Collections.emptyList();
+    }
+
+    /**
+     * 空值字段处理方案：
+     * 源中没有数据，那么就从目标数据中取数据，
+     * 如果目标数据中也没有数据，那么就真的没有数据了
+     */
+    public class DealNullPropertiesConverter implements Converter {
+
+        private Object target;
+
+        public DealNullPropertiesConverter(Object target) {
+            this.target = target;
+        }
+
+        @Override
+        public Object convert(Object o, Class aClass, Object o1) {
+            if (null == o && null != target) {
+                return getFieldValue(target, getFields((String) o1));
+            }
+            return o;
+        }
+    }
+
+    /**
+     * 反射获取当前成员变量的值
+     *
+     * @param target 目标
+     * @param field  变量名称
+     * @return 返回值
+     */
+    private Object getFieldValue(Object target, String field) {
+        Object o = null;
+        try {
+            Field declaredField = target.getClass().getDeclaredField(field);
+            declaredField.setAccessible(true);
+            o = declaredField.get(target);
+            declaredField.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+
+    /**
+     * 将setXX 转成xX
+     *
+     * @param setMethod setXX方法
+     * @return xX
+     */
+    private String getFields(String setMethod) {
+        int len;
+        char[] newStrs = new char[(len = setMethod.length() - 3)];
+        System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
+        newStrs[0] = Character.toLowerCase(newStrs[0]); // 转小写
+        return String.valueOf(newStrs);
+    }
+}
