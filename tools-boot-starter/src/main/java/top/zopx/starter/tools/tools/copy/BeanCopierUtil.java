@@ -65,18 +65,15 @@ public class BeanCopierUtil {
      * @return BeanCopier
      */
     private <K, T> BeanCopier getCopier(Class<K> source, Class<T> target) {
-        BeanCopier copier = null;
 
         String key = "";
-        if (!CONCURRENT_HASH_MAP.containsKey((key = getKey(source, target)))) {
-            // 如果不存在当前值，那么就创建并存储在MAP中
+        // 从缓存中取出当前对象
+        BeanCopier copier = CONCURRENT_HASH_MAP.get((key = getKey(source, target)));
+        if (null == copier) {
+            // 如果为空，就重新创建，然后存入缓存中
             copier = BeanCopier.create(source, target, useConverter);
             CONCURRENT_HASH_MAP.put(key, copier);
-        } else {
-            // 存在，直接取出
-            copier = CONCURRENT_HASH_MAP.get(key);
         }
-
         return copier;
     }
 
