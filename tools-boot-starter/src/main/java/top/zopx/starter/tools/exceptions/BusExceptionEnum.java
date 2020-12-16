@@ -11,6 +11,8 @@ import top.zopx.starter.tools.constants.BusCode;
  */
 public enum BusExceptionEnum {
 
+    DEFAULT_ERROR("ERROR", BusCode.RESULT_ERROR),
+    DEFAULT_SUCCESS("OK", BusCode.RESULT_OK),
     PARAM_IS_INVALID("参数无效", BusCode.PARAM_IS_INVALID),
     PARAM_IS_BLANK("参数为空", BusCode.PARAM_IS_BLANK),
     PARAM_TYPE_BIND_ERROR("参数类型错误", BusCode.PARAM_TYPE_BIND_ERROR),
