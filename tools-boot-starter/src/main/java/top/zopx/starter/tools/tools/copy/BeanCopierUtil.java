@@ -3,6 +3,7 @@ package top.zopx.starter.tools.tools.copy;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.core.Converter;
+import top.zopx.starter.tools.tools.strings.StringUtil;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -22,6 +23,8 @@ public class BeanCopierUtil {
 
 
     private static final ConcurrentHashMap<String, BeanCopier> CONCURRENT_HASH_MAP = new ConcurrentHashMap<>(16);
+    private static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
+    private static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
 
     private static boolean useConverter;
 
@@ -180,17 +183,27 @@ public class BeanCopierUtil {
      * @return 返回值
      */
     private Object getFieldValue(Object target, String field) {
-        Object o = null;
-        try {
-            Field declaredField = target.getClass().getDeclaredField(field);
-            declaredField.setAccessible(true);
-            o = declaredField.get(target);
-            declaredField.setAccessible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        Object o = CONCURRENT_HASH_MAP_OBJECT.get(field);
+
+        if (null == o) {
+            try {
+                o = reflectField(target, field);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         return o;
     }
+
+    private Object reflectField(Object target, String field) throws Exception {
+        Field declaredField = target.getClass().getDeclaredField(field);
+        declaredField.setAccessible(true);
+        CONCURRENT_HASH_MAP_OBJECT.put(field, declaredField.get(target));
+        declaredField.setAccessible(false);
+        return CONCURRENT_HASH_MAP_OBJECT.get(field);
+}
 
     /**
      * 将setXX 转成xX
@@ -199,10 +212,20 @@ public class BeanCopierUtil {
      * @return xX
      */
     private String getFields(String setMethod) {
+        String field = CONCURRENT_HASH_MAP_FIELD.get(setMethod);
+
+        if (StringUtil.isBlank(field))
+            field = getField(setMethod);
+
+        return field;
+    }
+
+    private String getField(String setMethod) {
         int len;
         char[] newStrs = new char[(len = setMethod.length() - 3)];
         System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
         newStrs[0] = Character.toLowerCase(newStrs[0]); // 转小写
-        return String.valueOf(newStrs);
+        CONCURRENT_HASH_MAP_FIELD.put(setMethod, String.valueOf(newStrs));
+        return CONCURRENT_HASH_MAP_FIELD.get(setMethod);
     }
 }

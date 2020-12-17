@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 阿里云 发送短信
@@ -30,8 +31,7 @@ public class ALiYunSmsServiceImpl implements ISmsService {
     private SmsProperties smsProperties;
 
     @Override
-    public SmsResponse sendSms(SmsRequest request) throws Throwable {
-
+    public SmsResponse sendSms(SmsRequest request,  Consumer<String> consumer) throws Throwable {
         if (smsProperties.getSmsLi().getOpen()) {
 
             if (null == request)
@@ -58,13 +58,21 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
+            if (null != consumer)
+                consumer.accept(JSON.toJSONString(response));
+
             return new SmsResponse(response.getData(), response.getHttpStatus());
         }
         return SmsResponse.error();
     }
 
     @Override
-    public SmsResponse sendSms(List<SmsRequest> requests) throws Throwable {
+    public SmsResponse sendSms(SmsRequest request) throws Throwable {
+        return sendSms(request, null);
+    }
+
+    @Override
+    public SmsResponse sendSms(List<SmsRequest> requests, Consumer<String> consumer) throws Throwable {
 
         if (smsProperties.getSmsLi().getOpen()) {
 
@@ -99,9 +107,18 @@ public class ALiYunSmsServiceImpl implements ISmsService {
             request.putQueryParameter("TemplateParamJson", JSON.toJSONString(templateParamJson));
 
             CommonResponse response = acsClient.getCommonResponse(request);
+
+            if (null != consumer)
+                consumer.accept(JSON.toJSONString(response));
+
             return new SmsResponse(response.getData(), response.getHttpStatus());
         }
 
         return SmsResponse.error();
+    }
+
+    @Override
+    public SmsResponse sendSms(List<SmsRequest> requests) throws Throwable {
+        return sendSms(requests, null);
     }
 }

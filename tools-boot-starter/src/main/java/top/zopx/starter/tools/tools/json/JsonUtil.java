@@ -23,7 +23,7 @@ public class JsonUtil {
      * @param obj 需要序列化的对象
      * @return JSON字符串
      */
-    public static String toJson(Object obj) {
+    public static <T> String toJson(T obj) {
         return JSON.toJSONString(obj);
     }
 

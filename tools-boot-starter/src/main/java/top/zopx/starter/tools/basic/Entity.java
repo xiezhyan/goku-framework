@@ -1,5 +1,6 @@
 package top.zopx.starter.tools.basic;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  * @author sanq.Yan
  * @date 2020/11/24
  */
-public class Entity {
+public class Entity implements Serializable {
 
     /**
      * 自定义参数
