@@ -44,9 +44,8 @@ public class BeanCopierUtil {
         return INSTANCE;
     }
 
-    public BeanCopierUtil setConverter(boolean useConverter) {
-        this.useConverter = useConverter;
-        return this;
+    private void setConverter(boolean useConverter) {
+        BeanCopierUtil.useConverter = useConverter;
     }
 
     /**
@@ -104,8 +103,7 @@ public class BeanCopierUtil {
      * @param consumer  通用操作
      */
     public void copy(Object source, Object target, Converter converter, BiConsumer<Object, Object> consumer) {
-        if (null != converter)
-            this.setConverter(true);
+        this.setConverter(null != converter);
 
         BeanCopier copier = getCopier(source.getClass(), target.getClass());
 
@@ -200,10 +198,12 @@ public class BeanCopierUtil {
     private Object reflectField(Object target, String field) throws Exception {
         Field declaredField = target.getClass().getDeclaredField(field);
         declaredField.setAccessible(true);
-        CONCURRENT_HASH_MAP_OBJECT.put(field, declaredField.get(target));
+        Object o = declaredField.get(target);
+        if (null != o)
+            CONCURRENT_HASH_MAP_OBJECT.put(field, o);
         declaredField.setAccessible(false);
-        return CONCURRENT_HASH_MAP_OBJECT.get(field);
-}
+        return o;
+    }
 
     /**
      * 将setXX 转成xX
