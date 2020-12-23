@@ -26,12 +26,12 @@ public class BeanCopierUtil {
     private static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
     private static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
 
-    private static boolean useConverter;
+    private boolean useConverter;
 
     private BeanCopierUtil() {
     }
 
-    private static BeanCopierUtil INSTANCE = null;
+    private volatile static BeanCopierUtil INSTANCE = null;
 
     public static BeanCopierUtil getInstance() {
         if (null == INSTANCE) {
@@ -45,7 +45,7 @@ public class BeanCopierUtil {
     }
 
     private void setConverter(boolean useConverter) {
-        BeanCopierUtil.useConverter = useConverter;
+        this.useConverter = useConverter;
     }
 
     /**
