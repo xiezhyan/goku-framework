@@ -199,8 +199,9 @@ public class BeanCopierUtil {
         Field declaredField = target.getClass().getDeclaredField(field);
         declaredField.setAccessible(true);
         Object o = declaredField.get(target);
-        if (null != o)
+        if (null != o) {
             CONCURRENT_HASH_MAP_OBJECT.put(field, o);
+        }
         declaredField.setAccessible(false);
         return o;
     }
@@ -214,8 +215,9 @@ public class BeanCopierUtil {
     private String getFields(String setMethod) {
         String field = CONCURRENT_HASH_MAP_FIELD.get(setMethod);
 
-        if (StringUtil.isBlank(field))
+        if (StringUtil.isBlank(field)) {
             field = getField(setMethod);
+        }
 
         return field;
     }
@@ -224,7 +226,8 @@ public class BeanCopierUtil {
         int len;
         char[] newStrs = new char[(len = setMethod.length() - 3)];
         System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
-        newStrs[0] = Character.toLowerCase(newStrs[0]); // 转小写
+        // 转小写
+        newStrs[0] = Character.toLowerCase(newStrs[0]);
         CONCURRENT_HASH_MAP_FIELD.put(setMethod, String.valueOf(newStrs));
         return CONCURRENT_HASH_MAP_FIELD.get(setMethod);
     }
