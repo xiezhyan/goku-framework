@@ -60,12 +60,12 @@
         <java.version>1.8</java.version>
 
         <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
         <mybatis.version>2.1.3</mybatis.version>
         <pagehelper.version>1.3.0</pagehelper.version>
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
 
+        <mysql.version>8.0.22</mysql.version>
         <druid.version>1.1.23</druid.version>
 
         <fastjson.version>1.2.73</fastjson.version>
@@ -78,20 +78,24 @@
         <lang3.version>3.9</lang3.version>
         <pool2.version>2.8.0</pool2.version>
 
-        <!--lock starter-->
-        <curator.version>4.2.0</curator.version>
-        <zookeeper.version>3.5.6</zookeeper.version>
-        <!--lock end-->
+        <curator.version>5.1.0</curator.version>
+        <zookeeper.version>3.6.2</zookeeper.version>
+        <dubbo.version>2.7.8</dubbo.version>
 
-        <!--validator start-->
         <validator.version>6.1.5.Final</validator.version>
-        <!--validator end-->
 
         <aliyun.sms.core.version>4.5.3</aliyun.sms.core.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <!--spring cloud-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -102,16 +106,7 @@
             </dependency>
             <!--spring cloud-->
 
-            <!--spring cloud alibaba-->
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!--spring cloud alibaba-->
-
+            <!--持久化 start-->
             <!--mybatis-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -119,15 +114,6 @@
                 <version>${mybatis.version}</version>
             </dependency>
             <!--mybatis-->
-
-            <!--分页插件-->
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${pagehelper.version}</version>
-            </dependency>
-            <!--分页插件-->
-
             <!--mybatis plus-->
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -140,21 +126,28 @@
                 <version>${mybatis.plus.version}</version>
             </dependency>
             <!--mybatis plus-->
-
             <!--数据源-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+                <scope>runtime</scope>
+            </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
             <!--数据源-->
+            <!--持久化 end-->
 
+            <!--分页插件-->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
             </dependency>
+            <!--分页插件-->
 
             <!--json框架-->
             <dependency>
@@ -185,34 +178,18 @@
                 <version>${collections.version}</version>
             </dependency>
             <!--工具类-->
-
-
-            <!--lock starter-->
+            
+            <!--dubbo start-->
             <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-framework</artifactId>
-                <version>${curator.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.zookeeper</groupId>
-                        <artifactId>zookeeper</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
             </dependency>
+            <!--dubbo end-->
+            <!--zookeeper starter-->
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
-                <version>${curator.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.zookeeper</groupId>
-                        <artifactId>zookeeper</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-client</artifactId>
                 <version>${curator.version}</version>
                 <exclusions>
                     <exclusion>
@@ -227,7 +204,7 @@
                 <artifactId>zookeeper</artifactId>
                 <version>${zookeeper.version}</version>
             </dependency>
-            <!--lock end-->
+            <!--zookeeper end-->
 
             <!--validator start-->
             <dependency>
@@ -237,11 +214,13 @@
             </dependency>
             <!--validator end-->
 
+            <!--redis pool支持-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
                 <version>${pool2.version}</version>
             </dependency>
+            <!--redis pool支持-->
 
             <dependency>
                 <groupId>com.aliyun</groupId>
