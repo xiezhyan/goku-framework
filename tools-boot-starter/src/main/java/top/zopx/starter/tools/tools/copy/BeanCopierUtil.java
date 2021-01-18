@@ -55,7 +55,7 @@ public class BeanCopierUtil {
      * @param target 目标对象
      * @return String
      */
-    private <K, T> String getKey(Class<K> source, Class<T> target) {
+    private <S, T> String getKey(Class<S> source, Class<T> target) {
         return source.getName() + "_" + target.getName();
     }
 
@@ -66,7 +66,7 @@ public class BeanCopierUtil {
      * @param target 目标对象
      * @return BeanCopier
      */
-    private <K, T> BeanCopier getCopier(Class<K> source, Class<T> target) {
+    private <S, T> BeanCopier getCopier(Class<S> source, Class<T> target) {
 
         String key = "";
         // 从缓存中取出当前对象
@@ -102,7 +102,7 @@ public class BeanCopierUtil {
      * @param converter 转换器
      * @param consumer  通用操作
      */
-    public void copy(Object source, Object target, Converter converter, BiConsumer<Object, Object> consumer) {
+    public <S, T> void copy(S source, T target, Converter converter, BiConsumer<S, T> consumer) {
         this.setConverter(null != converter);
 
         BeanCopier copier = getCopier(source.getClass(), target.getClass());
@@ -122,7 +122,7 @@ public class BeanCopierUtil {
      * @param target   目标对象
      * @param consumer 通用操作
      */
-    public void copyPropertiesIgnoreNull(Object source, Object target, BiConsumer<Object, Object> consumer) {
+    public <S, T> void copyPropertiesIgnoreNull(S source, T target, BiConsumer<S, T> consumer) {
         copy(source, target, new DealNullPropertiesConverter(target), consumer);
     }
 
