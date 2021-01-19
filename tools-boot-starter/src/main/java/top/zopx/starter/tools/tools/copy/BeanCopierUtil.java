@@ -87,7 +87,7 @@ public class BeanCopierUtil {
      * @param target    目标对象
      * @param converter 转换器
      */
-    public void copy(Object source, Object target, Converter converter) {
+    public <S, T> void copy(S source, T target, Converter converter) {
         /**
          * 这里为了防止在外部设置忘记该配置，所以在这里提前加上，不影响
          */
