@@ -9,10 +9,10 @@ package top.zopx.starter.tools.tools.worker;
 public class Id {
 
     private volatile static Id INSTANCE = null;
-    private SnowflakeWorker WORKER;
+    private SnowflakeWorker worker;
 
     private Id(long workerId, long datacenterId) {
-        WORKER = new SnowflakeWorker(workerId, datacenterId);
+        worker = new SnowflakeWorker(workerId, datacenterId);
     }
 
     public static Id getInstance(long workerId, long datacenterId) {
@@ -27,6 +27,6 @@ public class Id {
     }
 
     public Long getId() {
-        return WORKER.nextId();
+        return worker.nextId();
     }
 }

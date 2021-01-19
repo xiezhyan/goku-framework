@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import top.zopx.starter.sms.providers.a_li.properties.LiYunSms;
+import top.zopx.starter.sms.providers.cloud.properties.LiYunSms;
 
 /**
  * @author sanq.Yan

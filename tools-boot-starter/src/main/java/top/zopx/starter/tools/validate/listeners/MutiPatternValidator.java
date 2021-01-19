@@ -26,8 +26,9 @@ public class MutiPatternValidator implements ConstraintValidator<MutiPattern, St
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        if (CollectionUtils.isEmpty(patterns))
+        if (CollectionUtils.isEmpty(patterns)) {
             return false;
+        }
 
         if (logic == MutiPattern.Logic.OR) {
             for (String pattern : patterns) {

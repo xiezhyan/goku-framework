@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.zopx.starter.sms.properties.SmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
-import top.zopx.starter.sms.providers.a_li.service.impl.ALiYunSmsServiceImpl;
+import top.zopx.starter.sms.providers.cloud.service.impl.CloudSmsServiceImpl;
 
 /**
  * 自动配置
@@ -21,6 +21,6 @@ public class SmsAutoConfigurator {
     @Bean
     @ConditionalOnClass(IAcsClient.class)
     public ISmsService aliyunSmsService() {
-        return new ALiYunSmsServiceImpl();
+        return new CloudSmsServiceImpl();
     }
 }

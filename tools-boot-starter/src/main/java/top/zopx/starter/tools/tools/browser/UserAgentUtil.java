@@ -28,8 +28,9 @@ public class UserAgentUtil {
      */
     public static UserAgentInfo getUserAgentInfo(String userAgent) throws IOException {
         UASparser sparser = LOCAL.get();
-        if (sparser == null)
+        if (sparser == null) {
             return null;
+        }
 
         return sparser.parse(userAgent);
     }
@@ -40,8 +41,9 @@ public class UserAgentUtil {
      */
     public static String getOs(String userAgent) throws IOException {
         UserAgentInfo userAgentInfo = getUserAgentInfo(userAgent);
-        if (null == userAgentInfo)
+        if (null == userAgentInfo) {
             return "";
+        }
 
         return userAgentInfo.getOsFamily().toLowerCase();
     }

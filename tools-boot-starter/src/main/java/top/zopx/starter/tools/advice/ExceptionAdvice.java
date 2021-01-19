@@ -19,7 +19,7 @@ import javax.validation.ConstraintViolationException;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@RestControllerAdvice   // 控制器增强
+@RestControllerAdvice
 public class ExceptionAdvice {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

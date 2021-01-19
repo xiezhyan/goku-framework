@@ -32,71 +32,81 @@ public class LogUtil {
     }
 
     public static void info(String msg) {
-        if (!isInfo())
+        if (!isInfo()) {
             return;
+        }
 
         LOGGER.info(msg);
     }
 
     public static void info(String msg, Object... args) {
-        if (!isInfo())
+        if (!isInfo()) {
             return;
+        }
 
         LOGGER.info(msg, args);
     }
 
     public static void debug(String msg) {
-        if (!isDebug())
+        if (!isDebug()) {
             return;
+        }
 
         LOGGER.debug(msg);
     }
 
     public static void debug(String msg, Object... args) {
-        if (!isDebug())
+        if (!isDebug()) {
             return;
+        }
 
         LOGGER.debug(msg, args);
     }
 
     public static void error(String msg) {
-        if (!isError())
+        if (!isError()) {
             return;
+        }
 
         LOGGER.error(msg);
     }
 
     public static void error(String msg, Object... args) {
-        if (!isError())
+        if (!isError()) {
             return;
+        }
 
         LOGGER.error(msg, args);
     }
 
     public static void warn(String msg) {
-        if (!isWarn())
+        if (!isWarn()) {
             return;
+        }
 
         LOGGER.warn(msg);
     }
 
     public static void warn(String msg, Object... args) {
-        if (!isWarn())
+        if (!isWarn()) {
             return;
+        }
 
         LOGGER.warn(msg, args);
     }
 
     public static void trace(String msg) {
-        if (isTrace())
+        if (!isTrace()) {
             return;
+        }
 
         LOGGER.trace(msg);
     }
 
     public static void trace(String msg, Object... args) {
-        if (isTrace())
+        if (!isTrace()) {
             return;
+        }
 
         LOGGER.trace(msg, args);
     }

@@ -1,4 +1,4 @@
-package top.zopx.starter.sms.providers.a_li.service.impl;
+package top.zopx.starter.sms.providers.cloud.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.CommonRequest;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  * @author sanq.Yan
  * @date 2020/11/23
  */
-public class ALiYunSmsServiceImpl implements ISmsService {
+public class CloudSmsServiceImpl implements ISmsService {
 
     @Resource
     private IAcsClient acsClient;
@@ -34,8 +34,9 @@ public class ALiYunSmsServiceImpl implements ISmsService {
     public SmsResponse sendSms(SmsRequest request,  Consumer<String> consumer) throws Throwable {
         if (smsProperties.getSmsLi().getOpen()) {
 
-            if (null == request)
+            if (null == request) {
                 return SmsResponse.error();
+            }
 
             String signName = smsProperties.getSmsLi().getSignName();
 
@@ -58,8 +59,9 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
-            if (null != consumer)
+            if (null != consumer) {
                 consumer.accept(JSON.toJSONString(response));
+            }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());
         }
@@ -76,8 +78,9 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
         if (smsProperties.getSmsLi().getOpen()) {
 
-            if (CollectionUtils.isEmpty(requests))
+            if (CollectionUtils.isEmpty(requests)) {
                 return SmsResponse.error();
+            }
 
             List<String> phoneNumberJson = new ArrayList<>(requests.size());
             List<String> signNameJson = new ArrayList<>(requests.size());
@@ -108,8 +111,9 @@ public class ALiYunSmsServiceImpl implements ISmsService {
 
             CommonResponse response = acsClient.getCommonResponse(request);
 
-            if (null != consumer)
+            if (null != consumer) {
                 consumer.accept(JSON.toJSONString(response));
+            }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());
         }

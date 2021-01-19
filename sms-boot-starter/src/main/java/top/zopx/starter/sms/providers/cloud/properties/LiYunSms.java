@@ -1,4 +1,4 @@
-package top.zopx.starter.sms.providers.a_li.properties;
+package top.zopx.starter.sms.providers.cloud.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
