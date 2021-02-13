@@ -12,12 +12,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 
 /**
+ * 动态扫描指定包下类
+ *
  * @author sanq.Yan
  * @date 2021/2/8
  */
-public final class PackageUtil {
+public enum PackageUtil {
 
-    private PackageUtil() {
+    /**
+     * 单例实例
+     */
+    INSTANCE;
+
+    PackageUtil() {
     }
 
     /**
@@ -27,20 +34,21 @@ public final class PackageUtil {
      * @param packageName 包名
      * @param superClass  父类
      * @param isRecursion 是否迭代
-     * @return List<Class<?>>
+     * @return List<Class < ?>>
      * @throws IOException            IOException
      * @throws ClassNotFoundException ClassNotFoundException
      */
-    public static List<Class<?>> getFileList(String packageName, Class<?> superClass, boolean isRecursion) throws IOException, ClassNotFoundException {
+    public List<Class<?>> getFileList(String packageName, Class<?> superClass, boolean isRecursion) throws IOException, ClassNotFoundException {
 
-        if (null == superClass || StringUtil.isBlank(packageName))
+        if (null == superClass || StringUtil.isBlank(packageName)) {
             return Collections.emptyList();
-        else
+        } else {
             return getFileListBySuperClass(packageName, isRecursion, superClass::isAssignableFrom);
+        }
 
     }
 
-    private static List<Class<?>> getFileListBySuperClass(
+    private List<Class<?>> getFileListBySuperClass(
             String packageName,
             boolean isRecursion,
             Function<Class<?>, Boolean> filter
@@ -65,7 +73,7 @@ public final class PackageUtil {
         return classList;
     }
 
-    private static List<Class<?>> list2Dir(File dirFile, String packageName, boolean isRecursion, Function<Class<?>, Boolean> filter) throws ClassNotFoundException {
+    private List<Class<?>> list2Dir(File dirFile, String packageName, boolean isRecursion, Function<Class<?>, Boolean> filter) throws ClassNotFoundException {
         List<Class<?>> resultList = Collections.emptyList();
 
         // 判断文件是否存在
@@ -118,12 +126,13 @@ public final class PackageUtil {
 
     /**
      * 得到指定类中指定方法的参数
+     *
      * @param superClass 指定类
      * @param methodName 方法名称
-     * @param filter 过滤器
-     * @return List<Class<?>>
+     * @param filter     过滤器
+     * @return List<Class < ?>>
      */
-    public static List<Class<?>> getType(Class<?> superClass, String methodName, Function<Class<?>, Boolean> filter) {
+    public List<Class<?>> getType(Class<?> superClass, String methodName, Function<Class<?>, Boolean> filter) {
         List<Class<?>> returnList = Collections.emptyList();
 
         if (null == superClass || StringUtil.isBlank(methodName)) {

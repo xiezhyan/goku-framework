@@ -10,33 +10,6 @@
         <version>1.1.4</version>
     </parent>
 
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <scm>
-        <connection>https://gitee.com/thanks_studio/square-boot-starter.git</connection>
-        <developerConnection>https://gitee.com/thanks_studio/square-boot-starter.git</developerConnection>
-        <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
-    </scm>
-
-    <developers>
-        <developer>
-            <id>mr.sanq</id>
-            <name>mr.sanq</name>
-            <email>bin_cruel@sohu.com</email>
-            <roles>
-                <role>Admin</role>
-                <role>Developer</role>
-            </roles>
-            <timezone>+8</timezone>
-        </developer>
-    </developers>
-
     <artifactId>sms-boot-starter</artifactId>
     <name>${groupId}:${artifactId}</name>
     <description>短信服务</description>
@@ -59,16 +32,6 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-
-            <!-- 打包时跳过测试 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>
