@@ -1,5 +1,6 @@
 package top.zopx.starter.tools.tools.reflection;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 
@@ -125,6 +127,11 @@ public enum PackageUtil {
     }
 
     /**
+     * 缓存
+     */
+    private static final Map<String, List<Class<?>>> TYPE_MAP = new ConcurrentHashMap<>(8);
+
+    /**
      * 得到指定类中指定方法的参数
      *
      * @param superClass 指定类
@@ -133,19 +140,24 @@ public enum PackageUtil {
      * @return List<Class < ?>>
      */
     public List<Class<?>> getType(Class<?> superClass, String methodName, Function<Class<?>, Boolean> filter) {
-        List<Class<?>> returnList = Collections.emptyList();
 
         if (null == superClass || StringUtil.isBlank(methodName)) {
-            return returnList;
+            return Collections.emptyList();
+        }
+
+        List<Class<?>> cacheList = TYPE_MAP.get(methodName);
+
+        if (CollectionUtils.isNotEmpty(cacheList)) {
+            return cacheList;
         }
 
         Method[] methods = superClass.getDeclaredMethods();
 
         if (ArrayUtils.isEmpty(methods)) {
-            return returnList;
+            return Collections.emptyList();
         }
 
-        returnList = new ArrayList<>();
+        List<Class<?>> returnList = new ArrayList<>();
         for (Method method : methods) {
             if (!method.getName().equals(methodName)) {
                 continue;
@@ -159,6 +171,9 @@ public enum PackageUtil {
 
                 returnList.add(type);
             }
+        }
+        if (CollectionUtils.isNotEmpty(returnList)) {
+            TYPE_MAP.put(methodName, returnList);
         }
 
         return returnList;
