@@ -1,0 +1,10 @@
+management:
+  endpoint:
+  # 开启手动下线接口
+    shutdown:
+      enabled: true
+  # 对外暴露端点
+  endpoints:
+    web:
+      exposure:
+        include: '*'

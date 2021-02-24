@@ -6,8 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * top.zopx.starter.tools.annotations.PassTokenSecurityAnnotation
- * <p>
  * 跳过token验证，即跳过登录
  *
  * @author sanq.Yan
