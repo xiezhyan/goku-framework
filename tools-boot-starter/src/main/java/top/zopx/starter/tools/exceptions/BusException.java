@@ -1,6 +1,7 @@
 package top.zopx.starter.tools.exceptions;
 
 import top.zopx.starter.tools.constants.BusCode;
+import top.zopx.starter.tools.constants.BusExceptionConstant;
 
 /**
  * 自定义异常信息

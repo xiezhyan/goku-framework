@@ -1,4 +1,4 @@
-package top.zopx.starter.tools.exceptions;
+package top.zopx.starter.tools.constants;
 
 
 import top.zopx.starter.tools.constants.BusCode;
