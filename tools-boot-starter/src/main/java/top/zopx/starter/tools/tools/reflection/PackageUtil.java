@@ -137,6 +137,7 @@ public enum PackageUtil {
      *          true  是modifiers修饰的
      */
     public boolean isModifier(Class<?> clazz, int modifiers) {
+
         if (null == clazz){
             return false;
         }
