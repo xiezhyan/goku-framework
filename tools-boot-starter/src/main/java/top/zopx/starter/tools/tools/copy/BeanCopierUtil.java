@@ -31,17 +31,12 @@ public class BeanCopierUtil {
     private BeanCopierUtil() {
     }
 
-    private volatile static BeanCopierUtil INSTANCE = null;
+    private static class Holder {
+        public static final BeanCopierUtil INSTANCE = new BeanCopierUtil();
+    }
 
     public static BeanCopierUtil getInstance() {
-        if (null == INSTANCE) {
-            synchronized (BeanCopierUtil.class) {
-                if (null == INSTANCE) {
-                    INSTANCE = new BeanCopierUtil();
-                }
-            }
-        }
-        return INSTANCE;
+        return Holder.INSTANCE;
     }
 
     private void setConverter(boolean useConverter) {

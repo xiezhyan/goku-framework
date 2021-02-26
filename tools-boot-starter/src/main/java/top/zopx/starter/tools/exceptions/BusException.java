@@ -25,7 +25,7 @@ public class BusException extends RuntimeException {
         this.code = code;
     }
 
-    public BusException(BusExceptionEnum busExceptionEnum) {
+    public BusException(BusExceptionConstant busExceptionEnum) {
         super();
         this.msg = busExceptionEnum.getMsg();
         this.code = busExceptionEnum.getCode();

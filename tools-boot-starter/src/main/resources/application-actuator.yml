@@ -3,8 +3,15 @@ management:
   # 开启手动下线接口
     shutdown:
       enabled: true
+    health:
+      show-details: always
   # 对外暴露端点
   endpoints:
     web:
       exposure:
         include: '*'
+
+server:
+  # 优雅关机
+  shutdown: graceful
+

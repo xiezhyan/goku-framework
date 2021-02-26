@@ -8,8 +8,6 @@ package top.zopx.starter.tools.constants;
  */
 public class BusCode {
 
-
-
     public static final Integer RESULT_OK = 200;
     public static final Integer RESULT_ERROR = 500;
 
@@ -31,5 +29,4 @@ public class BusCode {
     public static final Integer USER_ACCOUNT_FORBIDDEN = 2003;
     public static final Integer USER_NOT_EXIST = 2004;
     public static final Integer USER_HAS_EXISTED = 2005;
-    public static final Integer USER_NOT_ACCESS = 2006;
 }
