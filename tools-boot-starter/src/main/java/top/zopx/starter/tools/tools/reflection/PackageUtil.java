@@ -128,7 +128,7 @@ public enum PackageUtil {
 
     /**
      * 检测当前类的修饰符
-     * if(vertifyClassType(T.class, Modifier.ABSTRACT)) {
+     * if(isModifier(T.class, Modifier.ABSTRACT)) {
      *     // 是ABSTRACT修饰的
      * }
      * @param clazz     类
@@ -136,9 +136,10 @@ public enum PackageUtil {
      * @return  false 不是modifiers修饰
      *          true  是modifiers修饰的
      */
-    public boolean vertifyClassType(Class<?> clazz, int modifiers) {
-        if (null == clazz)
+    public boolean isModifier(Class<?> clazz, int modifiers) {
+        if (null == clazz){
             return false;
+        }
 
         return (clazz.getModifiers() & modifiers) != 0;
     }

@@ -24,7 +24,7 @@
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-boot-starter</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.4</version>
   <type>pom</type>
 </dependency>
 
@@ -32,7 +32,13 @@
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>tools-boot-starter</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.4</version>
+</dependency>
+
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>sms-boot-starter</artifactId>
+  <version>1.1.4</version>
 </dependency>
 ```
 
