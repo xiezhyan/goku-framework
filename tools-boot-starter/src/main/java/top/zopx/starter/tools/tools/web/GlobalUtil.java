@@ -4,6 +4,8 @@ import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 获取用户访问IP等
@@ -123,6 +125,20 @@ public class GlobalUtil {
         public static void set(HttpServletResponse response, String key, String value) {
             response.setHeader("Access-Control-Expose-Headers", key);
             response.setHeader(key, value);
+        }
+
+        /**
+         * 通过Response将内容写出去
+         * @param response HttpServletResponse
+         * @param msg 发送内容
+         * @throws IOException IOException
+         */
+        public static void write(HttpServletResponse response, String msg) throws IOException {
+            response.setContentType("application/json;charset=utf-8");
+            try (final PrintWriter writer = response.getWriter()) {
+                writer.write(msg);
+                writer.flush();
+            }
         }
     }
 }

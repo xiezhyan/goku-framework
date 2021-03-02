@@ -27,7 +27,7 @@ public class ExceptionAdvice {
     public Response handleHttpMessageNotReadableException(
             HttpMessageNotReadableException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getMessage(), BusCode.PARAM_NOT_READABLE);
     }
 
@@ -35,49 +35,49 @@ public class ExceptionAdvice {
     public Response handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getMessage());
     }
 
     @ExceptionHandler({HttpMediaTypeNotSupportedException.class})
     public Response handleHttpMediaTypeNotSupportedException(Exception e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getMessage());
     }
 
     @ExceptionHandler(BusException.class)
     public Response handleBusException(BusException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getMsg(), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
     public Response handleException(Exception e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Response handleValidationException(MethodArgumentNotValidException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public Response handleValidationException(ConstraintViolationException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getConstraintViolations().iterator().next().getMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 
     @ExceptionHandler(BindException.class)
     public Response handleValidationException(BindException e) {
 //        e.printStackTrace();
-        LogUtil.error("异常信息：{}", e);
+        LogUtil.error("异常信息：{}", e.getMessage());
         return new Response().failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), BusCode.PARAM_VALIDATE_ERROR);
     }
 }
