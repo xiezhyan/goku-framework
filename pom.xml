@@ -114,6 +114,13 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis.plus.version}</version>
             </dependency>
+            <!--代码生成器-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+            <!--代码生成器-->
             <!--mybatis plus-->
             <!--数据源-->
             <dependency>
@@ -231,14 +238,6 @@
             <version>${validator.version}</version>
         </dependency>
         <!--validator end-->
-
-        <!--代码生成器-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis.plus.version}</version>
-        </dependency>
-        <!--代码生成器-->
 
         <!--spring boot web-->
         <dependency>
