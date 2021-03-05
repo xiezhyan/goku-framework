@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 
@@ -148,7 +147,7 @@ public enum PackageUtil {
     /**
      * 缓存
      */
-    private final Map<String, List<Class<?>>> TYPE_MAP = new ConcurrentHashMap<>(8);
+    private final Map<String, List<Class<?>>> TYPE_MAP = new WeakHashMap<>(8);
 
     /**
      * 得到指定类中指定方法的参数
