@@ -5,7 +5,7 @@ management:
       enabled: true
     health:
       show-details: always
-
+      enabled: true
   # 对外暴露端点
   endpoints:
     web:
