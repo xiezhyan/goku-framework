@@ -67,7 +67,7 @@
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
 
         <mysql.version>8.0.22</mysql.version>
-        <druid.version>1.1.23</druid.version>
+        <druid.version>1.2.5</druid.version>
 
         <fastjson.version>1.2.73</fastjson.version>
         <uasparser.version>0.6.2</uasparser.version>
@@ -86,6 +86,11 @@
         <validator.version>6.1.5.Final</validator.version>
 
         <aliyun.sms.core.version>4.5.3</aliyun.sms.core.version>
+
+        <!--rocketmq -->
+        <rocketmq.version>2.2.0</rocketmq.version>
+        <!--activiti-->
+        <activiti.version>6.0.0</activiti.version>
     </properties>
 
     <dependencyManagement>
@@ -184,6 +189,18 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
                 <version>${aliyun.sms.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-basic</artifactId>
+                <version>${activiti.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
