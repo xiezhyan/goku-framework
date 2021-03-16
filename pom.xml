@@ -12,8 +12,8 @@
     </parent>
 
     <modules>
-        <module>tools-boot-starter</module>
-        <module>sms-boot-starter</module>
+        <module>tools-spring-boot-starter</module>
+        <module>sms-spring-boot-starter</module>
     </modules>
 
     <licenses>
@@ -44,11 +44,11 @@
     </developers>
 
     <groupId>top.zopx</groupId>
-    <artifactId>square-boot-starter</artifactId>
+    <artifactId>square-spring-boot-starter</artifactId>
     <version>1.1.5</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
-    <description>square-boot-starter</description>
+    <description>square-spring-boot-starter</description>
     <name>${groupId}:${artifactId}</name>
 
     <properties>

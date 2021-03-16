@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>top.zopx</groupId>
-        <artifactId>square-boot-starter</artifactId>
+        <artifactId>square-spring-boot-starter</artifactId>
         <version>1.1.5</version>
     </parent>
 
-    <artifactId>sms-boot-starter</artifactId>
+    <artifactId>sms-spring-boot-starter</artifactId>
     <name>${groupId}:${artifactId}</name>
     <description>短信服务</description>
     <packaging>jar</packaging>
