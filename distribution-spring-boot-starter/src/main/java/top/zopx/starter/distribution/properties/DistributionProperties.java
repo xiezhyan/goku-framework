@@ -1,17 +1,12 @@
 package top.zopx.starter.distribution.properties;
 
-import org.redisson.Redisson;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import top.zopx.starter.distribution.properties.redis.Redis;
 
 /**
  * @author sanq.Yan
  * @date 2021/3/28
  */
-@Component
-@Configuration
 @ConfigurationProperties(DistributionProperties.DISTRIBUTION_PREFIX)
 public class DistributionProperties {
 

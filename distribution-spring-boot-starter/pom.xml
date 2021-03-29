@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>distribution-spring-boot-starter</artifactId>
-    <description>分布式锁</description>
+    <description>基于Redis或者Zookeeper的分布式锁</description>
     <name>${groupId}:${artifactId}</name>
 
     <dependencies>

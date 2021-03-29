@@ -1,5 +1,8 @@
 package top.zopx.starter.distribution.annotation;
 
+import org.springframework.context.annotation.Import;
+import top.zopx.starter.distribution.server.DistributionMarkerConfiguration;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,5 +15,6 @@ import java.lang.annotation.Target;
  */
 @Target(value = ElementType.METHOD)
 @Retention(value = RetentionPolicy.RUNTIME)
+@Import(DistributionMarkerConfiguration.class)
 public @interface EnableDistribution {
 }

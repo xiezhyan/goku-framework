@@ -4,9 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.redis.Redis;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -14,10 +15,9 @@ import java.util.List;
 /**
  * @author sanq.Yan
  * @date 2021/3/28
- *
  */
-@Configuration
-public class RedisConfigurator {
+@ConditionalOnProperty(prefix = Redis.PREFIX, name = "open", havingValue = "true")
+public class RedisInitialConfigurator {
 
     @Resource
     private DistributionProperties distributionProperties;
