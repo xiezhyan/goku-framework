@@ -63,7 +63,7 @@ public class DistributionAspect {
 
     public AnnotationDistribution getAnnotationDistribution(ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        return signature.getMethod().getAnnotation(AnnotationDistribution.class);
+        return signature.getMethod().getDeclaredAnnotation(AnnotationDistribution.class);
     }
 
     public HttpServletRequest getRequest() {
