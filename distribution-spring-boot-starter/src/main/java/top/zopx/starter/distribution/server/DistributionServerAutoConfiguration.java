@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import top.zopx.starter.distribution.aspect.DistributionAspect;
 import top.zopx.starter.distribution.configurator.RedisInitialConfigurator;
 import top.zopx.starter.distribution.properties.DistributionProperties;
 import top.zopx.starter.distribution.service.ILockService;
@@ -17,7 +18,7 @@ import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties({ DistributionProperties.class })
-@Import({RedisInitialConfigurator.class})
+@Import({RedisInitialConfigurator.class, DistributionAspect.class})
 public class DistributionServerAutoConfiguration {
 
     @Bean
