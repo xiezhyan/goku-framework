@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @author sanq.Yan
  * @date 2021/3/28
  */
-@Target(value = ElementType.METHOD)
+@Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Import(DistributionMarkerConfiguration.class)
 public @interface EnableDistribution {

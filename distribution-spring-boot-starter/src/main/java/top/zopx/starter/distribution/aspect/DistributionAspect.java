@@ -1,27 +1,21 @@
 package top.zopx.starter.distribution.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.mvc.condition.RequestConditionHolder;
-import org.springframework.web.servlet.support.RequestContextUtils;
-import top.zopx.starter.distribution.annotation.AnnotationDistribution;
+import top.zopx.starter.distribution.annotation.Distribution;
 import top.zopx.starter.distribution.service.ILockService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.annotation.Annotation;
 
 
 /**
@@ -38,13 +32,13 @@ public class DistributionAspect {
     @Resource
     private ILockService lockService;
 
-    @Pointcut(value = "@annotation(top.zopx.starter.distribution.annotation.AnnotationDistribution)")
+    @Pointcut(value = "@annotation(top.zopx.starter.distribution.annotation.Distribution)")
     public void pointcut() {}
 
     @Around("pointcut()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        final AnnotationDistribution annotation = getAnnotationDistribution(joinPoint);
+        final Distribution annotation = getAnnotationDistribution(joinPoint);
 
         LOGGER.debug("执行任务开始，加锁:{} > {}", annotation.key(), Thread.currentThread().getName());
 
@@ -61,9 +55,9 @@ public class DistributionAspect {
         }
     }
 
-    public AnnotationDistribution getAnnotationDistribution(ProceedingJoinPoint joinPoint) {
+    public Distribution getAnnotationDistribution(ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        return signature.getMethod().getDeclaredAnnotation(AnnotationDistribution.class);
+        return signature.getMethod().getDeclaredAnnotation(Distribution.class);
     }
 
     public HttpServletRequest getRequest() {

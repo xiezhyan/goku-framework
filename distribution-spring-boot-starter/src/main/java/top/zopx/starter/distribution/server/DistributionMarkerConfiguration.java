@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
  * @author sanq.Yan
  * @date 2021/3/29
  */
-@Configuration(proxyBeanMethods = false)
 public class DistributionMarkerConfiguration {
 
     @Bean
@@ -15,6 +14,6 @@ public class DistributionMarkerConfiguration {
         return new Marker();
     }
 
-    static class Marker {
+    class Marker {
     }
 }

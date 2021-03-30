@@ -15,9 +15,9 @@ import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
  * @date 2021/3/29
  */
 @Configuration(proxyBeanMethods = false)
-@Import({RedisInitialConfigurator.class})
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties({ DistributionProperties.class })
+@Import({RedisInitialConfigurator.class})
 public class DistributionServerAutoConfiguration {
 
     @Bean
