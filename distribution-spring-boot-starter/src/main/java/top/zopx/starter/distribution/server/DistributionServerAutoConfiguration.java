@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import top.zopx.starter.distribution.configurator.RedisInitialConfigurator;
+import top.zopx.starter.distribution.configurator.ZookeeperInitialConfigurator;
 import top.zopx.starter.distribution.properties.DistributionProperties;
 import top.zopx.starter.distribution.service.ILockService;
 import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
+import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockServiceImpl;
 
 /**
  * @author sanq.Yan
@@ -17,12 +19,18 @@ import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties({ DistributionProperties.class })
-@Import({RedisInitialConfigurator.class})
+@Import({RedisInitialConfigurator.class, ZookeeperInitialConfigurator.class})
 public class DistributionServerAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(RedisInitialConfigurator.class)
     public ILockService redisLockService() {
         return new RedisLockServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnBean(ZookeeperInitialConfigurator.class)
+    public ILockService zookeeperLockService() {
+        return new ZookeeperLockServiceImpl();
     }
 }

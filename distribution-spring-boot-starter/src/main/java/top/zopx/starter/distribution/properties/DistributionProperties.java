@@ -2,6 +2,7 @@ package top.zopx.starter.distribution.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.zopx.starter.distribution.properties.redis.Redis;
+import top.zopx.starter.distribution.properties.zookeeper.Zookeeper;
 
 /**
  * @author sanq.Yan
@@ -15,6 +16,8 @@ public class DistributionProperties {
     private int retryAttempts = 3;
 
     private Redis redis;
+
+    private Zookeeper zookeeper;
 
     public Redis getRedis() {
         return redis;
@@ -30,5 +33,13 @@ public class DistributionProperties {
 
     public void setRetryAttempts(int retryAttempts) {
         this.retryAttempts = retryAttempts;
+    }
+
+    public Zookeeper getZookeeper() {
+        return zookeeper;
+    }
+
+    public void setZookeeper(Zookeeper zookeeper) {
+        this.zookeeper = zookeeper;
     }
 }
