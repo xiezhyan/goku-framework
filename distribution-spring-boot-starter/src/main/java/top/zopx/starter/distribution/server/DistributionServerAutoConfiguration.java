@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import top.zopx.starter.distribution.aspect.DistributionAspect;
 import top.zopx.starter.distribution.configurator.RedisInitialConfigurator;
 import top.zopx.starter.distribution.configurator.ZookeeperInitialConfigurator;
 import top.zopx.starter.distribution.properties.DistributionProperties;
@@ -19,7 +20,7 @@ import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockService
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties({ DistributionProperties.class })
-@Import({RedisInitialConfigurator.class, ZookeeperInitialConfigurator.class})
+@Import({RedisInitialConfigurator.class, DistributionAspect.class, ZookeeperInitialConfigurator.class})
 public class DistributionServerAutoConfiguration {
 
     @Bean

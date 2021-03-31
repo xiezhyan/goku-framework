@@ -32,7 +32,6 @@ import java.util.Objects;
  * @date 2021/3/28
  */
 @Aspect
-@Component
 @Order(1)
 public class DistributionAspect {
 

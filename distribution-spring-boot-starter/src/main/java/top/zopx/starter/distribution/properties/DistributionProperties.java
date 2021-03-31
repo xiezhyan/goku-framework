@@ -13,6 +13,9 @@ public class DistributionProperties {
 
     public static final String DISTRIBUTION_PREFIX = "distribution";
 
+    /**
+     * 重试次数
+     */
     private int retryAttempts = 3;
 
     private Redis redis;
