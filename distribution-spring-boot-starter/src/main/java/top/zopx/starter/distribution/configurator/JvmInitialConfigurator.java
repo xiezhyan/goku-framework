@@ -1,5 +1,6 @@
 package top.zopx.starter.distribution.configurator;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import top.zopx.starter.distribution.properties.DistributionProperties;
@@ -12,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author sanq.Yan
  * @date 2021/4/3
  */
-@ConditionalOnProperty(prefix = Jvm.PREFIX, name = "open", havingValue = "true")
+@ConditionalOnMissingBean({RedisInitialConfigurator.class, ZookeeperInitialConfigurator.class})
 public class JvmInitialConfigurator {
 
     @Resource

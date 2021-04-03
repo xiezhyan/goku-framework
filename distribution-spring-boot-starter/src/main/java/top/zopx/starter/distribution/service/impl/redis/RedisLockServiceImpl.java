@@ -29,7 +29,7 @@ public class RedisLockServiceImpl implements ILockService {
     public void lock(String key) {
         if (distributionProperties.getRedis().isOpen()) {
             // 开始加锁
-            LOGGER.info("=============starting lock, {}=============", key);
+            LOGGER.info("=============starting lock, {}， {}=============", key, Thread.currentThread().getName());
             rLock = redissonClient.getLock(key);
             rLock.lock();
         }
@@ -39,7 +39,7 @@ public class RedisLockServiceImpl implements ILockService {
     public void unLock(String key) {
         if (distributionProperties.getRedis().isOpen()) {
             // 开始解锁
-            LOGGER.info("=============starting unlock, {}=============", key);
+            LOGGER.info("=============starting unlock, {}， {}=============", key, Thread.currentThread().getName());
             rLock = redissonClient.getLock(key);
             rLock.unlock();
         }

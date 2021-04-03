@@ -24,17 +24,11 @@ public class ZookeeperLockServiceImpl implements ILockService {
     @Resource
     private CuratorFramework curatorFramework;
 
-    private InterProcessMutex mutex;
-
     @Override
     public void lock(String key) throws Exception {
         if (distributionProperties.getZookeeper().isOpen()) {
             // 开始加锁
-            LOGGER.info("starting lock, {}", key);
-            // 可重入互斥锁
-            mutex = new InterProcessMutex(curatorFramework, distributionProperties.getZookeeper().getRoot() + key);
-            mutex.acquire();
-
+            LOGGER.info("starting lock, {}， {}=============", key, Thread.currentThread().getName());
         }
     }
 
@@ -42,9 +36,7 @@ public class ZookeeperLockServiceImpl implements ILockService {
     public void unLock(String key) throws Exception {
         if (distributionProperties.getZookeeper().isOpen()) {
             // 开始解锁
-            LOGGER.info("starting unlock, {}", key);
-            mutex = new InterProcessMutex(curatorFramework, distributionProperties.getZookeeper().getRoot() + key);
-            mutex.release();
+            LOGGER.info("starting unlock, {}， {}=============", key, Thread.currentThread().getName());
         }
     }
 }

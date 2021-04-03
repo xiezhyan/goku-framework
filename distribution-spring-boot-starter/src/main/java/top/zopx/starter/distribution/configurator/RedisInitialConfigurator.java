@@ -18,8 +18,6 @@ import java.util.List;
  */
 @ConditionalOnProperty(prefix = Redis.PREFIX, name = "open", havingValue = "true")
 public class RedisInitialConfigurator {
-    private static final String REDIS_URL_PREFIX = "redis://";
-
     @Resource
     private DistributionProperties distributionProperties;
 
@@ -100,7 +98,7 @@ public class RedisInitialConfigurator {
         List<String> address;
         if (1 == (address = distributionProperties.getRedis().getAddress()).size()) {
             config.useSingleServer()
-                    .setAddress(REDIS_URL_PREFIX + address.get(0)).setDatabase(0)
+                    .setAddress(address.get(0)).setDatabase(0)
                     .setRetryAttempts(distributionProperties.getRetryAttempts())
             ;
             if (StringUtils.isNotBlank(distributionProperties.getRedis().getPassword())) {

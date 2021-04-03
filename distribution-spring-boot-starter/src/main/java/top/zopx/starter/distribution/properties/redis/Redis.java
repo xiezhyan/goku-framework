@@ -29,7 +29,7 @@ public class Redis {
     private boolean open = false;
 
     /**
-     * redis地址
+     * redis地址,协议：redis://
      */
     private List<String> address;
 

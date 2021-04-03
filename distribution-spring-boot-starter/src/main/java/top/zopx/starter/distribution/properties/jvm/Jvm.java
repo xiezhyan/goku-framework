@@ -3,6 +3,7 @@ package top.zopx.starter.distribution.properties.jvm;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import top.zopx.starter.distribution.properties.DistributionProperties;
 import top.zopx.starter.distribution.properties.redis.Redis;
 
 /**
@@ -13,7 +14,7 @@ import top.zopx.starter.distribution.properties.redis.Redis;
 @Configuration
 @ConfigurationProperties(Jvm.PREFIX)
 public class Jvm {
-    public static final String PREFIX = "jvm";
+    public static final String PREFIX = DistributionProperties.DISTRIBUTION_PREFIX + ".jvm";
 
 
     /**
