@@ -1,6 +1,7 @@
 package top.zopx.starter.distribution.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.zopx.starter.distribution.properties.jvm.Jvm;
 import top.zopx.starter.distribution.properties.redis.Redis;
 import top.zopx.starter.distribution.properties.zookeeper.Zookeeper;
 
@@ -21,6 +22,16 @@ public class DistributionProperties {
     private Redis redis;
 
     private Zookeeper zookeeper;
+
+    private Jvm jvm;
+
+    public Jvm getJvm() {
+        return jvm;
+    }
+
+    public void setJvm(Jvm jvm) {
+        this.jvm = jvm;
+    }
 
     public Redis getRedis() {
         return redis;

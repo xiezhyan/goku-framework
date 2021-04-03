@@ -1,5 +1,6 @@
 package top.zopx.starter.distribution.annotation;
 
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import top.zopx.starter.distribution.server.DistributionMarkerConfiguration;
 
@@ -16,5 +17,6 @@ import java.lang.annotation.Target;
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Import(DistributionMarkerConfiguration.class)
+@EnableAspectJAutoProxy
 public @interface EnableDistribution {
 }

@@ -1,12 +1,14 @@
 package top.zopx.starter.distribution.service.impl.zookeeper;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.starter.distribution.properties.DistributionProperties;
 import top.zopx.starter.distribution.service.ILockService;
 
 import javax.annotation.Resource;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author sanq.Yan
@@ -22,20 +24,27 @@ public class ZookeeperLockServiceImpl implements ILockService {
     @Resource
     private CuratorFramework curatorFramework;
 
+    private InterProcessMutex mutex;
+
     @Override
-    public void lock(String key) {
+    public void lock(String key) throws Exception {
         if (distributionProperties.getZookeeper().isOpen()) {
             // 开始加锁
             LOGGER.info("starting lock, {}", key);
+            // 可重入互斥锁
+            mutex = new InterProcessMutex(curatorFramework, distributionProperties.getZookeeper().getRoot() + key);
+            mutex.acquire();
 
         }
     }
 
     @Override
-    public void unLock(String key) {
+    public void unLock(String key) throws Exception {
         if (distributionProperties.getZookeeper().isOpen()) {
             // 开始解锁
             LOGGER.info("starting unlock, {}", key);
+            mutex = new InterProcessMutex(curatorFramework, distributionProperties.getZookeeper().getRoot() + key);
+            mutex.release();
         }
     }
 }

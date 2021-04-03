@@ -11,8 +11,3 @@ management:
     web:
       exposure:
         include: '*'
-
-server:
-  # 优雅关机
-  shutdown: graceful
-

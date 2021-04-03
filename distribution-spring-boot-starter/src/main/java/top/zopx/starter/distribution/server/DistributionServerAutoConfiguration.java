@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import top.zopx.starter.distribution.aspect.DistributionAspect;
+import top.zopx.starter.distribution.configurator.JvmInitialConfigurator;
 import top.zopx.starter.distribution.configurator.RedisInitialConfigurator;
 import top.zopx.starter.distribution.configurator.ZookeeperInitialConfigurator;
 import top.zopx.starter.distribution.properties.DistributionProperties;
 import top.zopx.starter.distribution.service.ILockService;
+import top.zopx.starter.distribution.service.impl.jvm.ReentrantLockServiceImpl;
 import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
 import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockServiceImpl;
 
@@ -20,7 +22,7 @@ import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockService
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties({ DistributionProperties.class })
-@Import({RedisInitialConfigurator.class, DistributionAspect.class, ZookeeperInitialConfigurator.class})
+@Import({RedisInitialConfigurator.class, DistributionAspect.class, ZookeeperInitialConfigurator.class, JvmInitialConfigurator.class})
 public class DistributionServerAutoConfiguration {
 
     @Bean
@@ -34,4 +36,12 @@ public class DistributionServerAutoConfiguration {
     public ILockService zookeeperLockService() {
         return new ZookeeperLockServiceImpl();
     }
+
+
+    @Bean
+    @ConditionalOnBean(JvmInitialConfigurator.class)
+    public ILockService reentrantLockService() {
+        return new ReentrantLockServiceImpl();
+    }
+
 }

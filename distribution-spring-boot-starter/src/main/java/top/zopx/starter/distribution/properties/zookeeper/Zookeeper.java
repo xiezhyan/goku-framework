@@ -40,6 +40,11 @@ public class Zookeeper {
      */
     private int maxRetry = 10;
 
+    /**
+     * zookeeper中加锁根路径
+     */
+    private String root = "/lock/";
+
     public String getZookeeperUrl() {
         return zookeeperUrl;
     }
@@ -78,5 +83,16 @@ public class Zookeeper {
 
     public void setMaxRetry(int maxRetry) {
         this.maxRetry = maxRetry;
+    }
+
+    public String getRoot() {
+        if (!this.root.endsWith("/")) {
+            return this.root + "/";
+        }
+        return root;
+    }
+
+    public void setRoot(String root) {
+        this.root = root;
     }
 }

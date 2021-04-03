@@ -10,11 +10,11 @@ public interface ILockService {
      * 加锁
      * @param key 加锁唯一标识
      */
-    void lock(String key);
+    void lock(String key) throws Exception;
 
     /**
      * 删除锁
      * @param key 加锁唯一标识
      */
-    void unLock(String key);
+    void unLock(String key) throws Exception;
 }
