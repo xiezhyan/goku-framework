@@ -23,7 +23,7 @@ public class DistributionProperties {
 
     private Zookeeper zookeeper;
 
-    private Jvm jvm;
+    private Jvm jvm = new Jvm();
 
     public Jvm getJvm() {
         return jvm;
