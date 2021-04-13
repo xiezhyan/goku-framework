@@ -23,6 +23,5 @@
 */target
 */*.iml
 *.iml
-*/*/test
 
 target
