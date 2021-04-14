@@ -1,8 +1,10 @@
 package top.zopx.starter.log.listener;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import top.zopx.starter.log.event.ErrorLogEvent;
+import top.zopx.starter.log.properties.SquareLogProperties;
 import top.zopx.starter.log.service.IErrorLogService;
 
 import javax.annotation.Resource;
@@ -13,6 +15,7 @@ import java.util.Map;
  * @date 2021/4/12
  */
 @Component
+@ConditionalOnProperty(value = SquareLogProperties.PREFIX + ".endurance", havingValue = "true")
 public class ErrorEventListener implements ApplicationListener<ErrorLogEvent> {
 
     @Resource

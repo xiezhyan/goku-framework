@@ -15,30 +15,40 @@
 
 > 持续更新中
 
-
-
 ### 依赖
 
 ```xml
 <!--parent-->
 <dependency>
-  <groupId>top.zopx</groupId>
-  <artifactId>square-boot-starter</artifactId>
-  <version>1.1.4</version>
-  <type>pom</type>
+    <groupId>top.zopx</groupId>
+    <artifactId>square-spring-boot-starter</artifactId>
+    <version>1.1.5</version>
+    <type>pom</type>
 </dependency>
 
 <!--实现依赖-->
 <dependency>
   <groupId>top.zopx</groupId>
-  <artifactId>tools-boot-starter</artifactId>
-  <version>1.1.4</version>
+  <artifactId>square-tools-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
-  <artifactId>sms-boot-starter</artifactId>
-  <version>1.1.4</version>
+  <artifactId>square-log-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
+</dependency>
+
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-distribution-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
+</dependency>
+
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-sms-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
 </dependency>
 ```
 

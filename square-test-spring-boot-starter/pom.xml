@@ -28,6 +28,16 @@
             <artifactId>square-log-spring-boot-starter</artifactId>
             <version>${square.version}</version>
         </dependency>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>square-distribution-spring-boot-starter</artifactId>
+            <version>${square.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>square-sms-spring-boot-starter</artifactId>
+            <version>${square.version}</version>
+        </dependency>
     </dependencies>
     
 </project>
