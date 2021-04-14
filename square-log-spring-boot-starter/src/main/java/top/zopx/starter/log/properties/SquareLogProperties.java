@@ -2,7 +2,6 @@ package top.zopx.starter.log.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import top.zopx.starter.tools.configurator.basic.SquareProperties;
 
 import java.lang.ref.PhantomReference;
 
