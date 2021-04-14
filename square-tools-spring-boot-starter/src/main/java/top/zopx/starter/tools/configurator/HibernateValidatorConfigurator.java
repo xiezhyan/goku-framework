@@ -16,8 +16,6 @@ import javax.validation.Validator;
  * @author sanq.Yan
  * @date 2020/1/26
  */
-@Configuration
-@Component
 public class HibernateValidatorConfigurator {
 
     @Bean

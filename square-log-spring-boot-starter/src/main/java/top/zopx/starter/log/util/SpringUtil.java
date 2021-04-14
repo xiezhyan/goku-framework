@@ -4,12 +4,14 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.stereotype.Component;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
 /**
  * @author sanq.Yan
  * @date 2021/4/12
  */
+@Component
 public class SpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;

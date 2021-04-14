@@ -1,6 +1,7 @@
 package top.zopx.starter.log.listener;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.omg.CORBA.BAD_CONTEXT;
 import top.zopx.starter.log.constant.BaseConstant;
 import top.zopx.starter.log.constant.ErrorConstant;
 import top.zopx.starter.log.event.ErrorLogEvent;
@@ -59,6 +60,7 @@ public class ErrorPublish {
         map.put(BaseConstant.AGENT, GlobalUtil.Request.getBrowserAgent(request));
         map.put(BaseConstant.REFERENCE, GlobalUtil.Request.getBrowserRefer(request));
         map.put(BaseConstant.CREATE_TIME, LocalDateUtils.nowDate());
+        map.put(BaseConstant.REQUEST_TYPE, request.getMethod());
     }
 
     public static String getPath(String uriStr) {

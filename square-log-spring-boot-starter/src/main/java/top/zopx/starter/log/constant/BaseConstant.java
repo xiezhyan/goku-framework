@@ -6,6 +6,7 @@ package top.zopx.starter.log.constant;
  */
 public class BaseConstant {
 
+    public static final String REQUEST_TYPE = "requestType";
     public static final String REFERENCE = "reference";
     public static final String CREATE_TIME = "createTime";
     public static final String AGENT = "agent";
