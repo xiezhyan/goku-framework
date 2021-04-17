@@ -8,8 +8,8 @@ import java.util.Map;
  */
 public interface ILogService {
 
-    boolean saveError(Map<String, Object> map);
+    void saveError(Map<String, Object> map);
 
-    boolean saveApi(Map<String, Object> map);
+    void saveApi(Map<String, Object> map);
 
 }

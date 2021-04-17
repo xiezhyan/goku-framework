@@ -14,14 +14,12 @@ import java.util.Map;
 public class ErrorLogServiceImpl implements ILogService {
 
     @Override
-    public boolean saveError(Map<String, Object> map) {
+    public void saveError(Map<String, Object> map) {
         System.out.println("error" + JsonUtil.toJson(map));
-        return false;
     }
 
     @Override
-    public boolean saveApi(Map<String, Object> map) {
+    public void saveApi(Map<String, Object> map) {
         System.out.println("api" + JsonUtil.toJson(map));
-        return false;
     }
 }
