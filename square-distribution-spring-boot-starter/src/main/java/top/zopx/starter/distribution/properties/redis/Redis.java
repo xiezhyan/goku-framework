@@ -30,6 +30,8 @@ public class Redis {
 
     /**
      * redis地址,协议：redis://
+     *  1、1个节点就是单机版
+     *  2、没有特殊条件 多个节点配置为集群版
      */
     private List<String> address;
 
@@ -40,15 +42,22 @@ public class Redis {
 
     /**
      * 哨兵配置
+     *  1、地址配置在address中
+     *  2、哨兵名称配置在sentinel中
      */
     private Sentinel sentinel;
 
     /**
-     * 主从
+     * 主从配置 1主多从
+     *  1、主节点配置在address中
+     *  2、从节点配置在masterSlave中
      */
     private MasterSlave masterSlave;
 
     public static class Sentinel {
+        /**
+         * 哨兵名称
+         */
         private String masterName;
 
         public String getMasterName() {
@@ -61,6 +70,9 @@ public class Redis {
     }
 
     public static class MasterSlave {
+        /**
+         * 从节点地址,协议：redis://
+         */
         public List<String> slaves;
 
         public List<String> getSlaves() {

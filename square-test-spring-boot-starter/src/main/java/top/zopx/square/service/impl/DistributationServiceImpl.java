@@ -5,6 +5,7 @@ import top.zopx.starter.distribution.annotation.Distribution;
 import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author sanq.Yan
@@ -18,6 +19,11 @@ public class DistributationServiceImpl {
 
     @Distribution
     public void lock1() {
+        try {
+            TimeUnit.SECONDS.sleep(1L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("lock");
     }
 
