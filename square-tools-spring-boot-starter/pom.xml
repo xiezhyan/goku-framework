@@ -16,11 +16,26 @@
     <description>工具类</description>
     <name>${groupId}:${artifactId}</name>
 
+    <properties>
+        <uasparser.version>0.6.2</uasparser.version>
+        <java.jwt.version>3.11.0</java.jwt.version>
+    </properties>
+
     <dependencies>
+        <!--处理userAgent-->
         <dependency>
             <groupId>cz.mallat.uasparser</groupId>
             <artifactId>uasparser</artifactId>
+            <version>${uasparser.version}</version>
         </dependency>
+        <!--处理userAgent-->
+        <!--jwt start-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java.jwt.version}</version>
+        </dependency>
+        <!--jwt end-->
     </dependencies>
 
     <build>

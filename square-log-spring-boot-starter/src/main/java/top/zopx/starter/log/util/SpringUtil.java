@@ -5,7 +5,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
+import top.zopx.starter.log.constant.LogConstant;
+import top.zopx.starter.tools.tools.date.LocalDateUtils;
+import top.zopx.starter.tools.tools.web.GlobalUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 
 /**
  * @author sanq.Yan
@@ -41,10 +49,31 @@ public class SpringUtil implements ApplicationContextAware {
         if (context != null) {
             try {
                 context.publishEvent(event);
-            } catch (Exception var2) {
-                LogUtil.getInstance(SpringUtil.class).error(var2.getMessage());
+            } catch (Exception e) {
+                LogUtil.getInstance(SpringUtil.class).error(e.getMessage());
             }
 
         }
     }
+
+    public static void addRequestInfo(HttpServletRequest request, Map<String, Object> map) {
+        map.put(LogConstant.REQUEST_URI, getPath(request.getRequestURI()));
+        map.put(LogConstant.IP, GlobalUtil.Request.getBrowserIp(request));
+        map.put(LogConstant.AGENT, GlobalUtil.Request.getBrowserAgent(request));
+        map.put(LogConstant.REFERENCE, GlobalUtil.Request.getBrowserRefer(request));
+        map.put(LogConstant.CREATE_TIME, LocalDateUtils.nowDate());
+        map.put(LogConstant.REQUEST_TYPE, request.getMethod());
+    }
+
+    public static String getPath(String uriStr) {
+        URI uri;
+        try {
+            uri = new URI(uriStr);
+        } catch (URISyntaxException var3) {
+            throw new RuntimeException(var3);
+        }
+
+        return uri.getPath();
+    }
+
 }

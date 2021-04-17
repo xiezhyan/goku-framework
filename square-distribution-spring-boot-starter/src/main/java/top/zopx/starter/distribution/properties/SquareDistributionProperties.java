@@ -9,8 +9,8 @@ import top.zopx.starter.distribution.properties.zookeeper.Zookeeper;
  * @author sanq.Yan
  * @date 2021/3/28
  */
-@ConfigurationProperties(DistributionProperties.DISTRIBUTION_PREFIX)
-public class DistributionProperties {
+@ConfigurationProperties(SquareDistributionProperties.DISTRIBUTION_PREFIX)
+public class SquareDistributionProperties {
 
     public static final String DISTRIBUTION_PREFIX = "square.distribution";
 

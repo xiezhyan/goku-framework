@@ -16,8 +16,8 @@ import top.zopx.starter.sms.providers.cloud.properties.LiYunSms;
  */
 @Configuration
 @Component
-@ConfigurationProperties(prefix = SmsProperties.PREFIX)
-public class SmsProperties {
+@ConfigurationProperties(prefix = SquareSmsProperties.PREFIX)
+public class SquareSmsProperties {
     public static final String PREFIX = "square.sms";
 
     /**

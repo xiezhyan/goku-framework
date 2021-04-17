@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import top.zopx.starter.sms.properties.SmsProperties;
+import top.zopx.starter.sms.properties.SquareSmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
 import top.zopx.starter.sms.providers.cloud.service.impl.CloudSmsServiceImpl;
 
@@ -15,7 +15,7 @@ import top.zopx.starter.sms.providers.cloud.service.impl.CloudSmsServiceImpl;
  * @date 2020/11/23
  */
 @Configuration
-@EnableConfigurationProperties({SmsProperties.class})
+@EnableConfigurationProperties({SquareSmsProperties.class})
 public class SmsAutoConfigurator {
 
     @Bean

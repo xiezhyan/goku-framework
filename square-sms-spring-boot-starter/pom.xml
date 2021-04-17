@@ -15,10 +15,16 @@
     <description>短信服务</description>
     <packaging>jar</packaging>
 
+    <properties>
+        <aliyun.sms.core.version>4.5.3</aliyun.sms.core.version>
+    </properties>
+
     <dependencies>
+
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun.sms.core.version}</version>
         </dependency>
     </dependencies>
 

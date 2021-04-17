@@ -3,7 +3,7 @@ package top.zopx.starter.distribution.properties.redis;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(Redis.PREFIX)
 public class Redis {
-    public static final String PREFIX = DistributionProperties.DISTRIBUTION_PREFIX + ".redis";
+    public static final String PREFIX = SquareDistributionProperties.DISTRIBUTION_PREFIX + ".redis";
 
 
     /**

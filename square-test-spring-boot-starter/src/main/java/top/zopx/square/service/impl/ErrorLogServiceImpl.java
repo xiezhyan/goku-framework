@@ -1,7 +1,7 @@
 package top.zopx.square.service.impl;
 
 import org.springframework.stereotype.Service;
-import top.zopx.starter.log.service.IErrorLogService;
+import top.zopx.starter.log.service.ILogService;
 import top.zopx.starter.tools.tools.json.JsonUtil;
 
 import java.util.Map;
@@ -11,11 +11,17 @@ import java.util.Map;
  * @date 2021/4/14
  */
 @Service
-public class ErrorLogServiceImpl implements IErrorLogService {
+public class ErrorLogServiceImpl implements ILogService {
 
     @Override
-    public boolean save(Map<String, Object> map) {
-        System.out.println(JsonUtil.toJson(map));
+    public boolean saveError(Map<String, Object> map) {
+        System.out.println("error" + JsonUtil.toJson(map));
+        return false;
+    }
+
+    @Override
+    public boolean saveApi(Map<String, Object> map) {
+        System.out.println("api" + JsonUtil.toJson(map));
         return false;
     }
 }

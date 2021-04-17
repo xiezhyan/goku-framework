@@ -1,10 +1,8 @@
 package top.zopx.starter.distribution.configurator;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import top.zopx.starter.distribution.properties.DistributionProperties;
-import top.zopx.starter.distribution.properties.jvm.Jvm;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 
 import javax.annotation.Resource;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,11 +15,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class JvmInitialConfigurator {
 
     @Resource
-    private DistributionProperties distributionProperties;
+    private SquareDistributionProperties squareDistributionProperties;
 
     @Bean
     public ReentrantLock reentrantLock() {
-        return new ReentrantLock(distributionProperties.getJvm().isFail());
+        return new ReentrantLock(squareDistributionProperties.getJvm().isFail());
     }
 
 }

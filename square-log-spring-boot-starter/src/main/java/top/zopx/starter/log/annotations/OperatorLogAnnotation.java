@@ -1,4 +1,4 @@
-package top.zopx.starter.tools.annotations;
+package top.zopx.starter.log.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

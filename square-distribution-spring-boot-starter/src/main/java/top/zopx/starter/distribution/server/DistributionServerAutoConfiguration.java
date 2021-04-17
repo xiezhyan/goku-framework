@@ -9,7 +9,7 @@ import top.zopx.starter.distribution.aspect.DistributionAspect;
 import top.zopx.starter.distribution.configurator.JvmInitialConfigurator;
 import top.zopx.starter.distribution.configurator.RedisInitialConfigurator;
 import top.zopx.starter.distribution.configurator.ZookeeperInitialConfigurator;
-import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 import top.zopx.starter.distribution.service.ILockService;
 import top.zopx.starter.distribution.service.impl.jvm.ReentrantLockServiceImpl;
 import top.zopx.starter.distribution.service.impl.redis.RedisLockServiceImpl;
@@ -21,7 +21,7 @@ import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockService
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
-@EnableConfigurationProperties({ DistributionProperties.class })
+@EnableConfigurationProperties({ SquareDistributionProperties.class })
 @Import({RedisInitialConfigurator.class, DistributionAspect.class, ZookeeperInitialConfigurator.class, JvmInitialConfigurator.class})
 public class DistributionServerAutoConfiguration {
 

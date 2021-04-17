@@ -6,7 +6,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 import top.zopx.starter.distribution.properties.redis.Redis;
 
 import javax.annotation.Resource;
@@ -19,7 +19,7 @@ import java.util.List;
 @ConditionalOnProperty(prefix = Redis.PREFIX, name = "open", havingValue = "true")
 public class RedisInitialConfigurator {
     @Resource
-    private DistributionProperties distributionProperties;
+    private SquareDistributionProperties squareDistributionProperties;
 
     @Bean
     public RedissonClient redissonClient() {
@@ -42,17 +42,17 @@ public class RedisInitialConfigurator {
     }
 
     private void updateMasterSlaveServer(Config config) {
-        if (null != distributionProperties.getRedis().getMasterSlave()) {
+        if (null != squareDistributionProperties.getRedis().getMasterSlave()) {
             config.useMasterSlaveServers()
                     .setDatabase(0)
-                    .setRetryAttempts(distributionProperties.getRetryAttempts())
-                    .setRetryInterval(distributionProperties.getRedis().getInterval())
-                    .setMasterAddress(distributionProperties.getRedis().getAddress().get(0))
-                    .addSlaveAddress(distributionProperties.getRedis().getMasterSlave().getSlaves().toArray(new String[0]));
+                    .setRetryAttempts(squareDistributionProperties.getRetryAttempts())
+                    .setRetryInterval(squareDistributionProperties.getRedis().getInterval())
+                    .setMasterAddress(squareDistributionProperties.getRedis().getAddress().get(0))
+                    .addSlaveAddress(squareDistributionProperties.getRedis().getMasterSlave().getSlaves().toArray(new String[0]));
 
-            if (StringUtils.isNotBlank(distributionProperties.getRedis().getPassword())) {
+            if (StringUtils.isNotBlank(squareDistributionProperties.getRedis().getPassword())) {
                 config.useMasterSlaveServers()
-                        .setPassword(distributionProperties.getRedis().getPassword())
+                        .setPassword(squareDistributionProperties.getRedis().getPassword())
                 ;
             }
         }
@@ -60,35 +60,35 @@ public class RedisInitialConfigurator {
 
     private void updateClusterServer(Config config) {
         List<String> address;
-        if (1 < (address = distributionProperties.getRedis().getAddress()).size()) {
+        if (1 < (address = squareDistributionProperties.getRedis().getAddress()).size()) {
             config.useClusterServers()
-                    .setScanInterval(distributionProperties.getRedis().getInterval())
+                    .setScanInterval(squareDistributionProperties.getRedis().getInterval())
                     .addNodeAddress(address.toArray(new String[0]))
-                    .setRetryAttempts(distributionProperties.getRetryAttempts())
+                    .setRetryAttempts(squareDistributionProperties.getRetryAttempts())
             ;
-            if (StringUtils.isNotBlank(distributionProperties.getRedis().getPassword())) {
+            if (StringUtils.isNotBlank(squareDistributionProperties.getRedis().getPassword())) {
                 config.useClusterServers()
-                        .setPassword(distributionProperties.getRedis().getPassword())
+                        .setPassword(squareDistributionProperties.getRedis().getPassword())
                 ;
             }
         }
     }
 
     private void updateSentinelServer(Config config) {
-        if (null == distributionProperties.getRedis().getSentinel())
+        if (null == squareDistributionProperties.getRedis().getSentinel())
             return;
 
         String masterName;
-        if (StringUtils.isNotBlank(masterName = distributionProperties.getRedis().getSentinel().getMasterName())) {
+        if (StringUtils.isNotBlank(masterName = squareDistributionProperties.getRedis().getSentinel().getMasterName())) {
             config.useSentinelServers()
-                    .addSentinelAddress(distributionProperties.getRedis().getAddress().toArray(new String[0]))
+                    .addSentinelAddress(squareDistributionProperties.getRedis().getAddress().toArray(new String[0]))
                     .setMasterName(masterName)
-                    .setRetryAttempts(distributionProperties.getRetryAttempts())
+                    .setRetryAttempts(squareDistributionProperties.getRetryAttempts())
                     .setDatabase(0);
 
-            if (StringUtils.isNotBlank(distributionProperties.getRedis().getPassword())) {
+            if (StringUtils.isNotBlank(squareDistributionProperties.getRedis().getPassword())) {
                 config.useSentinelServers()
-                        .setPassword(distributionProperties.getRedis().getPassword())
+                        .setPassword(squareDistributionProperties.getRedis().getPassword())
                 ;
             }
         }
@@ -96,14 +96,14 @@ public class RedisInitialConfigurator {
 
     private void updateSingleServer(Config config) {
         List<String> address;
-        if (1 == (address = distributionProperties.getRedis().getAddress()).size()) {
+        if (1 == (address = squareDistributionProperties.getRedis().getAddress()).size()) {
             config.useSingleServer()
                     .setAddress(address.get(0)).setDatabase(0)
-                    .setRetryAttempts(distributionProperties.getRetryAttempts())
+                    .setRetryAttempts(squareDistributionProperties.getRetryAttempts())
             ;
-            if (StringUtils.isNotBlank(distributionProperties.getRedis().getPassword())) {
+            if (StringUtils.isNotBlank(squareDistributionProperties.getRedis().getPassword())) {
                 config.useSingleServer()
-                        .setPassword(distributionProperties.getRedis().getPassword())
+                        .setPassword(squareDistributionProperties.getRedis().getPassword())
                 ;
             }
         }

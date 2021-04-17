@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import top.zopx.starter.sms.properties.BaseSms;
-import top.zopx.starter.sms.properties.SmsProperties;
+import top.zopx.starter.sms.properties.SquareSmsProperties;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ConfigurationProperties(prefix = LiYunSms.PREFIX)
 public class LiYunSms extends BaseSms implements Serializable {
 
-    public static final String PREFIX = SmsProperties.PREFIX + ".sms-li";
+    public static final String PREFIX = SquareSmsProperties.PREFIX + ".sms-li";
 
     private String regionId = "cn-hangzhou";
 

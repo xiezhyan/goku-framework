@@ -9,7 +9,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import top.zopx.starter.sms.entity.SmsRequest;
 import top.zopx.starter.sms.entity.SmsResponse;
-import top.zopx.starter.sms.properties.SmsProperties;
+import top.zopx.starter.sms.properties.SquareSmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
 
 import javax.annotation.Resource;
@@ -28,7 +28,7 @@ public class CloudSmsServiceImpl implements ISmsService {
     @Resource
     private IAcsClient acsClient;
     @Resource
-    private SmsProperties smsProperties;
+    private SquareSmsProperties smsProperties;
 
     @Override
     public SmsResponse sendSms(SmsRequest request,  Consumer<String> consumer) throws Throwable {

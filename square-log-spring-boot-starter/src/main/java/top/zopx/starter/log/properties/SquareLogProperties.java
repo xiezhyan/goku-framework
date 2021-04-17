@@ -2,13 +2,13 @@ package top.zopx.starter.log.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.lang.ref.PhantomReference;
+import org.springframework.stereotype.Component;
 
 /**
  * @author sanq.Yan
  * @date 2021/4/14
  */
+@Component
 @Configuration
 @ConfigurationProperties(prefix = SquareLogProperties.PREFIX)
 public class SquareLogProperties {

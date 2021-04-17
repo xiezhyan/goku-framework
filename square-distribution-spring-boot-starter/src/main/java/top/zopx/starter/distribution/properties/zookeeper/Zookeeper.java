@@ -3,7 +3,7 @@ package top.zopx.starter.distribution.properties.zookeeper;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 
 /**
  * @author sanq.Yan
@@ -13,7 +13,7 @@ import top.zopx.starter.distribution.properties.DistributionProperties;
 @Configuration
 @ConfigurationProperties(Zookeeper.PREFIX)
 public class Zookeeper {
-    public static final String PREFIX = DistributionProperties.DISTRIBUTION_PREFIX + ".zookeeper";
+    public static final String PREFIX = SquareDistributionProperties.DISTRIBUTION_PREFIX + ".zookeeper";
 
     /**
      * 是否开启

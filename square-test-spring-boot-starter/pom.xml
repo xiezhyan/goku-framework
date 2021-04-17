@@ -10,12 +10,25 @@
         <version>1.1.5</version>
     </parent>
 
+    <groupId>top.zopx.square.test</groupId>
     <artifactId>square-test-spring-boot-starter</artifactId>
     <version>${square.version}</version>
 
     <properties>
         <square.version>1.1.5</square.version>
     </properties>
+
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>top.zopx</groupId>-->
+<!--                <artifactId>square-spring-boot-starter</artifactId>-->
+<!--                <version>1.1.5</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <dependencies>
         <dependency>
@@ -39,5 +52,8 @@
             <version>${square.version}</version>
         </dependency>
     </dependencies>
-    
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
 </project>

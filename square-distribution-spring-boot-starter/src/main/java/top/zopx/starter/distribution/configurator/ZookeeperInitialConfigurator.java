@@ -6,7 +6,7 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import top.zopx.starter.distribution.properties.DistributionProperties;
+import top.zopx.starter.distribution.properties.SquareDistributionProperties;
 import top.zopx.starter.distribution.properties.zookeeper.Zookeeper;
 
 import javax.annotation.Resource;
@@ -19,14 +19,14 @@ import javax.annotation.Resource;
 public class ZookeeperInitialConfigurator {
 
     @Resource
-    private DistributionProperties distributionProperties;
+    private SquareDistributionProperties squareDistributionProperties;
 
     @Bean
     public CuratorFramework curatorFramework() {
         CuratorFramework framework = CuratorFrameworkFactory.builder()
-                .connectString(distributionProperties.getZookeeper().getZookeeperUrl())
-                .sessionTimeoutMs(distributionProperties.getZookeeper().getSessionTimeout())
-                .connectionTimeoutMs(distributionProperties.getZookeeper().getConnectTimeout())
+                .connectString(squareDistributionProperties.getZookeeper().getZookeeperUrl())
+                .sessionTimeoutMs(squareDistributionProperties.getZookeeper().getSessionTimeout())
+                .connectionTimeoutMs(squareDistributionProperties.getZookeeper().getConnectTimeout())
                 .retryPolicy(retryPolicy())
                 .build();
         framework.start();
@@ -41,8 +41,8 @@ public class ZookeeperInitialConfigurator {
     public RetryPolicy retryPolicy() {
         return new ExponentialBackoffRetry(
                 1000,
-                distributionProperties.getZookeeper().getMaxRetry(),
-                distributionProperties.getRetryAttempts()
+                squareDistributionProperties.getZookeeper().getMaxRetry(),
+                squareDistributionProperties.getRetryAttempts()
         );
     }
 }

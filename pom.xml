@@ -4,12 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+<!--    <parent>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--        <version>2.4.2</version>-->
+<!--    </parent>-->
+
     <modules>
         <module>square-tools-spring-boot-starter</module>
         <module>square-sms-spring-boot-starter</module>
         <module>square-distribution-spring-boot-starter</module>
         <module>square-log-spring-boot-starter</module>
         <module>square-mybatis-spring-boot-starter</module>
+        <module>square-activiti-spring-boot-starter</module>
     </modules>
 
     <licenses>
@@ -57,12 +64,14 @@
         <java.version>1.8</java.version>
         <square.version>1.1.5</square.version>
 
-        <spring.version>2.4.2</spring.version>
+        <spring.boot.version>2.4.2</spring.boot.version>
         <spring.cloud.version>2020.0.1</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
+        <mybatis.plus.version>3.4.0</mybatis.plus.version>
+
         <fastjson.version>1.2.73</fastjson.version>
-        <uasparser.version>0.6.2</uasparser.version>
+
         <collections.version>4.0</collections.version>
 
         <junit.version>4.12</junit.version>
@@ -77,14 +86,8 @@
 
         <validator.version>6.1.5.Final</validator.version>
 
-        <aliyun.sms.core.version>4.5.3</aliyun.sms.core.version>
-
         <!--rocketmq -->
         <rocketmq.version>2.2.0</rocketmq.version>
-        <!--activiti-->
-        <activiti.version>6.0.0</activiti.version>
-
-        <redisson.version>3.9.1</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -93,7 +96,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -119,13 +122,13 @@
             </dependency>
             <!--spring cloud alibaba-->
 
-            <!--处理userAgent-->
+            <!--代码生成器-->
             <dependency>
-                <groupId>cz.mallat.uasparser</groupId>
-                <artifactId>uasparser</artifactId>
-                <version>${uasparser.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis.plus.version}</version>
             </dependency>
-            <!--处理userAgent-->
+            <!--代码生成器-->
 
             <!--dubbo start-->
             <dependency>
@@ -134,6 +137,7 @@
                 <version>${dubbo.version}</version>
             </dependency>
             <!--dubbo end-->
+
             <!--zookeeper starter-->
             <dependency>
                 <groupId>org.apache.curator</groupId>
@@ -161,27 +165,9 @@
             <!--zookeeper end-->
 
             <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-java-sdk-core</artifactId>
-                <version>${aliyun.sms.core.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-spring-boot-starter</artifactId>
                 <version>${rocketmq.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.activiti</groupId>
-                <artifactId>activiti-spring-boot-starter-basic</artifactId>
-                <version>${activiti.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>${redisson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -287,6 +273,15 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <!-- 打包时跳过测试
             <plugin>
