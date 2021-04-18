@@ -1,10 +1,9 @@
 package top.zopx.square;
 
+import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import top.zopx.square.service.impl.DistributationServiceImpl;
-import top.zopx.square.service.impl.SmsServiceImpl;
+import top.zopx.starter.activiti.annotation.EnableActivitiDashboard;
 import top.zopx.starter.distribution.annotation.EnableDistribution;
 import top.zopx.starter.sms.annotation.EnableSms;
 
@@ -12,21 +11,14 @@ import top.zopx.starter.sms.annotation.EnableSms;
  * @author sanq.Yan
  * @date 2021/4/14
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableDistribution
 @EnableSms
+@EnableActivitiDashboard
 public class TestApplication {
 
     public static void main(String[] args) {
-        final ConfigurableApplicationContext run = SpringApplication.run(TestApplication.class, args);
-
-        final SmsServiceImpl smsService = run.getBean(SmsServiceImpl.class);
-
-        try {
-            smsService.sendVer();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+        SpringApplication.run(TestApplication.class, args);
     }
 
 }

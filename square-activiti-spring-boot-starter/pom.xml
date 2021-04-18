@@ -18,9 +18,17 @@
     <properties>
         <!--activiti-->
         <activiti.version>6.0.0</activiti.version>
+        <activiti.modeler.version>5.23.0</activiti.modeler.version>
+        <batik.version>1.8</batik.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>square-tools-spring-boot-starter</artifactId>
+            <version>${square.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-spring-boot-starter-basic</artifactId>
@@ -30,12 +38,51 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
                 </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Activiti modeler 可视化依赖 -->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-modeler</artifactId>
+            <version>${activiti.modeler.version}</version>
+            <exclusions>
                 <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
+                    <artifactId>spring-security-config</artifactId>
+                    <groupId>org.springframework.security</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-security-core</artifactId>
+                    <groupId>org.springframework.security</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-security-crypto</artifactId>
+                    <groupId>org.springframework.security</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-security-web</artifactId>
+                    <groupId>org.springframework.security</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Activity6 集成 Modeler 需要 jar 包 -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-transcoder</artifactId>
+            <version>${batik.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+            <version>${batik.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-json-converter</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

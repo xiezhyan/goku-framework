@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.zopx.starter.log.LogServerAutoConfiguration
+  top.zopx.starter.activiti.server.ActivitiServerAutoConfiguration

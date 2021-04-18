@@ -1,6 +1,21 @@
 # Activiti审批
 
+# 操作
+## 获取流程图列表
+```http request
+http://localhost:8080/activiti/list
+```
 
+## 查看流程图
+```http request
+http://localhost:8080/modeler.html?modelId=1
+```
+
+## 保存
+
+## 发布
+
+## 查看当前进度
 
 # 数据表
 ```mysql
