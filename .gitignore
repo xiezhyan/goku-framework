@@ -25,3 +25,4 @@
 *.iml
 
 target
+square-test-spring-boot-starter/src/main/resources/application.yml

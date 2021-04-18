@@ -4,7 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import top.zopx.square.service.impl.DistributationServiceImpl;
+import top.zopx.square.service.impl.SmsServiceImpl;
 import top.zopx.starter.distribution.annotation.EnableDistribution;
+import top.zopx.starter.sms.annotation.EnableSms;
 
 /**
  * @author sanq.Yan
@@ -12,15 +14,18 @@ import top.zopx.starter.distribution.annotation.EnableDistribution;
  */
 @SpringBootApplication
 @EnableDistribution
+@EnableSms
 public class TestApplication {
 
     public static void main(String[] args) {
         final ConfigurableApplicationContext run = SpringApplication.run(TestApplication.class, args);
 
-        final DistributationServiceImpl bean = run.getBean(DistributationServiceImpl.class);
+        final SmsServiceImpl smsService = run.getBean(SmsServiceImpl.class);
 
-        for (int i = 0; i < 20; i++) {
-            new Thread(bean::lock1).start();
+        try {
+            smsService.sendVer();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
     }
 
