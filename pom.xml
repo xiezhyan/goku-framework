@@ -42,7 +42,7 @@
 
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.1.5</version>
+    <version>${square.version}</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>square-spring-boot-starter</description>
@@ -63,8 +63,6 @@
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
-
-        <fastjson.version>1.2.73</fastjson.version>
 
         <collections.version>4.0</collections.version>
 
@@ -200,14 +198,6 @@
         </dependency>
         <!--redis pool支持-->
         <!--工具类-->
-
-        <!--json框架-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>${fastjson.version}</version>
-        </dependency>
-        <!--json框架-->
 
         <!--validator start-->
         <dependency>

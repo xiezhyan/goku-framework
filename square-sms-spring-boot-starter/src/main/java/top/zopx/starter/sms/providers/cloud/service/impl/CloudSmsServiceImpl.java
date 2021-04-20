@@ -11,6 +11,7 @@ import top.zopx.starter.sms.entity.SmsRequest;
 import top.zopx.starter.sms.entity.SmsResponse;
 import top.zopx.starter.sms.properties.SquareSmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
+import top.zopx.starter.tools.tools.json.JsonUtil;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -55,12 +56,12 @@ public class CloudSmsServiceImpl implements ISmsService {
             req.putQueryParameter("PhoneNumbers", request.getPhoneNumber());
             req.putQueryParameter("SignName", signName);
             req.putQueryParameter("TemplateCode", request.getTemplate());
-            req.putQueryParameter("TemplateParam", JSON.toJSONString(request.getTemplateParam()));
+            req.putQueryParameter("TemplateParam", JsonUtil.toJson(request.getTemplateParam()));
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
             if (null != consumer) {
-                consumer.accept(JSON.toJSONString(response));
+                consumer.accept(JsonUtil.toJson(response));
             }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());
@@ -104,15 +105,15 @@ public class CloudSmsServiceImpl implements ISmsService {
             request.setSysAction("SendBatchSms");
 
             request.putQueryParameter("RegionId", smsProperties.getSmsLi().getRegionId());
-            request.putQueryParameter("PhoneNumberJson", JSON.toJSONString(phoneNumberJson));
-            request.putQueryParameter("SignNameJson", JSON.toJSONString(signNameJson));
-            request.putQueryParameter("TemplateCode", JSON.toJSONString(templateCode));
-            request.putQueryParameter("TemplateParamJson", JSON.toJSONString(templateParamJson));
+            request.putQueryParameter("PhoneNumberJson", JsonUtil.toJson(phoneNumberJson));
+            request.putQueryParameter("SignNameJson", JsonUtil.toJson(signNameJson));
+            request.putQueryParameter("TemplateCode", JsonUtil.toJson(templateCode));
+            request.putQueryParameter("TemplateParamJson", JsonUtil.toJson(templateParamJson));
 
             CommonResponse response = acsClient.getCommonResponse(request);
 
             if (null != consumer) {
-                consumer.accept(JSON.toJSONString(response));
+                consumer.accept(JsonUtil.toJson(response));
             }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());

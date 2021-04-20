@@ -15,6 +15,7 @@ package top.zopx.starter.activiti.controller.model;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.engine.ActivitiException;
@@ -23,6 +24,7 @@ import org.activiti.engine.repository.Model;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,6 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
 
     @Resource
     private RepositoryService repositoryService;
-
     @Resource
     private ObjectMapper objectMapper;
 
@@ -72,9 +73,9 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
 
             repositoryService.saveModel(model);
 
-            repositoryService.addModelEditorSource(model.getId(), json_xml.getBytes("utf-8"));
+            repositoryService.addModelEditorSource(model.getId(), json_xml.getBytes(StandardCharsets.UTF_8));
 
-            InputStream svgStream = new ByteArrayInputStream(svg_xml.getBytes("utf-8"));
+            InputStream svgStream = new ByteArrayInputStream(svg_xml.getBytes(StandardCharsets.UTF_8));
             TranscoderInput input = new TranscoderInput(svgStream);
 
             PNGTranscoder transcoder = new PNGTranscoder();
@@ -92,5 +93,32 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
             LOGGER.error("Error saving model", e);
             throw new ActivitiException("Error saving model", e);
         }
+    }
+
+    @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
+    public ObjectNode getEditorJson(@PathVariable String modelId) {
+        ObjectNode modelNode = null;
+
+        Model model = repositoryService.getModel(modelId);
+
+        if (model != null) {
+            try {
+                if (StringUtils.isNotEmpty(model.getMetaInfo())) {
+                    modelNode = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+                } else {
+                    modelNode = objectMapper.createObjectNode();
+                    modelNode.put(MODEL_NAME, model.getName());
+                }
+                modelNode.put(MODEL_ID, model.getId());
+                ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
+                        new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
+                modelNode.put("model", editorJsonNode);
+
+            } catch (Exception e) {
+                LOGGER.error("Error creating model JSON", e);
+                throw new ActivitiException("Error creating model JSON", e);
+            }
+        }
+        return modelNode;
     }
 }

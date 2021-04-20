@@ -3,18 +3,23 @@
 # 操作
 ## 获取流程图列表
 ```http request
-http://localhost:8080/activiti/list
+GET http://localhost:8080/activiti/list
 ```
 
 ## 查看流程图
 ```http request
-http://localhost:8080/modeler.html?modelId=1
+GET http://localhost:8080/modeler.html?modelId={modelId}
 ```
 
 ## 保存
+```http request
+PUT http://localhost:8080/activiti/model/{modelId}/save
+```
 
 ## 发布
-
+```http request
+POST http://localhost:8080/activiti/deploy/{modelId}
+```
 ## 查看当前进度
 
 # 数据表

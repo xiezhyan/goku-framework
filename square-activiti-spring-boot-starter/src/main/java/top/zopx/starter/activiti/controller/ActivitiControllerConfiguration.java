@@ -14,7 +14,7 @@ import top.zopx.starter.activiti.controller.model.ModelSaveRestResource;
 @Component
 @Import({
         StencilsetRestResource.class,
-        ModelEditorJsonRestResource.class,
+//        ModelEditorJsonRestResource.class,
         ModelSaveRestResource.class,
         ModelRestController.class
 })

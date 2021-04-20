@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Tijs Rademakers
@@ -41,8 +42,7 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
 
     @Resource
     private RepositoryService repositoryService;
-
-    @Autowired
+    @Resource
     private ObjectMapper objectMapper;
 
     @RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
@@ -61,7 +61,7 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
                 }
                 modelNode.put(MODEL_ID, model.getId());
                 ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
-                        new String(repositoryService.getModelEditorSource(model.getId()), "utf-8"));
+                        new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
                 modelNode.put("model", editorJsonNode);
 
             } catch (Exception e) {
