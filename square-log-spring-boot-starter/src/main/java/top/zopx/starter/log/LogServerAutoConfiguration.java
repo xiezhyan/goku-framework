@@ -16,17 +16,27 @@ import top.zopx.starter.log.util.SpringUtil;
  * @date 2021/4/12
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({ SquareLogProperties.class})
-@Import({
-        ErrorLogServer.class,
-        ApiLogServer.class,
-        PublishEventListener.class
-})
+@EnableConfigurationProperties({SquareLogProperties.class})
 @EnableAspectJAutoProxy
 public class LogServerAutoConfiguration {
 
     @Bean
     public SpringUtil springUtil() {
         return new SpringUtil();
+    }
+
+    @Bean
+    public ErrorLogServer errorLogServer() {
+        return new ErrorLogServer();
+    }
+
+    @Bean
+    public ApiLogServer apiLogServer() {
+        return new ApiLogServer();
+    }
+
+    @Bean
+    public PublishEventListener publishEventListener() {
+        return new PublishEventListener();
     }
 }

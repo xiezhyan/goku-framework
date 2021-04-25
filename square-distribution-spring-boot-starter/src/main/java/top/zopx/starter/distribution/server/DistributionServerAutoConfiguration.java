@@ -20,9 +20,14 @@ import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockService
  * @date 2021/3/29
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnBean(DistributionMarkerConfiguration.Marker.class)
+@ConditionalOnBean(DistributionMarkerConfiguration.DistributionMarker.class)
 @EnableConfigurationProperties({ SquareDistributionProperties.class })
-@Import({RedisInitialConfigurator.class, DistributionAspect.class, ZookeeperInitialConfigurator.class, JvmInitialConfigurator.class})
+@Import({
+        RedisInitialConfigurator.class,
+        DistributionAspect.class,
+        ZookeeperInitialConfigurator.class,
+        JvmInitialConfigurator.class
+})
 public class DistributionServerAutoConfiguration {
 
     @Bean

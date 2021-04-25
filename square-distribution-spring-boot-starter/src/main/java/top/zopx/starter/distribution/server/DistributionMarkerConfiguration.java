@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 public class DistributionMarkerConfiguration {
 
     @Bean
-    public Marker distributionServerMarkerBean() {
-        return new Marker();
+    public DistributionMarker distributionServerMarkerBean() {
+        return new DistributionMarker();
     }
 
-    class Marker {
+    static class DistributionMarker {
     }
 }
