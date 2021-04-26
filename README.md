@@ -50,5 +50,16 @@
   <artifactId>square-sms-spring-boot-starter</artifactId>
   <version>1.1.5</version>
 </dependency>
-```
 
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-mybatis-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
+</dependency>
+
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-activiti-spring-boot-starter</artifactId>
+  <version>1.1.5</version>
+</dependency>
+```
