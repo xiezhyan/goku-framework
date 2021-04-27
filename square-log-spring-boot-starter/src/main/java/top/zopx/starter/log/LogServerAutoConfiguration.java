@@ -1,10 +1,10 @@
 package top.zopx.starter.log;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 import top.zopx.starter.log.listener.PublishEventListener;
 import top.zopx.starter.log.properties.SquareLogProperties;
 import top.zopx.starter.log.server.ApiLogServer;
@@ -36,6 +36,7 @@ public class LogServerAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = SquareLogProperties.PREFIX, name = "endurance", havingValue = "true")
     public PublishEventListener publishEventListener() {
         return new PublishEventListener();
     }

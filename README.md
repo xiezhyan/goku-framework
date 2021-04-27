@@ -22,7 +22,7 @@
 <dependency>
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <type>pom</type>
 </dependency>
 
@@ -30,36 +30,36 @@
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-tools-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-log-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-distribution-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-sms-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-mybatis-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-activiti-spring-boot-starter</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 ```
