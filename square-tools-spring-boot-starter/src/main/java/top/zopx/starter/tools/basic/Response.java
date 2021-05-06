@@ -6,10 +6,12 @@ import java.io.Serializable;
 
 /**
  *  统一json返回格式
+ *      推荐使用 R<T>
  *
  * @author sanq.Yan
  * @date 2020/1/26
  */
+@Deprecated
 public class Response implements Serializable {
 
     public static final String OK = "OK";
