@@ -96,6 +96,22 @@ public final class R<T> implements Serializable {
         );
     }
 
+    /**
+     * 失败
+     * @param msg 失败说明
+     * @param code 失败码
+     * @return R<T>
+     */
+    public static <T> R<T> failure(String msg, Integer code) {
+        return new R<>(
+                new Meta(
+                        false,
+                        msg,
+                        code),
+                null
+        );
+    }
+
     public static class Meta implements Serializable {
         private Boolean success;
         private String message;
