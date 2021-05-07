@@ -19,7 +19,7 @@ public enum BusExceptionConstant {
     PARAM_NOT_READABLE("参数反序列化失败", BusCode.PARAM_NOT_READABLE),
 
     USER_NOT_LOGIN("用户未登录，请先登录", BusCode.USER_NOT_LOGIN),
-    USER_LOGIN_ERROR("用户名或者密码错误，请重新登陆", BusCode.USER_LOGIN_ERROR),
+    USER_LOGIN_ERROR("用户名或者密码错误，请检查后重新登录", BusCode.USER_LOGIN_ERROR),
     USER_ACCOUNT_FORBIDDEN("账号不可用", BusCode.USER_ACCOUNT_FORBIDDEN),
     USER_NOT_EXIST("当前账户不存在，请检查后重新再试", BusCode.USER_NOT_EXIST),
     USER_HAS_EXISTED("当前账户不存在，请重新输入", BusCode.USER_HAS_EXISTED),

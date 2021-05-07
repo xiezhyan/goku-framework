@@ -98,6 +98,10 @@ public class BeanCopierUtil {
      * @param consumer  通用操作
      */
     public <S, T> void copy(S source, T target, Converter converter, BiConsumer<S, T> consumer) {
+        if (null == source) {
+            return;
+        }
+
         this.setConverter(null != converter);
 
         BeanCopier copier = getCopier(source.getClass(), target.getClass());
