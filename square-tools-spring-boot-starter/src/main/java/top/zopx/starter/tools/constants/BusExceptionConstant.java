@@ -22,7 +22,7 @@ public enum BusExceptionConstant {
     USER_LOGIN_ERROR("用户名或者密码错误，请检查后重新登录", BusCode.USER_LOGIN_ERROR),
     USER_ACCOUNT_FORBIDDEN("账号不可用", BusCode.USER_ACCOUNT_FORBIDDEN),
     USER_NOT_EXIST("当前账户不存在，请检查后重新再试", BusCode.USER_NOT_EXIST),
-    USER_HAS_EXISTED("当前账户不存在，请重新输入", BusCode.USER_HAS_EXISTED),
+    USER_HAS_EXISTED("当前账户已存在，请重新输入", BusCode.USER_HAS_EXISTED),
     HTTP_NO_AUTHORIZED("请求未授权", BusCode.HTTP_NO_AUTHORIZED),
     ;
     private String msg;
