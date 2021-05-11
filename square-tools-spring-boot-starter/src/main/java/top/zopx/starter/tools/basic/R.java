@@ -73,14 +73,15 @@ public final class R<T> implements Serializable {
     }
 
     /**
-     * 成功返回
+     * 返回对象
      *
      * @param data 数据
      * @param <T>  泛型类型
      * @return R<T>
      */
     public static <T> R<T> result(T data) {
-        return new R<>(
+        return result(
+                data,
                 data == null ?
                         new Meta(
                                 false,
@@ -91,14 +92,21 @@ public final class R<T> implements Serializable {
                                 true,
                                 OK,
                                 BusCode.RESULT_OK
-                        ),
+                        )
+        );
+    }
+
+    public static <T> R<T> result(T data, Meta meta) {
+        return new R<>(
+                meta,
                 data
         );
     }
 
     /**
      * 失败
-     * @param msg 失败说明
+     *
+     * @param msg  失败说明
      * @param code 失败码
      * @return R<T>
      */
