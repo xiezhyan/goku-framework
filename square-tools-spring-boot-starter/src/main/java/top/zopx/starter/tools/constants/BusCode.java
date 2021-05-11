@@ -31,7 +31,7 @@ public class BusCode {
     public static final Integer USER_HAS_EXISTED = 2005;
 
     /**
-     * 请求错误
+     * 请求错误 4001 ~ 4999
      */
     public static final Integer HTTP_NO_AUTHORIZED = 4001;
 }

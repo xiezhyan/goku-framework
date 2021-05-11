@@ -11,6 +11,7 @@ public enum BusExceptionConstant {
 
     DEFAULT_ERROR("ERROR", BusCode.RESULT_ERROR),
     DEFAULT_SUCCESS("OK", BusCode.RESULT_OK),
+
     PARAM_IS_INVALID("参数无效", BusCode.PARAM_IS_INVALID),
     PARAM_IS_BLANK("参数为空", BusCode.PARAM_IS_BLANK),
     PARAM_TYPE_BIND_ERROR("参数类型错误", BusCode.PARAM_TYPE_BIND_ERROR),
@@ -23,6 +24,7 @@ public enum BusExceptionConstant {
     USER_ACCOUNT_FORBIDDEN("账号不可用", BusCode.USER_ACCOUNT_FORBIDDEN),
     USER_NOT_EXIST("当前账户不存在，请检查后重新再试", BusCode.USER_NOT_EXIST),
     USER_HAS_EXISTED("当前账户已存在，请重新输入", BusCode.USER_HAS_EXISTED),
+
     HTTP_NO_AUTHORIZED("请求未授权", BusCode.HTTP_NO_AUTHORIZED),
     ;
     private String msg;
