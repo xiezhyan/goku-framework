@@ -20,18 +20,14 @@ import top.zopx.starter.log.util.SpringUtil;
 @EnableConfigurationProperties({SquareLogProperties.class})
 @EnableAspectJAutoProxy
 @Import({
-        ErrorLogServer.class
+        ErrorLogServer.class,
+        ApiLogServer.class
 })
 public class LogServerAutoConfiguration {
 
     @Bean
     public SpringUtil springUtil() {
         return new SpringUtil();
-    }
-
-    @Bean
-    public ApiLogServer apiLogServer() {
-        return new ApiLogServer();
     }
 
     @Bean
