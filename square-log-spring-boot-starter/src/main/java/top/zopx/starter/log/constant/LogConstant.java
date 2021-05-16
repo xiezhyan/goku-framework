@@ -22,6 +22,7 @@ public class LogConstant {
     public static final String IP = "ip";
     public static final String RESULT = "result";
     public static final String PARAMS = "params";
+    public static final String VALUE = "value";
 
 
 }
