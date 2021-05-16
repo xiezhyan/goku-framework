@@ -8,6 +8,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import top.zopx.starter.log.constant.LogConstant;
 import top.zopx.starter.log.listener.api.ApiPublish;
+import top.zopx.starter.tools.tools.json.JsonUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class ApiLogAspect {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 基本方法设置
         Map<String, Object> map = new HashMap<>();
-        map.put(LogConstant.PARAMS, joinPoint.getArgs());
+        map.put(LogConstant.PARAMS, JsonUtil.toJson(joinPoint.getArgs()));
         map.put(LogConstant.CLASS_NAME, joinPoint.getSignature().getDeclaringTypeName());
         map.put(LogConstant.METHOD_NAME, joinPoint.getSignature().getName());
 
