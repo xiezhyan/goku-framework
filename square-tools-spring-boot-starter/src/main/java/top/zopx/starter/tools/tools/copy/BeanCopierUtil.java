@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class BeanCopierUtil {
 
 
-    private static final ConcurrentHashMap<String, BeanCopier> CONCURRENT_HASH_MAP = new ConcurrentHashMap<>(16);
     private static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
     private static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
 
@@ -62,16 +61,7 @@ public class BeanCopierUtil {
      * @return BeanCopier
      */
     private <S, T> BeanCopier getCopier(Class<S> source, Class<T> target) {
-
-        String key = "";
-        // 从缓存中取出当前对象
-        BeanCopier copier = CONCURRENT_HASH_MAP.get((key = getKey(source, target)));
-        if (null == copier) {
-            // 如果为空，就重新创建，然后存入缓存中
-            copier = BeanCopier.create(source, target, useConverter);
-            CONCURRENT_HASH_MAP.put(key, copier);
-        }
-        return copier;
+        return BeanCopier.create(source, target, useConverter);
     }
 
 
