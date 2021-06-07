@@ -1,26 +1,22 @@
 package top.zopx.starter.tools.tools.strings;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *  正则验证
+ * 正则验证
  *
  * @author sanq.Yan
  * @date 2020/1/26
  */
 public class MatcherUtil {
-    public static final String EMAIL_REGEX = "^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})$";
+    public static final String EMAIL_REGEX = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?";
     public static final String URL_REGEX = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
     public static final String PHONE_REGEX = "^(\\d{3,4}-)?\\d{6,8}$";
     public static final String POSTAL_CODE_REGEX = "^\\d{6}$";
-    public static final String TEL_REGEX = "^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$";
-    public static final String NUMBER_REGEX = "^[0-9]*$";
-    public static final String INT_REGEX = "^\\+?[1-9][0-9]*$";
-    public static final String UP_CHAR_REGEX = "^[A-Z]+$";
-    public static final String LOW_CHAR_REGEX = "^[a-z]+$";
+    public static final String TEL_REGEX = "^((13[0-9])|(14[5-9])|(15([0-3]|[5-9]))|(16[6-7])|(17[1-8])|(18[0-9])|(19[1|3])|(19[5|6])|(19[8|9]))\\d{8}$";
+    public static final String NUMBER_REGEX = "^-?[0-9]\\d*$";
+    public static final String FLOAT_REGEX = "^-?[0-9]\\d*\\.\\d*|-0\\.\\d*[1-9]\\d*$";
     public static final String LETTER_REGEX = "^[A-Za-z]+$";
     public static final String CHINESE_REGEX = "^[\u4e00-\u9fa5],{0,}$";
     private static final String IP_NUM = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
@@ -29,68 +25,62 @@ public class MatcherUtil {
     /**
      * 验证邮箱
      *
-     * @return 如果是符合的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isEmail(String str) {
-        String regex = EMAIL_REGEX;
-        return match(regex, str);
+        return match(EMAIL_REGEX, str);
     }
 
     /**
      * 验证IP地址
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
-    public static boolean isIP(String str) {
-        String regex = IP_REGEX;
-        return match(regex, str);
+    public static boolean isIp(String str) {
+        return match(IP_REGEX, str);
     }
 
     /**
      * 验证网址Url
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isUrl(String str) {
-        String regex = URL_REGEX;
-        return match(regex, str);
+        return match(URL_REGEX, str);
     }
 
     /**
      * 验证电话号码
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isPhone(String str) {
-        String regex = PHONE_REGEX;
-        return match(regex, str);
+        return match(PHONE_REGEX, str);
     }
 
     /**
      * 验证输入邮政编号
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
-    public static boolean isPostalcode(String str) {
-        String regex = POSTAL_CODE_REGEX;
-        return match(regex, str);
+    public static boolean isPostalCode(String str) {
+        return match(POSTAL_CODE_REGEX, str);
     }
 
     /**
      * 验证输入手机号码
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isTelephone(String str) {
-        String regex = TEL_REGEX;
-        return match(regex, str);
+        return match(TEL_REGEX, str);
     }
 
     /**
      * 替换特殊字符
      *
-     * @param str
-     * @return
+     * @param str 内容
+     * @return 替换后的内容
      */
     public static String replaceMark(String str) {
         String reg = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
@@ -100,63 +90,39 @@ public class MatcherUtil {
     }
 
     /**
-     * 验证数字输入
+     * 验证是否为整数
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isNumber(String str) {
-        String regex = NUMBER_REGEX;
-        return match(regex, str);
+        return match(NUMBER_REGEX, str);
     }
 
     /**
-     * 验证非零的正整数
+     * 验证是否为浮点数
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
-    public static boolean isIntNumber(String str) {
-        String regex = INT_REGEX;
-        return match(regex, str);
-    }
-
-    /**
-     * 验证大写字母
-     *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
-     */
-    public static boolean isUpChar(String str) {
-        String regex = UP_CHAR_REGEX;
-        return match(regex, str);
-    }
-
-    /**
-     * 验证小写字母
-     *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
-     */
-    public static boolean isLowChar(String str) {
-        String regex = LOW_CHAR_REGEX;
-        return match(regex, str);
+    public static boolean isFloat(String str) {
+        return match(FLOAT_REGEX, str);
     }
 
     /**
      * 验证输入字母
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isLetter(String str) {
-        String regex = LETTER_REGEX;
-        return match(regex, str);
+        return match(LETTER_REGEX, str);
     }
 
     /**
      * 验证验证输入汉字
      *
-     * @return 如果是符合格式的字符串, 返回 <b>true </b>,否则为 <b>false </b>
+     * @return true || false
      */
     public static boolean isChinese(String str) {
-        String regex = CHINESE_REGEX;
-        return match(regex, str);
+        return match(CHINESE_REGEX, str);
     }
 
     /**
@@ -165,39 +131,6 @@ public class MatcherUtil {
      * @return 如果str 符合 regex的正则表达式格式,返回true, 否则返回 false;
      */
     public static boolean match(String regex, String str) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
-    }
-
-    /**
-     * 是否包含
-     *
-     * @param regex
-     * @param str
-     * @return
-     */
-    public static boolean find(String regex, String str) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
-        return matcher.find();
-    }
-
-    /**
-     * 得到匹配到的内容
-     *
-     * @param regex
-     * @param str
-     * @return
-     */
-    public static List<String> group(String regex, String str) {
-        List<String> groups = new ArrayList<String>();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
-
-        while (matcher.find()) {
-            groups.add(matcher.group());
-        }
-        return groups;
+        return Pattern.matches(regex, str);
     }
 }

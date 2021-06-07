@@ -1,7 +1,6 @@
 package top.zopx.starter.log.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -10,8 +9,7 @@ import org.springframework.core.annotation.Order;
 import top.zopx.starter.log.annotations.OperatorLogAnnotation;
 import top.zopx.starter.log.constant.LogConstant;
 import top.zopx.starter.log.listener.api.ApiPublish;
-import top.zopx.starter.tools.tools.json.JsonUtil;
-import top.zopx.starter.tools.tools.web.LogUtil;
+import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +31,7 @@ public class ApiLogAspect {
         Map<String, Object> map = new HashMap<>();
         final MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
-        map.put(LogConstant.PARAMS, JsonUtil.toJson(joinPoint.getArgs()));
+        map.put(LogConstant.PARAMS, FJsonUtil.INSTANCE.toJson(joinPoint.getArgs()));
         map.put(LogConstant.CLASS_NAME, signature.getDeclaringTypeName());
         map.put(LogConstant.METHOD_NAME, signature.getName());
         map.put(LogConstant.VALUE, signature.getMethod().getDeclaredAnnotation(OperatorLogAnnotation.class).value());

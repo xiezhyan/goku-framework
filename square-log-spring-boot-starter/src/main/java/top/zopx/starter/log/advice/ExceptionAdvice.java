@@ -10,7 +10,7 @@ import top.zopx.starter.log.listener.error.ErrorPublish;
 import top.zopx.starter.tools.basic.Response;
 import top.zopx.starter.tools.constants.BusCode;
 import top.zopx.starter.tools.exceptions.BusException;
-import top.zopx.starter.tools.tools.json.JsonUtil;
+import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.validation.ConstraintViolationException;
@@ -63,7 +63,7 @@ public class ExceptionAdvice {
             errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), error.getDefaultMessage());
         }
         publish(e);
-        return new Response().failure(JsonUtil.toJson(errorMap), BusCode.PARAM_VALIDATE_ERROR);
+        return new Response().failure(FJsonUtil.INSTANCE.toJson(errorMap), BusCode.PARAM_VALIDATE_ERROR);
     }
 
     @ExceptionHandler(Throwable.class)

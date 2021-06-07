@@ -1,6 +1,5 @@
 package top.zopx.starter.sms.providers.cloud.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.IAcsClient;
@@ -11,7 +10,7 @@ import top.zopx.starter.sms.entity.SmsRequest;
 import top.zopx.starter.sms.entity.SmsResponse;
 import top.zopx.starter.sms.properties.SquareSmsProperties;
 import top.zopx.starter.sms.service.ISmsService;
-import top.zopx.starter.tools.tools.json.JsonUtil;
+import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -56,12 +55,12 @@ public class CloudSmsServiceImpl implements ISmsService {
             req.putQueryParameter("PhoneNumbers", request.getPhoneNumber());
             req.putQueryParameter("SignName", signName);
             req.putQueryParameter("TemplateCode", request.getTemplate());
-            req.putQueryParameter("TemplateParam", JsonUtil.toJson(request.getTemplateParam()));
+            req.putQueryParameter("TemplateParam", FJsonUtil.INSTANCE.toJson(request.getTemplateParam()));
 
             CommonResponse response = acsClient.getCommonResponse(req);
 
             if (null != consumer) {
-                consumer.accept(JsonUtil.toJson(response));
+                consumer.accept(FJsonUtil.INSTANCE.toJson(response));
             }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());
@@ -105,15 +104,15 @@ public class CloudSmsServiceImpl implements ISmsService {
             request.setSysAction("SendBatchSms");
 
             request.putQueryParameter("RegionId", smsProperties.getSmsLi().getRegionId());
-            request.putQueryParameter("PhoneNumberJson", JsonUtil.toJson(phoneNumberJson));
-            request.putQueryParameter("SignNameJson", JsonUtil.toJson(signNameJson));
-            request.putQueryParameter("TemplateCode", JsonUtil.toJson(templateCode));
-            request.putQueryParameter("TemplateParamJson", JsonUtil.toJson(templateParamJson));
+            request.putQueryParameter("PhoneNumberJson", FJsonUtil.INSTANCE.toJson(phoneNumberJson));
+            request.putQueryParameter("SignNameJson", FJsonUtil.INSTANCE.toJson(signNameJson));
+            request.putQueryParameter("TemplateCode", FJsonUtil.INSTANCE.toJson(templateCode));
+            request.putQueryParameter("TemplateParamJson", FJsonUtil.INSTANCE.toJson(templateParamJson));
 
             CommonResponse response = acsClient.getCommonResponse(request);
 
             if (null != consumer) {
-                consumer.accept(JsonUtil.toJson(response));
+                consumer.accept(FJsonUtil.INSTANCE.toJson(response));
             }
 
             return new SmsResponse(response.getData(), response.getHttpStatus());
