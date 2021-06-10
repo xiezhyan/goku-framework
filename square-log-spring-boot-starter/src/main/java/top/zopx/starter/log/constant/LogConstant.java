@@ -23,6 +23,7 @@ public class LogConstant {
     public static final String RESULT = "result";
     public static final String PARAMS = "params";
     public static final String VALUE = "value";
+    public static final String EXEC_TIME = "execTime";
 
 
 }

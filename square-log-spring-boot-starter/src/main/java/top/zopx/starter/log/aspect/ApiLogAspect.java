@@ -36,7 +36,9 @@ public class ApiLogAspect {
         map.put(LogConstant.METHOD_NAME, signature.getName());
         map.put(LogConstant.VALUE, signature.getMethod().getDeclaredAnnotation(OperatorLogAnnotation.class).value());
 
+        long startTime = System.currentTimeMillis();
         final Object result = joinPoint.proceed();
+        map.put(LogConstant.EXEC_TIME, System.currentTimeMillis() - startTime);
         ApiPublish.publish(map, result);
         return result;
     }
