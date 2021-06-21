@@ -7,7 +7,7 @@
     <parent>
         <groupId>top.zopx</groupId>
         <artifactId>square-spring-boot-starter</artifactId>
-        <version>1.1.7</version>
+        <version>1.1.8</version>
     </parent>
 
     <groupId>top.zopx.square.test</groupId>
@@ -15,7 +15,7 @@
     <version>${square.version}</version>
 
     <properties>
-        <square.version>1.1.7</square.version>
+        <square.version>1.1.8</square.version>
     </properties>
 
 <!--    <dependencyManagement>-->
@@ -23,7 +23,7 @@
 <!--            <dependency>-->
 <!--                <groupId>top.zopx</groupId>-->
 <!--                <artifactId>square-spring-boot-starter</artifactId>-->
-<!--                <version>1.1.7</version>-->
+<!--                <version>1.1.8</version>-->
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->

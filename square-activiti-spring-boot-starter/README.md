@@ -1,6 +1,11 @@
 # Activiti审批
 
 # 操作
+## 新建流程图
+```http request
+GET http://localhost:8080/activiti/creator
+```
+
 ## 获取流程图列表
 ```http request
 GET http://localhost:8080/activiti/list
@@ -11,16 +16,17 @@ GET http://localhost:8080/activiti/list
 GET http://localhost:8080/modeler.html?modelId={modelId}
 ```
 
-## 保存
-```http request
-PUT http://localhost:8080/activiti/model/{modelId}/save
-```
-
 ## 发布
 ```http request
 POST http://localhost:8080/activiti/deploy/{modelId}
 ```
 ## 查看当前进度
+
+
+## 保存
+```http request
+PUT http://localhost:8080/activiti/model/{modelId}/save
+```
 
 # 数据表
 ```mysql

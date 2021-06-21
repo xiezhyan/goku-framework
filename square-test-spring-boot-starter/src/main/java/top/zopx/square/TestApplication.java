@@ -12,9 +12,9 @@ import top.zopx.starter.sms.annotation.EnableSms;
  * @date 2021/4/14
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@EnableActivitiDashboard
 @EnableDistribution
 @EnableSms
-@EnableActivitiDashboard
 public class TestApplication {
 
     public static void main(String[] args) {

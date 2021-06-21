@@ -42,7 +42,7 @@
 
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>square-spring-boot-starter</description>
@@ -56,10 +56,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <java.version>1.8</java.version>
-        <square.version>1.1.7</square.version>
+        <square.version>1.1.8</square.version>
 
-        <spring.boot.version>2.4.2</spring.boot.version>
-        <spring.cloud.version>2020.0.1</spring.cloud.version>
+        <spring.boot.version>2.4.6</spring.boot.version>
+        <spring.cloud.version>2020.0.3</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
@@ -74,7 +74,6 @@
 
         <curator.version>5.1.0</curator.version>
         <zookeeper.version>3.6.2</zookeeper.version>
-        <dubbo.version>2.7.8</dubbo.version>
 
         <validator.version>6.1.5.Final</validator.version>
 
@@ -121,14 +120,6 @@
                 <version>${mybatis.plus.version}</version>
             </dependency>
             <!--代码生成器-->
-
-            <!--dubbo start-->
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <!--dubbo end-->
 
             <!--zookeeper starter-->
             <dependency>
