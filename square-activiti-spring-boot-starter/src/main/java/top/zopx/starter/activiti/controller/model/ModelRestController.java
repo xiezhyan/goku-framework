@@ -44,12 +44,12 @@ public class ModelRestController {
 
     /**
      * 主要目的：跳转到可视化界面
+     *
      * @param request request
-     * @param response response
      */
     @GetMapping("/creator")
-    public void createModel(HttpServletRequest request, HttpServletResponse response){
-        try{
+    public R<String> createModel(HttpServletRequest request) {
+        try {
             String modelName = "modelName";
             String modelKey = "modelKey";
             String description = "description";
@@ -79,14 +79,16 @@ public class ModelRestController {
             //保存模型
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes(StandardCharsets.UTF_8));
-            response.sendRedirect(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
-        }catch (Exception e){
-            LogUtil.getInstance(getClass()).error(e.getMessage());
+            return R.result(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
+        } catch (Exception e) {
+            LogUtil.getInstance(getClass()).error("creator异常信息: {}", e.getMessage());
+            throw new BusException(e.getMessage());
         }
     }
 
     /**
      * 分页获取流程数据
+     *
      * @param pagination 分页条件
      * @return Page<Model>
      */
@@ -101,6 +103,7 @@ public class ModelRestController {
 
     /**
      * 发布流程
+     *
      * @param modelId 流程ID
      * @return 是否成功
      */
