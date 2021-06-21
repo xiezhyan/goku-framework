@@ -74,8 +74,9 @@ public class RedisInitialConfigurator {
     }
 
     private void updateSentinelServer(Config config) {
-        if (null == squareDistributionProperties.getRedis().getSentinel())
+        if (null == squareDistributionProperties.getRedis().getSentinel()) {
             return;
+        }
 
         String masterName;
         if (StringUtils.isNotBlank(masterName = squareDistributionProperties.getRedis().getSentinel().getMasterName())) {

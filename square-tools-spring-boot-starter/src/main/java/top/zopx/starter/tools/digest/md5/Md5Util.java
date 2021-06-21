@@ -7,6 +7,9 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @date 2021/5/11
  */
 public enum  Md5Util {
+    /**
+     * 单例
+     */
     INSTANCE,
     ;
 

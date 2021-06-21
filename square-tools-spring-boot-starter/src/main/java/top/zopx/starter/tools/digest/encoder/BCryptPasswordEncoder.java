@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class BCryptPasswordEncoder implements PasswordEncoder {
 
-    private Pattern BCRYPT_PATTERN = Pattern
+    private static final Pattern BCRYPT_PATTERN = Pattern
             .compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
     private final LogUtil logger = LogUtil.getInstance(getClass());
 
@@ -49,6 +49,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
         this.random = random;
     }
 
+    @Override
     public String encode(CharSequence rawPassword) {
         if (rawPassword == null) {
             throw new IllegalArgumentException("rawPassword cannot be null");
@@ -69,6 +70,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
         return BCrypt.hashpw(rawPassword.toString(), salt);
     }
 
+    @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         if (rawPassword == null) {
             throw new IllegalArgumentException("rawPassword cannot be null");

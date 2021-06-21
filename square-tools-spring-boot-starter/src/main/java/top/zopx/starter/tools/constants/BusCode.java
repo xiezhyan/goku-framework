@@ -9,6 +9,9 @@ package top.zopx.starter.tools.constants;
 public class BusCode {
 
     public static final Integer RESULT_OK = 200;
+    /**
+     * 通用异常码
+     */
     public static final Integer RESULT_ERROR = 500;
 
     /**
@@ -18,6 +21,9 @@ public class BusCode {
     public static final Integer PARAM_IS_BLANK = 1002;
     public static final Integer PARAM_TYPE_BIND_ERROR = 1003;
     public static final Integer PARAM_NOT_COMPLETE = 1004;
+    /**
+     * 参数校验异常
+     */
     public static final Integer PARAM_VALIDATE_ERROR = 1054;
     public static final Integer PARAM_NOT_READABLE = 1055;
 

@@ -20,14 +20,17 @@ import java.util.Map;
  */
 public enum RSAUtil {
 
+    /**
+     * 单例
+     */
     INSTANCE,
     ;
 
-    String SECRET_KEY_SPEC = "AES";
-    String PADDING = "AES/CBC/PKCS5Padding";
+    private static final String SECRET_KEY_SPEC = "AES";
+    private static final String PADDING = "AES/CBC/PKCS5Padding";
 
-    String PUBLIC_KEY = "_PUBLIC_KEY";
-    String PRIVATE_KEY = "_PRIVATE_KEY";
+    private static final String PUBLIC_KEY = "_PUBLIC_KEY";
+    private static final String PRIVATE_KEY = "_PRIVATE_KEY";
 
     public Map<String, String> genKeyPair() {
 
@@ -38,8 +41,10 @@ public enum RSAUtil {
             keyPairGen.initialize(1024, new SecureRandom());
             // 生成一个密钥对，保存在keyPair中
             KeyPair keyPair = keyPairGen.generateKeyPair();
-            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();   // 得到私钥
-            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();  // 得到公钥
+            // 得到私钥
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+            // 得到公钥
+            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
             String publicKeyString = Base64Util.INSTANCE.encode(publicKey.getEncoded());
             // 得到私钥字符串
             String privateKeyString = Base64Util.INSTANCE.encode(privateKey.getEncoded());

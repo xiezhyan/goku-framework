@@ -40,6 +40,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/activiti")
+@SuppressWarnings("all")
 public class ModelSaveRestResource implements ModelDataJsonConstants {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(ModelSaveRestResource.class);
@@ -112,7 +113,7 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
                 modelNode.put(MODEL_ID, model.getId());
                 ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
                         new String(repositoryService.getModelEditorSource(model.getId()), StandardCharsets.UTF_8));
-                modelNode.put("model", editorJsonNode);
+                modelNode.set("model", editorJsonNode);
 
             } catch (Exception e) {
                 LOGGER.error("Error creating model JSON", e);

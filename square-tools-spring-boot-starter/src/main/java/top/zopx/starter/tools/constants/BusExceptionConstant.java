@@ -7,6 +7,7 @@ package top.zopx.starter.tools.constants;
  * @author sanq.Yan
  * @date 2020/1/26
  */
+@SuppressWarnings("all")
 public enum BusExceptionConstant {
 
     DEFAULT_ERROR("ERROR", BusCode.RESULT_ERROR),

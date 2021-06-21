@@ -18,6 +18,7 @@ public class ReentrantLockServiceImpl implements ILockService {
     @Resource
     private ReentrantLock reentrantLock;
 
+    @SuppressWarnings("all")
     @Override
     public void lock(String key) throws Exception {
         if (squareDistributionProperties.getJvm().isOpen()) {

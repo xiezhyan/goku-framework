@@ -10,6 +10,9 @@ import java.nio.charset.StandardCharsets;
  */
 public enum  Base64Util {
 
+    /**
+     * 单例
+     */
     INSTANCE,
     ;
 

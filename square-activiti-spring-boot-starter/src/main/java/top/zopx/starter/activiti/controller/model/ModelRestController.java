@@ -64,7 +64,7 @@ public class ModelRestController {
             editorNode.put("resourceId", "canvas");
             ObjectNode stencilSetNode = objectMapper.createObjectNode();
             stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-            editorNode.put("stencilset", stencilSetNode);
+            editorNode.set("stencilset", stencilSetNode);
             // 定义新模型
             Model modelData = repositoryService.newModel();
 

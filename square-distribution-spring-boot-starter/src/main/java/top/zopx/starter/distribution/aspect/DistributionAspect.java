@@ -71,7 +71,7 @@ public class DistributionAspect {
         Expression expression = parser.parseExpression(key);
         EvaluationContext context = new StandardEvaluationContext();
         for (int i = 0; i < args.length; i++) {
-            if (ArrayUtils.isNotEmpty(paramNames)) {
+            if (null != paramNames && ArrayUtils.isNotEmpty(paramNames)) {
                 context.setVariable(paramNames[i], args[i]);
             }
         }
@@ -85,10 +85,5 @@ public class DistributionAspect {
 
     public Distribution getAnnotationDistribution(ProceedingJoinPoint joinPoint) {
         return getMethod(joinPoint).getDeclaredAnnotation(Distribution.class);
-    }
-
-    public HttpServletRequest getRequest() {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        return attributes.getRequest();
     }
 }

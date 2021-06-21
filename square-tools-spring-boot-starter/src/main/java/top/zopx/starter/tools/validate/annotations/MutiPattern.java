@@ -30,7 +30,13 @@ public @interface MutiPattern {
     Class<? extends Payload>[] payload() default {};
 
     enum Logic {
+        /**
+         * 全部通过才算成功
+         */
         AND,
+        /**
+         * 只要有一个通过就可以
+         */
         OR
     }
 }
