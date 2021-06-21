@@ -1,7 +1,6 @@
 package top.zopx.starter.tools.exceptions;
 
-import top.zopx.starter.tools.constants.BusCode;
-import top.zopx.starter.tools.constants.BusExceptionConstant;
+import org.springframework.http.HttpStatus;
 
 /**
  * 自定义异常信息
@@ -17,19 +16,13 @@ public class BusException extends RuntimeException {
     public BusException(String msg) {
         super();
         this.msg = msg;
-        this.code = BusCode.RESULT_ERROR;
+        this.code = HttpStatus.BAD_REQUEST.value();
     }
 
     public BusException(String msg, Integer code) {
         super();
         this.msg = msg;
         this.code = code;
-    }
-
-    public BusException(BusExceptionConstant busExceptionEnum) {
-        super();
-        this.msg = busExceptionEnum.getMsg();
-        this.code = busExceptionEnum.getCode();
     }
 
     public String getMsg() {

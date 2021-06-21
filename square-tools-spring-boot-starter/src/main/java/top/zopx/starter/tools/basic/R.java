@@ -1,6 +1,6 @@
 package top.zopx.starter.tools.basic;
 
-import top.zopx.starter.tools.constants.BusCode;
+import org.springframework.http.HttpStatus;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 
 import java.io.Serializable;
@@ -66,7 +66,7 @@ public final class R<T> implements Serializable {
                 new Meta(
                         data,
                         data ? OK : StringUtil.isNotBlank(msg) ? msg : ERROR,
-                        data ? BusCode.RESULT_OK : BusCode.RESULT_ERROR
+                        data ? HttpStatus.OK.value() : HttpStatus.BAD_REQUEST.value()
                 ),
                 data
         );
@@ -86,12 +86,12 @@ public final class R<T> implements Serializable {
                         new Meta(
                                 false,
                                 ERROR,
-                                BusCode.RESULT_ERROR
+                                HttpStatus.BAD_REQUEST.value()
                         ) :
                         new Meta(
                                 true,
                                 OK,
-                                BusCode.RESULT_OK
+                                HttpStatus.OK.value()
                         )
         );
     }
