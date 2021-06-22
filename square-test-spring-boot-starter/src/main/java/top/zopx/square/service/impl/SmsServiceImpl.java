@@ -22,6 +22,7 @@ public class SmsServiceImpl {
                 SmsRequest.create()
                         .phoneNumber("15110148609")
                         .template("SMS_191190401")
+                        .signName("短信签名")
                         .templateParam("code", RandomUtils.nextLong(1000, 9999))
                         .builder(),
                 System.out::println

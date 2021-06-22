@@ -3,6 +3,7 @@ package top.zopx.starter.sms.entity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 发送短信对象
@@ -30,6 +31,11 @@ public class SmsRequest implements Serializable {
      *
      */
     private String template;
+
+    /**
+     * 生成短信内容
+     */
+    private String content;
 
     /**
      * 短信模板对应参数
@@ -76,6 +82,17 @@ public class SmsRequest implements Serializable {
 
     public void setTemplateParam(Map<String, Object> templateParam) {
         this.templateParam = templateParam;
+    }
+
+    public String getContent() {
+        this.templateParam.forEach((k, v) -> {
+            this.content = this.template.replace("{" + k + "}", v.toString());
+        });
+        return this.content + " 【"+this.signName+"】";
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public static class Build {
