@@ -3,7 +3,7 @@ package top.zopx.starter.tools.constants;
 /**
  * @author xiezhongyan
  * @date 2021/6/7
- * @email xiezhongyan@chinasofti.com
+ * @email xiezhyan@126.com
  */
 public enum JsonType {
 
