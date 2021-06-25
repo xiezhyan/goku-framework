@@ -44,11 +44,9 @@ public class ModelRestController {
 
     /**
      * 主要目的：跳转到可视化界面
-     *
-     * @param request request
      */
     @GetMapping("/creator")
-    public R<String> createModel(HttpServletRequest request) {
+    public void createModel(HttpServletRequest request, HttpServletResponse response) {
         try {
             String modelName = "modelName";
             String modelKey = "modelKey";
@@ -79,7 +77,7 @@ public class ModelRestController {
             //保存模型
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes(StandardCharsets.UTF_8));
-            return R.result(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
+            response.sendRedirect(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
         } catch (Exception e) {
             LogUtil.getInstance(getClass()).error("creator异常信息: {}", e.getMessage());
             throw new BusException(e.getMessage());
