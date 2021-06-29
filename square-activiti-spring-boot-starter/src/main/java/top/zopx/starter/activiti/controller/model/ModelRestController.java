@@ -49,7 +49,7 @@ public class ModelRestController {
         try {
             response.sendRedirect(request.getContextPath() + redirectUrl);
         } catch (IOException e) {
-            LogUtil.getInstance(getClass()).error("跳转出现异常：【{}】", e.getMessage());
+            LogUtil.getInstance(getClass()).error("creator异常信息: {}", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
