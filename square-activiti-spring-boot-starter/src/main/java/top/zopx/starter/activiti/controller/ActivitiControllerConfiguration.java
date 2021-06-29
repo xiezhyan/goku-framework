@@ -1,12 +1,12 @@
 package top.zopx.starter.activiti.controller;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import top.zopx.starter.activiti.controller.main.StencilsetRestResource;
-import top.zopx.starter.activiti.controller.model.ModelEditorJsonRestResource;
 import top.zopx.starter.activiti.controller.model.ModelRestController;
 import top.zopx.starter.activiti.controller.model.ModelSaveRestResource;
+import top.zopx.starter.activiti.service.IActivitiService;
+import top.zopx.starter.activiti.service.impl.ActivitiServiceImpl;
 
 /**
  * @author sanq.Yan
@@ -30,4 +30,8 @@ public class ActivitiControllerConfiguration {
         return new ModelRestController();
     }
 
+    @Bean
+    public IActivitiService activitiService() {
+        return new ActivitiServiceImpl();
+    }
 }

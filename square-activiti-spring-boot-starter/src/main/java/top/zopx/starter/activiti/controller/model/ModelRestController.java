@@ -1,20 +1,9 @@
 package top.zopx.starter.activiti.controller.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.editor.language.json.converter.BpmnJsonConverterUtil;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngines;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.Model;
-import org.activiti.engine.repository.ModelQuery;
 import org.springframework.web.bind.annotation.*;
+import top.zopx.starter.activiti.entity.request.ModelRequest;
+import top.zopx.starter.activiti.entity.response.ModelResponse;
+import top.zopx.starter.activiti.service.IActivitiService;
 import top.zopx.starter.tools.basic.Page;
 import top.zopx.starter.tools.basic.Pagination;
 import top.zopx.starter.tools.basic.R;
@@ -25,80 +14,56 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
- * @author sanq.Yan
- * @date 2021/4/18
+ * 提供自定义操作接口
+ *
+ * @author mr.sanq
+ * @date 2021/6/24
  */
 @RestController
 @RequestMapping("/activiti")
 public class ModelRestController {
 
     @Resource
-    private RepositoryService repositoryService;
+    private IActivitiService activitiService;
     @Resource
-    private ObjectMapper objectMapper;
+    private HttpServletRequest request;
+    @Resource
+    private HttpServletResponse response;
 
-    final BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
 
     /**
-     * 主要目的：跳转到可视化界面
-     *
-     * @param request request
+     * 跳转到可视化界面
+     * <b>这里需要重点注意： 由于该接口需要重定向到modeler.html中，那么前端在调用该接口的时候，需要直接通过href来进行调用，无法进行axios操作</b>
      */
     @GetMapping("/creator")
-    public R<String> createModel(HttpServletRequest request) {
+    public void createModel(
+            @RequestParam(value = "modelId", required = false) String modelId,
+            @RequestParam(value = "tenantId", required = false) String tenantId,
+            @RequestParam(value = "category", required = false) String category
+    ) {
+        final String redirectUrl = activitiService.saveOrUpdate(modelId, tenantId, category);
+
         try {
-            String modelName = "modelName";
-            String modelKey = "modelKey";
-            String description = "description";
-
-            ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
-
-            RepositoryService repositoryService = processEngine.getRepositoryService();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            ObjectNode editorNode = objectMapper.createObjectNode();
-            editorNode.put("id", "canvas");
-            editorNode.put("resourceId", "canvas");
-            ObjectNode stencilSetNode = objectMapper.createObjectNode();
-            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
-            editorNode.set("stencilset", stencilSetNode);
-            // 定义新模型
-            Model modelData = repositoryService.newModel();
-
-            ObjectNode modelObjectNode = objectMapper.createObjectNode();
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_NAME, modelName);
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_REVISION, 1);
-            modelObjectNode.put(ModelDataJsonConstants.MODEL_DESCRIPTION, description);
-            modelData.setMetaInfo(modelObjectNode.toString());
-            modelData.setName(modelName);
-            modelData.setKey(modelKey);
-
-            //保存模型
-            repositoryService.saveModel(modelData);
-            repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes(StandardCharsets.UTF_8));
-            return R.result(request.getContextPath() + "/modeler.html?modelId=" + modelData.getId());
-        } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("creator异常信息: {}", e.getMessage());
+            response.sendRedirect(request.getContextPath() + redirectUrl);
+        } catch (IOException e) {
+            LogUtil.getInstance(getClass()).error("跳转出现异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
 
     /**
      * 分页获取流程数据
-     *
-     * @param pagination 分页条件
+     * @param pagination 分页对象
+     * @param request 参数对象
      * @return Page<Model>
      */
     @GetMapping("/list")
-    public R<Page<Model>> getList(Pagination pagination) {
-        int firstResult = (pagination.getCurrentIndex() - 1) * pagination.getPageSize();
-        final ModelQuery query = repositoryService.createModelQuery();
-        pagination.setTotalCount(query.count());
-
-        return R.result(new Page<>(pagination, query.orderByCreateTime().desc().listPage(firstResult, pagination.getPageSize())));
+    public R<Page<ModelResponse>> getList(ModelRequest request, Pagination pagination) {
+        final List<ModelResponse> list = activitiService.getList(request, pagination);
+        return R.result(new Page<>(pagination, list));
     }
 
     /**
@@ -109,37 +74,17 @@ public class ModelRestController {
      */
     @PostMapping("/deploy/{modelId}")
     public R<Boolean> deploy(@PathVariable("modelId") String modelId) {
-        Model model = repositoryService.getModel(modelId);
-        if (null == model) {
-            throw new BusException("当前流程不存在");
-        }
+        return R.status(activitiService.deploy(modelId));
+    }
 
-        final byte[] modelEditorSource = repositoryService.getModelEditorSource(modelId);
-        if (null == modelEditorSource) {
-            throw new BusException("流程图不存在");
-        }
-
-        try {
-            final JsonNode jsonNode = objectMapper.readTree(modelEditorSource);
-            final BpmnModel bpmnModel = bpmnJsonConverter.convertToBpmnModel(jsonNode);
-
-            if (0 == bpmnModel.getProcesses().size()) {
-                throw new BusException("当前流程图不存在流程节点");
-            }
-
-            String processName = model.getName() + ".bpmn20.xml";
-            final Deployment deploy = repositoryService.createDeployment()
-                    .name(processName)
-                    .addBpmnModel(processName, bpmnModel)
-                    .deploy();
-
-            model.setDeploymentId(deploy.getId());
-            repositoryService.saveModel(model);
-
-            return R.status(true);
-        } catch (IOException e) {
-            LogUtil.getInstance(this.getClass()).error("流程部署失败：{}", e.getMessage());
-            return R.status(false, e.getMessage());
-        }
+    /**
+     * 删除流程
+     *
+     * @param modelId 流程ID
+     * @return true | false
+     */
+    @DeleteMapping("/{modelId}")
+    public R<Boolean> deleteByModelId(@PathVariable("modelId") String modelId) {
+        return R.status(activitiService.deleteByModelId(modelId));
     }
 }

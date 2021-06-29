@@ -32,39 +32,41 @@ PUT http://localhost:8080/activiti/model/{modelId}/save
 ```mysql
 -- 1 当部署流程文件时 影响4张表
 
--- 系统属性表-存有next.dbid
-select * from  act_re_procdef ;
+-- 系统属性表-存有NEXT.DBID
+SELECT * FROM  ACT_GE_PROPERTY ;
 -- 资源表，相当于附近表
-select * from act_ge_bytearray;
+SELECT * FROM ACT_GE_BYTEARRAY;
+-- 流程存储表
+SELECT * FROM ACT_RE_MODEL;
 -- 部署对象表
-select * from act_re_deployment ;
+SELECT * FROM ACT_RE_DEPLOYMENT ;
 -- 部署对象表
-select * from act_re_procdef ;
+SELECT * FROM ACT_RE_PROCDEF ;
 
 
 -- 2 启动流程 影响7张表
 
 -- 执行对象表
-select * from act_ru_execution;
+SELECT * FROM ACT_RU_EXECUTION;
 -- 流程实例历史表
-select* from act_hi_procinst;
+SELECT* FROM ACT_HI_PROCINST;
 -- 当前正在执行任务表----待办列表
-select* from act_ru_task;
+SELECT* FROM ACT_RU_TASK;
 -- 历史任务表
-select* from act_hi_taskinst;
+SELECT* FROM ACT_HI_TASKINST;
 -- 历史活动表
-select * from act_hi_actinst;
+SELECT * FROM ACT_HI_ACTINST;
 -- 当前任务执行人表
-select * from act_ru_identitylink;
+SELECT * FROM ACT_RU_IDENTITYLINK;
 -- 历史任务执行人表
-select* from act_hi_identitylink;
+SELECT* FROM ACT_HI_IDENTITYLINK;
 
 -- 3 使用流程变量 影响2张表
 
 -- 运行时流程变量表
-select * from act_ru_variable;
+SELECT * FROM ACT_RU_VARIABLE;
 -- 历史流程变量表
-select * from act_hi_varinst;
+SELECT * FROM ACT_HI_VARINST;
 
 
 

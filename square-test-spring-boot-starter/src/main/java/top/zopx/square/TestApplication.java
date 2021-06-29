@@ -3,7 +3,7 @@ package top.zopx.square;
 import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import top.zopx.starter.activiti.annotation.EnableActivitiDashboard;
+import top.zopx.starter.activiti.annotation.EnableActiviti;
 import top.zopx.starter.distribution.annotation.EnableDistribution;
 import top.zopx.starter.sms.annotation.EnableSms;
 
@@ -12,7 +12,7 @@ import top.zopx.starter.sms.annotation.EnableSms;
  * @date 2021/4/14
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-@EnableActivitiDashboard
+@EnableActiviti
 @EnableDistribution
 @EnableSms
 public class TestApplication {
