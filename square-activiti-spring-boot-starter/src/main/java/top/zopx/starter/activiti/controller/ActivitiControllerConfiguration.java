@@ -6,7 +6,9 @@ import top.zopx.starter.activiti.controller.main.StencilsetRestResource;
 import top.zopx.starter.activiti.controller.model.ModelRestController;
 import top.zopx.starter.activiti.controller.model.ModelSaveRestResource;
 import top.zopx.starter.activiti.service.IActivitiService;
+import top.zopx.starter.activiti.service.IBusinessFlowService;
 import top.zopx.starter.activiti.service.impl.ActivitiServiceImpl;
+import top.zopx.starter.activiti.service.impl.BusinessFlowServiceImpl;
 
 /**
  * @author sanq.Yan
@@ -33,5 +35,10 @@ public class ActivitiControllerConfiguration {
     @Bean
     public IActivitiService activitiService() {
         return new ActivitiServiceImpl();
+    }
+
+    @Bean
+    public IBusinessFlowService businessFlowService() {
+        return new BusinessFlowServiceImpl();
     }
 }
