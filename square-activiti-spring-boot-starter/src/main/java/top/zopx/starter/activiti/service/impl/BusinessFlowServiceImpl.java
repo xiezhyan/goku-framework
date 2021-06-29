@@ -177,7 +177,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
     }
 
     @Override
-    public List<HistoryFlowResponse> getHistoryTaskList(String processDefinitionKey, String businessKey, String userId, Pagination pagination) {
+    public List<HistoryResponse> getHistoryTaskList(String processDefinitionKey, String businessKey, String userId, Pagination pagination) {
 
         int firstResult = (pagination.getCurrentIndex() - 1) * pagination.getPageSize();
 
@@ -199,7 +199,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
         List<HistoricTaskInstance> list = query.listPage(firstResult, pagination.getPageSize());
 
         return list.stream().map(
-                item -> new HistoryFlowResponse(item.getAssignee(), item.getId(), item.getName(), item.getProcessDefinitionId(), item.getProcessInstanceId(), item.getExecutionId(), item.getCreateTime(), item.getProcessVariables(), item.getTaskLocalVariables(), item.getStartTime(), item.getEndTime(), item.getClaimTime())
+                item -> new HistoryResponse(item.getAssignee(), item.getId(), item.getName(), item.getProcessDefinitionId(), item.getProcessInstanceId(), item.getExecutionId(), item.getCreateTime(), item.getProcessVariables(), item.getTaskLocalVariables(), item.getStartTime(), item.getEndTime(), item.getClaimTime())
         ).collect(Collectors.toList());
     }
 
@@ -214,7 +214,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
     }
 
     @Override
-    public List<HistoryFlowResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId) {
+    public List<HistoryResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId) {
         HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
                 .finished();
 
@@ -233,7 +233,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
         List<HistoricProcessInstance> list = query.list();
 
         return list.stream().map(
-                item -> new HistoryFlowResponse(item.getId(), item.getName(), item.getProcessDefinitionId(), item.getProcessVariables(), item.getStartTime(), item.getEndTime())
+                item -> new HistoryResponse(item.getId(), item.getName(), item.getProcessDefinitionId(), item.getProcessVariables(), item.getStartTime(), item.getEndTime())
         ).collect(Collectors.toList());
     }
 }

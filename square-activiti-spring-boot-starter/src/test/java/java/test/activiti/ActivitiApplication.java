@@ -1,5 +1,4 @@
-package top.zopx.square.test.activiti;
-import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+package java.test.activiti;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

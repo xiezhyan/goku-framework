@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 流程列表
+ *
  * @author 俗世游子
  * @date 2021/6/24
  * @email xiezhyan@126.com
@@ -22,7 +24,7 @@ public class ModelResponse implements Serializable {
     public ModelResponse() {
     }
 
-    public ModelResponse(String id,String name, String key, String category, Date createTime, Date lastUpdateTime, String metaInfo, String deploymentId) {
+    public ModelResponse(String id, String name, String key, String category, Date createTime, Date lastUpdateTime, String metaInfo, String deploymentId) {
         this.id = id;
         this.name = name;
         this.key = key;

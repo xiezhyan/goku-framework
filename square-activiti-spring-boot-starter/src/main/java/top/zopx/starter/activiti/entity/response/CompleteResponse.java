@@ -3,6 +3,8 @@ package top.zopx.starter.activiti.entity.response;
 import java.io.Serializable;
 
 /**
+ * 提交任务返回
+ *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2021/6/29

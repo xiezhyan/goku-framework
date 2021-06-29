@@ -2,7 +2,7 @@ package top.zopx.starter.activiti.service;
 
 import top.zopx.starter.activiti.entity.response.TaskResponse;
 import top.zopx.starter.activiti.entity.response.CompleteResponse;
-import top.zopx.starter.activiti.entity.response.HistoryFlowResponse;
+import top.zopx.starter.activiti.entity.response.HistoryResponse;
 import top.zopx.starter.tools.basic.Pagination;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public interface IBusinessFlowService {
      * @param pagination           分页对象
      * @return List<HistoryFlowResponse>
      */
-    List<HistoryFlowResponse> getHistoryTaskList(String processDefinitionKey, String businessKey, String userId, Pagination pagination);
+    List<HistoryResponse> getHistoryTaskList(String processDefinitionKey, String businessKey, String userId, Pagination pagination);
 
     /**
      * 历史流程
@@ -72,6 +72,6 @@ public interface IBusinessFlowService {
      * @param userId               当前用户
      * @return List<HistoryFlowResponse>
      */
-    List<HistoryFlowResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId);
+    List<HistoryResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId);
 
 }
