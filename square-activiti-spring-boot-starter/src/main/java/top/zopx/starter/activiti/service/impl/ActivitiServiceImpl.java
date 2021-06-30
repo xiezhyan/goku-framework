@@ -7,10 +7,13 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Task;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.starter.activiti.entity.request.ModelRequest;
 import top.zopx.starter.activiti.entity.response.ModelResponse;
@@ -35,6 +38,8 @@ public class ActivitiServiceImpl implements IActivitiService {
 
     @Resource
     private RepositoryService repositoryService;
+    @Resource
+    private TaskService taskService;
 
     @Resource
     private ObjectMapper objectMapper;
@@ -185,11 +190,22 @@ public class ActivitiServiceImpl implements IActivitiService {
     @Override
     public boolean deleteByModelId(String modelId) {
         boolean isDelete = false;
+
+        final Model model = repositoryService.getModel(modelId);
+        if (null == model) {
+            throw new BusException("当前流程不存在");
+        }
+
+        // 2、 检查当前流程图下是否存在正在执行的流程
+        List<Task> list = taskService.createTaskQuery()
+                .processDefinitionKey(model.getKey())
+                .list();
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            throw new BusException("当前流程下存在正在执行的任务，不可被删除");
+        }
+
         try {
-            final Model model = repositoryService.getModel(modelId);
-            if (null == model) {
-                throw new BusException("当前流程不存在");
-            }
             repositoryService.deleteDeployment(model.getDeploymentId(), true);
             repositoryService.deleteModel(modelId);
             isDelete = true;

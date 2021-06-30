@@ -1,7 +1,9 @@
 package top.zopx.square.test;
 
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +38,8 @@ public class AcitvitiTest {
 
     @Resource
     private RepositoryService repositoryService;
+    @Resource
+    private TaskService taskService;
 
     String businessKey = "1";
 
@@ -113,6 +117,11 @@ public class AcitvitiTest {
 
     @Test
     public void test05() {
+        List<Task> list = taskService.createTaskQuery()
+                .processDefinitionKey("level")
+                .list();
+
+        System.out.println(list.size());
     }
 
     @Test

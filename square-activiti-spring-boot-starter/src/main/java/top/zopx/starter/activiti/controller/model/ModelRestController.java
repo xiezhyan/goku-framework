@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2021/6/24
  */
 @RestController
-@RequestMapping("/activiti")
+@RequestMapping("/model/rest")
 public class ModelRestController {
 
     @Resource

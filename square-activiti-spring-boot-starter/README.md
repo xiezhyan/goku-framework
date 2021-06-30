@@ -3,29 +3,21 @@
 # 操作
 ## 新建流程图
 ```http request
-GET http://localhost:8080/activiti/creator
+GET http://localhost:8080/model/rest/creator?modelId={modelId}&tenantId={tenantId}&category={category}
 ```
 
 ## 获取流程图列表
 ```http request
-GET http://localhost:8080/activiti/list
-```
-
-## 查看流程图
-```http request
-GET http://localhost:8080/modeler.html?modelId={modelId}
+GET http://localhost:8080/model/rest/list?name={name}&key={key}&category={category}&tenantId={tenantId}
 ```
 
 ## 发布
 ```http request
-POST http://localhost:8080/activiti/deploy/{modelId}
+POST http://localhost:8080/model/rest/deploy/{modelId}
 ```
-## 查看当前进度
-
-
-## 保存
+## 删除流程
 ```http request
-PUT http://localhost:8080/activiti/model/{modelId}/save
+DELETE http://localhost:8080/model/rest/{modelId}
 ```
 
 # 数据表
