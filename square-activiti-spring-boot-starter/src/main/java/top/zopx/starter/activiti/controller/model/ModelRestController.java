@@ -28,11 +28,6 @@ public class ModelRestController {
 
     @Resource
     private IActivitiService activitiService;
-    @Resource
-    private HttpServletRequest request;
-    @Resource
-    private HttpServletResponse response;
-
 
     /**
      * 跳转到可视化界面
@@ -42,7 +37,9 @@ public class ModelRestController {
     public void createModel(
             @RequestParam(value = "modelId", required = false) String modelId,
             @RequestParam(value = "tenantId", required = false) String tenantId,
-            @RequestParam(value = "category", required = false) String category
+            @RequestParam(value = "category", required = false) String category,
+            HttpServletRequest request,
+            HttpServletResponse response
     ) {
         final String redirectUrl = activitiService.saveOrUpdate(modelId, tenantId, category);
 
