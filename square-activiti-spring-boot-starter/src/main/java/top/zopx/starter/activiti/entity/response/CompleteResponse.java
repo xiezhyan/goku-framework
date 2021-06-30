@@ -11,13 +11,16 @@ import java.io.Serializable;
  */
 public class CompleteResponse implements Serializable {
 
+    private String taskId;
+
     private boolean isOk;
 
     private boolean isFinished;
 
-    public CompleteResponse(boolean isOk, boolean isFinished) {
+    public CompleteResponse(boolean isOk, boolean isFinished, String taskId) {
         this.isOk = isOk;
         this.isFinished = isFinished;
+        this.taskId = taskId;
     }
 
     public CompleteResponse() {
@@ -37,5 +40,13 @@ public class CompleteResponse implements Serializable {
 
     public void setFinished(boolean finished) {
         isFinished = finished;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }

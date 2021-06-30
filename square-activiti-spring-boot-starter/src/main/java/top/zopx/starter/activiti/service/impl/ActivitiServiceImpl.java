@@ -10,6 +10,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.starter.activiti.entity.request.ModelRequest;
 import top.zopx.starter.activiti.entity.response.ModelResponse;
@@ -197,5 +198,22 @@ public class ActivitiServiceImpl implements IActivitiService {
             throw new BusException(e.getMessage());
         }
         return isDelete;
+    }
+
+    @Override
+    public ModelResponse getById(String processDefinitionId) {
+        ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
+        if (null == processDefinition) {
+            throw new BusException("流程图不存在");
+        }
+
+        ModelResponse response = new ModelResponse();
+        response.setName(response.getName());
+        response.setKey(response.getKey());
+        response.setVersion(response.getVersion());
+        response.setCategory(response.getCategory());
+        response.setDeploymentId(response.getDeploymentId());
+
+        return response;
     }
 }

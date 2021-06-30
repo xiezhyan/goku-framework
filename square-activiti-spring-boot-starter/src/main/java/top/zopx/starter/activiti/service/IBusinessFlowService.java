@@ -1,5 +1,6 @@
 package top.zopx.starter.activiti.service;
 
+import top.zopx.starter.activiti.entity.response.CommentResponse;
 import top.zopx.starter.activiti.entity.response.TaskResponse;
 import top.zopx.starter.activiti.entity.response.CompleteResponse;
 import top.zopx.starter.activiti.entity.response.HistoryResponse;
@@ -21,8 +22,26 @@ public interface IBusinessFlowService {
      * @param variables            判断参数
      * @param businessKey          业务关联键
      * @param processDefinitionKey 流程图的流程名称：唯一key
+     * @return true | false
      */
     boolean startProcessByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables);
+
+    /**
+     * 设置受理人
+     *
+     * @param businessKey 业务关联键
+     * @param assignee    受理人
+     * @return true | false
+     */
+    boolean setAssignee(String businessKey, String assignee);
+
+    /**
+     * 得到审批内容
+     *
+     * @param businessKey 业务关联键
+     * @return List<CommentResponse>
+     */
+    List<CommentResponse> getCommentList(String businessKey);
 
     /**
      * 任务提交，进入下一步
@@ -31,7 +50,7 @@ public interface IBusinessFlowService {
      * @param map         参数
      * @return CompleteResponse
      */
-    CompleteResponse completeByTaskId(String businessKey, Map<String, Object> map);
+    CompleteResponse completeByBusinessKey(String businessKey, Map<String, Object> map);
 
     /**
      * 待办任务
@@ -40,7 +59,7 @@ public interface IBusinessFlowService {
      * @param userId      当前用户
      * @param isActive    是否是活动状态
      */
-    List<TaskResponse> getAgentTaskListByAssignee(String businessKey, String userId, boolean isActive);
+    List<TaskResponse> getTaskListByAssignee(String businessKey, String userId, boolean isActive);
 
 
     /**
@@ -54,7 +73,7 @@ public interface IBusinessFlowService {
     boolean revokeFlow(String processDefinitionKey, String businessKey, String userId, String reason);
 
     /**
-     * 历史任务
+     * 任务执行记录
      *
      * @param processDefinitionKey 流程唯一标识
      * @param businessKey          业务关联键
@@ -63,15 +82,4 @@ public interface IBusinessFlowService {
      * @return List<HistoryFlowResponse>
      */
     List<HistoryResponse> getHistoryTaskList(String processDefinitionKey, String businessKey, String userId, Pagination pagination);
-
-    /**
-     * 历史流程
-     *
-     * @param processDefinitionKey 流程唯一标识
-     * @param businessKey          业务关联键
-     * @param userId               当前用户
-     * @return List<HistoryFlowResponse>
-     */
-    List<HistoryResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId);
-
 }

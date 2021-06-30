@@ -21,6 +21,8 @@ public class ModelResponse implements Serializable {
     private String metaInfo;
     private String deploymentId;
 
+    private String version;
+
     public ModelResponse() {
     }
 
@@ -97,5 +99,13 @@ public class ModelResponse implements Serializable {
 
     public void setDeploymentId(String deploymentId) {
         this.deploymentId = deploymentId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

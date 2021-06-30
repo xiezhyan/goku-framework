@@ -47,4 +47,12 @@ public interface IActivitiService {
      * @return true | false
      */
     boolean deleteByModelId(String modelId);
+
+    /**
+     * 通过流程实例ID获取模式
+     *
+     * @param processDefinitionId 流程实例ID
+     * @return ModelResponse
+     */
+    ModelResponse getById(String processDefinitionId);
 }

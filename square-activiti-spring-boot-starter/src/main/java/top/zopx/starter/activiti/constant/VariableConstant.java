@@ -17,6 +17,10 @@ public enum VariableConstant {
      * 审批意见
      */
     COMMENT,
+    /**
+     * 发起人
+     */
+    SPONSOR
     ;
 
 }

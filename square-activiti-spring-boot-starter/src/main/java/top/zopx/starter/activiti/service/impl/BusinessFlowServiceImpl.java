@@ -8,6 +8,7 @@ import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,10 +22,8 @@ import top.zopx.starter.tools.tools.strings.StringUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -59,9 +58,11 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
             LogUtil.getInstance(getClass()).debug("流程定义ID\t:【{}】", processInstance.getProcessDefinitionId());
             LogUtil.getInstance(getClass()).debug("流程定义KEY\t:【{}】", processInstance.getProcessDefinitionKey());
             LogUtil.getInstance(getClass()).debug("流程部署ID\t:【{}】", processInstance.getDeploymentId());
+            LogUtil.getInstance(getClass()).debug("流程部署ID\t:【{}】", processInstance.getProcessInstanceId());
             LogUtil.getInstance(getClass()).debug("=========================启动流程输出============================");
 
             taskList = getTasksByBusKey(businessKey);
+
             return CollectionUtils.isNotEmpty(taskList);
         } catch (Exception e) {
             LogUtil.getInstance(getClass()).error("开启流程异常：【{}】", e.getMessage());
@@ -70,34 +71,69 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
     }
 
     @Override
-    @Transactional(rollbackFor = BusException.class)
-    public CompleteResponse completeByTaskId(String businessKey, Map<String, Object> map) {
-        CompleteResponse completeResponse = new CompleteResponse(false, false);
+    public boolean setAssignee(String businessKey, String assignee) {
+
+        List<Task> taskList = getTasksByBusKey(businessKey);
+
+        if (CollectionUtils.isEmpty(taskList)) {
+            throw new BusException("未查询到关于【" + businessKey + "】相关的任务");
+        }
 
         try {
-            String currentUser = map.getOrDefault(VariableConstant.CURRENT_USER.name(), "").toString();
-            if (StringUtil.isNotEmpty(currentUser)) {
-                // 没有指定查询用户
-                throw new BusException("没有指定查询用户");
-            }
+            taskService.setAssignee(taskList.get(0).getId(), assignee);
+            return true;
+        } catch (Exception e) {
+            LogUtil.getInstance(getClass()).error("设置代理人异常：【{}】", e.getMessage());
+            throw new BusException(e.getMessage());
+        }
+    }
 
-            // 获取businessKey相关的业务的currentUser的任务列表
-            List<TaskResponse> taskResponses = getAgentTaskListByAssignee(businessKey, currentUser, false);
+    @Override
+    public List<CommentResponse> getCommentList(String businessKey) {
+        List<Task> taskList = getTasksByBusKey(businessKey);
+        if (CollectionUtils.isEmpty(taskList)) {
+            throw new BusException("未查询到关于【" + businessKey + "】相关的任务");
+        }
 
-            if (CollectionUtils.isEmpty(taskResponses)) {
-                // 未查询到当前任务
-                throw new BusException("未查询到关于【" + businessKey + "】下【" + currentUser + "】相关的任务");
-            }
+        List<Comment> comments = taskService.getProcessInstanceComments(taskList.get(0).getProcessInstanceId());
 
-            if (taskResponses.size() != 1) {
-                throw new BusException("查询到关于【" + businessKey + "】下【" + currentUser + "】的多笔异常任务");
-            }
+        return comments.stream().map(
+                item -> new CommentResponse(item.getId(), item.getUserId(), item.getTime(), item.getTaskId(), item.getProcessInstanceId(), item.getType(), item.getFullMessage())
+        ).collect(Collectors.toList());
 
-            String comment = map.getOrDefault(VariableConstant.COMMENT.name(), "").toString();
-            if (StringUtil.isNotEmpty(comment)) {
-                taskService.addComment(taskResponses.get(0).getTaskId(), taskResponses.get(0).getProcessInstanceId(), comment);
-            }
+    }
 
+    @Override
+    @Transactional(rollbackFor = BusException.class)
+    public CompleteResponse completeByBusinessKey(String businessKey, Map<String, Object> map) {
+        CompleteResponse completeResponse = new CompleteResponse(false, false, "");
+
+        String currentUser = map.getOrDefault(VariableConstant.CURRENT_USER.name(), "").toString();
+        if (StringUtil.isEmpty(currentUser)) {
+            // 没有指定查询用户
+            LogUtil.getInstance(getClass()).error("没有指定查询用户");
+            throw new BusException("没有指定查询用户");
+        }
+
+        // 获取businessKey相关的业务的currentUser的任务列表
+        List<TaskResponse> taskResponses = getTaskListByAssignee(businessKey, currentUser, false);
+
+        if (CollectionUtils.isEmpty(taskResponses)) {
+            // 未查询到当前任务
+            LogUtil.getInstance(getClass()).error("未查询到关于【{}】下【{}】相关的任务", businessKey, currentUser);
+            throw new BusException("未查询到关于【" + businessKey + "】下【" + currentUser + "】相关的任务");
+        }
+
+        if (taskResponses.size() != 1) {
+            LogUtil.getInstance(getClass()).error("查询到关于【{}】下【{}】的多笔异常任务", businessKey, currentUser);
+            throw new BusException("查询到关于【" + businessKey + "】下【" + currentUser + "】的多笔异常任务");
+        }
+
+        String comment = map.getOrDefault(VariableConstant.COMMENT.name(), "").toString();
+        if (StringUtil.isNotEmpty(comment)) {
+            taskService.addComment(taskResponses.get(0).getTaskId(), taskResponses.get(0).getProcessInstanceId(), comment);
+        }
+        try {
             // 完成任务
             taskService.complete(taskResponses.get(0).getTaskId(), map);
             completeResponse.setOk(true);
@@ -106,8 +142,9 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
             if (CollectionUtils.isEmpty(tasksByBusKey)) {
                 // 任务已完成
                 completeResponse.setFinished(true);
+            } else {
+                completeResponse.setTaskId(tasksByBusKey.get(0).getId());
             }
-
         } catch (Exception e) {
             LogUtil.getInstance(getClass()).error("提交任务异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
@@ -116,27 +153,25 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
     }
 
     @Override
-    public List<TaskResponse> getAgentTaskListByAssignee(String businessKey, String userId, boolean isActive) {
+    public List<TaskResponse> getTaskListByAssignee(String businessKey, String userId, boolean isActive) {
         // 获取businessKey相关的业务的currentUser的任务列表
-        TaskQuery taskQuery1 = taskService.createTaskQuery()
-                .processInstanceBusinessKey(businessKey)
-                .taskAssignee(userId)
+        TaskQuery taskQuery = taskService.createTaskQuery()
                 .orderByTaskCreateTime()
                 .asc();
 
-        TaskQuery taskQuery2 = taskService.createTaskQuery()
-                .processInstanceBusinessKey(businessKey)
-                .taskCandidateUser(userId)
-                .orderByTaskCreateTime()
-                .asc();
-
-        if (isActive) {
-            taskQuery1 = taskQuery1.active();
-            taskQuery2 = taskQuery2.active();
+        if (StringUtil.isNotEmpty(userId)) {
+            taskQuery = taskQuery.taskCandidateOrAssigned(userId);
         }
 
-        List<Task> tasks = Optional.ofNullable(taskQuery1.list()).orElse(new ArrayList<>());
-        tasks.addAll(taskQuery2.list());
+        if (StringUtil.isNotEmpty(businessKey)) {
+            taskQuery = taskQuery.processInstanceBusinessKey(businessKey);
+        }
+
+        if (isActive) {
+            taskQuery = taskQuery.active();
+        }
+
+        List<Task> tasks = taskQuery.list();
 
         return tasks.stream().map(
                 item -> new TaskResponse(
@@ -181,8 +216,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
 
         int firstResult = (pagination.getCurrentIndex() - 1) * pagination.getPageSize();
 
-        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery()
-                .processFinished();
+        HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
         if (StringUtil.isNotEmpty(processDefinitionKey)) {
             query = query.processDefinitionKey(processDefinitionKey);
@@ -211,29 +245,5 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
      */
     private List<Task> getTasksByBusKey(String businessKey) {
         return taskService.createTaskQuery().processInstanceBusinessKey(businessKey).list();
-    }
-
-    @Override
-    public List<HistoryResponse> getHistoryTaskInstanceById(String processDefinitionKey, String businessKey, String userId) {
-        HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery()
-                .finished();
-
-        if (StringUtil.isNotEmpty(processDefinitionKey)) {
-            query = query.processDefinitionKey(processDefinitionKey);
-        }
-
-        if (StringUtil.isNotEmpty(businessKey)) {
-            query = query.processInstanceBusinessKey(businessKey);
-        }
-
-        if (StringUtil.isNotEmpty(userId)) {
-            query = query.involvedUser(userId);
-        }
-
-        List<HistoricProcessInstance> list = query.list();
-
-        return list.stream().map(
-                item -> new HistoryResponse(item.getId(), item.getName(), item.getProcessDefinitionId(), item.getProcessVariables(), item.getStartTime(), item.getEndTime())
-        ).collect(Collectors.toList());
     }
 }
