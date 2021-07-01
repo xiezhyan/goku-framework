@@ -28,7 +28,7 @@ public class DistributationServiceImpl {
     }
 
 
-    @Distribution(key = "'lock:'+#{name}")
+    @Distribution(value = "'lock:'+#{name}")
     public void lock2(String name) {
     }
 

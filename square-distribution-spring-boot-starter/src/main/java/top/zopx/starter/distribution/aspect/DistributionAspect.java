@@ -15,14 +15,10 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import top.zopx.starter.distribution.annotation.Distribution;
 import top.zopx.starter.distribution.service.ILockService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -37,8 +33,8 @@ public class DistributionAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DistributionAspect.class);
 
-    private static SpelExpressionParser parser = new SpelExpressionParser();
-    private static DefaultParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
+    private static final SpelExpressionParser PARSER = new SpelExpressionParser();
+    private static final DefaultParameterNameDiscoverer DISCOVERER = new DefaultParameterNameDiscoverer();
 
     @Resource
     private ILockService lockService;
@@ -50,7 +46,7 @@ public class DistributionAspect {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         final Distribution annotation = getAnnotationDistribution(joinPoint);
 
-        String key = annotation.key();
+        String key = annotation.value();
         if (StringUtils.contains(key, "#")) {
             key = getKeyBySpel(key, getMethod(joinPoint), joinPoint.getArgs());
         }
@@ -67,8 +63,8 @@ public class DistributionAspect {
     }
 
     private String getKeyBySpel(String key, Method method, Object[] args) {
-        String[] paramNames = discoverer.getParameterNames(method);
-        Expression expression = parser.parseExpression(key);
+        String[] paramNames = DISCOVERER.getParameterNames(method);
+        Expression expression = PARSER.parseExpression(key);
         EvaluationContext context = new StandardEvaluationContext();
         for (int i = 0; i < args.length; i++) {
             if (null != paramNames && ArrayUtils.isNotEmpty(paramNames)) {

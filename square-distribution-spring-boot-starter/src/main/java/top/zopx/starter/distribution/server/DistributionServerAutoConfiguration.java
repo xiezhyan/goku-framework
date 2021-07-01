@@ -24,9 +24,9 @@ import top.zopx.starter.distribution.service.impl.zookeeper.ZookeeperLockService
 @EnableConfigurationProperties({ SquareDistributionProperties.class })
 @Import({
         RedisInitialConfigurator.class,
-        DistributionAspect.class,
         ZookeeperInitialConfigurator.class,
-        JvmInitialConfigurator.class
+        JvmInitialConfigurator.class,
+        DistributionAspect.class
 })
 public class DistributionServerAutoConfiguration {
 
