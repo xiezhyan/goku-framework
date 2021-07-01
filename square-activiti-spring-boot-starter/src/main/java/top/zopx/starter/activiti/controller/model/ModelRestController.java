@@ -1,6 +1,7 @@
 package top.zopx.starter.activiti.controller.model;
 
 import org.springframework.web.bind.annotation.*;
+import top.zopx.starter.activiti.IOConvert;
 import top.zopx.starter.activiti.entity.request.ModelRequest;
 import top.zopx.starter.activiti.entity.response.ModelResponse;
 import top.zopx.starter.activiti.service.IActivitiService;
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -111,5 +113,22 @@ public class ModelRestController {
     @GetMapping("/{processDefinitionId}")
     public R<ModelResponse> getById(@PathVariable("processDefinitionId") String processDefinitionId) {
         return R.result(activitiService.getByProcessDefinitionId(processDefinitionId));
+    }
+
+    @GetMapping("/viewPic")
+    public R<String> viewPic(@RequestParam("processDefinitionKey") String processDefinitionKey) {
+        InputStream inputStream = activitiService.viewPic(processDefinitionKey);
+
+        String data = "";
+        if (null != inputStream) {
+            try {
+                data = IOConvert.INSTANCE.inputToString(inputStream);
+            } catch (IOException e) {
+                LogUtil.getInstance(getClass()).error("转换出现异常：【{}】", e.getMessage());
+                throw new BusException(e.getMessage());
+            }
+        }
+
+        return R.result(data);
     }
 }

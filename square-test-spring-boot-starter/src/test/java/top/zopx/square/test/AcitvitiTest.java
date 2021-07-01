@@ -125,6 +125,16 @@ public class AcitvitiTest {
     }
 
     @Test
+    public void test06() {
+        List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().processDefinitionKey("level").latestVersion().list();
+        System.out.println("=========" + list.size() + "=====================");
+        list.forEach(item -> {
+            System.out.println(item.getDiagramResourceName());
+            System.out.println(item.getId());
+        });
+    }
+
+    @Test
     public void test04() {
         List<HistoryResponse> historyTaskList = businessFlowService.getHistoryTaskList("level", businessKey, "", new Pagination());
 

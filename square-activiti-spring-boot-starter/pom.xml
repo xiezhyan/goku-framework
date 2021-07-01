@@ -82,7 +82,6 @@
             <artifactId>activiti-json-converter</artifactId>
             <version>${activiti.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

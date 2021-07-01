@@ -7,6 +7,7 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -25,6 +26,7 @@ import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +42,8 @@ public class ActivitiServiceImpl implements IActivitiService {
     private RepositoryService repositoryService;
     @Resource
     private TaskService taskService;
+    @Resource
+    private RuntimeService runtimeService;
 
     @Resource
     private ObjectMapper objectMapper;
@@ -171,7 +175,7 @@ public class ActivitiServiceImpl implements IActivitiService {
             final Deployment deploy = repositoryService.createDeployment()
                     .name(processName)
                     .category(model.getCategory())
-                    .key(StringUtil.uuid())
+                    .key(model.getKey())
                     .addBpmnModel(processName, bpmnModel)
                     .deploy();
 
@@ -231,5 +235,24 @@ public class ActivitiServiceImpl implements IActivitiService {
         response.setDeploymentId(response.getDeploymentId());
 
         return response;
+    }
+
+    @Override
+    public InputStream viewPic(String processDefinitionKey) {
+        List<ProcessDefinition> list = repositoryService.createProcessDefinitionQuery().processDefinitionKey(processDefinitionKey).latestVersion().list();
+
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BusException("没有查询到关于【"+processDefinitionKey+"】的部署流程");
+        }
+
+        ProcessDefinition processDefinition = list.get(0);
+
+        return repositoryService.getResourceAsStream(processDefinition.getId(), processDefinition.getDiagramResourceName());
+    }
+
+    @Override
+    public InputStream viewCurrentPic(String processDefinitionKey, String businessKey) {
+
+        return null;
     }
 }

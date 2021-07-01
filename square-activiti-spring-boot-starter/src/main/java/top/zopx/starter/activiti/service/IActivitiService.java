@@ -4,6 +4,7 @@ import top.zopx.starter.activiti.entity.request.ModelRequest;
 import top.zopx.starter.activiti.entity.response.ModelResponse;
 import top.zopx.starter.tools.basic.Pagination;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -55,4 +56,20 @@ public interface IActivitiService {
      * @return ModelResponse
      */
     ModelResponse getByProcessDefinitionId(String processDefinitionId);
+
+    /**
+     * 查看流程图
+     *
+     * @param processDefinitionKey 唯一标识
+     * @return InputStream
+     */
+    InputStream viewPic(String processDefinitionKey);
+
+    /**
+     * 查看当前流程图执行步骤
+     * @param processDefinitionKey 唯一标识
+     * @param businessKey 业务关联键
+     * @return InputStream
+     */
+    InputStream viewCurrentPic(String processDefinitionKey, String businessKey);
 }
