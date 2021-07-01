@@ -217,7 +217,7 @@ public class ActivitiServiceImpl implements IActivitiService {
     }
 
     @Override
-    public ModelResponse getById(String processDefinitionId) {
+    public ModelResponse getByProcessDefinitionId(String processDefinitionId) {
         ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
         if (null == processDefinition) {
             throw new BusException("流程图不存在");

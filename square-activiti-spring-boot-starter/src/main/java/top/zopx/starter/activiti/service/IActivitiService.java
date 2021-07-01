@@ -54,5 +54,5 @@ public interface IActivitiService {
      * @param processDefinitionId 流程实例ID
      * @return ModelResponse
      */
-    ModelResponse getById(String processDefinitionId);
+    ModelResponse getByProcessDefinitionId(String processDefinitionId);
 }
