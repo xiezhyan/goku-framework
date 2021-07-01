@@ -19,6 +19,16 @@ public class SquareLogProperties {
      */
     private boolean endurance = false;
 
+    private String appName;
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
     public boolean isEndurance() {
         return endurance;
     }

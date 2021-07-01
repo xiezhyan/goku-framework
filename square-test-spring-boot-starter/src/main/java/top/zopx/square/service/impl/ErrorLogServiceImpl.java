@@ -1,6 +1,7 @@
 package top.zopx.square.service.impl;
 
 import org.springframework.stereotype.Service;
+import top.zopx.starter.log.constant.LogConstant;
 import top.zopx.starter.log.service.ILogService;
 import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
 

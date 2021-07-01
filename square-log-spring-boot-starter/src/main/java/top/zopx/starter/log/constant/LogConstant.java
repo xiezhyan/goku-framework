@@ -24,6 +24,7 @@ public class LogConstant {
     public static final String PARAMS = "params";
     public static final String VALUE = "value";
     public static final String EXEC_TIME = "execTime";
+    public static final String APP_NAME = "appName";
 
 
 }
