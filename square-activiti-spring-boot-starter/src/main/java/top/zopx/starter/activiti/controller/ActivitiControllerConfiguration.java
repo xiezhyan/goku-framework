@@ -33,6 +33,11 @@ public class ActivitiControllerConfiguration {
     }
 
     @Bean
+    public BusinessController businessController() {
+        return new BusinessController();
+    }
+
+    @Bean
     public IActivitiService activitiService() {
         return new ActivitiServiceImpl();
     }

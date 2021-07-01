@@ -53,12 +53,29 @@ public class ModelRestController {
 
     /**
      * 分页获取流程数据
-     * @param pagination 分页对象
-     * @param request 参数对象
+     *
      * @return Page<Model>
      */
     @GetMapping("/list")
-    public R<Page<ModelResponse>> getList(ModelRequest request, Pagination pagination) {
+    public R<Page<ModelResponse>> getList(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "key", required = false) String key,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "tenantId", required = false) String tenantId,
+            @RequestParam(value = "currentIndex", required = false, defaultValue = "1") int currentIndex,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+    ) {
+
+        Pagination pagination = new Pagination();
+        pagination.setPageSize(pageSize);
+        pagination.setCurrentIndex(currentIndex);
+
+        ModelRequest request = new ModelRequest();
+        request.setName(name);
+        request.setKey(key);
+        request.setCategory(category);
+        request.setTenantId(tenantId);
+
         final List<ModelResponse> list = activitiService.getList(request, pagination);
         return R.result(new Page<>(pagination, list));
     }
@@ -83,5 +100,16 @@ public class ModelRestController {
     @DeleteMapping("/{modelId}")
     public R<Boolean> deleteByModelId(@PathVariable("modelId") String modelId) {
         return R.status(activitiService.deleteByModelId(modelId));
+    }
+
+    /**
+     * 通过 processDefinitionId 获取当前Model
+     *
+     * @param processDefinitionId processDefinitionId
+     * @return ModelResponse
+     */
+    @GetMapping("/{processDefinitionId}")
+    public R<ModelResponse> getById(@PathVariable("processDefinitionId") String processDefinitionId) {
+        return R.result(activitiService.getByProcessDefinitionId(processDefinitionId));
     }
 }
