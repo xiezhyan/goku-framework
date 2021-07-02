@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.expression.EvaluationContext;
@@ -16,6 +18,7 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import top.zopx.starter.distribution.annotation.Distribution;
+import top.zopx.starter.distribution.configurator.ZookeeperInitialConfigurator;
 import top.zopx.starter.distribution.service.ILockService;
 
 import javax.annotation.Resource;
@@ -29,6 +32,7 @@ import java.util.Objects;
  */
 @Aspect
 @Order(1)
+@ConditionalOnMissingBean({ZookeeperInitialConfigurator.class})
 public class DistributionAspect {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DistributionAspect.class);

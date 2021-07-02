@@ -79,7 +79,7 @@ public class RedisInitialConfigurator {
         }
 
         String masterName;
-        if (StringUtils.isNotBlank(masterName = squareDistributionProperties.getRedis().getSentinel().getMasterName())) {
+        if (StringUtils.isNotBlank(masterName = squareDistributionProperties.getRedis().getSentinel().getSentinelName())) {
             final SentinelServersConfig sentinelServersConfig = config.useSentinelServers()
                     .addSentinelAddress(squareDistributionProperties.getRedis().getAddress().toArray(new String[0]))
                     .setMasterName(masterName)
