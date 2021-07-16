@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
  * @author 俗世游子
  * @date 2021/5/11
  */
-public enum  Base64Util {
+public enum Base64Util {
 
     /**
      * 单例
@@ -18,6 +18,7 @@ public enum  Base64Util {
 
     /**
      * 转码
+     *
      * @param buffer 字节数组
      * @return 转码字符串
      */
@@ -27,10 +28,21 @@ public enum  Base64Util {
 
     /**
      * 解码
+     *
      * @param buffer 字节数组
      * @return 解码字符串
      */
     public String decode(byte[] buffer) {
         return new String(Base64.decodeBase64(buffer), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 解码
+     *
+     * @param buffer 字节数组
+     * @return byte[]
+     */
+    public byte[] decode(String buffer) {
+        return Base64.decodeBase64(buffer);
     }
 }
