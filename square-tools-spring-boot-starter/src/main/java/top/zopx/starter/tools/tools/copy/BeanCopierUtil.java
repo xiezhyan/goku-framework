@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 public class BeanCopierUtil {
 
 
-    private static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
-    private static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
+    private static final ConcurrentHashMap<String, BeanCopier> COPY_MAP = new ConcurrentHashMap<>(16);
 
     private boolean useConverter;
 
@@ -61,7 +60,14 @@ public class BeanCopierUtil {
      * @return BeanCopier
      */
     private <S, T> BeanCopier getCopier(Class<S> source, Class<T> target) {
-        return BeanCopier.create(source, target, useConverter);
+        String key = getKey(source, target);
+        // 如果不存在，就返回默认Copier
+        BeanCopier beanCopier = COPY_MAP.getOrDefault(key, BeanCopier.create(source, target, useConverter));
+        // 如果Map中不存在，就放置到Map中
+        if (!COPY_MAP.containsKey(key)) {
+            COPY_MAP.put(key, beanCopier);
+        }
+        return beanCopier;
     }
 
 
@@ -73,9 +79,6 @@ public class BeanCopierUtil {
      * @param converter 转换器
      */
     public <S, T> void copy(S source, T target, Converter converter) {
-        /**
-         * 这里为了防止在外部设置忘记该配置，所以在这里提前加上，不影响
-         */
         copy(source, target, converter, null);
     }
 
@@ -96,6 +99,11 @@ public class BeanCopierUtil {
 
         BeanCopier copier = getCopier(source.getClass(), target.getClass());
 
+        if (null == copier) {
+            // 以防万一
+            copier = BeanCopier.create(source.getClass(), target.getClass(), useConverter);
+        }
+
         copier.copy(source, target, converter);
 
         if (null != consumer) {
@@ -111,27 +119,43 @@ public class BeanCopierUtil {
      * @param target   目标对象
      * @param consumer 通用操作
      */
-    public <S, T> void copyPropertiesIgnoreNull(S source, T target, BiConsumer<S, T> consumer) {
-        copy(source, target, new DealNullPropertiesConverter(target), consumer);
+    public <S, T> void copyPropertiesIgnoreNull(S source, T target, DealNullPropertiesConverter dealNullPropertiesConverter, BiConsumer<S, T> consumer) {
+        copy(source, target, dealNullPropertiesConverter, consumer);
     }
 
     /**
      * 复制集合对象
      *
-     * @param source       源对象
-     * @param target       目标对象
-     * @param consumer     通用操作
-     * @param isIgnoreNull 是否对空对象进行设置
+     * @param source   源对象
+     * @param target   目标对象
+     * @param consumer 通用操作
      * @return List<T>
      */
-    public <S, T> List<T> copyList(List<S> source, Supplier<T> target, BiConsumer<S, T> consumer, boolean isIgnoreNull) {
+    public <S, T> List<T> copyList(List<S> source, Supplier<T> target, BiConsumer<S, T> consumer) {
         return CollectionUtils.isNotEmpty(source) ? source.stream().map(item -> {
             T t = target.get();
-            if (isIgnoreNull) {
-                copyPropertiesIgnoreNull(item, t, null);
-            } else {
-                copy(item, t, null);
+            copy(item, t, null);
+
+            if (null != consumer) {
+                consumer.accept(item, t);
             }
+            return t;
+        }).collect(Collectors.toList()) : Collections.emptyList();
+    }
+
+    /**
+     * 复制集合对象
+     *
+     * @param source                      源对象
+     * @param target                      目标对象
+     * @param dealNullPropertiesConverter 忽略空值属性
+     * @param consumer                    通用操作
+     * @return List<T>
+     */
+    public <S, T> List<T> copyList(List<S> source, Supplier<T> target, DealNullPropertiesConverter dealNullPropertiesConverter, BiConsumer<S, T> consumer) {
+        return CollectionUtils.isNotEmpty(source) ? source.stream().map(item -> {
+            T t = target.get();
+            copyPropertiesIgnoreNull(item, t, dealNullPropertiesConverter, null);
 
             if (null != consumer) {
                 consumer.accept(item, t);
@@ -145,7 +169,10 @@ public class BeanCopierUtil {
      * 源中没有数据，那么就从目标数据中取数据，
      * 如果目标数据中也没有数据，那么就真的没有数据了
      */
-    public class DealNullPropertiesConverter implements Converter {
+    public static abstract class DealNullPropertiesConverter implements Converter {
+
+        protected static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
+        protected static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
 
         private Object target;
 
@@ -160,64 +187,64 @@ public class BeanCopierUtil {
             }
             return o;
         }
-    }
 
-    /**
-     * 反射获取当前成员变量的值
-     *
-     * @param target 目标
-     * @param field  变量名称
-     * @return 返回值
-     */
-    private Object getFieldValue(Object target, String field) {
+        /**
+         * 反射获取当前成员变量的值
+         *
+         * @param target 目标
+         * @param field  变量名称
+         * @return 返回值
+         */
+        private Object getFieldValue(Object target, String field) {
 
-        Object o = CONCURRENT_HASH_MAP_OBJECT.get(field);
+            Object o = CONCURRENT_HASH_MAP_OBJECT.get(field);
 
-        if (null == o) {
-            try {
-                o = reflectField(target, field);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (null == o) {
+                try {
+                    o = reflectField(target, field);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            return o;
         }
 
-        return o;
-    }
-
-    private Object reflectField(Object target, String field) throws Exception {
-        Field declaredField = target.getClass().getDeclaredField(field);
-        declaredField.setAccessible(true);
-        Object o = declaredField.get(target);
-        if (null != o) {
-            CONCURRENT_HASH_MAP_OBJECT.put(field, o);
-        }
-        declaredField.setAccessible(false);
-        return o;
-    }
-
-    /**
-     * 将setXX 转成xX
-     *
-     * @param setMethod setXX方法
-     * @return xX
-     */
-    private String getFields(String setMethod) {
-        String field = CONCURRENT_HASH_MAP_FIELD.get(setMethod);
-
-        if (StringUtil.isBlank(field)) {
-            field = getField(setMethod);
+        private Object reflectField(Object target, String field) throws Exception {
+            Field declaredField = target.getClass().getDeclaredField(field);
+            declaredField.setAccessible(true);
+            Object o = declaredField.get(target);
+            if (null != o) {
+                CONCURRENT_HASH_MAP_OBJECT.put(field, o);
+            }
+            declaredField.setAccessible(false);
+            return o;
         }
 
-        return field;
-    }
+        /**
+         * 将setXX 转成xX
+         *
+         * @param setMethod setXX方法
+         * @return xX
+         */
+        private String getFields(String setMethod) {
+            String field = CONCURRENT_HASH_MAP_FIELD.get(setMethod);
 
-    private String getField(String setMethod) {
-        int len;
-        char[] newStrs = new char[(len = setMethod.length() - 3)];
-        System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
-        // 转小写
-        newStrs[0] = Character.toLowerCase(newStrs[0]);
-        CONCURRENT_HASH_MAP_FIELD.put(setMethod, String.valueOf(newStrs));
-        return CONCURRENT_HASH_MAP_FIELD.get(setMethod);
+            if (StringUtil.isBlank(field)) {
+                field = getField(setMethod);
+            }
+
+            return field;
+        }
+
+        private String getField(String setMethod) {
+            int len;
+            char[] newStrs = new char[(len = setMethod.length() - 3)];
+            System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
+            // 转小写
+            newStrs[0] = Character.toLowerCase(newStrs[0]);
+            CONCURRENT_HASH_MAP_FIELD.put(setMethod, String.valueOf(newStrs));
+            return CONCURRENT_HASH_MAP_FIELD.get(setMethod);
+        }
     }
 }
