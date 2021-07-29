@@ -1,13 +1,13 @@
 package top.zopx.starter.tools.validate.listeners;
 
 import org.apache.commons.collections4.CollectionUtils;
-import top.zopx.starter.tools.tools.strings.MatcherUtil;
 import top.zopx.starter.tools.validate.annotations.MutiPattern;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author sanq.Yan
@@ -32,13 +32,13 @@ public class MutiPatternValidator implements ConstraintValidator<MutiPattern, St
 
         if (logic == MutiPattern.Logic.OR) {
             for (String pattern : patterns) {
-                if (MatcherUtil.match(pattern, s)) {
+                if (Pattern.matches(pattern, s)) {
                     return true;
                 }
             }
         } else if (logic == MutiPattern.Logic.AND) {
             for (String pattern : patterns) {
-                if (!MatcherUtil.match(pattern, s)) {
+                if (!Pattern.matches(pattern, s)) {
                     return false;
                 }
             }
