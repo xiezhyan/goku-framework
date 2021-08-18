@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * 提供自定义操作接口
+ * 流程操作
  *
  * @author mr.sanq
  * @date 2021/6/24
@@ -31,9 +31,14 @@ public class ModelRestController {
     @Resource
     private IActivitiService activitiService;
 
+
     /**
      * 跳转到可视化界面
-     * <b>这里需要重点注意： 由于该接口需要重定向到modeler.html中，那么前端在调用该接口的时候，需要直接通过href来进行调用，无法进行axios操作</b>
+     *
+     * @param modelId  流程编号
+     * @param tenantId 租户
+     * @param category 分类
+     * @page /modeler.html?modelId=
      */
     @GetMapping("/creator")
     public void createModel(
@@ -56,7 +61,13 @@ public class ModelRestController {
     /**
      * 分页获取流程数据
      *
-     * @return Page<Model>
+     * @param name         流程名称
+     * @param key          唯一标识
+     * @param category     分类
+     * @param tenantId     租户
+     * @param currentIndex 页码
+     * @param pageSize     显示条数
+     * @return Page<ModelResponse>
      */
     @GetMapping("/list")
     public R<Page<ModelResponse>> getList(
@@ -86,7 +97,7 @@ public class ModelRestController {
      * 发布流程
      *
      * @param modelId 流程ID
-     * @return 是否成功
+     * @return Boolean true：成功  false：失败
      */
     @PostMapping("/deploy/{modelId}")
     public R<Boolean> deploy(@PathVariable("modelId") String modelId) {
@@ -97,7 +108,7 @@ public class ModelRestController {
      * 删除流程
      *
      * @param modelId 流程ID
-     * @return true | false
+     * @return Boolean true：删除成功    false：删除失败
      */
     @DeleteMapping("/{modelId}")
     public R<Boolean> deleteByModelId(@PathVariable("modelId") String modelId) {
@@ -115,6 +126,11 @@ public class ModelRestController {
         return R.result(activitiService.getByProcessDefinitionId(processDefinitionId));
     }
 
+    /**
+     * 查看当前流程图
+     * @param processDefinitionKey 流程定义key
+     * @return base64编码后的字节数组
+     */
     @GetMapping("/viewPic")
     public R<String> viewPic(@RequestParam("processDefinitionKey") String processDefinitionKey) {
         InputStream inputStream = activitiService.viewPic(processDefinitionKey);

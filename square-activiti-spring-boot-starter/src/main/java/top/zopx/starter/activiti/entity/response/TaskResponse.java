@@ -49,7 +49,7 @@ public class TaskResponse implements Serializable {
     private Date createTime;
 
     /**
-     *
+     * 流程参数
      */
     private Map<String, Object> processVariables;
 

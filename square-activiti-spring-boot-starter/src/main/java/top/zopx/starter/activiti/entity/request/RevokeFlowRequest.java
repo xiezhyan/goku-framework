@@ -8,19 +8,27 @@ public class RevokeFlowRequest {
 
     /**
      * 流程图唯一标识
+     *
+     * @required
      */
     private String processDefinitionKey;
     /**
      * 业务关联键
+     *
+     * @required
      */
     private String businessKey;
 
     /**
      * 用户ID
+     *
+     * @required
      */
     private String userId;
     /**
      * 撤销原因
+     *
+     * @required
      */
     private String reason;
 

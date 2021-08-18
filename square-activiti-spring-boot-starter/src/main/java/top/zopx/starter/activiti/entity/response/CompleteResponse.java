@@ -11,10 +11,19 @@ import java.io.Serializable;
  */
 public class CompleteResponse implements Serializable {
 
+    /**
+     * 实例ID
+     */
     private String taskId;
 
+    /**
+     * 是否提交成功
+     */
     private boolean isOk;
 
+    /**
+     * 流程是否结束
+     */
     private boolean isFinished;
 
     public CompleteResponse(boolean isOk, boolean isFinished, String taskId) {

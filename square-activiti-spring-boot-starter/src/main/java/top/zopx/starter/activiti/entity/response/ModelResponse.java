@@ -12,15 +12,42 @@ import java.util.Date;
  */
 public class ModelResponse implements Serializable {
 
+    /**
+     * 编号
+     */
     private String id;
+    /**
+     * 名称
+     */
     private String name;
+    /**
+     * 唯一标识
+     */
     private String key;
+    /**
+     * 分类
+     */
     private String category;
+    /**
+     * 创建时间
+     */
     private Date createTime;
+    /**
+     * 最后一次修改时间
+     */
     private Date lastUpdateTime;
+    /**
+     * 元数据信息
+     */
     private String metaInfo;
+    /**
+     * 部署ID
+     */
     private String deploymentId;
 
+    /**
+     * 版本号
+     */
     private Integer version;
 
     public ModelResponse() {

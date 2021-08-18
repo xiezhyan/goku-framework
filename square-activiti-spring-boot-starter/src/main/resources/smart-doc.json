@@ -1,0 +1,4 @@
+{
+  "outPath": "./docs",
+  "packageFilters": "top.zopx.starter.activiti.*"
+}

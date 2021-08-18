@@ -10,18 +10,39 @@ import java.util.Date;
  */
 public class CommentResponse  implements Serializable {
 
+    /**
+     * 编号
+     */
     private String id;
 
+    /**
+     * 用户ID
+     */
     private String userId;
 
+    /**
+     * 评论时间
+     */
     private Date time;
 
+    /**
+     * 实例ID
+     */
     private String taskId;
 
+    /**
+     * 引用做出此评论的流程实例
+     */
     private String processInstanceId;
 
+    /**
+     * 对注释类型的引用
+     */
     private String type;
 
+    /**
+     * 完整评论消息
+     */
     private String fullMessage;
 
     public CommentResponse() {

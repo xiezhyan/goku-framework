@@ -13,10 +13,19 @@ import java.util.Map;
  */
 public class HistoryResponse extends TaskResponse implements Serializable {
 
+    /**
+     * 开始时间
+     */
     private Date startTime;
 
+    /**
+     * 结束时间
+     */
     private Date endTime;
 
+    /**
+     * 领取任务的时间
+     */
     private Date claimTime;
 
     public HistoryResponse(String id, String name, String processDefinitionId, Map<String, Object> processVariables, Date startTime, Date endTime) {
