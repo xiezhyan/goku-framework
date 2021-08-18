@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 @Import({ActivitiMarkerConfiguration.class})
-public @interface EnableActiviti {
+public @interface EnableActivitiSDK {
 }

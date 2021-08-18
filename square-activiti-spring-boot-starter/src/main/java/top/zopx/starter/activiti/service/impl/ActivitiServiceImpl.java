@@ -134,16 +134,20 @@ public class ActivitiServiceImpl implements IActivitiService {
 
         return modelList.stream()
                 .map(model ->
-                        new ModelResponse(
-                                model.getId(),
-                                model.getName(),
-                                model.getKey(),
-                                model.getCategory(),
-                                model.getCreateTime(),
-                                model.getLastUpdateTime(),
-                                model.getMetaInfo(),
-                                model.getDeploymentId()
-                        )
+                        {
+                            ModelResponse response = new ModelResponse(
+                                    model.getId(),
+                                    model.getName(),
+                                    model.getKey(),
+                                    model.getCategory(),
+                                    model.getCreateTime(),
+                                    model.getLastUpdateTime(),
+                                    model.getMetaInfo(),
+                                    model.getDeploymentId()
+                            );
+                            response.setVersion(model.getVersion());
+                            return response;
+                        }
                 )
                 .collect(Collectors.toList());
     }
