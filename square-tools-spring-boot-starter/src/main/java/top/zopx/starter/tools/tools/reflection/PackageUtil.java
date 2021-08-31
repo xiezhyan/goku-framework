@@ -5,12 +5,15 @@ import org.apache.commons.lang3.ArrayUtils;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 /**
  * 动态扫描指定包下类
@@ -68,10 +71,130 @@ public enum PackageUtil {
 
             if ("file".equalsIgnoreCase(protocol)) {
                 classList = list2Dir(new File(url.getFile()), packageName, isRecursion, filter);
+            }  else if ("jar".equalsIgnoreCase(protocol)) {
+                // 获取文件字符串
+                String fileStr = url.getFile();
+
+                if (fileStr.startsWith("file:")) {
+                    // 如果是以 "file:" 开头的,
+                    // 则去除这个开头
+                    fileStr = fileStr.substring(5);
+                }
+
+                if (fileStr.lastIndexOf('!') > 0) {
+                    // 如果有 '!' 字符,
+                    // 则截断 '!' 字符之后的所有字符
+                    fileStr = fileStr.substring(0, fileStr.lastIndexOf('!'));
+                }
+
+                // 从 JAR 文件中加载类
+                classList = listClazzFromJar(
+                        new File(fileStr), packageName, isRecursion, filter
+                );
             }
         }
 
         return classList;
+    }
+
+    private List<Class<?>> listClazzFromJar(File file, String packageName, boolean isRecursion, Function<Class<?>, Boolean> filter) throws IOException, ClassNotFoundException {
+        if (file == null ||
+                file.isDirectory()) {
+            // 如果参数对象为空,
+            // 则直接退出!
+            return Collections.emptyList();
+        }
+
+        JarInputStream jarIn = new JarInputStream(new FileInputStream(file));
+        // 进入点
+        JarEntry entry;
+
+        List<Class<?>> resultList = new ArrayList<>();
+
+        while ((entry = jarIn.getNextJarEntry()) != null) {
+            if (entry.isDirectory()) {
+                continue;
+            }
+
+            // 获取进入点名称
+            String entryName = entry.getName();
+
+            if (!entryName.endsWith(".class")) {
+                // 如果不是以 .class 结尾,
+                // 则说明不是 JAVA 类文件, 直接跳过!
+                continue;
+            }
+
+            if (!isRecursion) {
+                //
+                // 如果没有开启递归模式,
+                // 那么就需要判断当前 .class 文件是否在指定目录下?
+                //
+                // 获取目录名称
+                String tmpStr = entryName.substring(0, entryName.lastIndexOf(File.separator));
+                // 将目录中的 "/" 全部替换成 "."
+                tmpStr = join(tmpStr.split(File.separator), ".");
+
+                if (!packageName.equals(tmpStr)) {
+                    // 如果包名和目录名不相等,
+                    // 则直接跳过!
+                    continue;
+                }
+            }
+
+            String clazzName;
+
+            // 清除最后的 .class 结尾
+            clazzName = entryName.substring(0, entryName.lastIndexOf('.'));
+            // 将所有的 / 修改为 .
+            clazzName = join(clazzName.split(File.separator), ".");
+
+            // 加载类定义
+            Class<?> clazzObj = Class.forName(clazzName);
+
+            if (null != filter &&
+                    !filter.apply(clazzObj)) {
+                // 如果过滤器不为空,
+                // 且过滤器不接受当前类,
+                // 则直接跳过!
+                continue;
+            }
+
+            // 添加类定义到集合
+            resultList.add(clazzObj);
+        }
+
+        jarIn.close();
+
+        return resultList;
+    }
+
+    /**
+     * 使用连接符连接字符串数组
+     *
+     * @param strArr 字符串数组
+     * @param conn   连接符
+     * @return 连接后的字符串
+     */
+    static private String join(String[] strArr, String conn) {
+        if (null == strArr ||
+                strArr.length <= 0) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < strArr.length; i++) {
+            if (i > 0) {
+                // 添加连接符
+                sb.append(conn);
+            }
+
+            // 添加字符串
+            sb.append(strArr[i]);
+        }
+
+        return sb.toString();
     }
 
     private List<Class<?>> list2Dir(File dirFile, String packageName, boolean isRecursion, Function<Class<?>, Boolean> filter) throws ClassNotFoundException {
