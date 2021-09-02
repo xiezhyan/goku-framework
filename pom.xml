@@ -42,7 +42,7 @@
 
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.1.8</version>
+    <version>1.2.0</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>square-spring-boot-starter</description>
@@ -257,19 +257,10 @@
             </resource>
         </resources>
         <plugins>
-            <!-- 打包时跳过测试
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
--->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
