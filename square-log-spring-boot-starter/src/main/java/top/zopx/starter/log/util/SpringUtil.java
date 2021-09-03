@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
 import top.zopx.starter.log.constant.LogConstant;
-import top.zopx.starter.tools.tools.date.LocalDateUtils;
+import top.zopx.starter.tools.tools.date.LocalDateUtil;
 import top.zopx.starter.tools.tools.web.GlobalUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
@@ -61,7 +61,7 @@ public class SpringUtil implements ApplicationContextAware {
         map.put(LogConstant.IP, GlobalUtil.Request.getBrowserIp(request));
         map.put(LogConstant.AGENT, GlobalUtil.Request.getBrowserAgent(request));
         map.put(LogConstant.REFERENCE, GlobalUtil.Request.getBrowserRefer(request));
-        map.put(LogConstant.CREATE_TIME, LocalDateUtils.nowDateTime());
+        map.put(LogConstant.CREATE_TIME, LocalDateUtil.INSTANCE.nowDateTime());
         map.put(LogConstant.REQUEST_TYPE, request.getMethod());
     }
 
