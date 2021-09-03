@@ -8,7 +8,7 @@ import top.zopx.starter.tools.tools.strings.StringUtil;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class BeanCopierUtil {
 
 
-    private static final ConcurrentHashMap<String, BeanCopier> COPY_MAP = new ConcurrentHashMap<>(16);
+    private static final WeakHashMap<String, BeanCopier> COPY_MAP = new WeakHashMap<>(16);
 
     private boolean useConverter;
 
@@ -83,6 +83,17 @@ public class BeanCopierUtil {
     }
 
     /**
+     * 复制对象 定义转换器
+     *
+     * @param source    源对象
+     * @param target    目标对象
+     * @param converter 转换器
+     */
+    public <S, T> T copy(S source, Supplier<T> target, Converter converter) {
+        return copy(source, target.get(), converter, null);
+    }
+
+    /**
      * 复制对象 如果还存在后续操作，可以通过该方式来进行操作
      *
      * @param source    源对象
@@ -90,9 +101,9 @@ public class BeanCopierUtil {
      * @param converter 转换器
      * @param consumer  通用操作
      */
-    public <S, T> void copy(S source, T target, Converter converter, BiConsumer<S, T> consumer) {
+    public <S, T> T copy(S source, T target, Converter converter, BiConsumer<S, T> consumer) {
         if (null == source) {
-            return;
+            return null;
         }
 
         this.setConverter(null != converter);
@@ -109,6 +120,7 @@ public class BeanCopierUtil {
         if (null != consumer) {
             consumer.accept(source, target);
         }
+        return target;
     }
 
 
@@ -119,8 +131,8 @@ public class BeanCopierUtil {
      * @param target   目标对象
      * @param consumer 通用操作
      */
-    public <S, T> void copyPropertiesIgnoreNull(S source, T target, DealNullPropertiesConverter dealNullPropertiesConverter, BiConsumer<S, T> consumer) {
-        copy(source, target, dealNullPropertiesConverter, consumer);
+    public <S, T> void copyPropertiesIgnoreNull(S source, T target, BiConsumer<S, T> consumer) {
+        copy(source, target, new DealNullPropertiesConverter(target), consumer);
     }
 
     /**
@@ -144,37 +156,16 @@ public class BeanCopierUtil {
     }
 
     /**
-     * 复制集合对象
-     *
-     * @param source                      源对象
-     * @param target                      目标对象
-     * @param dealNullPropertiesConverter 忽略空值属性
-     * @param consumer                    通用操作
-     * @return List<T>
-     */
-    public <S, T> List<T> copyList(List<S> source, Supplier<T> target, DealNullPropertiesConverter dealNullPropertiesConverter, BiConsumer<S, T> consumer) {
-        return CollectionUtils.isNotEmpty(source) ? source.stream().map(item -> {
-            T t = target.get();
-            copyPropertiesIgnoreNull(item, t, dealNullPropertiesConverter, null);
-
-            if (null != consumer) {
-                consumer.accept(item, t);
-            }
-            return t;
-        }).collect(Collectors.toList()) : Collections.emptyList();
-    }
-
-    /**
      * 空值字段处理方案：
      * 源中没有数据，那么就从目标数据中取数据，
      * 如果目标数据中也没有数据，那么就真的没有数据了
      */
-    public static abstract class DealNullPropertiesConverter implements Converter {
+    public static class DealNullPropertiesConverter implements Converter {
 
-        protected static final ConcurrentHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new ConcurrentHashMap<>(64);
-        protected static final ConcurrentHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new ConcurrentHashMap<>(64);
+        protected static final WeakHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new WeakHashMap<>(64);
+        protected static final WeakHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new WeakHashMap<>(64);
 
-        private Object target;
+        private final Object target;
 
         public DealNullPropertiesConverter(Object target) {
             this.target = target;
@@ -182,7 +173,7 @@ public class BeanCopierUtil {
 
         @Override
         public Object convert(Object o, Class aClass, Object o1) {
-            if (null == o && null != target) {
+            if (null != target) {
                 return getFieldValue(target, getFields((String) o1));
             }
             return o;
@@ -232,6 +223,7 @@ public class BeanCopierUtil {
 
             if (StringUtil.isBlank(field)) {
                 field = getField(setMethod);
+                CONCURRENT_HASH_MAP_FIELD.put(setMethod, field);
             }
 
             return field;
@@ -243,8 +235,7 @@ public class BeanCopierUtil {
             System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
             // 转小写
             newStrs[0] = Character.toLowerCase(newStrs[0]);
-            CONCURRENT_HASH_MAP_FIELD.put(setMethod, String.valueOf(newStrs));
-            return CONCURRENT_HASH_MAP_FIELD.get(setMethod);
+            return String.valueOf(newStrs);
         }
     }
 }
