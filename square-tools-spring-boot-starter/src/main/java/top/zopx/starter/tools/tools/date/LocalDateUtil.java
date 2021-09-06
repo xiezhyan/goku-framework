@@ -2,7 +2,9 @@ package top.zopx.starter.tools.tools.date;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalUnit;
 
 /**
@@ -108,5 +110,14 @@ public enum LocalDateUtil {
 
     public static void main(String[] args) {
         System.out.println(LocalDateUtil.INSTANCE.getTimeByPlus(1, DateTime.MINUTE));
+        System.out.println(LocalDateUtil.INSTANCE.nowDate().with(TemporalAdjusters.firstDayOfMonth()));
+        System.out.println(LocalDateUtil.INSTANCE.nowDate().with(TemporalAdjusters.lastDayOfMonth()));
+        System.out.println(LocalDateUtil.INSTANCE.nowDate().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth()));
+        LocalDateTime start = LocalDateUtil.INSTANCE.nowDate().with(TemporalAdjusters.firstDayOfMonth()).atTime(0, 0, 0, 0);
+        LocalDateTime end = LocalDateUtil.INSTANCE.nowDate().with(TemporalAdjusters.lastDayOfMonth()).atTime(23, 59, 59, 999999999);
+        System.out.println(ChronoUnit.DAYS.between(start, end));
+        System.out.println(end.toLocalDate().toEpochDay() - start.toLocalDate().toEpochDay());
+        System.out.println((start = LocalDateTime.of(LocalDateUtil.INSTANCE.nowDate(), LocalTime.MIN)));
+        System.out.println((end = LocalDateTime.of(LocalDateUtil.INSTANCE.nowDate(), LocalTime.MAX)));
     }
 }
