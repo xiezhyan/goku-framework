@@ -1,15 +1,5 @@
 package top.zopx.starter.tools.tools.ip;
 
-import jdk.nashorn.internal.runtime.GlobalConstants;
-
-import java.io.*;
-import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-
 /**
  * Ip解析
  *

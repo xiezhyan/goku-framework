@@ -1,7 +1,7 @@
 package top.zopx.starter.activiti;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.springframework.util.Base64Utils;
+import top.zopx.starter.tools.digest.base64.Base64Util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,14 +25,13 @@ public enum IOConvert {
         byte[] bytes = new byte[inputStream.available()];
         // 将文件中的内容读入到数组中
         int read = inputStream.read(bytes);
-        data = new BASE64Encoder().encode(bytes);
+        data = Base64Utils.encodeToString(bytes);
         inputStream.close();
         return data;
     }
 
     public InputStream base64ToInput(String data) throws IOException {
-        byte[] bytes = new BASE64Decoder().decodeBuffer(data);
-        InputStream in = new ByteArrayInputStream(bytes);
-        return in;
+        byte[] bytes = Base64Util.INSTANCE.decode(data);
+        return new ByteArrayInputStream(bytes);
     }
 }
