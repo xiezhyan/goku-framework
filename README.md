@@ -22,7 +22,7 @@
 <dependency>
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <type>pom</type>
 </dependency>
 
@@ -30,37 +30,37 @@
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-tools-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-log-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-distribution-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-sms-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-mybatis-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-activiti-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
@@ -71,7 +71,7 @@
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-tools-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
@@ -94,7 +94,7 @@
 <dependency>
     <groupId>top.zopx</groupId>
     <artifactId>square-sms-spring-boot-starter</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -139,7 +139,7 @@ public void sendVer() throws Throwable {
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-log-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
@@ -159,7 +159,7 @@ class A implement ILogService {}
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-activiti-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
@@ -176,7 +176,7 @@ class A implement ILogService {}
 <dependency>
   <groupId>top.zopx</groupId>
   <artifactId>square-distribution-spring-boot-starter</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
