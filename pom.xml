@@ -12,7 +12,6 @@
         <module>square-mybatis-spring-boot-starter</module>
         <module>square-activiti-spring-boot-starter</module>
         <module>square-netty-spring-boot-starter</module>
-        <module>square-queue-spring-boot-starter</module>
     </modules>
 
     <licenses>
