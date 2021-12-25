@@ -23,6 +23,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import top.zopx.netty.configurator.NettyProperties;
 import top.zopx.netty.listener.ChannelInboundHandlerListener;
 import top.zopx.starter.tools.exceptions.BusException;
+import top.zopx.starter.tools.tools.strings.StringUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
 import java.time.Duration;
@@ -196,7 +197,6 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
     public void destory() {
         this.destory(this.appBoss, this.appWork);
         this.destory(this.websocketBoss, this.websocketWork);
-//        this.destory(this.httpBoss, this.httpBoss);
     }
 
     /**
@@ -207,51 +207,13 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
             throw new BusException("服务处理接口异常");
         }
 
-        if (null == app || null == appCodec) {
-            throw new BusException("自定义协议服务必要参数丢失");
+        if (null != app && null != appCodec) {
+            this.bindAppServer();
         }
-        this.bindAppServer();
 
-        if (null == webs || null == websCodec) {
-            throw new BusException("websocket服务必要参数丢失");
+        if (null != webs || null != websCodec) {
+            this.bindWebsocketServer();
         }
-        this.bindWebsocketServer();
-
-//        if (null == http) {
-//            throw new BusException("Http服务必要参数丢失");
-//        }
-//        this.bindHttpServer();
-    }
-
-    /**
-     * http服务
-     */
-    private void bindHttpServer() {
-        createHttpEventLoopGroup();
-
-        final ChannelFuture channelFuture = createServerBootstrap(http.getPort(), socketChannel -> {
-            socketChannel.pipeline().addLast(
-                    new HttpServerCodec(),
-                    new HttpObjectAggregator(65535),
-                    new ChunkedWriteHandler(),
-                    new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
-                    new LoggingHandler(LogLevel.INFO),
-                    NettyServerAcceptor.this
-            );
-        }, httpBoss, httpWork);
-
-        channelFuture.channel()
-                .newSucceededFuture()
-                .addListener(future -> {
-                    String log = "\n ____________________________________________\n" +
-                            "|                                            |\n" +
-                            "|   Http服务启动成功,端口设置：{}         |\n" +
-                            "|____________________________________________|";
-                    LogUtil.getInstance(NettyServerAcceptor.class).info(log, http.getPort());
-                })
-                .channel()
-                .closeFuture()
-                .addListener(future -> this.destory(this.httpBoss, this.httpWork));
     }
 
     /**
@@ -265,7 +227,7 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
             ch.pipeline().addLast(
                     new HttpServerCodec(),
                     new HttpObjectAggregator(65535),
-                    new WebSocketServerProtocolHandler("/", false),
+                    new WebSocketServerProtocolHandler(StringUtil.isBlank(webs.getWsPath()) ? "/" : webs.getWsPath(), false),
                     new ChunkedWriteHandler(),
                     websCodec,
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),

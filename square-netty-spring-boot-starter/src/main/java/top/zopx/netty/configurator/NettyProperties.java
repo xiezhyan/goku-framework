@@ -9,7 +9,7 @@ import java.time.Duration;
  * @date 2021/10/3
  * @email xiezhyan@126.com
  */
-@ConfigurationProperties("netty")
+@ConfigurationProperties("ksi.netty")
 public class NettyProperties {
 
     /**
@@ -88,12 +88,23 @@ public class NettyProperties {
          */
         private Integer port = 23457;
 
+        private String wsPath = "/";
+
         public Integer getPort() {
             return port;
         }
 
         public void setPort(Integer port) {
             this.port = port;
+        }
+
+        public String getWsPath() {
+            return wsPath;
+        }
+
+        public Webs setWsPath(String wsPath) {
+            this.wsPath = wsPath;
+            return this;
         }
     }
 

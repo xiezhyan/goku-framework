@@ -3,9 +3,7 @@ package top.zopx.starter.tools.tools.copy;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.cglib.core.Converter;
-import top.zopx.starter.tools.tools.strings.StringUtil;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
  * @date 2020/12/12
  */
 public class BeanCopierUtil {
-
 
     private static final WeakHashMap<String, BeanCopier> COPY_MAP = new WeakHashMap<>(16);
 
@@ -83,17 +80,6 @@ public class BeanCopierUtil {
     }
 
     /**
-     * 复制对象 定义转换器
-     *
-     * @param source    源对象
-     * @param target    目标对象
-     * @param converter 转换器
-     */
-    public <S, T> T copy(S source, Supplier<T> target, Converter converter) {
-        return copy(source, target.get(), converter, null);
-    }
-
-    /**
      * 复制对象 如果还存在后续操作，可以通过该方式来进行操作
      *
      * @param source    源对象
@@ -125,17 +111,6 @@ public class BeanCopierUtil {
 
 
     /**
-     * 复制对象 空值定义转换
-     *
-     * @param source   源对象
-     * @param target   目标对象
-     * @param consumer 通用操作
-     */
-    public <S, T> void copyPropertiesIgnoreNull(S source, T target, BiConsumer<S, T> consumer) {
-        copy(source, target, new DealNullPropertiesConverter(target), consumer);
-    }
-
-    /**
      * 复制集合对象
      *
      * @param source   源对象
@@ -153,89 +128,5 @@ public class BeanCopierUtil {
             }
             return t;
         }).collect(Collectors.toList()) : Collections.emptyList();
-    }
-
-    /**
-     * 空值字段处理方案：
-     * 源中没有数据，那么就从目标数据中取数据，
-     * 如果目标数据中也没有数据，那么就真的没有数据了
-     */
-    public static class DealNullPropertiesConverter implements Converter {
-
-        protected static final WeakHashMap<String, String> CONCURRENT_HASH_MAP_FIELD = new WeakHashMap<>(64);
-        protected static final WeakHashMap<String, Object> CONCURRENT_HASH_MAP_OBJECT = new WeakHashMap<>(64);
-
-        private final Object target;
-
-        public DealNullPropertiesConverter(Object target) {
-            this.target = target;
-        }
-
-        @Override
-        public Object convert(Object o, Class aClass, Object o1) {
-            if (null != target) {
-                return getFieldValue(target, getFields((String) o1));
-            }
-            return o;
-        }
-
-        /**
-         * 反射获取当前成员变量的值
-         *
-         * @param target 目标
-         * @param field  变量名称
-         * @return 返回值
-         */
-        private Object getFieldValue(Object target, String field) {
-
-            Object o = CONCURRENT_HASH_MAP_OBJECT.get(field);
-
-            if (null == o) {
-                try {
-                    o = reflectField(target, field);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return o;
-        }
-
-        private Object reflectField(Object target, String field) throws Exception {
-            Field declaredField = target.getClass().getDeclaredField(field);
-            declaredField.setAccessible(true);
-            Object o = declaredField.get(target);
-            if (null != o) {
-                CONCURRENT_HASH_MAP_OBJECT.put(field, o);
-            }
-            declaredField.setAccessible(false);
-            return o;
-        }
-
-        /**
-         * 将setXX 转成xX
-         *
-         * @param setMethod setXX方法
-         * @return xX
-         */
-        private String getFields(String setMethod) {
-            String field = CONCURRENT_HASH_MAP_FIELD.get(setMethod);
-
-            if (StringUtil.isBlank(field)) {
-                field = getField(setMethod);
-                CONCURRENT_HASH_MAP_FIELD.put(setMethod, field);
-            }
-
-            return field;
-        }
-
-        private String getField(String setMethod) {
-            int len;
-            char[] newStrs = new char[(len = setMethod.length() - 3)];
-            System.arraycopy(setMethod.toCharArray(), 3, newStrs, 0, len);
-            // 转小写
-            newStrs[0] = Character.toLowerCase(newStrs[0]);
-            return String.valueOf(newStrs);
-        }
     }
 }

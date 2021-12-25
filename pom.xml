@@ -77,6 +77,8 @@
         <zookeeper.version>3.6.2</zookeeper.version>
 
         <validator.version>6.1.5.Final</validator.version>
+
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -144,6 +146,14 @@
                 </exclusions>
             </dependency>
             <!--zookeeper end-->
+
+            <!-- bean copy start -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <!-- bean copy end -->
         </dependencies>
     </dependencyManagement>
 
@@ -334,9 +344,26 @@
                                     <charset>UTF-8</charset>
                                     <additionalparam>-Xdoclint:none</additionalparam>
                                 </configuration>
-
                             </execution>
                         </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <source>1.8</source> <!-- depending on your project -->
+                            <target>1.8</target> <!-- depending on your project -->
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${org.mapstruct.version}</version>
+                                </path>
+                                <!-- other annotation processors -->
+                            </annotationProcessorPaths>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -368,6 +395,24 @@
                             <source>${maven.compiler.source}</source>
                             <target>${maven.compiler.target}</target>
                             <encoding>UTF-8</encoding>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.1</version>
+                        <configuration>
+                            <source>${maven.compiler.source}</source> <!-- depending on your project -->
+                            <target>${maven.compiler.target}</target> <!-- depending on your project -->
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${org.mapstruct.version}</version>
+                                </path>
+                                <!-- other annotation processors -->
+                            </annotationProcessorPaths>
                         </configuration>
                     </plugin>
                 </plugins>

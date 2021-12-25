@@ -101,6 +101,13 @@ public final class LogUtil {
         LOGGER.error(msg, args);
     }
 
+    public void error(String msg, Throwable t) {
+        if (isInfo()) {
+            return;
+        }
+        LOGGER.error(msg, t);
+    }
+
     public void warn(String msg) {
         if (isWarn()) {
             return;

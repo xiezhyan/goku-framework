@@ -11,25 +11,6 @@ import io.netty.handler.timeout.IdleStateEvent;
 public interface ChannelInboundHandlerListener {
 
     /**
-     * 链接进入
-     * @param ctx
-     */
-    default void doActive(ChannelHandlerContext ctx) {}
-
-    /**
-     * 链接断开
-     * @param ctx
-     */
-    default void doInactive(ChannelHandlerContext ctx) {}
-
-    /**
-     * 消息读取
-     * @param ctx
-     * @param msg
-     */
-    void doRead(ChannelHandlerContext ctx, Object msg);
-
-    /**
      * 心跳机制
      * @param ctx
      * @param evt
@@ -42,4 +23,22 @@ public interface ChannelInboundHandlerListener {
      * @param cause
      */
     default void doException(ChannelHandlerContext ctx, Throwable cause) {}
+
+    /**
+     * 链接进入
+     * @param ctx
+     */
+    void doActive(ChannelHandlerContext ctx);
+    /**
+     * 消息读取
+     * @param ctx
+     * @param msg
+     */
+    void doRead(ChannelHandlerContext ctx, Object msg);
+
+    /**
+     * 链接断开
+     * @param ctx
+     */
+    void doInactive(ChannelHandlerContext ctx);
 }
