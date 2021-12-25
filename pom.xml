@@ -61,7 +61,7 @@
 
         <spring.boot.version>2.4.6</spring.boot.version>
         <spring.cloud.version>2020.0.3</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
 
@@ -271,6 +271,14 @@
                             <source>${maven.compiler.source}</source>
                             <target>${maven.compiler.target}</target>
                             <encoding>UTF-8</encoding>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${org.mapstruct.version}</version>
+                                </path>
+                                <!-- other annotation processors -->
+                            </annotationProcessorPaths>
                         </configuration>
                     </plugin>
                     <!-- 以下都为上传jar默认配置不做修改 -->
@@ -347,24 +355,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
-                        <configuration>
-                            <source>1.8</source> <!-- depending on your project -->
-                            <target>1.8</target> <!-- depending on your project -->
-                            <annotationProcessorPaths>
-                                <path>
-                                    <groupId>org.mapstruct</groupId>
-                                    <artifactId>mapstruct-processor</artifactId>
-                                    <version>${org.mapstruct.version}</version>
-                                </path>
-                                <!-- other annotation processors -->
-                            </annotationProcessorPaths>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -395,16 +385,6 @@
                             <source>${maven.compiler.source}</source>
                             <target>${maven.compiler.target}</target>
                             <encoding>UTF-8</encoding>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.1</version>
-                        <configuration>
-                            <source>${maven.compiler.source}</source> <!-- depending on your project -->
-                            <target>${maven.compiler.target}</target> <!-- depending on your project -->
                             <annotationProcessorPaths>
                                 <path>
                                     <groupId>org.mapstruct</groupId>
