@@ -61,7 +61,7 @@
 
         <spring.boot.version>2.4.6</spring.boot.version>
         <spring.cloud.version>2020.0.3</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
 
         <mybatis.plus.version>3.4.0</mybatis.plus.version>
 
