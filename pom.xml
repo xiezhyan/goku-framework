@@ -6,8 +6,6 @@
 
     <modules>
         <module>square-tools-spring-boot-starter</module>
-        <module>square-sms-spring-boot-starter</module>
-        <module>square-distribution-spring-boot-starter</module>
         <module>square-log-spring-boot-starter</module>
         <module>square-mybatis-spring-boot-starter</module>
         <module>square-activiti-spring-boot-starter</module>

@@ -89,50 +89,6 @@
     - web相关
     - ID生成
 
-#### sms
-```xml
-<dependency>
-    <groupId>top.zopx</groupId>
-    <artifactId>square-sms-spring-boot-starter</artifactId>
-    <version>1.3.0</version>
-</dependency>
-```
-
-配置
-```yaml
-square:
-  sms:
-    sms-li:
-      open: true
-      access-key-id: ddd
-      access-secret: ddd
-      sign-name: 批量无效
-      region-id: 根据厂商指定
-```
-
-启动类添加
-```java
-@EnableSms
-```
-
-调用方法
-```java
-@Resource
-private ISmsService smsService;
-
-public void sendVer() throws Throwable {
-    smsService.sendSms(
-            SmsRequest.create()
-                    .phoneNumber("********")
-                    .template("短信末班|内容")
-                    .signName("短信签名")
-                    .templateParam("code", RandomUtils.nextLong(1000, 9999))
-                    .builder(),
-            System.out::println
-    );
-}
-```
-
 #### log
 
 ```xml
@@ -169,30 +125,3 @@ class A implement ILogService {}
 ```
 
 涉及接口在Activiti项目下README.md文件中
-
-#### distribution
-
-```xml
-<dependency>
-  <groupId>top.zopx</groupId>
-  <artifactId>square-distribution-spring-boot-starter</artifactId>
-  <version>1.3.0</version>
-</dependency>
-```
-
-启动类
-```java
-@EnableDistribution
-```
-
-包含单机、redis、zookeeper三种锁，单独配置
-
-```java
-@Distribution
-public void lock1() {}
-
-
-@Distribution(key = "'lock:'+#{name}")
-public void lock2(String name) {}
-```
-
