@@ -12,23 +12,23 @@ public class ProcessRequest implements Serializable {
 
     /**
      * 流程图唯一标识
-     * @required
+     * 
      */
     private String processDefinitionKey;
     /**
      * 业务关联键
-     * @required
+     * 
      */
     private String businessKey;
     /**
      * 参数
-     * @required
+     * 
      */
     private Map<String, Object> variables;
 
     /**
      * 代理人:[设置代理人接口必填]
-     * @required
+     * 
      */
     private String assgnee;
 
