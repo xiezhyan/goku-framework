@@ -32,42 +32,11 @@ public class NettyProperties {
      */
     private Integer workThreadPool = 4;
 
-    private Http http = new Http();
-
     private App app = new App();
 
     private Webs webs = new Webs();
 
-    public static class Http {
-        /**
-         * http端绑定端口
-         */
-        private Integer port = 23458;
-
-        /**
-         * response类型
-         */
-        private String contentType = "application/json;charset=UTF-8";
-
-        public Integer getPort() {
-            return port;
-        }
-
-        public void setPort(Integer port) {
-            this.port = port;
-        }
-
-        public String getContentType() {
-            return contentType;
-        }
-
-        public Http setContentType(String contentType) {
-            this.contentType = contentType;
-            return this;
-        }
-    }
-
-    public static class  App {
+    public static class App {
         /**
          * APP端绑定端口
          */
@@ -106,14 +75,6 @@ public class NettyProperties {
             this.wsPath = wsPath;
             return this;
         }
-    }
-
-    public Http getHttp() {
-        return http;
-    }
-
-    public void setHttp(Http http) {
-        this.http = http;
     }
 
     public App getApp() {

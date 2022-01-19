@@ -1,6 +1,5 @@
 package top.zopx.netty.parse;
 
-import com.google.protobuf.GeneratedMessageV3;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -9,19 +8,15 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.ByteToMessageCodec;
-import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import top.zopx.netty.configurator.NettyProperties;
-import top.zopx.netty.listener.ChannelInboundHandlerListener;
+import top.zopx.netty.listener.BaseChannelHandlerFactory;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.tools.tools.strings.StringUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
@@ -52,10 +47,6 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
     private final NettyProperties.Webs webs;
 
     /**
-     * http端端口
-     */
-    private final NettyProperties.Http http;
-    /**
      * 读操作超时时间
      */
     private final Duration readTimeout;
@@ -71,11 +62,6 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
      * 工作线程数
      */
     private final int workThreadPool;
-
-    /**
-     * 消息处理器
-     */
-    private final ChannelInboundHandlerListener listener;
 
     /**
      * APP端主线程组
@@ -95,15 +81,6 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
     private EventLoopGroup websocketWork;
 
     /**
-     * WS端主线程组
-     */
-    private EventLoopGroup httpBoss;
-    /**
-     * WS端工作线程组
-     */
-    private EventLoopGroup httpWork;
-
-    /**
      * 主线程池方法
      */
     private final ThreadFactory bossFactory;
@@ -112,18 +89,10 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
      */
     private final ThreadFactory workFactory;
 
-    /**
-     * websocket解码编码器
-     */
-    private final MessageToMessageCodec<BinaryWebSocketFrame, GeneratedMessageV3> websCodec;
-    /**
-     * 自定义协议解码编码器
-     */
-    private final ByteToMessageCodec<GeneratedMessageV3> appCodec;
+    private final BaseChannelHandlerFactory factory;
 
     public NettyServerAcceptor(Builder builder) {
         this.app = builder.app;
-        this.http = builder.http;
         this.webs = builder.webs;
 
         this.readTimeout = builder.readTimeout;
@@ -131,10 +100,7 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         this.bossThreadPool = builder.bossThreadPool;
         this.workThreadPool = builder.workThreadPool;
 
-        this.listener = builder.listener;
-
-        this.websCodec = builder.websCodec;
-        this.appCodec = builder.appCodec;
+        this.factory = builder.factory;
 
         bossFactory = r -> new Thread(r, "square-boss");
         workFactory = r -> new Thread(r, "square-work");
@@ -166,16 +132,6 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private void createHttpEventLoopGroup() {
-        if (isLinux()) {
-            httpBoss = new EpollEventLoopGroup(bossThreadPool, bossFactory);
-            httpWork = new EpollEventLoopGroup(workThreadPool, workFactory);
-        } else {
-            httpBoss = new NioEventLoopGroup(bossThreadPool, bossFactory);
-            httpWork = new NioEventLoopGroup(workThreadPool, workFactory);
-        }
-    }
-
     /**
      * 优雅停机
      *
@@ -203,15 +159,15 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
      * 启动服务
      */
     public void bind() {
-        if (null == this.listener) {
-            throw new BusException("服务处理接口异常");
+        if (null == factory) {
+            throw new BusException("HandleFactory处理器异常");
         }
 
-        if (null != app && null != appCodec) {
+        if (null != app) {
             this.bindAppServer();
         }
 
-        if (null != webs || null != websCodec) {
+        if (null != webs) {
             this.bindWebsocketServer();
         }
     }
@@ -229,7 +185,7 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
                     new HttpObjectAggregator(65535),
                     new WebSocketServerProtocolHandler(StringUtil.isBlank(webs.getWsPath()) ? "/" : webs.getWsPath(), false),
                     new ChunkedWriteHandler(),
-                    websCodec,
+                    factory.createWSMsgHandler(),
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
                     new LoggingHandler(LogLevel.INFO),
                     NettyServerAcceptor.this
@@ -259,7 +215,7 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
 
         ChannelFuture channelFuture = createServerBootstrap(app.getPort(), ch -> {
             ch.pipeline().addLast(
-                    appCodec,
+                    factory.createAppMsgHandler(),
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
                     new LoggingHandler(LogLevel.INFO),
                     NettyServerAcceptor.this
@@ -294,6 +250,7 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         return new ServerBootstrap()
                 .group(boss, work)
                 .channel(this.getServerChannel())
+                .option(ChannelOption.SO_BACKLOG, 128)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
@@ -315,85 +272,18 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("linux");
     }
 
-    /**
-     * 连接进来
-     */
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        LogUtil.getInstance(getClass()).info("新进客户端连接进来：{}，{}", ctx.name(), ctx.channel().id());
-        listener.doActive(ctx);
-    }
-
-    /**
-     * 连接断开
-     */
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        LogUtil.getInstance(getClass()).info("客户端断开连接：{}", ctx.name());
-        listener.doInactive(ctx);
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        // 获取消息类
-        Class<?> msgClazz = msg.getClass();
-
-        LogUtil.getInstance(getClass()).info(
-                "收到客户端消息, msgClazz = {}, msg = {}",
-                msgClazz.getName(),
-                msg
-        );
-
-        listener.doRead(ctx, msg);
-    }
-
-    /**
-     * 事件处理
-     */
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof IdleStateEvent) {
-            listener.doIdleStateEvent(ctx, (IdleStateEvent) evt);
-        } else {
-            super.userEventTriggered(ctx, evt);
-        }
-    }
-
-    /**
-     * 异常信息
-     */
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        LogUtil.getInstance(getClass()).error("异常信息：{}", cause.getMessage());
-        listener.doException(ctx, cause);
-    }
-
     public static class Builder {
         NettyProperties.App app;
-        NettyProperties.Http http;
         NettyProperties.Webs webs;
         private Duration readTimeout;
         private Duration writeTimeout;
         private int bossThreadPool;
         private int workThreadPool;
-        private ChannelInboundHandlerListener listener;
 
-        /**
-         * websocket解码编码器
-         */
-        MessageToMessageCodec<BinaryWebSocketFrame, GeneratedMessageV3> websCodec;
-        /**
-         * 自定义协议解码编码器
-         */
-        ByteToMessageCodec<GeneratedMessageV3> appCodec;
+        private BaseChannelHandlerFactory factory;
 
         public Builder setApp(NettyProperties.App app) {
             this.app = app;
-            return this;
-        }
-
-        public Builder setHttp(NettyProperties.Http http) {
-            this.http = http;
             return this;
         }
 
@@ -422,18 +312,8 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
             return this;
         }
 
-        public Builder setListener(ChannelInboundHandlerListener listener) {
-            this.listener = listener;
-            return this;
-        }
-
-        public Builder setWebsCodec(MessageToMessageCodec<BinaryWebSocketFrame, GeneratedMessageV3> websCodec) {
-            this.websCodec = websCodec;
-            return this;
-        }
-
-        public Builder setAppCodec(ByteToMessageCodec<GeneratedMessageV3> appCodec) {
-            this.appCodec = appCodec;
+        public Builder setFactory(BaseChannelHandlerFactory factory) {
+            this.factory = factory;
             return this;
         }
 
