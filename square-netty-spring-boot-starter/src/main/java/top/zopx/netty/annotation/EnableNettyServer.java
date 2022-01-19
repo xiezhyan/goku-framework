@@ -26,44 +26,26 @@ import java.lang.annotation.Target;
  *                 .setWebs(nettyProperties.getWebs())
  *                 .setWriteTimeout(nettyProperties.getWriteTimeout())
  *                 .setReadTimeout(nettyProperties.getReadTimeout())
- *                 .setListener(new ChannelInboundHandlerListener() {
+ *                 .setFactory(new BaseChannelHandlerFactory() {
  *                     @Override
- *                     public void doActive(ChannelHandlerContext ctx) {
- *                         // 连上的处理方式
+ *                     public ChannelHandler createAppMsgHandler() {
+ *                         return new ChannelDuplexHandler() {
+ *                             @Override
+ *                             public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+ *
+ *                             }
+ *
+ *                             @Override
+ *                             public void read(ChannelHandlerContext ctx) throws Exception {
+ *                                 super.read(ctx);
+ *                             }
+ *
+ *                         };
  *                     }
  *
  *                     @Override
- *                     public void doRead(ChannelHandlerContext ctx, Object msg) {
- *                         System.out.println(msg.toString());
- *                         // 1、根据msg的class类型获取执行 ICmdHandler
- *                         // 2、处理指令
- *                     }
- *
- *                     @Override
- *                     public void doInactive(ChannelHandlerContext ctx) {
- *                         // 断开的处理方式
- *                     }
- *                 })
- *                 .setAppCodec(new ByteToMessageCodec<GeneratedMessageV3>() {
- *                     @Override
- *                     protected void encode(ChannelHandlerContext channelHandlerContext, GeneratedMessageV3 generatedMessageV3, ByteBuf byteBuf) throws Exception {
- *                         // 自定义协议编码器
- *                     }
- *
- *                     @Override
- *                     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
- *                         // 自定义协议解码器
- *                     }
- *                 })
- *                 .setWebsCodec(new MessageToMessageCodec<BinaryWebSocketFrame, GeneratedMessageV3>() {
- *                     @Override
- *                     protected void encode(ChannelHandlerContext channelHandlerContext, GeneratedMessageV3 generatedMessageV3, List<Object> list) throws Exception {
- *                         // websocket 解码器
- *                     }
- *
- *                     @Override
- *                     protected void decode(ChannelHandlerContext channelHandlerContext, BinaryWebSocketFrame binaryWebSocketFrame, List<Object> list) throws Exception {
- *                         // websocket编码器 out.add(new BinaryWebSocketFrame(buff));
+ *                     public ChannelHandler createWSMsgHandler() {
+ *                         return null;
  *                     }
  *                 })
  *                 .build();
