@@ -1,4 +1,4 @@
-package top.zopx.starter.log.advice;
+package top.zopx.starter.log.configurator.mvc.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -7,7 +7,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import top.zopx.starter.log.listener.error.ErrorPublish;
+import top.zopx.starter.log.event.listener.error.ErrorPublish;
 import top.zopx.starter.tools.basic.R;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.tools.tools.json.impl.FJsonUtil;

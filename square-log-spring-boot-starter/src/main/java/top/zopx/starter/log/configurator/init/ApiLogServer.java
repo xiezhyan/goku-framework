@@ -1,7 +1,7 @@
-package top.zopx.starter.log.server;
+package top.zopx.starter.log.configurator.init;
 
 import org.springframework.context.annotation.Import;
-import top.zopx.starter.log.aspect.ApiLogAspect;
+import top.zopx.starter.log.configurator.mvc.aspect.ApiLogAspect;
 
 /**
  * @author sanq.Yan

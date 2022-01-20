@@ -4,8 +4,6 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @date 2021/6/30
@@ -148,36 +145,5 @@ public class AcitvitiTest {
     public void test09() {
         boolean b = businessFlowService.revokeFlow("level", businessKey, "1", "填错了");
         System.out.println("b:" + b);
-    }
-
-
-    @Resource
-    private CuratorFramework curatorFramework;
-
-
-    @Test
-    public void testLock() {
-        for (int i = 0; i < 10; i++) {
-            new Thread(() -> {
-                InterProcessMutex interProcessMutex = new InterProcessMutex(curatorFramework, "/lock");
-                try {
-                    interProcessMutex.acquire();
-                    System.out.println(Thread.currentThread().getName() + ": lock");
-                    TimeUnit.SECONDS.sleep(2L);
-                    System.out.println(Thread.currentThread().getName() + ": unlock");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        interProcessMutex.release();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-        }
-
-        while (true) {}
     }
 }

@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * @date 2021/9/10
  */
 @ChannelHandler.Sharable
-public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
+public class NettyServerAcceptor {
 
     /**
      * APP端端口
@@ -180,16 +180,26 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         createWebSocketEventLoopGroup();
 
         ChannelFuture channelFuture = createServerBootstrap(webs.getPort(), ch -> {
-            ch.pipeline().addLast(
+            LogUtil.getInstance(NettyServerAcceptor.class).info("WS Server init Handler");
+
+            final ChannelHandler msgHandler = factory.createWSMsgHandler();
+
+            ChannelHandler[] handlers = {
                     new HttpServerCodec(),
                     new HttpObjectAggregator(65535),
                     new WebSocketServerProtocolHandler(StringUtil.isBlank(webs.getWsPath()) ? "/" : webs.getWsPath(), false),
                     new ChunkedWriteHandler(),
-                    factory.createWSMsgHandler(),
+                    msgHandler,
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
                     new LoggingHandler(LogLevel.INFO),
-                    NettyServerAcceptor.this
-            );
+            };
+
+            for (ChannelHandler h : handlers) {
+                if (null != h) {
+                    ch.pipeline().addLast(h);
+                }
+            }
+
         }, websocketBoss, websocketWork);
 
         channelFuture.channel()
@@ -214,12 +224,21 @@ public class NettyServerAcceptor extends ChannelInboundHandlerAdapter {
         createAppEventLoopGroup();
 
         ChannelFuture channelFuture = createServerBootstrap(app.getPort(), ch -> {
-            ch.pipeline().addLast(
-                    factory.createAppMsgHandler(),
+            LogUtil.getInstance(NettyServerAcceptor.class).info("App Server init Handler");
+
+            final ChannelHandler msgHandler = factory.createAppMsgHandler();
+
+            ChannelHandler[] handlers = {
+                    msgHandler, // 消息处理器
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
-                    new LoggingHandler(LogLevel.INFO),
-                    NettyServerAcceptor.this
-            );
+                    new LoggingHandler(LogLevel.INFO)
+            };
+
+            for (ChannelHandler h : handlers) {
+                if (null != h) {
+                    ch.pipeline().addLast(h);
+                }
+            }
         }, appBoss, appWork);
 
         channelFuture

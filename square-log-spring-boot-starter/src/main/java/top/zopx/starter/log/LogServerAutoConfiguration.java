@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
-import top.zopx.starter.log.listener.PublishEventListener;
-import top.zopx.starter.log.properties.SquareLogProperties;
-import top.zopx.starter.log.server.ApiLogServer;
-import top.zopx.starter.log.server.ErrorLogServer;
+import top.zopx.starter.log.event.listener.PublishEventListener;
+import top.zopx.starter.log.configurator.properties.SquareLogProperties;
+import top.zopx.starter.log.configurator.init.ApiLogServer;
+import top.zopx.starter.log.configurator.init.ErrorLogServer;
 import top.zopx.starter.log.util.SpringUtil;
 
 /**

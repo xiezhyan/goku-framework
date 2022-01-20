@@ -1,4 +1,4 @@
-package top.zopx.starter.log.listener.api;
+package top.zopx.starter.log.event.listener.api;
 
 import top.zopx.starter.log.constant.LogConstant;
 import top.zopx.starter.log.event.ApiLogEvent;

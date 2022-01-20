@@ -1,4 +1,4 @@
-package top.zopx.starter.log.listener.error;
+package top.zopx.starter.log.event.listener.error;
 
 import org.apache.commons.lang3.ObjectUtils;
 import top.zopx.starter.log.constant.LogConstant;

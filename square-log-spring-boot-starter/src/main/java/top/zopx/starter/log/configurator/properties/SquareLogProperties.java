@@ -1,4 +1,4 @@
-package top.zopx.starter.log.properties;
+package top.zopx.starter.log.configurator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
