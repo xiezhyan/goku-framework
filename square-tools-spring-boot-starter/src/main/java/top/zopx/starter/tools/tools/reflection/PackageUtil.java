@@ -52,10 +52,10 @@ public enum PackageUtil {
 
     }
 
-    private List<Class<?>> getFileListBySuperClass(
+    public List<Class<?>> getFileListBySuperClass(
             String packageName,
             boolean isRecursion,
-            Function<Class<?>, Boolean> filter
+            Function<Class<?>, Boolean> func
     ) throws IOException, ClassNotFoundException {
         List<Class<?>> classList = Collections.emptyList();
 
@@ -70,7 +70,7 @@ public enum PackageUtil {
             String protocol = url.getProtocol();
 
             if ("file".equalsIgnoreCase(protocol)) {
-                classList = list2Dir(new File(url.getFile()), packageName, isRecursion, filter);
+                classList = list2Dir(new File(url.getFile()), packageName, isRecursion, func);
             }  else if ("jar".equalsIgnoreCase(protocol)) {
                 // 获取文件字符串
                 String fileStr = url.getFile();
@@ -89,7 +89,7 @@ public enum PackageUtil {
 
                 // 从 JAR 文件中加载类
                 classList = listClazzFromJar(
-                        new File(fileStr), packageName, isRecursion, filter
+                        new File(fileStr), packageName, isRecursion, func
                 );
             }
         }
