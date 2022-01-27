@@ -17,7 +17,7 @@
 
     <properties>
         <netty.version>4.1.68.Final</netty.version>
-        <protobuf.java.version>3.12.2</protobuf.java.version>
+        <protobuf.java.version>3.19.3</protobuf.java.version>
         <guava.version>31.0.1-jre</guava.version>
     </properties>
 
