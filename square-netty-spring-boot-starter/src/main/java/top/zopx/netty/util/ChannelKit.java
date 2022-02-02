@@ -13,7 +13,6 @@ import top.zopx.netty.constant.AttributeKeyConstant;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,7 @@ public enum ChannelKit {
     INSTANCE,
     ;
     private static final List<Channel> EMPTY_LIST = new LinkedList<>();
+
     private static final Multimap<String, Channel> SESSION_MAP = Multimaps.synchronizedMultimap(LinkedListMultimap.create());
 
     private final transient ChannelFutureListener listener = new ChannelFutureListener() {
@@ -158,38 +158,22 @@ public enum ChannelKit {
      *
      * @param channel   指定用户
      * @param msg       消息
-     * @param predicate 过滤器：pc端在线是否需要发送到移动端
+     * @param predicate 过滤器
      */
     public void write(Channel channel, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
         this.getByKey(channel).stream().filter(predicate).forEach(client -> writeToLoop(client, msg));
     }
 
     /**
-     * 指定客户端发送消息
+     * 通过Key将消息发送到指定客户端
      *
-     * @param channel    通道
-     * @param pushClient 想要发送的客户端类型
-     * @param msg        消息
+     * @param key       指定用户
+     * @param msg       消息
+     * @param predicate 过滤器
      */
-    public void write(Channel channel, int pushClient, GeneratedMessageV3 msg) {
-        this.getByKey(channel).stream().filter(client ->
-                0 == pushClient || Objects.equals(client.attr(AttributeKeyConstant.PLATFORM).get(), pushClient)
-        ).forEach(client -> writeToLoop(client, msg));
+    public void write(String key, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
+        this.getByKey(key, predicate).forEach(client -> writeToLoop(client, msg));
     }
-
-    /**
-     * 通过ID向指定客户端发送消息
-     *
-     * @param id         ID
-     * @param pushClient 想要发送的客户端类型
-     * @param msg        消息
-     */
-    public void write(String id, int pushClient, GeneratedMessageV3 msg) {
-        this.getByKey(id).stream().filter(client ->
-                0 == pushClient || Objects.equals(client.attr(AttributeKeyConstant.PLATFORM).get(), pushClient)
-        ).forEach(client -> writeToLoop(client, msg));
-    }
-
 
     public void writeToLoop(Channel channel, GeneratedMessageV3 msg) {
         channel.eventLoop().execute(() -> channel.writeAndFlush(msg));

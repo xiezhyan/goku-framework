@@ -137,4 +137,18 @@ public final class HandleGenMsgRecognizer {
             return CLASS_HANDLE_MAP;
         }
     }
+
+    /**
+     * 获取处理工具类
+     *
+     * @param msgClazz 消息对象
+     * @return ICmdHandler<? extends GeneratedMessageV3>
+     */
+    public ICmdHandler<? extends GeneratedMessageV3> get(Class<?> msgClazz) {
+        if (null == msgClazz) {
+            return null;
+        }
+
+        return CLASS_HANDLE_MAP.get(msgClazz);
+    }
 }
