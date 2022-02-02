@@ -16,7 +16,7 @@
     <name>${groupId}:${artifactId}</name>
 
     <properties>
-        <netty.version>4.1.68.Final</netty.version>
+        <netty.version>4.1.73.Final</netty.version>
         <protobuf.java.version>3.19.3</protobuf.java.version>
         <guava.version>31.0.1-jre</guava.version>
     </properties>
