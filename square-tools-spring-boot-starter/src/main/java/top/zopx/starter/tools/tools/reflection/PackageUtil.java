@@ -71,7 +71,7 @@ public enum PackageUtil {
 
             if ("file".equalsIgnoreCase(protocol)) {
                 classList = list2Dir(new File(url.getFile()), packageName, isRecursion, func);
-            }  else if ("jar".equalsIgnoreCase(protocol)) {
+            } else if ("jar".equalsIgnoreCase(protocol)) {
                 // 获取文件字符串
                 String fileStr = url.getFile();
 
@@ -105,67 +105,65 @@ public enum PackageUtil {
             return Collections.emptyList();
         }
 
-        JarInputStream jarIn = new JarInputStream(new FileInputStream(file));
-        // 进入点
-        JarEntry entry;
-
         List<Class<?>> resultList = new ArrayList<>();
 
-        while ((entry = jarIn.getNextJarEntry()) != null) {
-            if (entry.isDirectory()) {
-                continue;
-            }
+        try (JarInputStream jarIn = new JarInputStream(new FileInputStream(file))) {
+            // 进入点
+            JarEntry entry;
 
-            // 获取进入点名称
-            String entryName = entry.getName();
+            while ((entry = jarIn.getNextJarEntry()) != null) {
+                if (entry.isDirectory()) {
+                    continue;
+                }
 
-            if (!entryName.endsWith(".class")) {
-                // 如果不是以 .class 结尾,
-                // 则说明不是 JAVA 类文件, 直接跳过!
-                continue;
-            }
+                // 获取进入点名称
+                String entryName = entry.getName();
 
-            if (!isRecursion) {
-                //
-                // 如果没有开启递归模式,
-                // 那么就需要判断当前 .class 文件是否在指定目录下?
-                //
-                // 获取目录名称
-                String tmpStr = entryName.substring(0, entryName.lastIndexOf(File.separator));
-                // 将目录中的 "/" 全部替换成 "."
-                tmpStr = join(tmpStr.split(File.separator), ".");
+                if (!entryName.endsWith(".class")) {
+                    // 如果不是以 .class 结尾,
+                    // 则说明不是 JAVA 类文件, 直接跳过!
+                    continue;
+                }
 
-                if (!packageName.equals(tmpStr)) {
-                    // 如果包名和目录名不相等,
+                if (!isRecursion) {
+                    //
+                    // 如果没有开启递归模式,
+                    // 那么就需要判断当前 .class 文件是否在指定目录下?
+                    //
+                    // 获取目录名称
+                    String tmpStr = entryName.substring(0, entryName.lastIndexOf(File.separator));
+                    // 将目录中的 "/" 全部替换成 "."
+                    tmpStr = join(tmpStr.split(File.separator), ".");
+
+                    if (!packageName.equals(tmpStr)) {
+                        // 如果包名和目录名不相等,
+                        // 则直接跳过!
+                        continue;
+                    }
+                }
+
+                String clazzName;
+
+                // 清除最后的 .class 结尾
+                clazzName = entryName.substring(0, entryName.lastIndexOf('.'));
+                // 将所有的 / 修改为 .
+                clazzName = join(clazzName.split(File.separator), ".");
+
+                // 加载类定义
+                Class<?> clazzObj = Class.forName(clazzName);
+
+                if (null != filter &&
+                        !filter.apply(clazzObj)) {
+                    // 如果过滤器不为空,
+                    // 且过滤器不接受当前类,
                     // 则直接跳过!
                     continue;
                 }
+
+                // 添加类定义到集合
+                resultList.add(clazzObj);
             }
-
-            String clazzName;
-
-            // 清除最后的 .class 结尾
-            clazzName = entryName.substring(0, entryName.lastIndexOf('.'));
-            // 将所有的 / 修改为 .
-            clazzName = join(clazzName.split(File.separator), ".");
-
-            // 加载类定义
-            Class<?> clazzObj = Class.forName(clazzName);
-
-            if (null != filter &&
-                    !filter.apply(clazzObj)) {
-                // 如果过滤器不为空,
-                // 且过滤器不接受当前类,
-                // 则直接跳过!
-                continue;
-            }
-
-            // 添加类定义到集合
-            resultList.add(clazzObj);
         }
-
-        jarIn.close();
-
         return resultList;
     }
 
@@ -251,16 +249,17 @@ public enum PackageUtil {
     /**
      * 检测当前类的修饰符
      * if(isModifier(T.class, Modifier.ABSTRACT)) {
-     *     // 是ABSTRACT修饰的
+     * // 是ABSTRACT修饰的
      * }
+     *
      * @param clazz     类
      * @param modifiers 修饰符
-     * @return  false 不是modifiers修饰
-     *          true  是modifiers修饰的
+     * @return false 不是modifiers修饰
+     * true  是modifiers修饰的
      */
     public boolean isModifier(Class<?> clazz, int modifiers) {
 
-        if (null == clazz){
+        if (null == clazz) {
             return false;
         }
 
