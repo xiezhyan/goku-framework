@@ -227,12 +227,11 @@ public final class NettyClientAcceptor {
                 if (!handshaker.isHandshakeComplete()) {
                     return;
                 }
-
-                LOGGER.info(
-                        ">>> 连接到服务器成功! {} <<<",
-                        _usingConf
-                );
             }
+            LOGGER.info(
+                    ">>> 连接到服务器成功! {} <<<",
+                    _usingConf
+            );
             // 准备完成
             _ready = true;
         } catch (Exception ex) {
