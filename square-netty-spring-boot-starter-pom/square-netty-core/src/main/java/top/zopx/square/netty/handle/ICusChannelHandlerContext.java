@@ -17,6 +17,10 @@ public interface ICusChannelHandlerContext {
 
     void setRemoteSessionId(long sessionId);
 
+    int getServerId();
+
+    void setServerId(int serverId);
+
     void writeAndFlush(Object msg);
 
     default JSONObject getExtra() {
