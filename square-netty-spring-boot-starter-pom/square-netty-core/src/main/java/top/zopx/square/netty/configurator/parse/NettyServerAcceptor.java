@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * @date 2021/9/10
  */
 public class NettyServerAcceptor {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyServerAcceptor.class);
 
     /**
@@ -180,7 +180,7 @@ public class NettyServerAcceptor {
     private void bindWebsocketServer() {
         createWebSocketEventLoopGroup();
 
-        ChannelFuture channelFuture = createServerBootstrap(webs.getPort(), ch -> {
+        ChannelFuture channelFuture = createServerBootstrap(webs.getHost(), webs.getPort(), ch -> {
             LOGGER.info("WS Server init Handler");
 
             final ChannelHandler msgHandler = factory.createWSMsgHandler();
@@ -224,7 +224,7 @@ public class NettyServerAcceptor {
     private void bindAppServer() {
         createAppEventLoopGroup();
 
-        ChannelFuture channelFuture = createServerBootstrap(app.getPort(), ch -> {
+        ChannelFuture channelFuture = createServerBootstrap(app.getHost(), app.getPort(), ch -> {
             LOGGER.info("App Server init Handler");
 
             final ChannelHandler msgHandler = factory.createAppMsgHandler();
@@ -266,7 +266,7 @@ public class NettyServerAcceptor {
      * @param work     工作线程组
      * @return ChannelFuture
      */
-    private ChannelFuture createServerBootstrap(int port, Consumer<SocketChannel> consumer, EventLoopGroup boss, EventLoopGroup work) {
+    private ChannelFuture createServerBootstrap(String host, int port, Consumer<SocketChannel> consumer, EventLoopGroup boss, EventLoopGroup work) {
         return new ServerBootstrap()
                 .group(boss, work)
                 .channel(this.getServerChannel())
@@ -280,7 +280,7 @@ public class NettyServerAcceptor {
                         consumer.accept(ch);
                     }
                 })
-                .bind(port)
+                .bind(host, port)
                 .syncUninterruptibly();
     }
 

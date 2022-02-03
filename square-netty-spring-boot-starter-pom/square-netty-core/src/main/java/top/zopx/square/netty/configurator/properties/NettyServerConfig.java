@@ -35,6 +35,10 @@ public class NettyServerConfig {
 
     public static class App {
         /**
+         * bing host
+         */
+        private String host = "127.0.0.1";
+        /**
          * APP端绑定端口
          */
         private Integer port = 23456;
@@ -46,9 +50,21 @@ public class NettyServerConfig {
         public void setPort(Integer port) {
             this.port = port;
         }
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
+        }
     }
 
     public static class Webs {
+        /**
+         * bing host
+         */
+        private String host = "127.0.0.1";
         /**
          * websocket端绑定端口
          */
@@ -68,9 +84,15 @@ public class NettyServerConfig {
             return wsPath;
         }
 
-        public Webs setWsPath(String wsPath) {
+        public void setWsPath(String wsPath) {
             this.wsPath = wsPath;
-            return this;
+        }
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
         }
     }
 
