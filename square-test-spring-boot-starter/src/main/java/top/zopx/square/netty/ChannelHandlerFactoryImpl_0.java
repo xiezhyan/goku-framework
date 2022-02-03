@@ -1,7 +1,7 @@
 package top.zopx.square.netty;
 
 import io.netty.channel.ChannelHandler;
-import top.zopx.netty.listener.BaseChannelHandlerFactory;
+import top.zopx.square.netty.handle.BaseChannelHandlerFactory;
 
 /**
  * @author 俗世游子

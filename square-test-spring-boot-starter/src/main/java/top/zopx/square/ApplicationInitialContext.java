@@ -4,9 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import top.zopx.netty.configurator.properties.NettyProperties;
-import top.zopx.netty.parse.NettyServerAcceptor;
 import top.zopx.square.netty.ChannelHandlerFactoryImpl_0;
+import top.zopx.square.netty.configurator.parse.NettyServerAcceptor;
+import top.zopx.starter.netty.configurator.properties.NettyProperties;
 
 import javax.annotation.Resource;
 
