@@ -1,7 +1,6 @@
-package top.zopx.netty.configurator;
+package top.zopx.netty.configurator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 
@@ -10,7 +9,6 @@ import java.time.Duration;
  * @date 2021/10/3
  * @email xiezhyan@126.com
  */
-@Configuration
 @ConfigurationProperties("square.netty")
 public class NettyProperties {
 

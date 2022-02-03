@@ -1,7 +1,7 @@
 package top.zopx.netty.annotation;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import top.zopx.netty.configurator.NettyProperties;
+import top.zopx.netty.configurator.properties.NettyProperties;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

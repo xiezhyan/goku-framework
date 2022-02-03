@@ -1,4 +1,4 @@
-package top.zopx.netty.constant;
+package top.zopx.netty.configurator.constant;
 
 import io.netty.util.AttributeKey;
 
@@ -28,6 +28,10 @@ public interface AttributeKeyConstant {
      * 应用ID
      */
     AttributeKey<String> DEVICE_ID = AttributeKey.valueOf("DEVICE_ID");
+    /**
+     * 应用ID
+     */
+    AttributeKey<Long> SESSION_ID = AttributeKey.valueOf("SESSION_ID");
 
     /**
      * 最大心跳检测次数

@@ -8,7 +8,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import org.apache.commons.collections4.CollectionUtils;
-import top.zopx.netty.constant.AttributeKeyConstant;
+import top.zopx.netty.configurator.constant.AttributeKeyConstant;
 
 import java.util.Collection;
 import java.util.LinkedList;

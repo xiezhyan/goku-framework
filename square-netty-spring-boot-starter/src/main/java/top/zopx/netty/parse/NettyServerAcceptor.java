@@ -15,7 +15,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import top.zopx.netty.configurator.NettyProperties;
+import top.zopx.netty.configurator.properties.NettyProperties;
 import top.zopx.netty.listener.BaseChannelHandlerFactory;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.tools.tools.strings.StringUtil;
