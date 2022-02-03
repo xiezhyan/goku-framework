@@ -1,7 +1,6 @@
 package top.zopx.square.netty.handle;
 
 import com.google.protobuf.GeneratedMessageV3;
-import io.netty.channel.ChannelHandlerContext;
 
 /**
  * 基础业务处理类
@@ -10,7 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
  * @email xiezhyan@126.com
  * @date 2021/9/13
  */
-public interface ICmdHandler<T extends GeneratedMessageV3> {
+public interface ICusCmdHandler<T extends GeneratedMessageV3> {
 
     /**
      * 处理命令
@@ -18,5 +17,5 @@ public interface ICmdHandler<T extends GeneratedMessageV3> {
      * @param ctx 上下文对象
      * @param cmd 消息体
      */
-    void cmd(ChannelHandlerContext ctx, T cmd);
+    void cmd(ICusChannelHandlerContext ctx, T cmd);
 }
