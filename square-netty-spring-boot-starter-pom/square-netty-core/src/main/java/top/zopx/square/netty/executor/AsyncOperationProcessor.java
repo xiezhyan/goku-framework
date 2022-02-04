@@ -70,7 +70,7 @@ public final class AsyncOperationProcessor {
      *
      * @param bindId 绑定 ( 线程 ) Id
      * @param op     异步操作对象
-     * @param exec   同步执行线程
+     * @param exec   同步执行线程 Executor mainThreadExecutor = (cmd) -> new MainThreadPoolExecutor().process(cmd);
      * @param co     同步继续执行
      */
     public void process(int bindId, Runnable op, Executor exec, Runnable co) {
