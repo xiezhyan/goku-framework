@@ -13,9 +13,9 @@ public interface ICusChannelHandlerContext {
 
     String getUserId();
 
-    long getRemoteSessionId();
+    String getRemoteSessionId();
 
-    void setRemoteSessionId(long sessionId);
+    void setRemoteSessionId(String sessionId);
 
     int getServerId();
 

@@ -3,7 +3,8 @@ package top.zopx.square.netty.util;
 import io.netty.channel.Channel;
 import top.zopx.square.netty.configurator.constant.AttributeKeyConstant;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 对Channel设置sessionID
@@ -17,8 +18,6 @@ public enum SessionIDUtil {
     INSTANCE,
     ;
 
-    private static final AtomicLong ATOMIC_LONG = new AtomicLong(1);
-
     /**
      * 设置sessionID
      *
@@ -26,7 +25,7 @@ public enum SessionIDUtil {
      */
     public void setSessionID(Channel channel) {
         if (null != channel) {
-            channel.attr(AttributeKeyConstant.SESSION_ID).setIfAbsent(ATOMIC_LONG.incrementAndGet());
+            channel.attr(AttributeKeyConstant.SESSION_ID).setIfAbsent(UUID.randomUUID().toString().replace("-", "").toUpperCase(Locale.ROOT));
         }
     }
 
@@ -36,9 +35,9 @@ public enum SessionIDUtil {
      * @param channel 通道
      * @return sessionID
      */
-    public long getSessionID(Channel channel) {
+    public String getSessionID(Channel channel) {
         if (null == channel) {
-            return -1;
+            return "";
         }
 
         return channel.attr(AttributeKeyConstant.SESSION_ID).get();
