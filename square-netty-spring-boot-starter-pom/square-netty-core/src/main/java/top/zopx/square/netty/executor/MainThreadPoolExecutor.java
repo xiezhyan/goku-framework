@@ -5,8 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.square.netty.handle.ICmdHandler;
-import top.zopx.square.netty.handle.ICusChannelHandlerContext;
-import top.zopx.square.netty.handle.ICusCmdHandler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,23 +28,29 @@ public final class MainThreadPoolExecutor {
      */
     private final ExecutorService executorService;
 
-    public MainThreadPoolExecutor(String threadName) {
+    /**
+     * 消息处理类工厂
+     */
+    private final ICmdHandlerFactory factory;
+
+    public MainThreadPoolExecutor(String threadName, ICmdHandlerFactory factory) {
         executorService = Executors.newSingleThreadExecutor((r) -> {
             // 创建线程并起个名字
             Thread t = new Thread(r);
             t.setName(threadName);
             return t;
         });
+
+        this.factory = factory;
     }
 
     /**
      * 主线程开始执行逻辑
      *
-     * @param ctx     通道上下文
-     * @param cmdMsg  消息体
-     * @param factory 消息处理工厂
+     * @param ctx    通道上下文
+     * @param cmdMsg 消息体
      */
-    public void process(ChannelHandlerContext ctx, GeneratedMessageV3 cmdMsg, ICmdHandlerFactory factory) {
+    public void process(ChannelHandlerContext ctx, GeneratedMessageV3 cmdMsg) {
         if (null == ctx ||
                 null == cmdMsg) {
             return;
@@ -56,42 +60,6 @@ public final class MainThreadPoolExecutor {
             // 获取命令类
             final Class<?> cmdClazz = cmdMsg.getClass();
             final ICmdHandler<? extends GeneratedMessageV3> cmdHandler = factory.create(cmdClazz);
-
-            if (null == cmdHandler) {
-                LOGGER.error(
-                        "未找到命令处理器, cmdClazz = {}",
-                        cmdClazz
-                );
-                return;
-            }
-
-            LOGGER.debug(
-                    "处理命令, cmdClazz = {}",
-                    cmdClazz.getName()
-            );
-
-            cmdHandler.cmd(ctx, cast(cmdMsg));
-        });
-    }
-
-
-    /**
-     * 主线程开始执行逻辑
-     *
-     * @param ctx     通道上下文
-     * @param cmdMsg  消息体
-     * @param factory 消息处理工厂
-     */
-    public void process(ICusChannelHandlerContext ctx, GeneratedMessageV3 cmdMsg, ICmdHandlerFactory factory) {
-        if (null == ctx ||
-                null == cmdMsg) {
-            return;
-        }
-
-        this.process(() -> {
-            // 获取命令类
-            final Class<?> cmdClazz = cmdMsg.getClass();
-            final ICusCmdHandler<? extends GeneratedMessageV3> cmdHandler = factory.create_0(cmdClazz);
 
             if (null == cmdHandler) {
                 LOGGER.error(
@@ -127,6 +95,34 @@ public final class MainThreadPoolExecutor {
                     new SafeRunner(runnable)
             );
         }
+    }
+
+    public void process(ChannelHandlerContext ctx, String sessionId, String fromUserId, GeneratedMessageV3 cmdMsg) {
+        if (null == ctx ||
+                null == cmdMsg) {
+            return;
+        }
+
+        this.process(() -> {
+            // 获取命令类
+            final Class<?> cmdClazz = cmdMsg.getClass();
+            final ICmdHandler<? extends GeneratedMessageV3> cmdHandler = factory.create(cmdClazz);
+
+            if (null == cmdHandler) {
+                LOGGER.error(
+                        "未找到命令处理器, cmdClazz = {}",
+                        cmdClazz
+                );
+                return;
+            }
+
+            LOGGER.debug(
+                    "处理命令, cmdClazz = {}",
+                    cmdClazz.getName()
+            );
+
+            cmdHandler.cmd(ctx, cast(cmdMsg), sessionId, fromUserId);
+        });
     }
 
     private static class SafeRunner implements Runnable {

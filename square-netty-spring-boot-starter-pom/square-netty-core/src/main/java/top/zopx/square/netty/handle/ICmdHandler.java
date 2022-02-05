@@ -2,6 +2,8 @@ package top.zopx.square.netty.handle;
 
 import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.ChannelHandlerContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 基础业务处理类
@@ -13,10 +15,28 @@ import io.netty.channel.ChannelHandlerContext;
 public interface ICmdHandler<T extends GeneratedMessageV3> {
 
     /**
+     * 日志对象
+     */
+    Logger LOGGER = LoggerFactory.getLogger(ICmdHandler.class);
+
+
+    /**
      * 处理命令
      *
      * @param ctx 上下文对象
      * @param cmd 消息体
      */
     void cmd(ChannelHandlerContext ctx, T cmd);
+
+    /**
+     * 处理命令
+     *
+     * @param ctx        上下文对象
+     * @param cmd        消息体
+     * @param sessionId  sessionId
+     * @param fromUserId 来源用户ID
+     */
+    default void cmd(ChannelHandlerContext ctx, T cmd, String sessionId, String fromUserId) {
+        LOGGER.info("sessionId={}， fromUserId={}", sessionId, fromUserId);
+    }
 }
