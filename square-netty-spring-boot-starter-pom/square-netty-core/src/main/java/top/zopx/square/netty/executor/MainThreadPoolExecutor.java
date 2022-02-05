@@ -97,6 +97,14 @@ public final class MainThreadPoolExecutor {
         }
     }
 
+    /**
+     * 主线程开始执行逻辑
+     *
+     * @param ctx        通道上下文
+     * @param sessionId  网关服务器 SessionID
+     * @param fromUserId 来源用户 ID
+     * @param cmdMsg     消息体
+     */
     public void process(ChannelHandlerContext ctx, String sessionId, String fromUserId, GeneratedMessageV3 cmdMsg) {
         if (null == ctx ||
                 null == cmdMsg) {
