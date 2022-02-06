@@ -125,6 +125,11 @@ public final class HandleGenMsgRecognizer {
                     continue;
                 }
 
+                // 已经存在，不需要重复
+                if(CLASS_HANDLE_MAP.containsKey(parameterType)) {
+                    continue;
+                }
+
                 LOGGER.info("{} <=======> {}", parameterType.getSimpleName(), handler.getClass().getName());
                 CLASS_HANDLE_MAP.put(parameterType, handler);
             }

@@ -139,7 +139,7 @@ public enum GroupKit {
         List<ChannelMatcher> list = new ArrayList<>();
         channelKeys.forEach(
                 channelKey ->
-                        ChannelKit.INSTANCE.getByKey(channelKey, Channel::isActive)
+                        ChannelKit.getInstance().getById(channelKey, Channel::isActive)
                                 .forEach(channel -> list.add(ChannelMatchers.is(channel)))
         );
 

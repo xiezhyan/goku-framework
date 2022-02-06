@@ -8,11 +8,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import top.zopx.square.netty.configurator.constant.AttributeKeyConstant;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -23,24 +22,31 @@ import java.util.stream.Collectors;
  * @email xiezhyan@126.com
  * @date 2021/9/13
  */
-public enum ChannelKit {
+public final class ChannelKit {
 
-    /**
-     * 单例
-     */
-    INSTANCE,
-    ;
-    private static final List<Channel> EMPTY_LIST = new LinkedList<>();
 
-    private static final Multimap<String, Channel> SESSION_MAP = Multimaps.synchronizedMultimap(LinkedListMultimap.create());
-
+    private final List<Channel> EMPTY_LIST;
+    private final Multimap<String, Channel> SESSION_MAP;
     private final transient ChannelFutureListener listener = new ChannelFutureListener() {
         @Override
         public void operationComplete(ChannelFuture future) {
             future.removeListener(this);
-            INSTANCE.remove(future.channel());
+            remove(future.channel());
         }
     };
+
+    private ChannelKit() {
+        EMPTY_LIST = new LinkedList<>();
+        SESSION_MAP = Multimaps.synchronizedMultimap(LinkedListMultimap.create());
+    }
+
+    private static class Holder {
+        public static final ChannelKit INSTANCE = new ChannelKit();
+    }
+
+    public static ChannelKit getInstance() {
+        return Holder.INSTANCE;
+    }
 
     /**
      * 通过当前Channel获取绑定用户
@@ -48,7 +54,7 @@ public enum ChannelKit {
      * @param channel 通道
      * @return ID
      */
-    public String getById(Channel channel) {
+    public String getByChannel(Channel channel) {
         return channel.attr(AttributeKeyConstant.USER_ATTR).get();
     }
 
@@ -58,10 +64,19 @@ public enum ChannelKit {
      * @param id 用户ID
      * @return Collection<Channel>
      */
-    public Collection<Channel> getByKey(String id) {
+    public Collection<Channel> getById(String id) {
         return SESSION_MAP.get(id);
     }
 
+    /**
+     * 通过ID得到绑定的channel
+     *
+     * @param id 用户ID
+     * @return Channel
+     */
+    public Optional<Channel> getFirstById(String id) {
+        return getById(id).stream().findFirst();
+    }
 
     /**
      * 通过ID得到绑定的channel
@@ -70,8 +85,8 @@ public enum ChannelKit {
      * @param predicate 过滤条件
      * @return Collection<Channel>
      */
-    public Collection<Channel> getByKey(String id, Predicate<Channel> predicate) {
-        return getByKey(id).stream().filter(predicate).collect(Collectors.toList());
+    public Collection<Channel> getById(String id, Predicate<Channel> predicate) {
+        return getById(id).stream().filter(predicate).collect(Collectors.toList());
     }
 
 
@@ -81,8 +96,8 @@ public enum ChannelKit {
      * @param channel 通道
      * @return Collection<Channel>
      */
-    public Collection<Channel> getByKey(Channel channel) {
-        String id = this.getById(channel);
+    public Collection<Channel> getById(Channel channel) {
+        String id = this.getByChannel(channel);
         if (id != null) {
             return SESSION_MAP.get(id);
         }
@@ -96,8 +111,8 @@ public enum ChannelKit {
      *
      * @param channel 通道
      */
-    public void add(Channel channel) {
-        String id = this.getById(channel);
+    public void put(Channel channel) {
+        String id = this.getByChannel(channel);
         if (id != null && channel.isActive()) {
             channel.closeFuture().addListener(this.listener);
             SESSION_MAP.put(id, channel);
@@ -115,10 +130,10 @@ public enum ChannelKit {
      * @param channel 通道
      */
     public void remove(Channel channel) {
-        String id = this.getById(channel);
+        String id = this.getByChannel(channel);
         if (id != null) {
             SESSION_MAP.remove(id, channel);
-            if (CollectionUtils.isEmpty(getByKey(id))) {
+            if (CollectionUtils.isEmpty(getById(id))) {
                 SESSION_MAP.removeAll(id);
             }
         }
@@ -131,7 +146,7 @@ public enum ChannelKit {
      * @param predicate 过滤条件
      */
     public void remove(String key, Predicate<Channel> predicate) {
-        this.getByKey(key).stream().filter(predicate).forEach(this::close);
+        this.getById(key).stream().filter(predicate).forEach(this::close);
     }
 
     /**
@@ -161,7 +176,7 @@ public enum ChannelKit {
      * @param predicate 过滤器
      */
     public void write(Channel channel, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
-        this.getByKey(channel).stream().filter(predicate).forEach(client -> writeToLoop(client, msg));
+        this.getById(channel).stream().filter(predicate).forEach(client -> writeToLoop(client, msg));
     }
 
     /**
@@ -172,11 +187,47 @@ public enum ChannelKit {
      * @param predicate 过滤器
      */
     public void write(String key, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
-        this.getByKey(key, predicate).forEach(client -> writeToLoop(client, msg));
+        this.getById(key, predicate).forEach(client -> writeToLoop(client, msg));
     }
 
     public void writeToLoop(Channel channel, GeneratedMessageV3 msg) {
         channel.eventLoop().execute(() -> channel.writeAndFlush(msg));
     }
 
+    /**
+     * 设置sessionID
+     *
+     * @param channel 通道
+     */
+    public void setSessionID(Channel channel) {
+        if (null != channel) {
+            setSessionID(channel, UUID.randomUUID().toString().replace("-", "").toUpperCase(Locale.ROOT));
+        }
+    }
+
+    /**
+     * 得到sessionID
+     *
+     * @param channel 通道
+     * @return sessionID
+     */
+    public String getSessionID(Channel channel) {
+        if (null == channel) {
+            return "";
+        }
+
+        return channel.attr(AttributeKeyConstant.SESSION_ID).get();
+    }
+
+    /**
+     * 自定义sessionID
+     *
+     * @param channel   通道
+     * @param sessionId sessionID
+     */
+    public void setSessionID(Channel channel, String sessionId) {
+        if (null != channel && StringUtils.isNotBlank(sessionId)) {
+            channel.attr(AttributeKeyConstant.SESSION_ID).setIfAbsent(sessionId);
+        }
+    }
 }

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  * @date 2022/2/4
  * @email xiezhyan@126.com
  */
-public enum CommandLnUtil {
+public enum CommandLnKit {
 
 
     /**
@@ -18,7 +18,7 @@ public enum CommandLnUtil {
     INSTANCE,
     ;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommandLnUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommandLnKit.class);
 
     /**
      * 命令行参数获取
