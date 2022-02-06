@@ -5,6 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -31,17 +32,17 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * NettyClient.Config clientConf = NettyClient.Config.fromJSONObj(joServerInfo);
- *         clientConf.setChannelHandlerFactory(new ChannelHandlerFactoryImpl_0());
- *         clientConf.setCloseCallback((closeClient) -> {
- *              // Client掉线之后的操作
- *         });
- *
- *         NettyClient serverConn = new NettyClient(clientConf);
- *         serverConn.conn();
- *
- *         if (!serverConn.isReady()) {
- *             return null;
- *         }
+ * clientConf.setChannelHandlerFactory(new ChannelHandlerFactoryImpl_0());
+ * clientConf.setCloseCallback((closeClient) -> {
+ * // Client掉线之后的操作
+ * });
+ * <p>
+ * NettyClient serverConn = new NettyClient(clientConf);
+ * serverConn.conn();
+ * <p>
+ * if (!serverConn.isReady()) {
+ * return null;
+ * }
  *
  * @author 俗世游子
  * @date 2022/2/3
@@ -115,14 +116,16 @@ public final class NettyClientAcceptor {
     }
 
     /**
-     * 连接到Websocket
+     * 连接到服务器端
      */
     public void conn() {
         try {
             final URI serverURI = new URI(MessageFormat.format(
-                    "ws://{0}:{1}/websocket",
+                    "{0}://{1}:{2}/{3}",
+                    _usingConf.getWsPrefix(),
                     _usingConf.getServerHost(),
-                    String.valueOf(_usingConf.getServerPort())
+                    String.valueOf(_usingConf.getServerPort()),
+                    _usingConf.getPath()
             ));
 
             final DefaultHttpHeaders headerz = new DefaultHttpHeaders();
@@ -147,7 +150,7 @@ public final class NettyClientAcceptor {
 
             Bootstrap b = new Bootstrap();
             b.group(isLinux() ? new EpollEventLoopGroup() : new NioEventLoopGroup());
-            b.channel(NioSocketChannel.class);
+            b.channel(isLinux() ? EpollSocketChannel.class : NioSocketChannel.class);
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) {
@@ -264,7 +267,14 @@ public final class NettyClientAcceptor {
      */
     static public final class Config {
 
+        /**
+         * C/S连接模式
+         */
         public static final int APP = 1;
+
+        /**
+         * WebSocket连接模式
+         */
         public static final int WS = 2;
 
         /**
@@ -299,6 +309,16 @@ public final class NettyClientAcceptor {
         private int _serverPort;
 
         /**
+         * WebSocket连接地址
+         */
+        private String _path = "ws";
+
+        /**
+         * 是否为安全连接
+         */
+        private Boolean _safe = false;
+
+        /**
          * 信道处理器工厂
          */
         private AbstractChannelHandlerFactory _channelHandlerFactory;
@@ -307,6 +327,35 @@ public final class NettyClientAcceptor {
          * 连接关闭
          */
         private ICloseCallback _closeCallback;
+
+
+        /**
+         * 根据safe验证是否为需要签名认证的前缀
+         *
+         * @return prefix
+         */
+        public String getWsPrefix() {
+            return this._safe ? "wss" : "ws";
+        }
+
+        @JSONField(name = "path")
+        public String getPath() {
+            return _path;
+        }
+
+        public void setPath(String path) {
+            this._path = path;
+        }
+
+
+        @JSONField(name = "safe")
+        public Boolean getSafe() {
+            return _safe;
+        }
+
+        public void setSafe(Boolean safe) {
+            this._safe = safe;
+        }
 
         @JSONField(name = "serverType")
         public int getServerType() {

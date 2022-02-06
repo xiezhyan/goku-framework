@@ -29,7 +29,7 @@ public class ApplicationInitialContext implements CommandLineRunner {
     public NettyServerAcceptor nettyServerAccepter() {
         return new NettyServerAcceptor.Builder()
                 .setApp(nettyProperties.getApp())
-                .setWebs(nettyProperties.getWebs())
+                .setWs(nettyProperties.getWs())
                 .setWriteTimeout(nettyProperties.getWriteTimeout())
                 .setReadTimeout(nettyProperties.getReadTimeout())
                 .setFactory(new ChannelHandlerFactoryImpl_0())
@@ -38,6 +38,6 @@ public class ApplicationInitialContext implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        applicationContext.getBean(NettyServerAcceptor.class).bind();
+        applicationContext.getBean(NettyServerAcceptor.class).start();
     }
 }

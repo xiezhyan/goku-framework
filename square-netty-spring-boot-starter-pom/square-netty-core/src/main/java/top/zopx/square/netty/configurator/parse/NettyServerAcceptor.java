@@ -45,7 +45,7 @@ public class NettyServerAcceptor {
     /**
      * ws端端口
      */
-    private final NettyServerConfig.Webs webs;
+    private final NettyServerConfig.Ws ws;
 
     /**
      * 读操作超时时间
@@ -92,9 +92,9 @@ public class NettyServerAcceptor {
 
     private final BaseChannelHandlerFactory factory;
 
-    public NettyServerAcceptor(Builder builder) {
+    private NettyServerAcceptor(Builder builder) {
         this.app = builder.app;
-        this.webs = builder.webs;
+        this.ws = builder.ws;
 
         this.readTimeout = builder.readTimeout;
         this.writeTimeout = builder.writeTimeout;
@@ -159,7 +159,7 @@ public class NettyServerAcceptor {
     /**
      * 启动服务
      */
-    public void bind() {
+    public void start() {
         if (null == factory) {
             throw new RuntimeException("HandleFactory处理器异常");
         }
@@ -168,7 +168,7 @@ public class NettyServerAcceptor {
             this.bindAppServer();
         }
 
-        if (null != webs) {
+        if (null != ws) {
             this.bindWebsocketServer();
         }
     }
@@ -180,7 +180,7 @@ public class NettyServerAcceptor {
     private void bindWebsocketServer() {
         createWebSocketEventLoopGroup();
 
-        ChannelFuture channelFuture = createServerBootstrap(webs.getHost(), webs.getPort(), ch -> {
+        ChannelFuture channelFuture = createServerBootstrap(ws.getHost(), ws.getPort(), ch -> {
             LOGGER.info("WS Server init Handler");
 
             final ChannelHandler msgHandler = factory.createWSMsgHandler();
@@ -188,7 +188,7 @@ public class NettyServerAcceptor {
             ChannelHandler[] handlers = {
                     new HttpServerCodec(),
                     new HttpObjectAggregator(65535),
-                    new WebSocketServerProtocolHandler(StringUtils.isBlank(webs.getWsPath()) ? "/ws" : webs.getWsPath(), false),
+                    new WebSocketServerProtocolHandler(StringUtils.isBlank(ws.getPath()) ? "/ws" : ws.getPath(), false),
                     new ChunkedWriteHandler(),
                     msgHandler,
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
@@ -203,16 +203,19 @@ public class NettyServerAcceptor {
 
         }, websocketBoss, websocketWork);
 
-        channelFuture.channel()
+        final Channel serverChannel = channelFuture.channel();
+
+        serverChannel
                 .newSucceededFuture()
                 .addListener(future -> {
-                    String log = "\n ____________________________________________\n" +
-                            "|                                            |\n" +
-                            "|   WebSocket服务启动成功,端口设置：{}      |\n" +
-                            "|____________________________________________|";
-                    LOGGER.info(log, webs.getPort());
-                })
-                .channel()
+                    String log =
+                            "\n _____________________________________________________________________\n" +
+                            "                                                                   \n" +
+                            "   WebSocket服务启动成功,绑定设置：ws://{}:{}/{}                                 \n" +
+                            "_____________________________________________________________________";
+                    LOGGER.info(log, ws.getHost(), ws.getPort(), ws.getPath());
+                });
+        serverChannel
                 .closeFuture()
                 .addListener(future -> this.destory(this.websocketBoss, this.websocketWork));
     }
@@ -242,17 +245,19 @@ public class NettyServerAcceptor {
             }
         }, appBoss, appWork);
 
-        channelFuture
-                .channel()
+        final Channel serverChannel = channelFuture
+                .channel();
+        serverChannel
                 .newSucceededFuture()
                 .addListener(future -> {
-                    String log = "\n ______________________________________\n" +
-                            "|                                      |\n" +
-                            "|   App服务启动成功,端口设置：{}      |\n" +
-                            "|______________________________________|";
-                    LOGGER.info(log, app.getPort());
-                })
-                .channel()
+                    String log =
+                            "\n _______________________________________________________________\n" +
+                            "|                                                                 |\n" +
+                            "|   App服务启动成功,绑定地址：{}:{}                                  |\n" +
+                            "|_______________________________________________________________|";
+                    LOGGER.info(log, app.getHost(), app.getPort());
+                });
+        serverChannel
                 .closeFuture()
                 .addListener(future -> this.destory(this.appBoss, this.appWork));
     }
@@ -276,7 +281,7 @@ public class NettyServerAcceptor {
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) {
                         consumer.accept(ch);
                     }
                 })
@@ -294,7 +299,7 @@ public class NettyServerAcceptor {
 
     public static class Builder {
         NettyServerConfig.App app;
-        NettyServerConfig.Webs webs;
+        NettyServerConfig.Ws ws;
         private Duration readTimeout;
         private Duration writeTimeout;
         private int bossThreadPool;
@@ -307,8 +312,8 @@ public class NettyServerAcceptor {
             return this;
         }
 
-        public Builder setWebs(NettyServerConfig.Webs webs) {
-            this.webs = webs;
+        public Builder setWs(NettyServerConfig.Ws ws) {
+            this.ws = ws;
             return this;
         }
 

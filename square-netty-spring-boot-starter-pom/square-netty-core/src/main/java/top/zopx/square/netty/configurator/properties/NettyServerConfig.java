@@ -31,7 +31,7 @@ public class NettyServerConfig {
 
     private App app = new App();
 
-    private Webs webs = new Webs();
+    private Ws ws = new Ws();
 
     public static class App {
         /**
@@ -60,7 +60,7 @@ public class NettyServerConfig {
         }
     }
 
-    public static class Webs {
+    public static class Ws {
         /**
          * bing host
          */
@@ -70,7 +70,15 @@ public class NettyServerConfig {
          */
         private Integer port = 23457;
 
-        private String wsPath;
+        /**
+         * 是否为安全设置
+         */
+        private Boolean safe;
+
+        /**
+         * ws 地址
+         */
+        private String path;
 
         public Integer getPort() {
             return port;
@@ -80,13 +88,22 @@ public class NettyServerConfig {
             this.port = port;
         }
 
-        public String getWsPath() {
-            return wsPath;
+        public Boolean getSafe() {
+            return safe;
         }
 
-        public void setWsPath(String wsPath) {
-            this.wsPath = wsPath;
+        public void setSafe(Boolean safe) {
+            this.safe = safe;
         }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
         public String getHost() {
             return host;
         }
@@ -104,12 +121,12 @@ public class NettyServerConfig {
         this.app = app;
     }
 
-    public Webs getWebs() {
-        return webs;
+    public Ws getWs() {
+        return ws;
     }
 
-    public void setWebs(Webs webs) {
-        this.webs = webs;
+    public void setWs(Ws ws) {
+        this.ws = ws;
     }
 
     public Duration getReadTimeout() {
