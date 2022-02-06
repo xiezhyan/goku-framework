@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,6 +54,12 @@ public final class NettyClientAcceptor {
      * 日志对象
      */
     static private final Logger LOGGER = LoggerFactory.getLogger(NettyClientAcceptor.class);
+
+    private static final ThreadFactory THREAD_FACTORY = (r) -> new Thread(r, "square-client-work");
+
+    private static final EpollEventLoopGroup EPOLL_EVENT_LOOP_GROUP = new EpollEventLoopGroup(THREAD_FACTORY);
+
+    private static final NioEventLoopGroup NIO_EVENT_LOOP_GROUP = new NioEventLoopGroup(THREAD_FACTORY);
 
     /**
      * 使用配置
@@ -119,6 +126,15 @@ public final class NettyClientAcceptor {
      * 连接到服务器端
      */
     public void conn() {
+        conn(null);
+    }
+
+    /**
+     * 连接到服务器端
+     *
+     * @param work 自定义 EventLoopGroup
+     */
+    public void conn(EventLoopGroup work) {
         try {
             final URI serverURI = new URI(MessageFormat.format(
                     "{0}://{1}:{2}/{3}",
@@ -149,8 +165,23 @@ public final class NettyClientAcceptor {
             );
 
             Bootstrap b = new Bootstrap();
-            b.group(isLinux() ? new EpollEventLoopGroup() : new NioEventLoopGroup());
-            b.channel(isLinux() ? EpollSocketChannel.class : NioSocketChannel.class);
+            b.group(
+                    null == work ?
+                            isLinux() ?
+                                    EPOLL_EVENT_LOOP_GROUP :
+                                    NIO_EVENT_LOOP_GROUP :
+                            work
+            );
+
+            b.channel(
+                    null == work ?
+                            isLinux() ?
+                                    EpollSocketChannel.class :
+                                    NioSocketChannel.class :
+                            work instanceof EpollEventLoopGroup ?
+                                    EpollSocketChannel.class :
+                                    NioSocketChannel.class
+            );
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) {
