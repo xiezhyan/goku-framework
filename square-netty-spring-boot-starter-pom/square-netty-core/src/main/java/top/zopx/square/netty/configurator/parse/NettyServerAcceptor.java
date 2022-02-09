@@ -180,6 +180,7 @@ public class NettyServerAcceptor {
     private void bindWebsocketServer() {
         createWebSocketEventLoopGroup();
 
+        String path = StringUtils.isBlank(ws.getPath()) ? "/ws" : ws.getPath();
         ChannelFuture channelFuture = createServerBootstrap(ws.getHost(), ws.getPort(), ch -> {
             LOGGER.info("WS Server init Handler");
 
@@ -188,7 +189,7 @@ public class NettyServerAcceptor {
             ChannelHandler[] handlers = {
                     new HttpServerCodec(),
                     new HttpObjectAggregator(65535),
-                    new WebSocketServerProtocolHandler(StringUtils.isBlank(ws.getPath()) ? "/ws" : ws.getPath(), false),
+                    new WebSocketServerProtocolHandler(path, false),
                     new ChunkedWriteHandler(),
                     msgHandler,
                     new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
@@ -209,11 +210,11 @@ public class NettyServerAcceptor {
                 .newSucceededFuture()
                 .addListener(future -> {
                     String log =
-                            "\n _____________________________________________________________________\n" +
+                            "\n_____________________________________________________________________\n" +
                             "                                                                   \n" +
-                            "   WebSocket服务启动成功,绑定设置：ws://{}:{}/{}                                 \n" +
+                            "   WebSocket服务启动成功,绑定设置：【ws://{}:{}{}】                                 \n" +
                             "_____________________________________________________________________";
-                    LOGGER.info(log, ws.getHost(), ws.getPort(), ws.getPath());
+                    LOGGER.info(log, ws.getHost(), ws.getPort(), path);
                 });
         serverChannel
                 .closeFuture()
@@ -251,10 +252,10 @@ public class NettyServerAcceptor {
                 .newSucceededFuture()
                 .addListener(future -> {
                     String log =
-                            "\n _______________________________________________________________\n" +
-                            "|                                                                 |\n" +
-                            "|   App服务启动成功,绑定地址：{}:{}                                  |\n" +
-                            "|_______________________________________________________________|";
+                            "\n_____________________________________________________________________\n" +
+                            "                                                                 \n" +
+                            "   App服务启动成功,绑定地址：【{}:{}】                                  \n" +
+                            "_____________________________________________________________________";
                     LOGGER.info(log, app.getHost(), app.getPort());
                 });
         serverChannel

@@ -29,7 +29,7 @@ public class NettyServerConfig {
      */
     private Integer workThreadPool = 4;
 
-    private App app = new App();
+    private App app;
 
     private Ws ws = new Ws();
 
