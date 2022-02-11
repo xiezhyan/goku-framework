@@ -8,8 +8,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import top.zopx.starter.log.annotations.OperatorLogAnnotation;
 import top.zopx.starter.log.constant.LogConstant;
-import top.zopx.starter.log.event.listener.api.ApiPublish;
-import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
+import top.zopx.starter.log.event.ApiLogEvent;
+import top.zopx.starter.log.util.SpringUtil;
+import top.zopx.starter.tools.tools.web.GlobalUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ApiLogAspect {
         Map<String, Object> map = new HashMap<>();
         final MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
-        map.put(LogConstant.PARAMS, FJsonUtil.INSTANCE.toJson(joinPoint.getArgs()));
+        map.put(LogConstant.PARAMS, SpringUtil.getJson().toJson(joinPoint.getArgs()));
         map.put(LogConstant.CLASS_NAME, signature.getDeclaringTypeName());
         map.put(LogConstant.METHOD_NAME, signature.getName());
         map.put(LogConstant.VALUE, signature.getMethod().getDeclaredAnnotation(OperatorLogAnnotation.class).value());
@@ -39,7 +40,13 @@ public class ApiLogAspect {
         long startTime = System.currentTimeMillis();
         final Object result = joinPoint.proceed();
         map.put(LogConstant.EXEC_TIME, System.currentTimeMillis() - startTime);
-        ApiPublish.publish(map, result);
+        publish(map, result);
         return result;
+    }
+
+    public void publish(Map<String, Object> map, Object result) {
+        SpringUtil.addRequestInfo(GlobalUtil.Request.getRequest(), map);
+        map.put(LogConstant.RESULT, SpringUtil.getJson().toJson(result));
+        SpringUtil.publishEvent(new ApiLogEvent(map));
     }
 }

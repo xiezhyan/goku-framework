@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
-import top.zopx.starter.log.event.listener.PublishEventListener;
+import top.zopx.starter.log.configurator.mvc.advice.ExceptionAdvice;
+import top.zopx.starter.log.configurator.mvc.aspect.ApiLogAspect;
 import top.zopx.starter.log.configurator.properties.SquareLogProperties;
-import top.zopx.starter.log.configurator.init.ApiLogServer;
-import top.zopx.starter.log.configurator.init.ErrorLogServer;
+import top.zopx.starter.log.event.listener.PublishEventListener;
 import top.zopx.starter.log.util.SpringUtil;
 
 /**
@@ -19,10 +19,7 @@ import top.zopx.starter.log.util.SpringUtil;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({SquareLogProperties.class})
 @EnableAspectJAutoProxy
-@Import({
-        ErrorLogServer.class,
-        ApiLogServer.class
-})
+@Import({ExceptionAdvice.class, ApiLogAspect.class})
 public class LogServerAutoConfiguration {
 
     @Bean

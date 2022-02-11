@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
 import top.zopx.starter.log.constant.LogConstant;
 import top.zopx.starter.tools.tools.date.LocalDateUtil;
+import top.zopx.starter.tools.tools.json.IJson;
+import top.zopx.starter.tools.tools.json.JsonUtil;
 import top.zopx.starter.tools.tools.web.GlobalUtil;
 import top.zopx.starter.tools.tools.web.LogUtil;
 
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author sanq.Yan
@@ -43,6 +46,10 @@ public class SpringUtil implements ApplicationContextAware {
         } else {
             return null;
         }
+    }
+
+    public static IJson getJson() {
+        return Optional.ofNullable(getBean(IJson.class)).orElse(JsonUtil.getInstance().getJson());
     }
 
     public static void publishEvent(ApplicationEvent event) {

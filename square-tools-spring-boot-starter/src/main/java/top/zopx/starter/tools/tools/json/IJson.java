@@ -39,7 +39,7 @@ public interface IJson {
      * @param <T>   类型
      * @return 返回的List对象
      */
-    <T> List<T> toObjList(String json, Class<T> clazz);
+    <T> List<T> toObjList(String json, Class<T[]> clazz);
 
     /**
      * 将字符串转成Map

@@ -16,7 +16,6 @@ import top.zopx.starter.activiti.entity.response.TaskResponse;
 import top.zopx.starter.activiti.service.IActivitiService;
 import top.zopx.starter.activiti.service.IBusinessFlowService;
 import top.zopx.starter.tools.basic.Pagination;
-import top.zopx.starter.tools.tools.json.impl.FJsonUtil;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -137,8 +136,6 @@ public class AcitvitiTest {
     @Test
     public void test04() {
         List<HistoryResponse> historyTaskList = businessFlowService.getHistoryTaskList("level", businessKey, "", new Pagination());
-
-        System.out.println(FJsonUtil.INSTANCE.toJson(historyTaskList));
     }
 
     @Test
