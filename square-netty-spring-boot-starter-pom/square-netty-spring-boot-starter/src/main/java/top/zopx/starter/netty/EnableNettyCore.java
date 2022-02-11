@@ -1,6 +1,8 @@
 package top.zopx.starter.netty;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
+import top.zopx.starter.netty.configurator.init.NettyCoreInitialConfigurator;
 import top.zopx.starter.netty.configurator.properties.NettyProperties;
 
 import java.lang.annotation.ElementType;
@@ -67,5 +69,6 @@ import java.lang.annotation.Target;
 @EnableConfigurationProperties({
         NettyProperties.class
 })
-public @interface EnableNettyServer {
+@Import({NettyCoreInitialConfigurator.class})
+public @interface EnableNettyCore {
 }

@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>square-netty-core</artifactId>
+    <name>${groupId}:${artifactId}</name>
     
     <properties>
         <netty.version>4.1.73.Final</netty.version>

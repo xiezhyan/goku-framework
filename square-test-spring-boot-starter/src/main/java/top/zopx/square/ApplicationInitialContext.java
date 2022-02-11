@@ -2,10 +2,7 @@ package top.zopx.square;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import top.zopx.square.netty.ChannelHandlerFactoryImpl_0;
-import top.zopx.square.netty.configurator.parse.NettyServerAcceptor;
 import top.zopx.starter.netty.configurator.properties.NettyProperties;
 
 import javax.annotation.Resource;
@@ -25,19 +22,19 @@ public class ApplicationInitialContext implements CommandLineRunner {
     @Resource
     private ApplicationContext applicationContext;
 
-    @Bean(destroyMethod = "destory")
-    public NettyServerAcceptor nettyServerAccepter() {
-        return new NettyServerAcceptor.Builder()
-                .setApp(nettyProperties.getApp())
-                .setWs(nettyProperties.getWs())
-                .setWriteTimeout(nettyProperties.getWriteTimeout())
-                .setReadTimeout(nettyProperties.getReadTimeout())
-                .setFactory(new ChannelHandlerFactoryImpl_0())
-                .build();
-    }
+//    @Bean(destroyMethod = "destory")
+//    public NettyServerAcceptor nettyServerAccepter() {
+//        return new NettyServerAcceptor.Builder()
+//                .setApp(nettyProperties.getApp())
+//                .setWs(nettyProperties.getWs())
+//                .setWriteTimeout(nettyProperties.getWriteTimeout())
+//                .setReadTimeout(nettyProperties.getReadTimeout())
+//                .setFactory(new ChannelHandlerFactoryImpl_0())
+//                .build();
+//    }
 
     @Override
     public void run(String... args) throws Exception {
-        applicationContext.getBean(NettyServerAcceptor.class).start();
+//        applicationContext.getBean(NettyServerAcceptor.class).start();
     }
 }

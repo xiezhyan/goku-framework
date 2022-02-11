@@ -2,22 +2,19 @@ package top.zopx.starter.log.configurator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+import top.zopx.starter.tools.constants.PropertiesCons;
 
 /**
  * @author sanq.Yan
  * @date 2021/4/14
  */
-@Component
 @Configuration
-@ConfigurationProperties(prefix = SquareLogProperties.PREFIX)
+@ConfigurationProperties(prefix = PropertiesCons.Log.LOG_PROPERTIES)
 public class SquareLogProperties {
-    public static final String PREFIX = "square.log";
-
     /**
      * 是否持久化
      */
-    private boolean endurance = false;
+    private Boolean endurance = false;
 
     private String appName;
 
@@ -29,11 +26,11 @@ public class SquareLogProperties {
         this.appName = appName;
     }
 
-    public boolean isEndurance() {
+    public Boolean getEndurance() {
         return endurance;
     }
 
-    public void setEndurance(boolean endurance) {
+    public void setEndurance(Boolean endurance) {
         this.endurance = endurance;
     }
 }
