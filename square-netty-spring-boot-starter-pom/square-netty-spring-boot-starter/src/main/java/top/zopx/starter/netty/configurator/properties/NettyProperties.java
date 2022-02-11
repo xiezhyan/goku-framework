@@ -2,6 +2,7 @@ package top.zopx.starter.netty.configurator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import top.zopx.square.netty.configurator.properties.NettyServerConfig;
 import top.zopx.starter.tools.constants.PropertiesCons;
 
 import java.time.Duration;
@@ -34,103 +35,23 @@ public class NettyProperties {
      */
     private Integer workThreadPool = 4;
 
-    private App app;
+    private NettyServerConfig.App app;
 
-    private Ws ws = new Ws();
+    private NettyServerConfig.Ws ws = new NettyServerConfig.Ws();
 
-    public static class App {
-        /**
-         * bing host
-         */
-        private String host = "127.0.0.1";
-        /**
-         * APP端绑定端口
-         */
-        private Integer port = 23456;
-
-        public Integer getPort() {
-            return port;
-        }
-
-        public void setPort(Integer port) {
-            this.port = port;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public void setHost(String host) {
-            this.host = host;
-        }
-    }
-
-    public static class Ws {
-        /**
-         * bing host
-         */
-        private String host = "127.0.0.1";
-        /**
-         * websocket端绑定端口
-         */
-        private Integer port = 23457;
-
-        /**
-         * 是否为安全设置
-         */
-        private Boolean safe;
-
-        /**
-         * ws 地址
-         */
-        private String path;
-
-        public Integer getPort() {
-            return port;
-        }
-
-        public void setPort(Integer port) {
-            this.port = port;
-        }
-
-        public Boolean getSafe() {
-            return safe;
-        }
-
-        public void setSafe(Boolean safe) {
-            this.safe = safe;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public void setHost(String host) {
-            this.host = host;
-        }
-    }
-
-    public App getApp() {
+    public NettyServerConfig.App getApp() {
         return app;
     }
 
-    public void setApp(App app) {
+    public void setApp(NettyServerConfig.App app) {
         this.app = app;
     }
 
-    public Ws getWs() {
+    public NettyServerConfig.Ws getWs() {
         return ws;
     }
 
-    public void setWs(Ws ws) {
+    public void setWs(NettyServerConfig.Ws ws) {
         this.ws = ws;
     }
 
