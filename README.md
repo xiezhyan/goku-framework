@@ -109,7 +109,38 @@ class A implement ILogService {}
 
 启动类
 ```java
-@EnableActivitiDashboard
+@EnableActivitiUI
 ```
 
 涉及接口在Activiti项目下README.md文件中
+
+#### Netty
+
+```xml
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-netty-spring-boot-starter</artifactId>
+  <version>1.3.1</version>
+</dependency>
+```
+
+启动类
+```java
+@EnableNettyCore
+```
+
+```java
+@Resource
+private NettyProperties nettyProperties;
+
+@Bean(destroyMethod = "destory")
+public NettyServerAcceptor nettyServerAccepter() {
+    return new NettyServerAcceptor.Builder()
+            .setApp(nettyProperties.getApp())
+            .setWs(nettyProperties.getWs())
+            .setWriteTimeout(nettyProperties.getWriteTimeout())
+            .setReadTimeout(nettyProperties.getReadTimeout())
+            .setFactory(new ChannelHandlerFactoryImpl_0())
+            .build();
+}
+```
