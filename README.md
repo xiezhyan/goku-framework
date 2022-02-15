@@ -122,6 +122,22 @@ class A implement ILogService {}
   <artifactId>square-netty-spring-boot-starter</artifactId>
   <version>1.3.1</version>
 </dependency>
+
+<dependency>
+  <groupId>top.zopx</groupId>
+  <artifactId>square-netty-core</artifactId>
+  <version>1.3.1</version>
+  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>*</artifactId>
+    </exclusion>
+    <exclusion>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
 ```
 
 启动类
