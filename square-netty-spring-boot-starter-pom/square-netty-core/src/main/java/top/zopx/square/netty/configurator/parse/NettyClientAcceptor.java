@@ -1,7 +1,9 @@
 package top.zopx.square.netty.configurator.parse;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.epoll.EpollEventLoopGroup;
@@ -61,6 +63,7 @@ public final class NettyClientAcceptor {
 
     private static final NioEventLoopGroup NIO_EVENT_LOOP_GROUP = new NioEventLoopGroup(THREAD_FACTORY);
 
+    private static final Gson GSON = new Gson();
     /**
      * 使用配置
      */
@@ -352,11 +355,13 @@ public final class NettyClientAcceptor {
         /**
          * 信道处理器工厂
          */
+        @Expose(serialize = false, deserialize = false)
         private AbstractChannelHandlerFactory _channelHandlerFactory;
 
         /**
          * 连接关闭
          */
+        @Expose(serialize = false, deserialize = false)
         private ICloseCallback _closeCallback;
 
 
@@ -369,7 +374,7 @@ public final class NettyClientAcceptor {
             return this._safe ? "wss" : "ws";
         }
 
-        @JSONField(name = "path")
+        @SerializedName(value = "path")
         public String getPath() {
             return _path;
         }
@@ -379,7 +384,7 @@ public final class NettyClientAcceptor {
         }
 
 
-        @JSONField(name = "safe")
+        @SerializedName(value = "safe")
         public Boolean getSafe() {
             return _safe;
         }
@@ -388,7 +393,7 @@ public final class NettyClientAcceptor {
             this._safe = safe;
         }
 
-        @JSONField(name = "serverType")
+        @SerializedName(value = "serverType")
         public int getServerType() {
             return _serverType;
         }
@@ -402,7 +407,7 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器 Id
          */
-        @JSONField(name = "serverId")
+        @SerializedName(value = "serverId")
         public int getServerId() {
             return _serverId;
         }
@@ -421,7 +426,7 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器名称
          */
-        @JSONField(name = "serverName")
+        @SerializedName(value = "serverName")
         public String getServerName() {
             return _serverName;
         }
@@ -440,7 +445,7 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器工作类型集合
          */
-        @JSONField(name = "serverJobTypeSet")
+        @SerializedName(value = "serverJobTypeSet")
         public Set<String> getServerJobTypeSet() {
             if (CollectionUtils.isEmpty(_serverJobTypeSet)) {
                 return Collections.emptySet();
@@ -462,7 +467,7 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器地址
          */
-        @JSONField(name = "serverHost")
+        @SerializedName(value = "serverHost")
         public String getServerHost() {
             return _serverHost;
         }
@@ -481,7 +486,7 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器端口号
          */
-        @JSONField(name = "serverPort")
+        @SerializedName(value = "serverPort")
         public int getServerPort() {
             return _serverPort;
         }
@@ -500,7 +505,6 @@ public final class NettyClientAcceptor {
          *
          * @return 信道处理器工厂
          */
-        @JSONField(serialize = false, deserialize = false)
         public AbstractChannelHandlerFactory getChannelHandlerFactory() {
             return _channelHandlerFactory;
         }
@@ -519,7 +523,6 @@ public final class NettyClientAcceptor {
          *
          * @return 服务器关闭回调函数
          */
-        @JSONField(serialize = false, deserialize = false)
         public ICloseCallback getCloseCallback() {
             return _closeCallback;
         }
@@ -551,12 +554,12 @@ public final class NettyClientAcceptor {
          * @param jsonObj JSON 对象
          * @return 配置
          */
-        static public Config fromJSONObj(JSONObject jsonObj) {
+        static public Config fromJSONObj(JsonObject jsonObj) {
             if (null == jsonObj) {
                 return null;
             }
 
-            return jsonObj.toJavaObject(Config.class);
+            return GSON.fromJson(jsonObj, Config.class);
         }
 
         /**
