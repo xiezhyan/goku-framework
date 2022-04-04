@@ -1,4 +1,4 @@
-package top.zopx.square.netty.util;
+package top.zopx.square.netty.msgGenRecognizer;
 
 import com.google.protobuf.GeneratedMessageV3;
 import org.apache.commons.collections4.CollectionUtils;
@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.square.netty.handle.ICmdHandler;
+import top.zopx.square.netty.util.PackageUtil;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -14,6 +15,33 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ICmdHandle和泛型对象进行绑定
+ *
+ * @Override
+ *     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+ *         // 获取消息类
+ *         Class<?> msgClazz = msg.getClass();
+ *
+ *         LogUtil.getInstance(getClass()).info(
+ *                 "收到客户端消息, msgClazz = {}, msg = {}",
+ *                 msgClazz.getName(),
+ *                 msg
+ *         );
+ *
+ *         // 获取指令处理器
+ *         ICmdHandler<? extends GeneratedMessageV3>
+ *                 cmdHandler = HandleGenMsgRecognizer.get(msgClazz);
+ *
+ *         if (null == cmdHandler) {
+ *             LogUtil.getInstance(getClass()).error(
+ *                     "未找到相对应的指令处理器, msgClazz = {}",
+ *                     msgClazz.getName()
+ *             );
+ *             return;
+ *         }
+ *
+ *         // 处理指令
+ *         cmdHandler.cmd(ctx.channel(), cast(msg));
+ *     }
  *
  * @author 俗世游子
  * @date 2022/1/19

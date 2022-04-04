@@ -1,6 +1,7 @@
 package top.zopx.starter.log;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -18,17 +19,15 @@ import top.zopx.starter.tools.constants.PropertiesCons;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
+@EnableConfigurationProperties({
+        SquareLogProperties.class
+})
 @Import({ExceptionAdvice.class, ApiLogAspect.class})
 public class LogServerAutoConfiguration {
 
     @Bean
     public SpringUtil springUtil() {
         return new SpringUtil();
-    }
-
-    @Bean
-    public SquareLogProperties squareLogProperties() {
-        return new SquareLogProperties();
     }
 
     @Bean
