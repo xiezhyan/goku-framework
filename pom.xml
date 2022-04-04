@@ -41,7 +41,7 @@
 
     <groupId>top.zopx</groupId>
     <artifactId>square-spring-boot-starter</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
     <packaging>pom</packaging>
     <url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
     <description>square-spring-boot-starter</description>
@@ -55,7 +55,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <square.version>1.3.1</square.version>
+        <square.version>1.4.0</square.version>
 
         <spring.boot.version>2.6.3</spring.boot.version>
         <spring.cloud.version>2021.0.1</spring.cloud.version>

@@ -7,7 +7,7 @@
     <parent>
         <groupId>top.zopx</groupId>
         <artifactId>square-spring-boot-starter</artifactId>
-        <version>1.3.1</version>
+        <version>1.4.0</version>
     </parent>
 
     <groupId>java.test</groupId>
@@ -22,7 +22,7 @@
 <!--            <dependency>-->
 <!--                <groupId>top.zopx</groupId>-->
 <!--                <artifactId>square-spring-boot-starter</artifactId>-->
-<!--                <version>1.3.1</version>-->
+<!--                <version>1.4.0</version>-->
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
@@ -54,6 +54,35 @@
             <groupId>top.zopx</groupId>
             <artifactId>square-netty-spring-boot-starter</artifactId>
             <version>${square.version}</version>
+        </dependency>
+    
+        <!--zookeeper starter-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--zookeeper end-->
+    
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
         </dependency>
     </dependencies>
 
