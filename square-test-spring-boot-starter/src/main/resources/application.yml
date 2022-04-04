@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: square-test
+  datasource:
+    dynamic:
+      primary: master
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/activiti?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false
+          username: root
+          password: root
+          type: com.alibaba.druid.pool.DruidDataSource
+
+  activiti:
+    # false
+    # true
+    # create-drop
+    # drop-create
+    database-schema-update: true
+    # 启动是否自动部署流程
+    check-process-definitions: false
+    # none 不保存任何历史数据
+    # activity 保存流程实例与流程行为
+    # audit 保存流程实例与流程行为， 保存全部的流程任务及其属性
+    # full 保存流程实例与流程行为， 保存全部的流程任务及其属性 保存其他流程相关的细节数据，包括流程参数等
+    history-level: audit
+    db-history-used: true
+    database-schema: activiti
+  profiles:
+    include: actuator
+
+square:
+  log:
+    app-name: ${spring.application.name}
+    endurance: true
+  netty:
+    app:
+      port: 12333

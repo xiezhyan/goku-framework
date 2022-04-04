@@ -10,8 +10,6 @@ import top.zopx.starter.netty.EnableNettyCore;
 import top.zopx.starter.tools.tools.json.IJson;
 import top.zopx.starter.tools.tools.json.impl.GJson;
 
-import javax.annotation.Resource;
-
 /**
  * @author sanq.Yan
  * @date 2021/4/14
@@ -20,9 +18,6 @@ import javax.annotation.Resource;
 @EnableNettyCore
 @EnableActivitiUI
 public class TestApplication {
-
-    @Resource
-    private IJson json;
 
     public static void main(String[] args) {
         SpringApplication.run(TestApplication.class, args);
