@@ -1,12 +1,16 @@
 package top.zopx.square.netty.msgGenRecognizer;
 
 import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.Internal;
 import com.google.protobuf.Message;
 import io.netty.util.collection.IntObjectHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 消息code和消息体之间的关系
@@ -35,45 +39,100 @@ public final class ProtoCodeToProtoRecognizer {
      */
     private static final Map<Integer, GeneratedMessageV3> CODE_CLASS_MAP = new IntObjectHashMap<>();
 
-    public void init(IClassData classData, ICodeData codeData) {
-        if(null == classData || null == codeData) {
-            LOGGER.error("数据不全");
+    /**
+     * 消息编号和服务器工作类型字典
+     */
+    static private final Map<Integer, Integer> MSGCODE_SERVER_TYPE_MAP = new IntObjectHashMap<>();
+
+    public void tryInit(Class<?> protocolClazz, Enum<?>[] enumValArray, int serverType) {
+        if (null == protocolClazz ||
+                null == enumValArray ||
+                enumValArray.length <= 0) {
             return;
         }
 
-        classData.loadClassData().forEach(clazz -> {
-            // 小写
-            String clazzName = clazz.getSimpleName().toLowerCase(Locale.ROOT);
+        final Map<String, Integer> enumNameAndEnumValMap = new HashMap<>();
 
-            // 遍历枚举对象
-            for (CodeMsg msg : codeData.loadCodeData()) {
-                String msgCodeName = msg.getName().replace("_", "").toLowerCase(Locale.ROOT);
-
-                if (!msgCodeName.startsWith(clazzName)) {
-                    continue;
-                }
-
-                try {
-                    Object returnObj = clazz.getDeclaredMethod("getDefaultInstance").invoke(clazz);
-                    LOGGER.info("{} <=======> {}", msg.getCode(), clazz.getName());
-
-                    CODE_CLASS_MAP.put(msg.getCode(), (GeneratedMessageV3) returnObj);
-                } catch (Exception e) {
-                    LOGGER.error("反射异常：{}", e.getMessage());
-                }
+        for (Enum<?> enumVal : enumValArray) {
+            if (!(enumVal instanceof Internal.EnumLite) ||
+                    enumVal.name().equals("_Dummy") ||
+                    enumVal.name().equals("UNRECOGNIZED")) {
+                continue;
             }
-        });
+
+            enumNameAndEnumValMap.put(
+                    enumVal.name(),
+                    ((Internal.EnumLite) enumVal).getNumber()
+            );
+        }
+
+        // 获取内置类数组
+        Class<?>[] innerClazzArray = protocolClazz.getDeclaredClasses();
+
+        for (Class<?> innerClazz : innerClazzArray) {
+            if (!GeneratedMessageV3.class.isAssignableFrom(innerClazz)) {
+                // 如果不是消息,
+                continue;
+            }
+
+            // 消息类
+            String clazzName = innerClazz.getSimpleName();
+            // 获取消息编号
+            Integer msgCode = enumNameAndEnumValMap.get("_" + clazzName);
+
+            if (null == msgCode) {
+                continue;
+            }
+
+            try {
+                // 创建消息对象
+                Object newMsg = innerClazz.getDeclaredMethod("getDefaultInstance").invoke(innerClazz);
+
+                LOGGER.info(
+                        "关联 {} <==> {}, serverJobType = {}",
+                        clazzName,
+                        msgCode,
+                        serverType
+                );
+
+                CODE_CLASS_MAP.put(
+                        msgCode, (GeneratedMessageV3) newMsg
+                );
+
+                MSGCODE_SERVER_TYPE_MAP.put(
+                        msgCode,
+                        serverType
+                );
+            } catch (Exception ex) {
+                // 记录错误日志
+                LOGGER.error(ex.getMessage(), ex);
+            }
+        }
     }
 
     /**
+     * 根据消息编号获取服务器工作类型
+     *
+     * @param msgCode 指定的消息编号
+     * @return 服务器工作类型
+     */
+    static public int getServerJobTypeByMsgCode(int msgCode) {
+        if(msgCode < 0) {
+            LOGGER.error("根据消息编号获取服务器工作类型处理异常，异常code：{}", msgCode);
+            return -1;
+        }
+        return MSGCODE_SERVER_TYPE_MAP.get(msgCode);
+    }
+    /**
      * 通过messageV3 得到对应的编码
-     *  int msgCode = getMsgCodeByClazz(msg.getClass());
+     * int msgCode = getMsgCodeByClazz(msg.getClass());
      *
      * @param clazz 消息对象
      * @return 消息编码
      */
     public int getMsgCodeByClazz(Class<? extends GeneratedMessageV3> clazz) {
         if (null == clazz) {
+            LOGGER.error("通过messageV3 得到对应的编码处理异常，异常原因：参数为空");
             return -1;
         }
 
@@ -83,7 +142,7 @@ public final class ProtoCodeToProtoRecognizer {
                         .filter(entry -> Objects.equals(entry.getValue().getClass(), clazz))
                         .findFirst();
 
-        if(!optional.isPresent()) {
+        if (optional.isEmpty()) {
             LOGGER.error("消息编码获取异常");
             return -1;
         }
@@ -93,26 +152,27 @@ public final class ProtoCodeToProtoRecognizer {
 
     /**
      * 通过消息编码获取消息体
-     *  Message.Builder msgBuilder = getClazzByMsgCode(msgCode);
-     *  byte[] array;
-     *  if (in.hasArray()) {
-     *      //堆缓冲
-     *      ByteBuf slice = in.slice();
-     *      array = slice.array();
-     *  } else {
-     *      // 直接缓冲
-     *      array = new byte[len];
-     *      in.readBytes(array, 0, len);
-     *  }
+     * Message.Builder msgBuilder = getClazzByMsgCode(msgCode);
+     * byte[] array;
+     * if (in.hasArray()) {
+     * //堆缓冲
+     * ByteBuf slice = in.slice();
+     * array = slice.array();
+     * } else {
+     * // 直接缓冲
+     * array = new byte[len];
+     * in.readBytes(array, 0, len);
+     * }
+     * <p>
+     * // 构建消息对象
+     * msgBuilder.clear();
+     * msgBuilder.mergeFrom(array);
+     * <p>
+     * Message message = msgBuilder.build();
+     * if (null != message) {
+     * out.add(message);
+     * }
      *
-     *  // 构建消息对象
-     *  msgBuilder.clear();
-     *  msgBuilder.mergeFrom(array);
-     *
-     *  Message message = msgBuilder.build();
-     *  if (null != message) {
-     *      out.add(message);
-     *  }
      * @param code 消息编码
      * @return Message.Builder
      */
@@ -124,51 +184,5 @@ public final class ProtoCodeToProtoRecognizer {
         }
 
         return messageV3.newBuilderForType();
-    }
-
-    /**
-     * Arrays.stream(KsiImMsgCode.class.getDeclaredClasses())
-     *  .filter(GeneratedMessageV3.class::isAssignableFrom)
-     *  .collect(Collectors.toList());
-     */
-    public interface IClassData {
-        List<Class<?>> loadClassData();
-    }
-
-    public interface ICodeData {
-        List<CodeMsg> loadCodeData();
-    }
-
-    public static class CodeMsg {
-        /**
-         * 类名
-         */
-        private String name;
-
-        /**
-         * 编码
-         */
-        private Integer code;
-
-        public CodeMsg(String name, Integer code) {
-            this.name = name;
-            this.code = code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
-        public void setCode(Integer code) {
-            this.code = code;
-        }
     }
 }

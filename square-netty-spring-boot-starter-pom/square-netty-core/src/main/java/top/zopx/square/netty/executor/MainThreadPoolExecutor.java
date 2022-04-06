@@ -31,9 +31,9 @@ public final class MainThreadPoolExecutor {
     /**
      * 消息处理类工厂
      */
-    private final ICmdHandlerFactory factory;
+    private final BaseCmdHandlerFactory factory;
 
-    public MainThreadPoolExecutor(String threadName, ICmdHandlerFactory factory) {
+    public MainThreadPoolExecutor(String threadName, BaseCmdHandlerFactory factory) {
         executorService = Executors.newSingleThreadExecutor((r) -> {
             // 创建线程并起个名字
             Thread t = new Thread(r);
