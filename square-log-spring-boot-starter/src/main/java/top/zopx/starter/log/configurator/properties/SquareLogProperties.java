@@ -14,7 +14,7 @@ public class SquareLogProperties {
     /**
      * 是否持久化
      */
-    private Boolean endurance = false;
+    private Boolean lasting = false;
 
     private String appName;
 
@@ -26,11 +26,11 @@ public class SquareLogProperties {
         this.appName = appName;
     }
 
-    public Boolean getEndurance() {
-        return endurance;
+    public Boolean isLasting() {
+        return lasting;
     }
 
-    public void setEndurance(Boolean endurance) {
-        this.endurance = endurance;
+    public void setLasting(Boolean lasting) {
+        this.lasting = lasting;
     }
 }

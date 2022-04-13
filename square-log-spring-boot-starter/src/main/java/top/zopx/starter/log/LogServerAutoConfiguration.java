@@ -31,7 +31,7 @@ public class LogServerAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = PropertiesCons.Log.LOG_PROPERTIES, name = "endurance", havingValue = "true")
+    @ConditionalOnProperty(prefix = PropertiesCons.Log.LOG_PROPERTIES, name = "lasting", havingValue = "true")
     public PublishEventListener publishEventListener() {
         return new PublishEventListener();
     }
