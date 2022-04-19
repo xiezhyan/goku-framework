@@ -13,9 +13,6 @@ public class RsaKey implements Serializable {
 
     private String privateKey;
 
-    public RsaKey() {
-    }
-
     public RsaKey(String publicKey, String privateKey) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;

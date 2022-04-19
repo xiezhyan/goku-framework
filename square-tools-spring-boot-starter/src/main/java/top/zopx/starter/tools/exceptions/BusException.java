@@ -14,21 +14,19 @@ public class BusException extends RuntimeException {
     private Integer code;
 
     public BusException(String msg) {
-        super();
+        super(msg);
         this.msg = msg;
         this.code = HttpStatus.BAD_REQUEST.value();
     }
 
     public BusException(String msg, Integer code) {
-        super();
+        super(msg);
         this.msg = msg;
         this.code = code;
     }
 
     public BusException(IBus bus) {
-        super();
-        this.msg = bus.getMsg();
-        this.code = bus.getCode();
+        this(bus.getMsg(), bus.getCode());
     }
 
     public String getMsg() {

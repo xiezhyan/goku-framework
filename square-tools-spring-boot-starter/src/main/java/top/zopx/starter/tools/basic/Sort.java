@@ -1,17 +1,16 @@
 package top.zopx.starter.tools.basic;
 
+import top.zopx.starter.tools.tools.strings.StringUtil;
+
 /**
  * top.zopx.starter.tools.basic.Sort
  *
  * @author sanq.Yan
  * @date 2020/5/12
  */
-public class Sort {
+public abstract class Sort {
     private String field;
-    private String sorted = "asc";
-
-    public Sort() {
-    }
+    private String sorted;
 
     public Sort(String field, String sorted) {
         this.field = field;
@@ -27,6 +26,9 @@ public class Sort {
     }
 
     public String getSorted() {
+        if (StringUtil.isNotBlank(sorted)) {
+            return "ASC";
+        }
         return sorted;
     }
 
