@@ -31,7 +31,7 @@ public interface AttributeKeyConstant {
     /**
      * 应用ID
      */
-    AttributeKey<String> SESSION_ID = AttributeKey.valueOf("SESSION_ID");
+    AttributeKey<Integer> SESSION_ID = AttributeKey.valueOf("SESSION_ID");
 
     /**
      * 最大心跳检测次数

@@ -8,10 +8,13 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import top.zopx.square.netty.configurator.constant.AttributeKeyConstant;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
  */
 public final class ChannelKit {
 
+    private final AtomicInteger idGen = new AtomicInteger(0);
 
     private final List<Channel> EMPTY_LIST;
     private final Multimap<String, Channel> SESSION_MAP;
@@ -54,7 +58,7 @@ public final class ChannelKit {
      * @param channel 通道
      * @return ID
      */
-    public String getByChannel(Channel channel) {
+    public String getUserIdByChannel(Channel channel) {
         return channel.attr(AttributeKeyConstant.USER_ATTR).get();
     }
 
@@ -97,7 +101,7 @@ public final class ChannelKit {
      * @return Collection<Channel>
      */
     public Collection<Channel> getById(Channel channel) {
-        String id = this.getByChannel(channel);
+        String id = this.getUserIdByChannel(channel);
         if (id != null) {
             return SESSION_MAP.get(id);
         }
@@ -112,7 +116,7 @@ public final class ChannelKit {
      * @param channel 通道
      */
     public void put(Channel channel) {
-        String id = this.getByChannel(channel);
+        String id = this.getUserIdByChannel(channel);
         if (id != null && channel.isActive()) {
             channel.closeFuture().addListener(this.listener);
             SESSION_MAP.put(id, channel);
@@ -130,7 +134,7 @@ public final class ChannelKit {
      * @param channel 通道
      */
     public void remove(Channel channel) {
-        String id = this.getByChannel(channel);
+        String id = this.getUserIdByChannel(channel);
         if (id != null) {
             SESSION_MAP.remove(id, channel);
             if (CollectionUtils.isEmpty(getById(id))) {
@@ -201,7 +205,7 @@ public final class ChannelKit {
      */
     public void setSessionID(Channel channel) {
         if (null != channel) {
-            setSessionID(channel, UUID.randomUUID().toString().replace("-", "").toUpperCase(Locale.ROOT));
+            setSessionID(channel, idGen.incrementAndGet());
         }
     }
 
@@ -211,9 +215,9 @@ public final class ChannelKit {
      * @param channel 通道
      * @return sessionID
      */
-    public String getSessionID(Channel channel) {
+    public int getSessionID(Channel channel) {
         if (null == channel) {
-            return "";
+            return -1;
         }
 
         return channel.attr(AttributeKeyConstant.SESSION_ID).get();
@@ -225,8 +229,8 @@ public final class ChannelKit {
      * @param channel   通道
      * @param sessionId sessionID
      */
-    public void setSessionID(Channel channel, String sessionId) {
-        if (null != channel && StringUtils.isNotBlank(sessionId)) {
+    public void setSessionID(Channel channel, int sessionId) {
+        if (null != channel) {
             channel.attr(AttributeKeyConstant.SESSION_ID).setIfAbsent(sessionId);
         }
     }
