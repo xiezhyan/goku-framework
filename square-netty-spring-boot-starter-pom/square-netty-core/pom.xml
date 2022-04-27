@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>square-netty-core</artifactId>
+    <version>1.4.0.220427</version>
     <name>${groupId}:${artifactId}</name>
     
     <properties>
@@ -61,7 +62,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${version}</finalName>
         
         <plugins>
             <plugin>

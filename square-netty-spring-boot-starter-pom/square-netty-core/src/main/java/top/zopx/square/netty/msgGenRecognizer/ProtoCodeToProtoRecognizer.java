@@ -6,11 +6,11 @@ import com.google.protobuf.Message;
 import io.netty.util.collection.IntObjectHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.square.netty.constant.ICos;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 消息code和消息体之间的关系
@@ -39,12 +39,14 @@ public final class ProtoCodeToProtoRecognizer {
      */
     private static final Map<Integer, GeneratedMessageV3> CODE_CLASS_MAP = new IntObjectHashMap<>();
 
+    private static final Map<Class<?>, Integer> CLASS_CODE_MAP = new ConcurrentHashMap<>();
+
     /**
      * 消息编号和服务器工作类型字典
      */
-    static private final Map<Integer, Integer> MSGCODE_SERVER_TYPE_MAP = new IntObjectHashMap<>();
+    static private final Map<Integer, ICos> MSGCODE_SERVER_TYPE_MAP = new IntObjectHashMap<>();
 
-    public void tryInit(Class<?> protocolClazz, Enum<?>[] enumValArray, int serverType) {
+    public void tryInit(Class<?> protocolClazz, Enum<?>[] enumValArray, ICos serverType) {
         if (null == protocolClazz ||
                 null == enumValArray ||
                 enumValArray.length <= 0) {
@@ -99,6 +101,10 @@ public final class ProtoCodeToProtoRecognizer {
                         msgCode, (GeneratedMessageV3) newMsg
                 );
 
+                CLASS_CODE_MAP.put(
+                        innerClazz, msgCode
+                );
+
                 MSGCODE_SERVER_TYPE_MAP.put(
                         msgCode,
                         serverType
@@ -116,10 +122,10 @@ public final class ProtoCodeToProtoRecognizer {
      * @param msgCode 指定的消息编号
      * @return 服务器工作类型
      */
-    static public int getServerJobTypeByMsgCode(int msgCode) {
+    public ICos getServerJobTypeByMsgCode(int msgCode) {
         if(msgCode < 0) {
             LOGGER.error("根据消息编号获取服务器工作类型处理异常，异常code：{}", msgCode);
-            return -1;
+            return null;
         }
         return MSGCODE_SERVER_TYPE_MAP.get(msgCode);
     }
@@ -136,18 +142,7 @@ public final class ProtoCodeToProtoRecognizer {
             return -1;
         }
 
-        final Optional<Map.Entry<Integer, GeneratedMessageV3>> optional =
-                CODE_CLASS_MAP.entrySet()
-                        .stream()
-                        .filter(entry -> Objects.equals(entry.getValue().getClass(), clazz))
-                        .findFirst();
-
-        if (optional.isEmpty()) {
-            LOGGER.error("消息编码获取异常");
-            return -1;
-        }
-
-        return optional.get().getKey();
+        return CLASS_CODE_MAP.get(clazz);
     }
 
     /**
