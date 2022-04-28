@@ -21,6 +21,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.square.netty.handle.BaseChannelHandlerFactory;
 
 import java.net.URI;
 import java.text.MessageFormat;
@@ -189,12 +190,12 @@ public final class NettyClientAcceptor {
                 @Override
                 protected void initChannel(SocketChannel ch) {
                     // 获取信道处理器工厂
-                    final Config.AbstractChannelHandlerFactory f = _usingConf.getChannelHandlerFactory();
+                    final BaseChannelHandlerFactory f = _usingConf.getChannelHandlerFactory();
                     // 消息处理器
                     ChannelHandler msgHandler = null;
 
                     if (null != f) {
-                        msgHandler = f.createMsgHandler();
+                        msgHandler = f.createWSMsgHandler();
                     }
 
                     // 如果是WS的形式，那么才会加入这些
@@ -356,7 +357,7 @@ public final class NettyClientAcceptor {
          * 信道处理器工厂
          */
         @Expose(serialize = false, deserialize = false)
-        private AbstractChannelHandlerFactory _channelHandlerFactory;
+        private BaseChannelHandlerFactory _channelHandlerFactory;
 
         /**
          * 连接关闭
@@ -505,7 +506,7 @@ public final class NettyClientAcceptor {
          *
          * @return 信道处理器工厂
          */
-        public AbstractChannelHandlerFactory getChannelHandlerFactory() {
+        public BaseChannelHandlerFactory getChannelHandlerFactory() {
             return _channelHandlerFactory;
         }
 
@@ -514,7 +515,7 @@ public final class NettyClientAcceptor {
          *
          * @param val 对象值
          */
-        public void setChannelHandlerFactory(AbstractChannelHandlerFactory val) {
+        public void setChannelHandlerFactory(BaseChannelHandlerFactory val) {
             _channelHandlerFactory = val;
         }
 
@@ -562,17 +563,6 @@ public final class NettyClientAcceptor {
             return GSON.fromJson(jsonObj, Config.class);
         }
 
-        /**
-         * 抽象的信道处理器工厂
-         */
-        static public abstract class AbstractChannelHandlerFactory {
-            /**
-             * 创建消息处理器
-             *
-             * @return 消息处理器
-             */
-            public abstract ChannelHandler createMsgHandler();
-        }
     }
 
     /**
