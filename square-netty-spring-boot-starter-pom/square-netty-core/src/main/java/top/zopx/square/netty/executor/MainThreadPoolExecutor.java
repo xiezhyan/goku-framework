@@ -105,7 +105,7 @@ public final class MainThreadPoolExecutor {
      * @param fromUserId 来源用户 ID
      * @param cmdMsg     消息体
      */
-    public void process(ChannelHandlerContext ctx, String sessionId, String fromUserId, GeneratedMessageV3 cmdMsg) {
+    public void process(ChannelHandlerContext ctx, int sessionId, int fromUserId, GeneratedMessageV3 cmdMsg) {
         if (null == ctx ||
                 null == cmdMsg) {
             return;

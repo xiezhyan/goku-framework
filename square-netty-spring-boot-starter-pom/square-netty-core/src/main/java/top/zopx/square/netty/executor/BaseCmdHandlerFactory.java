@@ -22,7 +22,7 @@ public abstract class BaseCmdHandlerFactory {
     /**
      * 扫描包
      */
-    abstract String getScanPackage();
+    public abstract String getScanPackage();
 
     /**
      * ICmdHandler和消息体之间的映射初始化操作

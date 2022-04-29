@@ -26,7 +26,9 @@ public interface ICmdHandler<T extends GeneratedMessageV3> {
      * @param ctx 上下文对象
      * @param cmd 消息体
      */
-    void cmd(ChannelHandlerContext ctx, T cmd);
+    default void cmd(ChannelHandlerContext ctx, T cmd) {
+
+    }
 
     /**
      * 处理命令
@@ -36,7 +38,7 @@ public interface ICmdHandler<T extends GeneratedMessageV3> {
      * @param sessionId  sessionId
      * @param fromUserId 来源用户ID
      */
-    default void cmd(ChannelHandlerContext ctx, T cmd, String sessionId, String fromUserId) {
+    default void cmd(ChannelHandlerContext ctx, T cmd, int sessionId, int fromUserId) {
         LOGGER.info("sessionId={}， fromUserId={}", sessionId, fromUserId);
     }
 }
