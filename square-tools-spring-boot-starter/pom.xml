@@ -45,7 +45,6 @@
             <version>${gson.version}</version>
         </dependency>
     
-    
         <!--redis pool支持-->
         <dependency>
             <groupId>org.apache.commons</groupId>
