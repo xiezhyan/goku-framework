@@ -33,7 +33,7 @@ spring:
 square:
   log:
     app-name: ${spring.application.name}
-    endurance: true
+    lasting: true
   netty:
     app:
       port: 12333

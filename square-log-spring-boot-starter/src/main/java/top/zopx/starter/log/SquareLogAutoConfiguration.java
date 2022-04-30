@@ -1,11 +1,11 @@
 package top.zopx.starter.log;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 import top.zopx.starter.log.configurator.mvc.advice.ExceptionAdvice;
 import top.zopx.starter.log.configurator.mvc.aspect.ApiLogAspect;
 import top.zopx.starter.log.configurator.properties.SquareLogProperties;
@@ -22,8 +22,19 @@ import top.zopx.starter.tools.constants.PropertiesCons;
 @EnableConfigurationProperties({
         SquareLogProperties.class
 })
-@Import({ExceptionAdvice.class, ApiLogAspect.class})
-public class LogServerAutoConfiguration {
+public class SquareLogAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ApiLogAspect apiLogAspect() {
+        return new ApiLogAspect();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ExceptionAdvice exceptionAdvice() {
+        return new ExceptionAdvice();
+    }
 
     @Bean
     public SpringUtil springUtil() {

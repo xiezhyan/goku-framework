@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>top.zopx</groupId>
 		<artifactId>square-netty-spring-boot-starter-pom</artifactId>
-		<version>1.4.0</version>
+		<version>1.4.0.220501</version>
 	</parent>
 	
 	<artifactId>square-netty-spring-boot-starter</artifactId>
