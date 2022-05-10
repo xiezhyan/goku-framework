@@ -1,6 +1,8 @@
 package top.zopx.starter.tools.basic;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 分页对象
@@ -10,6 +12,7 @@ import java.io.Serializable;
  */
 public class Pagination implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // 当前显示的条数,默认显示100条
@@ -20,6 +23,9 @@ public class Pagination implements Serializable {
 
     // 查询总数
     private long totalCount;
+
+    // 排序方式
+    private List<Sorted> sorteds;
 
     public Pagination() {
     }
@@ -56,5 +62,13 @@ public class Pagination implements Serializable {
 
     public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public List<Sorted> getSorteds() {
+        return sorteds;
+    }
+
+    public void setSorteds(List<Sorted> sorteds) {
+        this.sorteds = sorteds;
     }
 }
