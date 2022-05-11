@@ -3,8 +3,6 @@ package top.zopx.starter.activiti.service.impl;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -12,14 +10,18 @@ import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.starter.activiti.constant.VariableConstant;
-import top.zopx.starter.activiti.entity.response.*;
+import top.zopx.starter.activiti.entity.response.CommentResponse;
+import top.zopx.starter.activiti.entity.response.CompleteResponse;
+import top.zopx.starter.activiti.entity.response.HistoryResponse;
+import top.zopx.starter.activiti.entity.response.TaskResponse;
 import top.zopx.starter.activiti.service.IBusinessFlowService;
 import top.zopx.starter.tools.basic.Pagination;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.tools.tools.strings.StringUtil;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
  * @email xiezhyan@126.com
  */
 public class BusinessFlowServiceImpl implements IBusinessFlowService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BusinessFlowServiceImpl.class);
 
     @Resource
     private TaskService taskService;
@@ -46,26 +49,26 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
         List<Task> taskList = getTasksByBusKey(businessKey);
 
         if (CollectionUtils.isNotEmpty(taskList)) {
-            LogUtil.getInstance(getClass()).error("启动流程异常：【业务数据：{}的流程已存在】", businessKey);
+            LOGGER.error("启动流程异常：【业务数据：{}的流程已存在】", businessKey);
             throw new BusException("启动流程异常：【业务数据：" + businessKey + "的流程已存在】");
         }
 
         try {
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);
 
-            LogUtil.getInstance(getClass()).debug("=========================启动流程输出============================");
-            LogUtil.getInstance(getClass()).debug("流程实例ID\t:【{}】", processInstance.getId());
-            LogUtil.getInstance(getClass()).debug("流程定义ID\t:【{}】", processInstance.getProcessDefinitionId());
-            LogUtil.getInstance(getClass()).debug("流程定义KEY\t:【{}】", processInstance.getProcessDefinitionKey());
-            LogUtil.getInstance(getClass()).debug("流程部署ID\t:【{}】", processInstance.getDeploymentId());
-            LogUtil.getInstance(getClass()).debug("流程部署ID\t:【{}】", processInstance.getProcessInstanceId());
-            LogUtil.getInstance(getClass()).debug("=========================启动流程输出============================");
+            LOGGER.debug("=========================启动流程输出============================");
+            LOGGER.debug("流程实例ID\t:【{}】", processInstance.getId());
+            LOGGER.debug("流程定义ID\t:【{}】", processInstance.getProcessDefinitionId());
+            LOGGER.debug("流程定义KEY\t:【{}】", processInstance.getProcessDefinitionKey());
+            LOGGER.debug("流程部署ID\t:【{}】", processInstance.getDeploymentId());
+            LOGGER.debug("流程部署ID\t:【{}】", processInstance.getProcessInstanceId());
+            LOGGER.debug("=========================启动流程输出============================");
 
             taskList = getTasksByBusKey(businessKey);
 
             return CollectionUtils.isNotEmpty(taskList);
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("开启流程异常：【{}】", e.getMessage());
+            LOGGER.error("开启流程异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
@@ -83,7 +86,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
             taskService.setAssignee(taskList.get(0).getId(), assignee);
             return true;
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("设置代理人异常：【{}】", e.getMessage());
+            LOGGER.error("设置代理人异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
@@ -111,7 +114,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
         String currentUser = map.getOrDefault(VariableConstant.CURRENT_USER.name(), "").toString();
         if (StringUtil.isEmpty(currentUser)) {
             // 没有指定查询用户
-            LogUtil.getInstance(getClass()).error("没有指定查询用户");
+            LOGGER.error("没有指定查询用户");
             throw new BusException("没有指定查询用户");
         }
 
@@ -120,12 +123,12 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
 
         if (CollectionUtils.isEmpty(taskResponses)) {
             // 未查询到当前任务
-            LogUtil.getInstance(getClass()).error("未查询到关于【{}】下【{}】相关的任务", businessKey, currentUser);
+            LOGGER.error("未查询到关于【{}】下【{}】相关的任务", businessKey, currentUser);
             throw new BusException("未查询到关于【" + businessKey + "】下【" + currentUser + "】相关的任务");
         }
 
         if (taskResponses.size() != 1) {
-            LogUtil.getInstance(getClass()).error("查询到关于【{}】下【{}】的多笔异常任务", businessKey, currentUser);
+            LOGGER.error("查询到关于【{}】下【{}】的多笔异常任务", businessKey, currentUser);
             throw new BusException("查询到关于【" + businessKey + "】下【" + currentUser + "】的多笔异常任务");
         }
 
@@ -146,7 +149,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
                 completeResponse.setTaskId(tasksByBusKey.get(0).getId());
             }
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("提交任务异常：【{}】", e.getMessage());
+            LOGGER.error("提交任务异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
         return completeResponse;
@@ -204,7 +207,7 @@ public class BusinessFlowServiceImpl implements IBusinessFlowService {
             });
             isRevoke = true;
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("撤销任务异常：【{}】", e.getMessage());
+            LOGGER.error("撤销任务异常：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
 

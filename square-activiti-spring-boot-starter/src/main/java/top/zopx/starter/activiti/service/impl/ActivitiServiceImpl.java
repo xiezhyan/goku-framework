@@ -15,6 +15,8 @@ import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.starter.activiti.entity.request.ModelRequest;
 import top.zopx.starter.activiti.entity.response.ModelResponse;
@@ -22,7 +24,6 @@ import top.zopx.starter.activiti.service.IActivitiService;
 import top.zopx.starter.tools.basic.Pagination;
 import top.zopx.starter.tools.exceptions.BusException;
 import top.zopx.starter.tools.tools.strings.StringUtil;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
  * @email xiezhyan@126.com
  */
 public class ActivitiServiceImpl implements IActivitiService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivitiServiceImpl.class);
 
     @Resource
     private RepositoryService repositoryService;
@@ -99,7 +101,7 @@ public class ActivitiServiceImpl implements IActivitiService {
             repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes(StandardCharsets.UTF_8));
             return "/modeler.html?modelId=" + modelData.getId();
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("saveOrUpdate异常信息: 【{}】", e.getMessage());
+            LOGGER.error("saveOrUpdate异常信息: 【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
@@ -187,7 +189,7 @@ public class ActivitiServiceImpl implements IActivitiService {
             repositoryService.saveModel(model);
             isDeploy = true;
         } catch (IOException e) {
-            LogUtil.getInstance(this.getClass()).error("流程部署失败：【{}】", e.getMessage());
+            LOGGER.error("流程部署失败：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
 
@@ -218,7 +220,7 @@ public class ActivitiServiceImpl implements IActivitiService {
             repositoryService.deleteModel(modelId);
             isDelete = true;
         } catch (Exception e) {
-            LogUtil.getInstance(getClass()).error("删除流程出现错误：【{}】", e.getMessage());
+            LOGGER.error("删除流程出现错误：【{}】", e.getMessage());
             throw new BusException(e.getMessage());
         }
         return isDelete;

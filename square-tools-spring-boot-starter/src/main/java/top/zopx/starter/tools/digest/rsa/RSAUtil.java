@@ -1,9 +1,9 @@
 package top.zopx.starter.tools.digest.rsa;
 
-import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import top.zopx.starter.tools.digest.base64.Base64Util;
 import top.zopx.starter.tools.exceptions.BusException;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +15,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * RSA 对称加密
@@ -33,6 +31,7 @@ public enum RSAUtil {
     ;
 
     private static final String SECRET_KEY_SPEC_RSA = "RSA";
+    private static final Logger LOGGER = LoggerFactory.getLogger(RSAUtil.class);
 
     /**
      * 生成公钥和私钥
@@ -56,7 +55,7 @@ public enum RSAUtil {
             // 将公钥和私钥保存
             return new RsaKey(publicKeyString, privateKeyString);
         } catch (Exception e) {
-            LogUtil.getInstance(RSAUtil.class).error(e.getMessage());
+            LOGGER.error(e.getMessage());
             throw new BusException(e.getMessage());
         }
     }

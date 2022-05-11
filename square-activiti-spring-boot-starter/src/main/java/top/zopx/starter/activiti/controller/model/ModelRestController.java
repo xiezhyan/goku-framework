@@ -1,5 +1,7 @@
 package top.zopx.starter.activiti.controller.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import top.zopx.starter.activiti.IOConvert;
 import top.zopx.starter.activiti.entity.request.ModelRequest;
@@ -9,7 +11,6 @@ import top.zopx.starter.tools.basic.Page;
 import top.zopx.starter.tools.basic.Pagination;
 import top.zopx.starter.tools.basic.R;
 import top.zopx.starter.tools.exceptions.BusException;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,8 @@ public class ModelRestController {
 
     @Resource
     private IActivitiService activitiService;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModelRestController.class);
 
 
     /**
@@ -53,7 +56,7 @@ public class ModelRestController {
         try {
             response.sendRedirect(request.getContextPath() + redirectUrl);
         } catch (IOException e) {
-            LogUtil.getInstance(getClass()).error("creator异常信息: {}", e.getMessage());
+            LOGGER.error("creator异常信息: {}", e.getMessage());
             throw new BusException(e.getMessage());
         }
     }
@@ -140,7 +143,7 @@ public class ModelRestController {
             try {
                 data = IOConvert.INSTANCE.inputToString(inputStream);
             } catch (IOException e) {
-                LogUtil.getInstance(getClass()).error("转换出现异常：【{}】", e.getMessage());
+                LOGGER.error("转换出现异常：【{}】", e.getMessage());
                 throw new BusException(e.getMessage());
             }
         }

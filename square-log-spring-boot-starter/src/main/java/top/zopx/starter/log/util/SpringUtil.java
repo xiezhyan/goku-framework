@@ -1,5 +1,7 @@
 package top.zopx.starter.log.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -10,7 +12,6 @@ import top.zopx.starter.tools.tools.date.LocalDateUtil;
 import top.zopx.starter.tools.tools.json.IJson;
 import top.zopx.starter.tools.tools.json.JsonUtil;
 import top.zopx.starter.tools.tools.web.GlobalUtil;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class SpringUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringUtil.class);
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -57,7 +59,7 @@ public class SpringUtil implements ApplicationContextAware {
             try {
                 context.publishEvent(event);
             } catch (Exception e) {
-                LogUtil.getInstance(SpringUtil.class).error(e.getMessage());
+                LOGGER.error(e.getMessage(), e);
             }
 
         }

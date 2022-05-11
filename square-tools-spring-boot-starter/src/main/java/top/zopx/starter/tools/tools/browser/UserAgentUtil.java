@@ -2,9 +2,9 @@ package top.zopx.starter.tools.tools.browser;
 
 import cz.mallat.uasparser.OnlineUpdater;
 import cz.mallat.uasparser.UASparser;
-import cz.mallat.uasparser.UserAgentInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import top.zopx.starter.tools.tools.strings.StringUtil;
-import top.zopx.starter.tools.tools.web.LogUtil;
 
 import java.io.IOException;
 
@@ -15,6 +15,8 @@ import java.io.IOException;
  * @date 2020/1/26
  */
 public class UserAgentUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserAgentUtil.class);
 
     public static final ThreadLocal<UASparser> LOCAL = ThreadLocal.withInitial(() -> {
         try {
@@ -45,7 +47,7 @@ public class UserAgentUtil {
             result.setOsName(info.getOsFamily());
             result.setOsVersion(info.getOsName());
         } catch (Exception e) {
-            LogUtil.getInstance(UserAgentUtil.class).error("解析UserAgent出错：【{}】", e.getMessage());
+            LOGGER.error("解析UserAgent出错：【{}】", e.getMessage());
         }
 
         return result;
