@@ -1,5 +1,6 @@
 package top.zopx.starter.mybatis.base;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.zopx.starter.mybatis.entity.DataEntity;
 import top.zopx.starter.tools.basic.BasicRequest;
@@ -16,14 +17,20 @@ import java.util.function.LongConsumer;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public abstract class BaseController<Request extends BasicRequest, Response, Entity extends DataEntity> {
+public abstract class BaseController<
+        Request extends BasicRequest,
+        Response,
+        Entity extends DataEntity,
+        Service extends IBaseService<Request, Response, Entity>
+> {
 
     /**
      * 获取服务
      *
      * @return IBaseService
      */
-    protected abstract IBaseService<Request, Response, Entity> baseService();
+    @Autowired
+    protected Service baseService;
 
     @GetMapping
     public R<Page<Response>> getList(
@@ -36,7 +43,7 @@ public abstract class BaseController<Request extends BasicRequest, Response, Ent
         }
 
         return R.result(
-                new Page<>(pagination, baseService().getList(pagination, request, consumer))
+                new Page<>(pagination, baseService.getList(pagination, request, consumer))
         );
     }
 
@@ -45,23 +52,23 @@ public abstract class BaseController<Request extends BasicRequest, Response, Ent
             @PathVariable("id") Long id
     ) {
         return R.result(
-                baseService().getByPriKey(id)
+                baseService.getByPriKey(id)
         );
     }
 
     @PostMapping
     public R<Boolean> save(@Valid @RequestBody Request request) {
-        return R.result(baseService().create(request));
+        return R.result(baseService.create(request));
     }
 
     @PutMapping("/{id}")
     public R<Boolean> updateByPriKey(@Valid @RequestBody Request request, @PathVariable("id") Long id) {
-        return R.result(baseService().updateByPriKey(request, id));
+        return R.result(baseService.updateByPriKey(request, id));
     }
 
     @DeleteMapping("/{id}")
     public R<Boolean> deleteByPriKey(@PathVariable("id") Long id) {
-        return R.result(baseService().deleteByPriKey(id));
+        return R.result(baseService.deleteByPriKey(id));
     }
 
 }
