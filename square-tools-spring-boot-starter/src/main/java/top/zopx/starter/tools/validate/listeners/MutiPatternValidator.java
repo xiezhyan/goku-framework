@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/11/19
  */
 public class MutiPatternValidator implements ConstraintValidator<MutiPattern, String> {

@@ -18,7 +18,7 @@ import java.util.jar.JarInputStream;
 /**
  * 动态扫描指定包下类
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/2/8
  */
 public enum PackageUtil {

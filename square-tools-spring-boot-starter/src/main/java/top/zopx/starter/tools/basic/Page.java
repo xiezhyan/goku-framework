@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 返回分页查询后的数据
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/1/26
  */
 public class Page<T> implements Serializable {

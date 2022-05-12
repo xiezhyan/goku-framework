@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import top.zopx.starter.activiti.controller.ActivitiControllerConfiguration;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/18
  */
 @Configuration(proxyBeanMethods = false)

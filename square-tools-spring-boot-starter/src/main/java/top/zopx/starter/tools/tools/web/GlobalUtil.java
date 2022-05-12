@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 /**
  * 全局对象
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/1/26
  */
 public final class GlobalUtil {

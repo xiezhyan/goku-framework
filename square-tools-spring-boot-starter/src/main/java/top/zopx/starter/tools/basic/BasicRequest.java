@@ -11,10 +11,10 @@ import java.util.Objects;
  * 基础实体类
  * - 典型案例：数据权限参数配置
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/11/24
  */
-public class Entity implements Serializable {
+public class BasicRequest implements Serializable {
 
     /**
      * 自定义参数
@@ -29,7 +29,7 @@ public class Entity implements Serializable {
         this.map = map;
     }
 
-    public Entity put(String key, Object value) {
+    public BasicRequest put(String key, Object value) {
         if (StringUtil.isBlank(key) || Objects.isNull(value)) {
             return this;
         }

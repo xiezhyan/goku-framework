@@ -11,7 +11,7 @@ import top.zopx.starter.activiti.service.impl.ActivitiServiceImpl;
 import top.zopx.starter.activiti.service.impl.BusinessFlowServiceImpl;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/18
  */
 @Component

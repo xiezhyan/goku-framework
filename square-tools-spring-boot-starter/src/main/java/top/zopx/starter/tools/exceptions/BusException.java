@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 /**
  * 自定义异常信息
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/1/26
  */
 public class BusException extends RuntimeException {

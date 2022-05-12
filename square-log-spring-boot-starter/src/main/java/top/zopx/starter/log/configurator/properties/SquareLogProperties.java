@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import top.zopx.starter.tools.constants.PropertiesCons;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/14
  */
 @Configuration

@@ -77,6 +77,8 @@
 		<validator.version>7.0.4.Final</validator.version>
 		
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+
+		<mybatis.plus.dynamic.version>3.5.1</mybatis.plus.dynamic.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -152,6 +154,14 @@
 				<version>${org.mapstruct.version}</version>
 			</dependency>
 			<!-- bean copy end -->
+
+			<!--动态数据源-->
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+				<version>${mybatis.plus.dynamic.version}</version>
+			</dependency>
+			<!--动态数据源-->
 		</dependencies>
 	</dependencyManagement>
 	

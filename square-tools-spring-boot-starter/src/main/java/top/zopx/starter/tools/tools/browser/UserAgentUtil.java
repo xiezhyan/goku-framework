@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * 对提交的UserAgent进行操作， 获取系统
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/1/26
  */
 public class UserAgentUtil {

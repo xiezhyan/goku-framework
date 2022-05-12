@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * 常用字符串操作
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/1/26
  */
 public class StringUtil extends StringUtils {

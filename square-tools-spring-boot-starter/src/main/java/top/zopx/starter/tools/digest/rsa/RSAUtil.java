@@ -19,7 +19,7 @@ import java.security.spec.X509EncodedKeySpec;
 /**
  * RSA 对称加密
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/5/11
  */
 public enum RSAUtil {

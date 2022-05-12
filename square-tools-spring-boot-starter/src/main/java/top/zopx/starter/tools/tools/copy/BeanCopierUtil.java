@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * 复制对象
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/12/12
  */
 public class BeanCopierUtil {

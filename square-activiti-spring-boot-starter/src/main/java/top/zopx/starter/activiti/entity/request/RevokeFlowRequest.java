@@ -1,7 +1,7 @@
 package top.zopx.starter.activiti.entity.request;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/7/1
  */
 public class RevokeFlowRequest {

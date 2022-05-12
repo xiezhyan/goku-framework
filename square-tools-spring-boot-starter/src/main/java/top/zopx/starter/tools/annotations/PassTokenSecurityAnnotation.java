@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 跳过token验证，即跳过登录
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/11/6
  */
 @Target(value = {ElementType.TYPE, ElementType.METHOD})

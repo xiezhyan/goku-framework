@@ -3,7 +3,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/16
  */
 @SpringBootApplication

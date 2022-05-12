@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 封装返回数据
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/5/3
  */
 public final class R<T> implements Serializable {

@@ -13,7 +13,6 @@
     <properties>
         <mybatis.version>2.2.2</mybatis.version>
         <pagehelper.version>1.4.1</pagehelper.version>
-        <mybatis.plus.dynamic.version>3.5.1</mybatis.plus.dynamic.version>
         <mysql.version>8.0.22</mysql.version>
         <druid.version>1.2.8</druid.version>
     </properties>
@@ -22,6 +21,12 @@
     <name>${groupId}:${artifactId}</name>
 
     <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>square-tools-spring-boot-starter</artifactId>
+            <version>${square.version}</version>
+        </dependency>
+
         <!--持久化 start-->
         <!--mybatis-->
         <dependency>
@@ -36,13 +41,6 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis.plus.version}</version>
         </dependency>
-        <!--动态数据源-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>${mybatis.plus.dynamic.version}</version>
-        </dependency>
-        <!--动态数据源-->
         <!--mybatis plus-->
         <!--数据源-->
         <dependency>

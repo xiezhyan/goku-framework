@@ -1,7 +1,7 @@
 package top.zopx.starter.log.constant;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/12
  */
 public class LogConstant {

@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2021/4/18
  */
 @Target(value = ElementType.TYPE)

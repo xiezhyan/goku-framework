@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * 跳过全部验证
  *
- * @author sanq.Yan
+ * @author 俗世游子
  * @date 2020/11/16
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
