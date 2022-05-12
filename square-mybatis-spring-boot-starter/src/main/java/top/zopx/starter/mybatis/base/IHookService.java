@@ -52,6 +52,8 @@ public interface IHookService<Request, Entity> {
      * @param id 主键
      * @return Entity
      */
-    Entity doDeleteBefore(Long id);
+    default Entity doDeleteBefore(Long id) {
+        return null;
+    }
 
 }

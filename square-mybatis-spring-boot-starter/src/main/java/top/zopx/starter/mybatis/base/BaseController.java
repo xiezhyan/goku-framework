@@ -21,9 +21,9 @@ public abstract class BaseController<Request extends BasicRequest, Response, Ent
     /**
      * 获取服务
      *
-     * @return
+     * @return IBaseService
      */
-    abstract IBaseService<Request, Response, Entity> baseService();
+    protected abstract IBaseService<Request, Response, Entity> baseService();
 
     @GetMapping
     public R<Page<Response>> getList(
