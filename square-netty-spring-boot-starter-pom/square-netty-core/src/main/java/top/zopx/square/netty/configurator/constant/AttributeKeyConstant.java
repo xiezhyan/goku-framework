@@ -12,7 +12,7 @@ public interface AttributeKeyConstant {
     /**
      * 登录之后绑定
      */
-    AttributeKey<String> USER_ATTR = AttributeKey.valueOf("USER_LOGIN_BIND");
+    AttributeKey<Long> USER_ATTR = AttributeKey.valueOf("USER_LOGIN_BIND");
 
     /**
      * 心跳检测机制

@@ -123,7 +123,7 @@ public enum GroupKit {
      * @param msg         消息
      * @param channelKeys 指定发送
      */
-    public void write(String groupKey, GeneratedMessageV3 msg, List<String> channelKeys) {
+    public void write(String groupKey, GeneratedMessageV3 msg, List<Long> channelKeys) {
         if (StringUtils.isBlank(groupKey) || null == msg) {
             LOGGER.error("参数传递异常，不处理");
             return;

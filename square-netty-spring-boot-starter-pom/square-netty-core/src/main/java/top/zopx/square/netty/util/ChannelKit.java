@@ -30,7 +30,8 @@ public final class ChannelKit {
     private final AtomicInteger idGen = new AtomicInteger(0);
 
     private final List<Channel> EMPTY_LIST;
-    private final Multimap<String, Channel> SESSION_MAP;
+    private final Multimap<Long, Channel> SESSION_MAP;
+
     private final transient ChannelFutureListener listener = new ChannelFutureListener() {
         @Override
         public void operationComplete(ChannelFuture future) {
@@ -58,7 +59,7 @@ public final class ChannelKit {
      * @param channel 通道
      * @return ID
      */
-    public String getUserIdByChannel(Channel channel) {
+    public Long getUserIdByChannel(Channel channel) {
         return channel.attr(AttributeKeyConstant.USER_ATTR).get();
     }
 
@@ -68,7 +69,7 @@ public final class ChannelKit {
      * @param id 用户ID
      * @return Collection<Channel>
      */
-    public Collection<Channel> getById(String id) {
+    public Collection<Channel> getById(Long id) {
         return SESSION_MAP.get(id);
     }
 
@@ -78,7 +79,7 @@ public final class ChannelKit {
      * @param id 用户ID
      * @return Channel
      */
-    public Optional<Channel> getFirstById(String id) {
+    public Optional<Channel> getFirstById(Long id) {
         return getById(id).stream().findFirst();
     }
 
@@ -89,7 +90,7 @@ public final class ChannelKit {
      * @param predicate 过滤条件
      * @return Collection<Channel>
      */
-    public Collection<Channel> getById(String id, Predicate<Channel> predicate) {
+    public Collection<Channel> getById(Long id, Predicate<Channel> predicate) {
         return getById(id).stream().filter(predicate).collect(Collectors.toList());
     }
 
@@ -101,7 +102,7 @@ public final class ChannelKit {
      * @return Collection<Channel>
      */
     public Collection<Channel> getById(Channel channel) {
-        String id = this.getUserIdByChannel(channel);
+        Long id = this.getUserIdByChannel(channel);
         if (id != null) {
             return SESSION_MAP.get(id);
         }
@@ -116,7 +117,7 @@ public final class ChannelKit {
      * @param channel 通道
      */
     public void put(Channel channel) {
-        String id = this.getUserIdByChannel(channel);
+        Long id = this.getUserIdByChannel(channel);
         if (id != null && channel.isActive()) {
             channel.closeFuture().addListener(this.listener);
             SESSION_MAP.put(id, channel);
@@ -134,7 +135,7 @@ public final class ChannelKit {
      * @param channel 通道
      */
     public void remove(Channel channel) {
-        String id = this.getUserIdByChannel(channel);
+        Long id = this.getUserIdByChannel(channel);
         if (id != null) {
             SESSION_MAP.remove(id, channel);
             if (CollectionUtils.isEmpty(getById(id))) {
@@ -149,7 +150,7 @@ public final class ChannelKit {
      * @param key       标识
      * @param predicate 过滤条件
      */
-    public void remove(String key, Predicate<Channel> predicate) {
+    public void remove(Long key, Predicate<Channel> predicate) {
         this.getById(key).stream().filter(predicate).forEach(this::close);
     }
 
@@ -190,7 +191,7 @@ public final class ChannelKit {
      * @param msg       消息
      * @param predicate 过滤器
      */
-    public void write(String key, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
+    public void write(Long key, GeneratedMessageV3 msg, Predicate<Channel> predicate) {
         this.getById(key, predicate).forEach(client -> writeToLoop(client, msg));
     }
 
