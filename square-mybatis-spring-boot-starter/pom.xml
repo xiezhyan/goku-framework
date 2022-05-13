@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>top.zopx</groupId>
-            <artifactId>square-tools-spring-boot-starter</artifactId>
+            <artifactId>square-log-spring-boot-starter</artifactId>
             <version>${square.version}</version>
         </dependency>
 
