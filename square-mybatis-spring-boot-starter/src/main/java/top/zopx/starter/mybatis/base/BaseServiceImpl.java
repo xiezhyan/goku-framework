@@ -50,7 +50,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
         if (baseMapper.insert(entity) == 1) {
             return doCreateAfter(entity);
         }
-        return false;
+        throw new BusException(ErrorCodeCons.ERROR_CREATE);
     }
 
     @Override
@@ -65,7 +65,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
         if (baseMapper.updateById(entity) == 1) {
             return doUpdateAfter(entity);
         }
-        return false;
+        throw new BusException(ErrorCodeCons.ERROR_UPDATE);
     }
 
 

@@ -13,6 +13,14 @@ public enum ErrorCodeCons implements IBus {
      * 主键查询结果不存在
      */
     NOT_ENTITY("主键查询结果不存在", 1000),
+    /**
+     * 修改数据失败
+     */
+    ERROR_UPDATE("修改数据发生异常", 1001),
+    /**
+     *
+     */
+    ERROR_CREATE("创建数据发生异常", 1002),
     ;
 
     /**
