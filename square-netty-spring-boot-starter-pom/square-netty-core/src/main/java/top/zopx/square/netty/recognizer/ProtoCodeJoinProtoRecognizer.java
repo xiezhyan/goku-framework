@@ -1,4 +1,4 @@
-package top.zopx.square.netty.msgGenRecognizer;
+package top.zopx.square.netty.recognizer;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Internal;
@@ -19,19 +19,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @email xiezhyan@126.com
  * @date 2022/04/04 22:35
  */
-public final class ProtoCodeToProtoRecognizer {
+public final class ProtoCodeJoinProtoRecognizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleGenMsgRecognizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MsgJoinHandlerRecognizer.class);
 
-    private ProtoCodeToProtoRecognizer() {
+    private ProtoCodeJoinProtoRecognizer() {
     }
 
     private static class Holder {
-        public static final ProtoCodeToProtoRecognizer INSTANCE = new ProtoCodeToProtoRecognizer();
+        public static final ProtoCodeJoinProtoRecognizer INSTANCE = new ProtoCodeJoinProtoRecognizer();
     }
 
-    public static ProtoCodeToProtoRecognizer getInstance() {
-        return ProtoCodeToProtoRecognizer.Holder.INSTANCE;
+    public static ProtoCodeJoinProtoRecognizer getInstance() {
+        return ProtoCodeJoinProtoRecognizer.Holder.INSTANCE;
     }
 
     /**

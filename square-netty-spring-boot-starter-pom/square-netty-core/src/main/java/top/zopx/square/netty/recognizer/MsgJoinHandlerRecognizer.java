@@ -1,4 +1,4 @@
-package top.zopx.square.netty.msgGenRecognizer;
+package top.zopx.square.netty.recognizer;
 
 import com.google.protobuf.GeneratedMessageV3;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,23 +47,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2022/1/19
  * @email xiezhyan@126.com
  */
-public final class HandleGenMsgRecognizer {
+public final class MsgJoinHandlerRecognizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HandleGenMsgRecognizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MsgJoinHandlerRecognizer.class);
 
     /**
      * 消息对象和逻辑处理类的映射
      */
     private static final Map<Class<?>, ICmdHandler<? extends GeneratedMessageV3>> CLASS_HANDLE_MAP = new ConcurrentHashMap<>(128);
 
-    private HandleGenMsgRecognizer() {
+    private MsgJoinHandlerRecognizer() {
     }
 
     private static class Holder {
-        public static final HandleGenMsgRecognizer INSTANCE = new HandleGenMsgRecognizer();
+        public static final MsgJoinHandlerRecognizer INSTANCE = new MsgJoinHandlerRecognizer();
     }
 
-    public static HandleGenMsgRecognizer getInstance() {
+    public static MsgJoinHandlerRecognizer getInstance() {
         return Holder.INSTANCE;
     }
 

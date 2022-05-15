@@ -4,7 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.square.netty.handle.ICmdHandler;
-import top.zopx.square.netty.msgGenRecognizer.HandleGenMsgRecognizer;
+import top.zopx.square.netty.recognizer.MsgJoinHandlerRecognizer;
 
 /**
  * @author 俗世游子
@@ -28,7 +28,7 @@ public abstract class BaseCmdHandlerFactory {
      * ICmdHandler和消息体之间的映射初始化操作
      */
     public void tryInit() {
-        HandleGenMsgRecognizer.getInstance().getClassHandleMap(getScanPackage());
+        MsgJoinHandlerRecognizer.getInstance().getClassHandleMap(getScanPackage());
     }
 
     /**
@@ -56,6 +56,6 @@ public abstract class BaseCmdHandlerFactory {
             return null;
         }
 
-        return HandleGenMsgRecognizer.getInstance().get(cmdClazz);
+        return MsgJoinHandlerRecognizer.getInstance().get(cmdClazz);
     }
 }

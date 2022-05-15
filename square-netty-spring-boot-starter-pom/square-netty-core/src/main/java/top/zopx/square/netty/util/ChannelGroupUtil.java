@@ -23,13 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @email xiezhyan@126.com
  * @date 2021/9/29
  */
-public enum GroupKit {
+public enum ChannelGroupUtil {
     /**
      * 单例
      */
     INSTANCE,
     ;
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroupKit.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChannelGroupUtil.class);
     
     private static final Map<String, ChannelGroup> CHANNEL_GROUP_MAP = new ConcurrentHashMap<>(128);
 
@@ -139,7 +139,7 @@ public enum GroupKit {
         List<ChannelMatcher> list = new ArrayList<>();
         channelKeys.forEach(
                 channelKey ->
-                        ChannelKit.getInstance().getById(channelKey, Channel::isActive)
+                        ChannelBizUtil.getInstance().getChannelByUserId(channelKey, Channel::isActive)
                                 .forEach(channel -> list.add(ChannelMatchers.is(channel)))
         );
 
