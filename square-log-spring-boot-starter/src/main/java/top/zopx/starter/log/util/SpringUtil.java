@@ -67,9 +67,9 @@ public class SpringUtil implements ApplicationContextAware {
 
     public static void addRequestInfo(HttpServletRequest request, Map<String, Object> map) {
         map.put(LogConstant.REQUEST_URI, getPath(request.getRequestURI()));
-        map.put(LogConstant.IP, GlobalUtil.Request.getBrowserIp(request));
-        map.put(LogConstant.AGENT, GlobalUtil.Request.getBrowserAgent(request));
-        map.put(LogConstant.REFERENCE, GlobalUtil.Request.getBrowserRefer(request));
+        map.put(LogConstant.IP, GlobalUtil.CurrentRequest.getBrowserIp());
+        map.put(LogConstant.AGENT, GlobalUtil.CurrentRequest.getBrowserAgent());
+        map.put(LogConstant.REFERENCE, GlobalUtil.CurrentRequest.getBrowserRefer());
         map.put(LogConstant.CREATE_TIME, LocalDateUtil.INSTANCE.nowDateTime());
         map.put(LogConstant.REQUEST_TYPE, request.getMethod());
     }

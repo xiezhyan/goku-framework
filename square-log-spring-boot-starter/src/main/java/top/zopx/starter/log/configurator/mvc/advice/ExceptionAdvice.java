@@ -83,7 +83,7 @@ public class ExceptionAdvice {
     }
 
     public void publish(Throwable e) {
-        HttpServletRequest request = GlobalUtil.Request.getRequest();
+        HttpServletRequest request = GlobalUtil.CurrentRequest.getRequest();
         Map<String, Object> map = new HashMap<>();
         if (ObjectUtils.isNotEmpty(e)) {
             map.put(LogConstant.STACK_TRACE, printStackTraceToString(e));

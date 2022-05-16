@@ -46,7 +46,7 @@ public class ApiLogAspect implements IAspect {
     }
 
     public void publish(Map<String, Object> map, Object result) {
-        SpringUtil.addRequestInfo(GlobalUtil.Request.getRequest(), map);
+        SpringUtil.addRequestInfo(GlobalUtil.CurrentRequest.getRequest(), map);
         map.put(LogConstant.RESULT, SpringUtil.getJson().toJson(result));
         SpringUtil.publishEvent(new ApiLogEvent(map));
     }
