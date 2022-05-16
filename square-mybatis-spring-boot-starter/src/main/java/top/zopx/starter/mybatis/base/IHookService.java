@@ -14,7 +14,7 @@ public interface IHookService<Request, Entity> {
      *
      * @param request 入参
      */
-    default void doSearchBefore(Request request) {
+    default void doSearchBefore(Request req) {
     }
 
     /**
@@ -22,7 +22,7 @@ public interface IHookService<Request, Entity> {
      *
      * @param data 入参
      */
-    default void doUpdateBefore(Entity data, Request request) {
+    default void doUpdateBefore(Entity data, Request req) {
     }
 
     /**
@@ -40,7 +40,7 @@ public interface IHookService<Request, Entity> {
      *
      * @param request 入参
      */
-    default void doCreateBefore(Request request) {
+    default void doCreateBefore(Request req) {
     }
 
     /**
@@ -49,7 +49,7 @@ public interface IHookService<Request, Entity> {
      * @param entity 参数
      * @return 是否处理成功
      */
-    default Boolean doCreateAfter(Entity entity, Request request) {
+    default Boolean doCreateAfter(Entity entity, Request req) {
         return true;
     }
 
