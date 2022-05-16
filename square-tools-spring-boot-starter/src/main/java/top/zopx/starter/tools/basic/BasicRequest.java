@@ -54,7 +54,7 @@ public class BasicRequest implements Serializable {
      * @return Long
      */
     public Long getValueToLong(String key) {
-        return StringUtil.toLong(map.getOrDefault(key, "0"));
+        return StringUtil.toLong(map.getOrDefault(key, "-1"));
     }
 
     /**
@@ -64,7 +64,7 @@ public class BasicRequest implements Serializable {
      * @return Integer
      */
     public Integer getValueToInteger(String key) {
-        return StringUtil.toInteger(map.getOrDefault(key, "0"));
+        return StringUtil.toInteger(map.getOrDefault(key, "-1"));
     }
 
 
