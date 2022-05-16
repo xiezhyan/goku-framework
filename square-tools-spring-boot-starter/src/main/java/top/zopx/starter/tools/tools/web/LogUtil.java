@@ -18,15 +18,15 @@ import java.util.WeakHashMap;
  * @date 2022/05/16
  * @email xiezhyan@126.com
  */
-public final class Log {
+public final class LogUtil {
 
-    private static final Log LOG = new Log();
+    private static final LogUtil LOG = new LogUtil();
 
     private static Logger logger = null;
 
     private static final WeakHashMap<Class<?>, Logger> WEAK_HASH_MAP = new WeakHashMap<>();
 
-    public static Log getLogger(Class<?> clazz) {
+    public static LogUtil getLogger(Class<?> clazz) {
         synchronized (LOG) {
             logger = WEAK_HASH_MAP.putIfAbsent(clazz, LoggerFactory.getLogger(clazz));
             if (Objects.isNull(logger)) {
@@ -135,9 +135,5 @@ public final class Log {
         if (!this.isTrace()) {
             logger.trace(msg, args);
         }
-    }
-
-    public static void main(String[] args) {
-        Log.getLogger(Log.class).info("");
     }
 }
