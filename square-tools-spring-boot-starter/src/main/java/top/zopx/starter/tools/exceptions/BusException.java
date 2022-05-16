@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class BusException extends RuntimeException {
 
-    private String msg;
-    private Integer code;
+    private final String msg;
+    private final Integer code;
 
     public BusException(String msg) {
         super(msg);
@@ -33,15 +33,8 @@ public class BusException extends RuntimeException {
         return msg;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
     public Integer getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
-    }
 }
