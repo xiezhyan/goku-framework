@@ -9,6 +9,13 @@ package top.zopx.starter.mybatis.base;
  */
 public interface IHookService<Request, Entity> {
 
+    /**
+     * 查询钩子函数
+     *
+     * @param request 入参
+     */
+    default void doSearchBefore(Request request) {
+    }
 
     /**
      * 修改钩子函数

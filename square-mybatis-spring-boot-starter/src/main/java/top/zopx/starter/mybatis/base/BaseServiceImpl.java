@@ -34,6 +34,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
             page = PageMethod.startPage(pagination.getCurrentIndex(), pagination.getPageSize());
             sorteds = pagination.getSorteds();
         }
+        doSearchBefore(request);
         List<Entity> list = baseMapper.getListOrder(request, sorteds);
         if (null != consumer && null != page) {
             consumer.accept(page.getTotal());
