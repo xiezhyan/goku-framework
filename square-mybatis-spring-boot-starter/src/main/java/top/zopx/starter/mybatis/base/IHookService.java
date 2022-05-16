@@ -22,7 +22,7 @@ public interface IHookService<Request, Entity> {
      *
      * @param data 入参
      */
-    default void doUpdateBefore(Entity data) {
+    default void doUpdateBefore(Entity data, Request request) {
     }
 
     /**
@@ -49,7 +49,7 @@ public interface IHookService<Request, Entity> {
      * @param entity 参数
      * @return 是否处理成功
      */
-    default Boolean doCreateAfter(Entity entity) {
+    default Boolean doCreateAfter(Entity entity, Request request) {
         return true;
     }
 

@@ -49,7 +49,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
         doCreateBefore(request);
         Entity entity = copyToEntity(request);
         if (baseMapper.insert(entity) == 1) {
-            return doCreateAfter(entity);
+            return doCreateAfter(entity, request);
         }
         throw new BusException(ErrorCodeCons.ERROR_CREATE);
     }
@@ -62,7 +62,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
         copyNotNullForRequest(request, entity);
         // 需要额外处理的操作，钩子函数
-        doUpdateBefore(entity);
+        doUpdateBefore(entity, request);
         if (baseMapper.updateById(entity) == 1) {
             return doUpdateAfter(entity);
         }
