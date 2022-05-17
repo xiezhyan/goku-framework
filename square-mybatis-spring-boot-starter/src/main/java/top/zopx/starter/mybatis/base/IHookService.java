@@ -38,9 +38,10 @@ public interface IHookService<Request, Entity> {
     /**
      * 创建钩子函数
      *
-     * @param request 入参
+     * @param req 入参
+     * @param entity 入参
      */
-    default void doCreateBefore(Request req) {
+    default void doCreateBefore(Entity entity, Request req) {
     }
 
     /**

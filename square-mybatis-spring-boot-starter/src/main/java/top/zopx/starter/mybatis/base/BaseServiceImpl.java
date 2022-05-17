@@ -46,8 +46,8 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean create(Request request) {
-        doCreateBefore(request);
         Entity entity = copyToEntity(request);
+        doCreateBefore(entity, request);
         if (baseMapper.insert(entity) == 1) {
             return doCreateAfter(entity, request);
         }
@@ -60,9 +60,9 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
         Entity entity =
                 Optional.ofNullable(baseMapper.selectById(id))
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
-        copyNotNullForRequest(request, entity);
         // 需要额外处理的操作，钩子函数
         doUpdateBefore(entity, request);
+        copyNotNullForRequest(request, entity);
         if (baseMapper.updateById(entity) == 1) {
             return doUpdateAfter(entity);
         }
