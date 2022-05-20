@@ -19,7 +19,7 @@ public class BasicRequest implements Serializable {
     /**
      * 自定义参数
      */
-    private Map<String, Object> map = new HashMap<>(8);
+    private transient Map<String, Object> map = new HashMap<>(8);
 
     public Map<String, Object> getMap() {
         return map;
