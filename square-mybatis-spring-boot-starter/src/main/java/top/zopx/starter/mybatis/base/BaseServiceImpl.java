@@ -6,7 +6,6 @@ import com.github.pagehelper.page.PageMethod;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.starter.mybatis.constant.ErrorCodeCons;
 import top.zopx.starter.mybatis.entity.DataEntity;
-import top.zopx.starter.tools.basic.BasicRequest;
 import top.zopx.starter.tools.basic.Pagination;
 import top.zopx.starter.tools.basic.Sorted;
 import top.zopx.starter.tools.exceptions.BusException;
@@ -22,12 +21,12 @@ import java.util.function.LongConsumer;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, Entity extends DataEntity, Mapper extends IBaseMapper<Entity, Request>>
+public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper extends IBaseMapper<Entity, DTO>>
         extends ServiceImpl<Mapper, Entity>
-        implements IBaseService<Request, Response, Entity>, IHookService<Request, Entity> {
+        implements IBaseService<DTO, Entity>, IHookService<DTO, Entity> {
 
     @Override
-    public List<Response> getList(Pagination pagination, Request request, LongConsumer consumer) {
+    public List<DTO> getList(Pagination pagination, DTO request, LongConsumer consumer) {
         Page<Module> page = null;
         List<Sorted> sorteds = null;
         if (null != pagination) {
@@ -45,7 +44,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean create(Request request) {
+    public Boolean create(DTO request) {
         Entity entity = copyToEntity(request);
         doCreateBefore(entity, request);
         if (baseMapper.insert(entity) == 1) {
@@ -56,7 +55,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateByPriKey(Request request, Long id) {
+    public Boolean updateByPriKey(DTO request, Long id) {
         Entity entity =
                 Optional.ofNullable(baseMapper.selectById(id))
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
@@ -82,7 +81,7 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
     }
 
     @Override
-    public Response getByPriKey(Long id) {
+    public DTO getByPriKey(Long id) {
         Entity entity =
                 Optional.ofNullable(baseMapper.selectById(id))
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
@@ -95,20 +94,20 @@ public abstract class BaseServiceImpl<Request  extends BasicRequest, Response, E
      * @param data Entity参数
      * @return Response
      */
-    protected abstract Response copyToResponse(Entity data);
+    protected abstract DTO copyToResponse(Entity data);
 
     /**
      * 将Request转换为Entity
      *
-     * @param request 入参
+     * @param dto 入参
      * @return Entity
      */
-    protected abstract Entity copyToEntity(Request request);
+    protected abstract Entity copyToEntity(DTO dto);
 
     /**
      * 将非空的Request转换为Entity
      *
-     * @param request 入参
+     * @param dto 入参
      */
-    protected abstract void copyNotNullForRequest(Request request, Entity data);
+    protected abstract void copyNotNullForRequest(DTO dto, Entity data);
 }

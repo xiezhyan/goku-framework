@@ -19,11 +19,11 @@ import java.util.function.LongConsumer;
  * @date 2022/05/12
  */
 public abstract class BaseController<
-        Request extends BasicRequest,
-        Response,
+        VO extends BasicRequest,
+        DTO,
         Entity extends DataEntity,
-        Service extends IBaseService<Request, Response, Entity>
-> {
+        Service extends IBaseService<DTO, Entity>
+        > {
 
     /**
      * 获取服务
@@ -35,40 +35,45 @@ public abstract class BaseController<
 
     @GetMapping
     @OperatorLogAnnotation(value = "获取数据列表")
-    public R<Page<Response>> getList(
+    public R<Page<VO>> getList(
             Pagination pagination,
-            Request request
+            VO vo
     ) {
         LongConsumer consumer = null;
         if (null != pagination) {
             consumer = pagination::setTotalCount;
         }
-
         return R.result(
-                new Page<>(pagination, baseService.getList(pagination, request, consumer))
+                new Page<>(
+                        pagination,
+                        baseService.getList(pagination, convertToDTO(vo), consumer)
+                                .stream()
+                                .map(this::convertToVO)
+                                .toList()
+                )
         );
     }
 
     @GetMapping("/{id}")
     @OperatorLogAnnotation(value = "获取数据详情")
-    public R<Response> getByPriKey(
+    public R<VO> getByPriKey(
             @PathVariable("id") Long id
     ) {
         return R.result(
-                baseService.getByPriKey(id)
+                convertToVO(baseService.getByPriKey(id))
         );
     }
 
     @PostMapping
     @OperatorLogAnnotation(value = "保存")
-    public R<Boolean> save(@Valid @RequestBody Request request) {
-        return R.result(baseService.create(request));
+    public R<Boolean> save(@Valid @RequestBody VO vo) {
+        return R.result(baseService.create(convertToDTO(vo)));
     }
 
     @PutMapping("/{id}")
     @OperatorLogAnnotation(value = "通过主键修改")
-    public R<Boolean> updateByPriKey(@Valid @RequestBody Request request, @PathVariable("id") Long id) {
-        return R.result(baseService.updateByPriKey(request, id));
+    public R<Boolean> updateByPriKey(@Valid @RequestBody VO vo, @PathVariable("id") Long id) {
+        return R.result(baseService.updateByPriKey(convertToDTO(vo), id));
     }
 
     @DeleteMapping("/{id}")
@@ -77,4 +82,23 @@ public abstract class BaseController<
         return R.result(baseService.deleteByPriKey(id));
     }
 
+    /**
+     * 将VO转换为DTO
+     *
+     * @param vo VO对象
+     * @return DTO
+     */
+    protected DTO convertToDTO(VO vo) {
+        return (DTO) vo;
+    }
+
+    /**
+     * 将DTO转换为VO
+     *
+     * @param dto DTO对象
+     * @return VO
+     */
+    protected VO convertToVO(DTO dto) {
+        return (VO) dto;
+    }
 }
