@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.LongConsumer;
+import java.util.stream.Collectors;
 
 /**
  * 基础服务实现
@@ -27,7 +28,7 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
 
     @Override
     public List<DTO> getList(Pagination pagination, DTO request, LongConsumer consumer) {
-        Page<Module> page = null;
+        Page<Entity> page = null;
         List<Sorted> sorteds = null;
         if (null != pagination) {
             page = PageMethod.startPage(pagination.getCurrentIndex(), pagination.getPageSize());
@@ -39,7 +40,7 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
             consumer.accept(page.getTotal());
         }
 
-        return list.stream().map(this::copyToResponse).toList();
+        return list.stream().map(this::copyToResponse).collect(Collectors.toList());
     }
 
     @Override

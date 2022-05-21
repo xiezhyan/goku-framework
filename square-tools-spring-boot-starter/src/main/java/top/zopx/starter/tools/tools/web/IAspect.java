@@ -47,7 +47,7 @@ public interface IAspect {
         return joinPoint.getArgs();
     }
 
-    private Method getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes) {
+    default Method getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes) {
         try {
             return clazz.getDeclaredMethod(name, parameterTypes);
         } catch (NoSuchMethodException e) {

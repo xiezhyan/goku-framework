@@ -11,6 +11,7 @@ import top.zopx.starter.tools.basic.R;
 
 import javax.validation.Valid;
 import java.util.function.LongConsumer;
+import java.util.stream.Collectors;
 
 /**
  * 基础Controller
@@ -49,7 +50,7 @@ public abstract class BaseController<
                         baseService.getList(pagination, convertToDTO(vo), consumer)
                                 .stream()
                                 .map(this::convertToVO)
-                                .toList()
+                                .collect(Collectors.toList())
                 )
         );
     }

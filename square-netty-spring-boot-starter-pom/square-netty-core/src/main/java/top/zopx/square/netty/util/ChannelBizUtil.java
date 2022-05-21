@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Channel相关操作
@@ -138,7 +139,7 @@ public final class ChannelBizUtil {
                     .filter(ch -> channel.attr(AttributeKeyConstant.PLATFORM).equals(ch.attr(AttributeKeyConstant.PLATFORM)))
                     .findFirst();
 
-            if (oldChannel.isEmpty()) {
+            if (!oldChannel.isPresent()) {
                 channel.closeFuture().addListener(this.listener);
                 SESSION_MAP.put(id, channel);
                 return;
@@ -169,7 +170,7 @@ public final class ChannelBizUtil {
      * @return Collection<Channel>
      */
     public Collection<Channel> getChannelByUserId(Long id, Predicate<Channel> predicate) {
-        return getChannelByUserId(id).stream().filter(predicate).toList();
+        return getChannelByUserId(id).stream().filter(predicate).collect(Collectors.toList());
     }
 
 
@@ -237,7 +238,7 @@ public final class ChannelBizUtil {
     @SuppressWarnings("all")
     public void write(Channel channel, GeneratedMessageV3 msg, int... platforms) {
         getAllChannelByChannel(channel).stream().filter(ch ->
-                List.of(platforms).contains(ch.attr(AttributeKeyConstant.PLATFORM).get())
+                Arrays.asList(platforms).contains(ch.attr(AttributeKeyConstant.PLATFORM).get())
         ).forEach(ch -> write(ch, msg));
     }
 }

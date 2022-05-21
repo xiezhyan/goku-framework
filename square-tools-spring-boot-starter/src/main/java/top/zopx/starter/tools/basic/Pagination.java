@@ -1,6 +1,5 @@
 package top.zopx.starter.tools.basic;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
  */
 public class Pagination implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     // 当前显示的条数,默认显示100条
