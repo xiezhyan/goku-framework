@@ -89,9 +89,7 @@ public abstract class BaseController<
      * @param vo VO对象
      * @return DTO
      */
-    protected DTO convertToDTO(VO vo) {
-        return (DTO) vo;
-    }
+    protected abstract DTO convertToDTO(VO vo);
 
     /**
      * 将DTO转换为VO
@@ -99,7 +97,5 @@ public abstract class BaseController<
      * @param dto DTO对象
      * @return VO
      */
-    protected VO convertToVO(DTO dto) {
-        return (VO) dto;
-    }
+    protected abstract VO convertToVO(DTO dto);
 }
