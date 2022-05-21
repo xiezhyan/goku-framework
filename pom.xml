@@ -4,14 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<modules>
-		<module>square-tools-spring-boot-starter</module>
-		<module>square-log-spring-boot-starter</module>
-		<module>square-mybatis-spring-boot-starter</module>
-		<module>square-activiti-spring-boot-starter</module>
-		<module>square-netty-spring-boot-starter-pom</module>
-	</modules>
-	
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -29,10 +21,9 @@
 	<developers>
 		<developer>
 			<id>mr.sanq</id>
-			<name>mr.sanq</name>
-			<email>bin_cruel@sohu.com</email>
+			<name>俗世游子</name>
+			<email>xiezhyan@126.com</email>
 			<roles>
-				<role>Admin</role>
 				<role>Developer</role>
 			</roles>
 			<timezone>+8</timezone>
@@ -40,12 +31,19 @@
 	</developers>
 	
 	<groupId>top.zopx</groupId>
-	<artifactId>square-spring-boot-starter</artifactId>
-	<version>1.4.0.220501</version>
+	<artifactId>goku-framework</artifactId>
+	<version>1.5.0.220601</version>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
-	<description>square-spring-boot-starter</description>
-	<name>${groupId}:${artifactId}</name>
+	
+	<description>${project.artifactId}快速开发架构</description>
+	<name>${groupId}:${artifactId}:${version}</name>
+	
+	<modules>
+		<module>goku-framework-tools</module>
+		<module>goku-framework-socket</module>
+		<module>goku-framework-starter</module>
+	</modules>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,7 +53,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		
-		<square.version>1.4.0.220501</square.version>
+		<square.version>1.5.0.220601</square.version>
 		
 		<spring.boot.version>2.6.4</spring.boot.version>
 		<spring.cloud.version>2021.0.1</spring.cloud.version>
@@ -267,6 +265,7 @@
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
 						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.12</version>
 						<!-- autoReleaseAfterClose的值为true，则脚本会自动完成在平台上close、release的操作，至此你将成功发布了 -->
 						<extensions>true</extensions>
 						<configuration>
@@ -279,6 +278,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-release-plugin</artifactId>
+						<version>2.5.3</version>
 						<configuration>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<useReleaseProfile>false</useReleaseProfile>
@@ -290,6 +290,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -304,6 +305,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -317,6 +319,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.3.2</version>
 						<configuration>
 							<!-- 解决控制台乱码 -->
 							<charset>UTF-8</charset>

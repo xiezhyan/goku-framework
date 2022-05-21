@@ -7,7 +7,7 @@
     <parent>
         <groupId>top.zopx</groupId>
         <artifactId>square-spring-boot-starter</artifactId>
-        <version>1.4.0.220501</version>
+        <version>1.5.0.220601</version>
     </parent>
 
     <artifactId>square-tools-spring-boot-starter</artifactId>

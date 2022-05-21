@@ -6,30 +6,22 @@
 
     <parent>
         <groupId>top.zopx</groupId>
-        <artifactId>square-spring-boot-starter</artifactId>
+        <artifactId>goku-framework-starter</artifactId>
         <version>1.5.0.220601</version>
     </parent>
 
-    <artifactId>square-log-spring-boot-starter</artifactId>
-    <name>${groupId}:${artifactId}</name>
-
-    <dependencies>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>square-tools-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-    </dependencies>
-
+    <artifactId>goku-framework-starter-log</artifactId>
+    <description>日志处理框架</description>
+    <name>${groupId}:${artifactId}:${version}</name>
+    
     <build>
         <finalName>${project.artifactId}-${version}</finalName>
-
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <proc>none</proc>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -37,4 +29,5 @@
             </plugin>
         </plugins>
     </build>
+    
 </project>
