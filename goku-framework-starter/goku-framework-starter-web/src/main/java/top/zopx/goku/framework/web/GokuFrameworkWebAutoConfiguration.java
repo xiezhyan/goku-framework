@@ -1,5 +1,6 @@
 package top.zopx.goku.framework.web;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -19,15 +20,13 @@ import top.zopx.goku.framework.web.properties.BootstrapSkipUri;
 @Import({
         GsonConfigurator.class, OkHttpFeignConfigurator.class
 })
+@EnableConfigurationProperties({
+        BootstrapSkipUri.class
+})
 public class GokuFrameworkWebAutoConfiguration {
 
     @Bean
     public SpringContext springContext() {
         return new SpringContext();
-    }
-
-    @Bean
-    public BootstrapSkipUri bootstrapSkipUri() {
-        return new BootstrapSkipUri();
     }
 }

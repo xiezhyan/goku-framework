@@ -14,6 +14,14 @@
     <description>日志处理框架</description>
     <name>${groupId}:${artifactId}:${version}</name>
     
+    <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-web</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
+    </dependencies>
+    
     <build>
         <finalName>${project.artifactId}-${version}</finalName>
         
