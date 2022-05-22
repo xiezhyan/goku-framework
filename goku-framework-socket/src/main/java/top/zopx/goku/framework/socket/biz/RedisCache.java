@@ -116,7 +116,7 @@ public final class RedisCache {
         /**
          * 从配置文件中加载配置
          */
-        public static Config fromJsonObject(JsonObject jsonObj) {
+        public static Config fromJsonData(JsonObject jsonObj) {
             if (Objects.isNull(jsonObj) || !jsonObj.has("redis")) {
                 LOGGER.error("没有对应的配置项，无法加载");
                 return null;
@@ -124,12 +124,12 @@ public final class RedisCache {
             Config config = new Config();
 
             JsonObject redisObj = jsonObj.getAsJsonObject("redis");
-            redisObj.entrySet().forEach(entry -> {
-                MAP.put(
-                        entry.getKey(),
-                        JsonUtil.getInstance().getGson().fromJson(entry.getValue(), RedisCacheItemConfig.class)
-                );
-            });
+            redisObj.entrySet().forEach(entry ->
+                    MAP.put(
+                            entry.getKey(),
+                            JsonUtil.getInstance().getGson().fromJson(entry.getValue(), RedisCacheItemConfig.class)
+                    )
+            );
             return config;
         }
 

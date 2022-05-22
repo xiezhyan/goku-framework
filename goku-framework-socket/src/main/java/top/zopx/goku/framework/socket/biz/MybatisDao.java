@@ -184,7 +184,7 @@ public final class MybatisDao {
          * @param jsonObj JSON 对象
          * @return 配置项
          */
-        public static Config fromJSONObj(JsonObject jsonObj) {
+        public static Config fromJsonData(JsonObject jsonObj) {
             if (Objects.isNull(jsonObj) || !jsonObj.has("db")) {
                 LOGGER.error("没有对应的配置项，无法加载");
                 return null;
