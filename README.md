@@ -13,4 +13,6 @@ top.zopx:goku-framework-starter-mysql-binlog
 top.zopx:goku-framework-starter-cache
 top.zopx:goku-framework-starter-material
 top.zopx:goku-framework-starter-mq
+top.zopx:goku-framework-starter-process
+top.zopx:goku-framework-starter-schedule
 ```
