@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-web</artifactId>
+            <artifactId>goku-framework-starter-log</artifactId>
             <version>${goku.version}</version>
         </dependency>
         <!--持久化 start-->
