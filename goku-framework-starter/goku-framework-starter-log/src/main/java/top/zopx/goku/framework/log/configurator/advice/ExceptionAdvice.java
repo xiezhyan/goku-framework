@@ -10,7 +10,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import top.zopx.goku.framework.log.configurator.aspect.ApiLogAspect;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ErrorLogEvent;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
@@ -19,10 +18,12 @@ import top.zopx.goku.framework.web.context.GlobalContext;
 import top.zopx.goku.framework.web.context.SpringContext;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,13 +56,6 @@ public class ExceptionAdvice {
         publish(e);
         return R.failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), HttpStatus.FORBIDDEN.value());
 
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public R<String> handleValidationException(ConstraintViolationException e) {
-        LOGGER.error("校验参数异常信息：{}", e.getMessage());
-        publish(e);
-        return R.failure(e.getMessage(), HttpStatus.FORBIDDEN.value());
     }
 
     @ExceptionHandler(BindException.class)
@@ -99,8 +93,28 @@ public class ExceptionAdvice {
                 map.put(LogConstant.LINE_NUMBER, element.getLineNumber());
             }
         }
-        ApiLogAspect.addRequestInfo(request, map);
+        addRequestInfo(request, map);
         SpringContext.publishEvent(new ErrorLogEvent(map));
+    }
+
+    public static void addRequestInfo(HttpServletRequest request, Map<String, Object> map) {
+        map.put(LogConstant.REQUEST_URI, getPath(request.getRequestURI()));
+        map.put(LogConstant.IP, GlobalContext.CurrentRequest.getBrowserIp());
+        map.put(LogConstant.AGENT, GlobalContext.CurrentRequest.getBrowserAgent());
+        map.put(LogConstant.REFERENCE, GlobalContext.CurrentRequest.getBrowserRefer());
+        map.put(LogConstant.CREATE_TIME, LocalDateTime.now());
+        map.put(LogConstant.REQUEST_TYPE, request.getMethod());
+    }
+
+    public static String getPath(String uriStr) {
+        URI uri;
+        try {
+            uri = new URI(uriStr);
+        } catch (URISyntaxException var3) {
+            throw new RuntimeException(var3);
+        }
+
+        return uri.getPath();
     }
 
     public String printStackTraceToString(Throwable t) {

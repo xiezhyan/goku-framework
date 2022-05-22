@@ -222,7 +222,12 @@
 									<artifactId>mapstruct-processor</artifactId>
 									<version>${org.mapstruct.version}</version>
 								</path>
-								<!-- other annotation processors -->
+								
+								<path>
+									<groupId>org.springframework.boot</groupId>
+									<artifactId>spring-boot-configuration-processor</artifactId>
+									<version>${spring.boot.version}</version>
+								</path>
 							</annotationProcessorPaths>
 						</configuration>
 					</plugin>
@@ -257,7 +262,12 @@
 									<artifactId>mapstruct-processor</artifactId>
 									<version>${org.mapstruct.version}</version>
 								</path>
-								<!-- other annotation processors -->
+								
+								<path>
+									<groupId>org.springframework.boot</groupId>
+									<artifactId>spring-boot-configuration-processor</artifactId>
+									<version>${spring.boot.version}</version>
+								</path>
 							</annotationProcessorPaths>
 						</configuration>
 					</plugin>
