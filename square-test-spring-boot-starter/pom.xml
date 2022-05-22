@@ -4,12 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>top.zopx</groupId>
-        <artifactId>square-spring-boot-starter</artifactId>
-        <version>1.5.0.220601</version>
-    </parent>
-
     <groupId>java.test</groupId>
     <artifactId>square-test-spring-boot-starter</artifactId>
     <version>${square.version}</version>
@@ -17,77 +11,11 @@
     <properties>
     </properties>
 
-<!--    <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>top.zopx</groupId>-->
-<!--                <artifactId>square-spring-boot-starter</artifactId>-->
-<!--                <version>1.5.0.220601</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-<!--    </dependencyManagement>-->
-
     <dependencies>
         <dependency>
             <groupId>top.zopx</groupId>
-            <artifactId>square-tools-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>square-log-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>square-activiti-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>square-mybatis-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>square-netty-spring-boot-starter</artifactId>
-            <version>${square.version}</version>
-        </dependency>
-    
-        <!--zookeeper starter-->
-        <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-recipes</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
-                    <artifactId>zookeeper</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!--zookeeper end-->
-    
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-        </dependency>
-    
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <artifactId>goku-framework-starter-log</artifactId>
+            <version>1.5.0.220601</version>
         </dependency>
     </dependencies>
 
