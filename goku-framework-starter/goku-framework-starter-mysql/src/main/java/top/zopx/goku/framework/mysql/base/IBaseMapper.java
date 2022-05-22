@@ -24,7 +24,7 @@ public interface IBaseMapper<Entity extends DataEntity, DTO> extends BaseMapper<
      * @return List<Entity>
      */
     List<Entity> getListOrder(
-            @Param("request") DTO req,
-            @Param("sorted") List<Sorted> sorteds
+            @Param("req") DTO req,
+            @Param("sort") List<Sorted> sorteds
     );
 }

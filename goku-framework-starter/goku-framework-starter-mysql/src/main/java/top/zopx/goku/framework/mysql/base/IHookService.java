@@ -1,13 +1,15 @@
 package top.zopx.goku.framework.mysql.base;
 
 
+import top.zopx.goku.framework.mysql.entity.DataEntity;
+
 /**
  * 钩子函数
  *
  * @author 俗世游子
  * @date 2022/05/12
  */
-public interface IHookService<DTO, Entity> {
+public interface IHookService<DTO, Entity extends DataEntity> {
 
     /**
      * 查询钩子函数

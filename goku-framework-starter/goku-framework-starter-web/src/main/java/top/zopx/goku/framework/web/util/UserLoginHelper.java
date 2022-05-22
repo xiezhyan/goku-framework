@@ -58,4 +58,14 @@ public class UserLoginHelper {
     public static Optional<UserLoginVO> getUserOrNull() {
         return Optional.ofNullable(THREAD_LOCAL.get());
     }
+
+    /**
+     * 获取登录用户ID
+     *
+     * @return 登录用户ID
+     */
+    public static Long getUserIdOrNull() {
+        final Optional<UserLoginVO> optional = getUserOrNull();
+        return optional.map(UserLoginVO::getUserId).orElse(null);
+    }
 }

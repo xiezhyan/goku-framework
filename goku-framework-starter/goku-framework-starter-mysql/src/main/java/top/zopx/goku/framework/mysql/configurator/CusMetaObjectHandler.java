@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
 import top.zopx.goku.framework.web.util.UserLoginHelper;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
  * @email xiezhyan@126.com
  * @date 2022/3/4
  */
+@Configuration
 public class CusMetaObjectHandler implements MetaObjectHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CusMetaObjectHandler.class);
@@ -21,17 +23,13 @@ public class CusMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         LOGGER.debug("save开始填充");
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
-        if (UserLoginHelper.getUserOrNull().isPresent()) {
-            this.strictInsertFill(metaObject, "creater", Long.class, UserLoginHelper.getUserOrNull().get().getUserId());
-        }
+        this.strictInsertFill(metaObject, "creater", Long.class, UserLoginHelper.getUserIdOrNull());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         LOGGER.debug("update开始填充");
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
-        if (UserLoginHelper.getUserOrNull().isPresent()) {
-            this.strictInsertFill(metaObject, "updater", Long.class, UserLoginHelper.getUserOrNull().get().getUserId());
-        }
+        this.strictInsertFill(metaObject, "updater", Long.class, UserLoginHelper.getUserIdOrNull());
     }
 }

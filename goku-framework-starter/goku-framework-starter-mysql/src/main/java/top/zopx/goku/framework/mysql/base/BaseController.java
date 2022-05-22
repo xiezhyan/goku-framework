@@ -23,7 +23,8 @@ public abstract class BaseController<
         VO extends BaseEntity,
         DTO,
         Entity extends DataEntity,
-        Service extends IBaseService<DTO, Entity>> {
+        Service extends IBaseService<DTO, Entity>
+        > {
 
     /**
      * 获取服务
