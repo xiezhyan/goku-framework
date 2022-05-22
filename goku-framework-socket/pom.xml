@@ -57,9 +57,9 @@
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
         </dependency>
-        
+    
         <dependency>
-            <groupId> org.apache.commons</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>${pool2.version}</version>
         </dependency>
