@@ -15,9 +15,9 @@
     <name>${groupId}:${artifactId}:${version}</name>
     
     <properties>
-        <mybatis.version>2.2.2</mybatis.version>
         <pagehelper.version>1.4.1</pagehelper.version>
-        <mysql.version>8.0.22</mysql.version>
+        
+        <mybatis.version>2.2.2</mybatis.version>
         <druid.version>1.2.8</druid.version>
     </properties>
     

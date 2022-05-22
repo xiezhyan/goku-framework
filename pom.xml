@@ -60,7 +60,8 @@
 		<spring.cloud.alibaba.version>2021.0.1.0</spring.cloud.alibaba.version>
 		
 		<mybatis.plus.version>3.5.1</mybatis.plus.version>
-		
+		<mybatis.plus.dynamic.version>3.5.1</mybatis.plus.dynamic.version>
+		<mysql.version>8.0.22</mysql.version>
 		<collections.version>4.4</collections.version>
 		
 		<junit.version>4.12</junit.version>
@@ -76,7 +77,6 @@
 		
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
-		<mybatis.plus.dynamic.version>3.5.1</mybatis.plus.dynamic.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -212,6 +212,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.10.1</version>
 						<configuration>
 							<source>${maven.compiler.source}</source>
 							<target>${maven.compiler.target}</target>
@@ -252,6 +253,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.10.1</version>
 						<configuration>
 							<source>${maven.compiler.source}</source>
 							<target>${maven.compiler.target}</target>
