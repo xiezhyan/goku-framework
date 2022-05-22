@@ -36,7 +36,7 @@
 	<packaging>pom</packaging>
 	<url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
 	
-	<description>${project.artifactId}快速开发架构</description>
+	<description>${project.artifactId}快速开发架构，够快才够酷</description>
 	<name>${groupId}:${artifactId}:${version}</name>
 	
 	<modules>

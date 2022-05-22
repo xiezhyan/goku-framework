@@ -46,9 +46,9 @@ public abstract class BaseController<
         return R.result(
                 new Page<>(
                         pagination,
-                        baseService.getList(pagination, convertToDTO(vo), consumer)
+                        baseService.getList(pagination, convertVoToDTO(vo), consumer)
                                 .stream()
-                                .map(this::convertToVO)
+                                .map(this::convertDtoToVO)
                                 .collect(Collectors.toList())
                 )
         );
@@ -60,20 +60,20 @@ public abstract class BaseController<
             @PathVariable("id") Long id
     ) {
         return R.result(
-                convertToVO(baseService.getByPriKey(id))
+                convertDtoToVO(baseService.getByPriKey(id))
         );
     }
 
     @PostMapping
     @OperatorLogAnnotation(value = "保存")
     public R<Boolean> save(@Valid @RequestBody VO vo) {
-        return R.result(baseService.create(convertToDTO(vo)));
+        return R.result(baseService.create(convertVoToDTO(vo)));
     }
 
     @PutMapping("/{id}")
     @OperatorLogAnnotation(value = "通过主键修改")
     public R<Boolean> updateByPriKey(@Valid @RequestBody VO vo, @PathVariable("id") Long id) {
-        return R.result(baseService.updateByPriKey(convertToDTO(vo), id));
+        return R.result(baseService.updateByPriKey(convertVoToDTO(vo), id));
     }
 
     @DeleteMapping("/{id}")
@@ -88,7 +88,7 @@ public abstract class BaseController<
      * @param vo VO对象
      * @return DTO
      */
-    protected abstract DTO convertToDTO(VO vo);
+    protected abstract DTO convertVoToDTO(VO vo);
 
     /**
      * 将DTO转换为VO
@@ -96,5 +96,5 @@ public abstract class BaseController<
      * @param dto DTO对象
      * @return VO
      */
-    protected abstract VO convertToVO(DTO dto);
+    protected abstract VO convertDtoToVO(DTO dto);
 }
