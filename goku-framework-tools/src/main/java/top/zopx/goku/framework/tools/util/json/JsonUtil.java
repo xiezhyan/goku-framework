@@ -21,8 +21,27 @@ public final class JsonUtil {
 
     private final IJson json;
 
+    private final Gson gson;
+
     private JsonUtil() {
+        gson = getDefaultGson();
         json = new GJson(getDefaultGson());
+    }
+
+    private static class Holder {
+        public static final JsonUtil INSTANCE = new JsonUtil();
+    }
+
+    public static JsonUtil getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    public IJson getJson() {
+        return json;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     private Gson getDefaultGson() {
@@ -61,17 +80,5 @@ public final class JsonUtil {
                                 )
                 )
                 .create();
-    }
-
-    private static class Holder {
-        public static final JsonUtil INSTANCE = new JsonUtil();
-    }
-
-    public static JsonUtil getInstance() {
-        return Holder.INSTANCE;
-    }
-
-    public IJson getJson() {
-        return json;
     }
 }

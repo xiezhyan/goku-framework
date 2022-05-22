@@ -27,6 +27,12 @@
     </modules>
     
     <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-tools</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
+        
         <!--test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
