@@ -25,3 +25,7 @@ spring:
     database-schema: activiti
   profiles:
     include: actuator
+
+goku:
+  log:
+    lasting: true

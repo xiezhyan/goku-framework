@@ -2,7 +2,10 @@ package top.zopx.square.service;
 
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.log.service.ILogService;
+import top.zopx.goku.framework.tools.util.json.IJson;
+import top.zopx.goku.framework.web.util.LogHelper;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -12,11 +15,15 @@ import java.util.Map;
  */
 @Component
 public class LogServiceImpl implements ILogService {
-    public void saveError(Map<String, Object> map) {
 
+    @Resource
+    private IJson json;
+
+    public void saveError(Map<String, Object> map) {
+        LogHelper.getLogger(LogServiceImpl.class).error(json.toJson(map));
     }
 
     public void saveApi(Map<String, Object> map) {
-
+        LogHelper.getLogger(LogServiceImpl.class).info(json.toJson(map));
     }
 }

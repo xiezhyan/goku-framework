@@ -22,18 +22,18 @@ import java.util.List;
 public class GsonConfigurator {
 
     @Bean
-    public Gson gson() {
+    public Gson writeGson() {
         return JsonUtil.getInstance().getGson();
     }
 
     @Bean
-    public IJson json(Gson gson) {
-        return new GJson(gson);
+    public IJson json(Gson writeGson) {
+        return new GJson(writeGson);
     }
 
     @Bean
-    public GsonHttpMessageConverter gsonHttpMessageConverter(Gson gson) {
-        GsonHttpMessageConverter gsonHttpConverter = new GsonHttpMessageConverter(gson);
+    public GsonHttpMessageConverter gsonHttpMessageConverter(Gson writeGson) {
+        GsonHttpMessageConverter gsonHttpConverter = new GsonHttpMessageConverter(writeGson);
         gsonHttpConverter.setDefaultCharset(Charset.defaultCharset());
 
         List<MediaType> supportedMediaTypes = new ArrayList<>();
