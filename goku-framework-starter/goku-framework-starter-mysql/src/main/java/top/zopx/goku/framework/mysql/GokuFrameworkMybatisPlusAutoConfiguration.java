@@ -1,10 +1,10 @@
-package top.zopx.starter.mybatis;
+package top.zopx.goku.framework.mysql;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import top.zopx.starter.mybatis.configurator.CusMetaObjectHandler;
+import top.zopx.goku.framework.mysql.configurator.CusMetaObjectHandler;
 
 /**
  * 自动注入

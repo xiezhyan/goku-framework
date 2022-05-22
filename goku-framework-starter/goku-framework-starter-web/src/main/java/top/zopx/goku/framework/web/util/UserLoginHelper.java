@@ -40,12 +40,22 @@ public class UserLoginHelper {
 
     /**
      * 获取登录用户ID
+     *
      * @return 登录用户ID
      */
     public static Long getUserId() {
-        if(isLogin()) {
+        if (isLogin()) {
             return THREAD_LOCAL.get().getUserId();
         }
         return null;
+    }
+
+    /**
+     * 返回登录用户
+     *
+     * @return UserLoginVO
+     */
+    public static Optional<UserLoginVO> getUserOrNull() {
+        return Optional.ofNullable(THREAD_LOCAL.get());
     }
 }

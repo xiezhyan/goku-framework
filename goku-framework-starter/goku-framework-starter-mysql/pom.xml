@@ -14,20 +14,60 @@
     <description>基于MyBatis的数据库操作框架</description>
     <name>${groupId}:${artifactId}:${version}</name>
     
+    <properties>
+        <mybatis.version>2.2.2</mybatis.version>
+        <pagehelper.version>1.4.1</pagehelper.version>
+        <mysql.version>8.0.22</mysql.version>
+        <druid.version>1.2.8</druid.version>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-web</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
+        <!--持久化 start-->
+        <!--mybatis-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <!--mybatis-->
+        <!--mybatis plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis.plus.version}</version>
+        </dependency>
+        <!--mybatis plus-->
+        <!--数据源-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!--数据源-->
+        <!--持久化 end-->
+        
+        <!--分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+        <!--分页插件-->
+    </dependencies>
+    
     <build>
         <finalName>${project.artifactId}-${version}</finalName>
-        
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
     
 </project>
