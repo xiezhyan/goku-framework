@@ -2,13 +2,15 @@ package top.zopx.goku.framework.cache;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/23 7:38
  */
-@Configuration
+@Component
+@Configuration(proxyBeanMethods = false)
 @ComponentScan("top.zopx.goku.framework.cache")
 public class GokuFrameworkCacheAutoConfiguration {
 }

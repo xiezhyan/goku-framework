@@ -9,6 +9,12 @@
     <version>${square.version}</version>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -17,19 +23,14 @@
             <artifactId>goku-framework-starter-log</artifactId>
             <version>1.5.0.220601</version>
         </dependency>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-cache</artifactId>
+            <version>1.5.0.220601</version>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}-${version}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>
