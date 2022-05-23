@@ -30,6 +30,12 @@
             <groupId>com.zendesk</groupId>
             <artifactId>mysql-binlog-connector-java</artifactId>
             <version>${binlog.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     
