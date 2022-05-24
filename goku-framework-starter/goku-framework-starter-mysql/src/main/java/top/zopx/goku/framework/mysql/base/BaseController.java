@@ -28,8 +28,6 @@ public abstract class BaseController<
 
     /**
      * 获取服务
-     *
-     * @return IBaseService
      */
     @Autowired
     protected Service baseService;
