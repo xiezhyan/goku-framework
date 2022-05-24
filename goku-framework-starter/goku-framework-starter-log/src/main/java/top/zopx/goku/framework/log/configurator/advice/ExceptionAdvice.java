@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 统一异常处理
+ *
  * @author 俗世游子
  * @date 2021/4/12
  */
