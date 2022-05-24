@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import top.zopx.goku.framework.log.configurator.advice.ExceptionAdvice;
 import top.zopx.goku.framework.log.configurator.aspect.ApiLogAspect;
 import top.zopx.goku.framework.log.event.listener.PublishEventListener;
 import top.zopx.goku.framework.log.properties.BootstrapLog;
@@ -27,12 +26,6 @@ public class GokuFrameworkLogAutoConfiguration {
     @ConditionalOnMissingBean
     public ApiLogAspect apiLogAspect() {
         return new ApiLogAspect();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ExceptionAdvice exceptionAdvice() {
-        return new ExceptionAdvice();
     }
 
     @Bean
