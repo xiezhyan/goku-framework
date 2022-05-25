@@ -1,9 +1,9 @@
 package top.zopx.goku.framework.mysql.binlog.template;
 
-import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
 import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
 import top.zopx.goku.framework.mysql.binlog.entity.TemplateSchema;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.sdk.mysql.binlog.constant.OperateTypeCons;
 
 import java.util.*;
 

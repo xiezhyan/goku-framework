@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>top.zopx</groupId>
+        <artifactId>goku-framework</artifactId>
+        <version>1.5.0.220601</version>
+    </parent>
+
+    <artifactId>goku-framework-sdk</artifactId>
+    <description>对外提供sdk处理</description>
+    <name>${groupId}:${artifactId}:${version}</name>
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>goku-framework-sdk-mysql-binlog</module>
+    </modules>
+    
+    <build>
+        <finalName>${project.artifactId}-${version}</finalName>
+    </build>
+</project>

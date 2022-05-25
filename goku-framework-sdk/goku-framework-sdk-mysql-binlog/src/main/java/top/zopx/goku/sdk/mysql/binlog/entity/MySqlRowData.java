@@ -1,6 +1,6 @@
-package top.zopx.goku.framework.mysql.binlog.entity;
+package top.zopx.goku.sdk.mysql.binlog.entity;
 
-import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
+import top.zopx.goku.sdk.mysql.binlog.constant.OperateTypeCons;
 
 import java.io.Serializable;
 import java.util.ArrayList;

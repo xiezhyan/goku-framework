@@ -14,10 +14,6 @@
     <description>监听MySQL中binlog的处理</description>
     <name>${groupId}:${artifactId}:${version}</name>
     
-    <properties>
-        <binlog.version>0.25.0</binlog.version>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
@@ -25,20 +21,13 @@
             <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
-        
-        <!-- https://github.com/osheroff/mysql-binlog-connector-java -->
-        <dependency>
-            <groupId>com.zendesk</groupId>
-            <artifactId>mysql-binlog-connector-java</artifactId>
-            <version>${binlog.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
     
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-sdk-mysql-binlog</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>

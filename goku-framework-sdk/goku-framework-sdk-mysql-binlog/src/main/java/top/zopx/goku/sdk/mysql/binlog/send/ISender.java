@@ -1,6 +1,6 @@
-package top.zopx.goku.framework.mysql.binlog.send;
+package top.zopx.goku.sdk.mysql.binlog.send;
 
-import top.zopx.goku.framework.mysql.binlog.entity.MySqlRowData;
+import top.zopx.goku.sdk.mysql.binlog.entity.MySqlRowData;
 
 /**
  * @author 俗世游子
