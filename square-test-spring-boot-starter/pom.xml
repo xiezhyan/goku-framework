@@ -23,11 +23,11 @@
             <artifactId>goku-framework-starter-log</artifactId>
             <version>1.5.0.220601</version>
         </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-cache</artifactId>
-            <version>1.5.0.220601</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>top.zopx</groupId>-->
+<!--            <artifactId>goku-framework-starter-cache</artifactId>-->
+<!--            <version>1.5.0.220601</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-mysql</artifactId>

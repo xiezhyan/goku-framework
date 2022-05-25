@@ -3,6 +3,7 @@ package top.zopx.goku.framework.web.base;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
 
 import java.lang.reflect.Method;
 
@@ -25,7 +26,7 @@ public interface IAspect {
         MethodSignature signature = resolveMethodSignature(joinPoint);
         Class<?> targetClass = joinPoint.getTarget().getClass();
 
-        Method method = getDeclaredMethodFor(targetClass, signature.getName(),
+        Method method = ReflectionClassUtil.getMethod(targetClass, signature.getName(),
                 signature.getMethod().getParameterTypes());
         if (method == null) {
             throw new IllegalStateException("Cannot resolve target method: " + signature.getMethod().getName());
@@ -46,17 +47,4 @@ public interface IAspect {
     default Object[] resolveArgs(JoinPoint joinPoint) {
         return joinPoint.getArgs();
     }
-
-    default Method getDeclaredMethodFor(Class<?> clazz, String name, Class<?>... parameterTypes) {
-        try {
-            return clazz.getDeclaredMethod(name, parameterTypes);
-        } catch (NoSuchMethodException e) {
-            Class<?> superClass = clazz.getSuperclass();
-            if (superClass != null) {
-                return getDeclaredMethodFor(superClass, name, parameterTypes);
-            }
-        }
-        return null;
-    }
-
 }
