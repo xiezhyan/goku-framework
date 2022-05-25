@@ -20,9 +20,10 @@
     
     <dependencies>
         <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-mysql</artifactId>
-            <version>${goku.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- https://github.com/osheroff/mysql-binlog-connector-java -->

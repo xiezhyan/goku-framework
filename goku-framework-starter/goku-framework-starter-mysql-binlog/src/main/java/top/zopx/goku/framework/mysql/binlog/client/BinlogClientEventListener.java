@@ -2,13 +2,14 @@ package top.zopx.goku.framework.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.mysql.binlog.entity.BinlogRowData;
 import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
 import top.zopx.goku.framework.mysql.binlog.send.ISendListener;
 import top.zopx.goku.framework.mysql.binlog.template.ParseTemplate;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
-import top.zopx.goku.framework.web.util.LogHelper;
 
 import java.io.Serializable;
 import java.util.*;
@@ -24,6 +25,8 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
 
     private String database;
     private String tableName;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinlogClientEventListener.class);
 
     private final Map<String, ISendListener> listenerMap = new HashMap<>();
 
@@ -32,7 +35,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
     }
 
     public void register(String database, String tableName, ISendListener listener) {
-        LogHelper.getLogger(BinlogClientEventListener.class).info("register : {}-{}", database, tableName);
+        LOGGER.info("register : {}-{}", database, tableName);
         this.listenerMap.put(genKey(database, tableName), listener);
     }
 
@@ -40,7 +43,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
     public void onEvent(Event event) {
 
         EventType type = event.getHeader().getEventType();
-        LogHelper.getLogger(BinlogClientEventListener.class).debug("event type: {}", type);
+        LOGGER.debug("event type: {}", type);
 
         if (type == EventType.TABLE_MAP) {
             TableMapEventData data = event.getData();
@@ -57,7 +60,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
 
         // 表名和库名是否已经完成填充
         if (StringUtil.isEmpty(database) || StringUtil.isEmpty(tableName)) {
-            LogHelper.getLogger(BinlogClientEventListener.class).error("no meta data event");
+            LOGGER.error("no meta data event");
             return;
         }
 
@@ -65,11 +68,11 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
         String key = genKey(this.database, this.tableName);
         ISendListener listener = this.listenerMap.get(key);
         if (null == listener) {
-            LogHelper.getLogger(BinlogClientEventListener.class).debug("skip {}", key);
+            LOGGER.debug("skip {}", key);
             return;
         }
 
-        LogHelper.getLogger(BinlogClientEventListener.class).info("trigger event: {}", type.name());
+        LOGGER.info("trigger event: {}", type.name());
 
         try {
             BinlogRowData rowData = buildRowData(event.getData());
@@ -79,7 +82,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
             rowData.setEventType(type);
             listener.onEvent(rowData);
         } catch (Exception ex) {
-            LogHelper.getLogger(BinlogClientEventListener.class).error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
         } finally {
             this.database = "";
             this.tableName = "";
@@ -109,7 +112,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
         TableTemplate table = ParseTemplate.MAP.get(tableName);
 
         if (null == table) {
-            LogHelper.getLogger(BinlogClientEventListener.class).warn("table {} not found", tableName);
+            LOGGER.warn("table {} not found", tableName);
             return null;
         }
 
@@ -128,7 +131,7 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
 
                 // 如果没有则说明不关心这个列
                 if (null == colName) {
-                    LogHelper.getLogger(BinlogClientEventListener.class).debug("ignore position: {}", ix);
+                    LOGGER.debug("ignore position: {}", ix);
                     continue;
                 }
 

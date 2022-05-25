@@ -1,11 +1,12 @@
 package top.zopx.goku.framework.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.mysql.binlog.properties.BootstrapBinlog;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
-import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -29,6 +30,8 @@ public class BinlogClient {
 
     private BinaryLogClient binaryLogClient;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinlogClient.class);
+
     public void connect() {
         taskExecutor.execute(() -> {
             final BootstrapBinlog.Binlog binlog = bootstrapBinlog.getBinlog();
@@ -47,11 +50,11 @@ public class BinlogClient {
             binaryLogClient.registerEventListener(binlogClientEventListener);
 
             try {
-                LogHelper.getLogger(BinlogClient.class).info("connecting to mysql start");
+                LOGGER.info("connecting to mysql start");
                 binaryLogClient.connect();
-                LogHelper.getLogger(BinlogClient.class).info("connecting to mysql done");
+                LOGGER.info("connecting to mysql done");
             } catch (IOException ex) {
-                LogHelper.getLogger(BinlogClient.class).error(ex.getMessage(), ex);
+                LOGGER.error(ex.getMessage(), ex);
             }
         });
     }
@@ -60,7 +63,7 @@ public class BinlogClient {
         try {
             binaryLogClient.disconnect();
         } catch (IOException ex) {
-            LogHelper.getLogger(BinlogClient.class).error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 }

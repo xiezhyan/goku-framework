@@ -52,4 +52,13 @@ public class MySqlRowData implements Serializable {
     public void setFieldValueMap(List<Map<String, String>> fieldValueMap) {
         this.fieldValueMap = fieldValueMap;
     }
+
+    @Override
+    public String toString() {
+        return "MySqlRowData{" +
+                "tableName='" + tableName + '\'' +
+                ", operateTypeCons=" + operateTypeCons +
+                ", fieldValueMap=" + fieldValueMap +
+                '}';
+    }
 }

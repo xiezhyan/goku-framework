@@ -1,13 +1,15 @@
 package top.zopx.goku.framework.mysql.binlog;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
+import top.zopx.goku.framework.mysql.binlog.client.BinlogClient;
 import top.zopx.goku.framework.mysql.binlog.entity.TemplateSchema;
 import top.zopx.goku.framework.mysql.binlog.properties.BootstrapBinlog;
 import top.zopx.goku.framework.mysql.binlog.template.ParseTemplate;
 import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -30,6 +32,8 @@ public class GokuFrameworkMySqlBinlogAutoConfiguration {
     @Resource
     private Gson writeGson;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BinlogClient.class);
+
     @PostConstruct
     public void init() {
         load(bootstrapBinlog.getTemplate());
@@ -42,7 +46,7 @@ public class GokuFrameworkMySqlBinlogAutoConfiguration {
             throw new BusException("fail load template.json");
         }
         final TemplateSchema schema = writeGson.fromJson(new BufferedReader(new InputStreamReader(inputStream)), TemplateSchema.class);
-        LogHelper.getLogger(getClass()).info("{} parse data = {}", bootstrapBinlog.getTemplate(), schema.toString());
+        LOGGER.info("{} parse data = {}", bootstrapBinlog.getTemplate(), schema.toString());
         ParseTemplate.parse(schema);
     }
 

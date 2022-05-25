@@ -76,7 +76,6 @@
 		<validator.version>7.0.4.Final</validator.version>
 		
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-
 	</properties>
 	
 	<dependencyManagement>

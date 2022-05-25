@@ -52,4 +52,14 @@ public class BinlogRowData implements Serializable {
     public void setBefore(List<Map<String, String>> before) {
         this.before = before;
     }
+
+    @Override
+    public String toString() {
+        return "BinlogRowData{" +
+                "table=" + table +
+                ", eventType=" + eventType +
+                ", after=" + after +
+                ", before=" + before +
+                '}';
+    }
 }
