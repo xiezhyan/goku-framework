@@ -1,0 +1,36 @@
+package top.zopx.goku.framework.mysql.binlog.entity;
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * @author 俗世游子
+ * @email xiezhyan@126.com
+ * @date 2022/05/25 21:36
+ */
+public class TemplateSchema implements Serializable {
+
+    private List<Template> schema;
+
+    public TemplateSchema() {
+    }
+
+    public TemplateSchema(List<Template> schema) {
+        this.schema = schema;
+    }
+
+    public List<Template> getSchema() {
+        return schema;
+    }
+
+    public void setSchema(List<Template> schema) {
+        this.schema = schema;
+    }
+
+    @Override
+    public String toString() {
+        return "TemplateSchema{" +
+                "schema=" + schema +
+                '}';
+    }
+}

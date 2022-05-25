@@ -34,3 +34,9 @@ spring:
 goku:
   log:
     lasting: true
+  mysql:
+    template: template.json
+    binlog:
+      username: root
+      password: root
+      binlog-name: binlog
