@@ -17,7 +17,7 @@ import top.zopx.goku.framework.web.util.LogHelper;
 public abstract class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        final boolean b = returnType.getGenericParameterType().equals(R.class);
+        final boolean b = returnType.getParameterType().equals(R.class);
         LogHelper.getLogger(ResponseResultAdvice.class).info("开始统一结果，返回是否为R，结果 = {}", b);
         return !b;
     }
