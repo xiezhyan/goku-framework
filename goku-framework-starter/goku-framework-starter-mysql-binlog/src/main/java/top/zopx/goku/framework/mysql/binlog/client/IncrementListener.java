@@ -49,6 +49,7 @@ public class IncrementListener implements ISendListener {
                             value.getTableName(),
                             this
                     ));
+                    break;
                 }
             }
         });
