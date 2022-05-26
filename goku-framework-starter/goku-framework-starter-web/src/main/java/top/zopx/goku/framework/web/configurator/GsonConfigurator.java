@@ -1,6 +1,7 @@
 package top.zopx.goku.framework.web.configurator;
 
 import com.google.gson.Gson;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import java.util.List;
 public class GsonConfigurator {
 
     @Bean
+    @ConditionalOnMissingBean
     public Gson writeGson() {
         return JsonUtil.getInstance().getGson();
     }
