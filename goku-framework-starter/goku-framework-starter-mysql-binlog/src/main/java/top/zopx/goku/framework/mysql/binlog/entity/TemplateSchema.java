@@ -2,6 +2,7 @@ package top.zopx.goku.framework.mysql.binlog.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 俗世游子
@@ -29,6 +30,9 @@ public class TemplateSchema implements Serializable {
 
     @Override
     public String toString() {
+        if (Objects.isNull(this)) {
+            return "";
+        }
         return "TemplateSchema{" +
                 "schema=" + schema +
                 '}';
