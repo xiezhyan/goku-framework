@@ -25,8 +25,6 @@ public class BootstrapBinlog implements Serializable {
 
     private Binlog binlog = new Binlog();
 
-    private SendEvent event;
-
     public static class Binlog implements Serializable {
 
         /**
@@ -107,22 +105,6 @@ public class BootstrapBinlog implements Serializable {
         }
     }
 
-    public static class SendEvent implements Serializable {
-
-        /**
-         * 主题
-         */
-        private String topic;
-
-        public String getTopic() {
-            return topic;
-        }
-
-        public void setTopic(String topic) {
-            this.topic = topic;
-        }
-    }
-
     public String getTemplate() {
         return template;
     }
@@ -137,13 +119,5 @@ public class BootstrapBinlog implements Serializable {
 
     public void setBinlog(Binlog binlog) {
         this.binlog = binlog;
-    }
-
-    public SendEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(SendEvent event) {
-        this.event = event;
     }
 }
