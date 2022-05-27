@@ -1,15 +1,17 @@
 package top.zopx.goku.framework.mysql.base;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.zopx.goku.framework.log.annotations.OperatorLogAnnotation;
+import top.zopx.goku.framework.mysql.entity.BaseEntity;
 import top.zopx.goku.framework.mysql.entity.DataEntity;
-import top.zopx.goku.framework.tools.entity.vo.BaseEntity;
 import top.zopx.goku.framework.tools.entity.vo.Page;
 import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
+import top.zopx.goku.framework.web.util.validate.constant.ValidGroup;
 
-import javax.validation.Valid;
+import javax.validation.groups.Default;
 import java.util.function.LongConsumer;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  * @author 俗世游子
  * @date 2022/05/12
  */
+@Validated
 public abstract class BaseController<
         VO extends BaseEntity,
         DTO,
@@ -32,7 +35,7 @@ public abstract class BaseController<
     @Autowired
     protected Service baseService;
 
-    @GetMapping
+    @GetMapping("/page")
     @OperatorLogAnnotation(value = "获取数据列表")
     public R<Page<VO>> getList(
             Pagination pagination,
@@ -53,32 +56,30 @@ public abstract class BaseController<
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail")
     @OperatorLogAnnotation(value = "获取数据详情")
-    public R<VO> getByPriKey(
-            @PathVariable("id") Long id
-    ) {
+    public R<VO> getByPriKey(@RequestParam(value = "id", required = true) Long id) {
         return R.result(
                 convertDtoToVO(baseService.getByPriKey(id))
         );
     }
 
-    @PostMapping
+    @PostMapping("/save")
     @OperatorLogAnnotation(value = "保存")
-    public R<Boolean> save(@Valid @RequestBody VO vo) {
+    public R<Boolean> save(@Validated(value = {Default.class, ValidGroup.Create.class}) @RequestBody VO vo) {
         return R.result(baseService.create(convertVoToDTO(vo)));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update")
     @OperatorLogAnnotation(value = "通过主键修改")
-    public R<Boolean> updateByPriKey(@Valid @RequestBody VO vo, @PathVariable("id") Long id) {
-        return R.result(baseService.updateByPriKey(convertVoToDTO(vo), id));
+    public R<Boolean> updateByPriKey(@Validated(value = {Default.class, ValidGroup.Update.class}) @RequestBody VO vo) {
+        return R.result(baseService.updateByPriKey(convertVoToDTO(vo), vo.getId()));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete")
     @OperatorLogAnnotation(value = "通过主键删除")
-    public R<Boolean> deleteByPriKey(@PathVariable("id") Long id) {
-        return R.result(baseService.deleteByPriKey(id));
+    public R<Boolean> deleteByPriKey(@Validated(value = {ValidGroup.Delete.class}) @RequestBody VO vo) {
+        return R.result(baseService.deleteByPriKey(vo.getId()));
     }
 
     /**

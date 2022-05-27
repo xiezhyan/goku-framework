@@ -1,7 +1,9 @@
-package top.zopx.goku.framework.tools.entity.vo;
+package top.zopx.goku.framework.mysql.entity;
 
 import top.zopx.goku.framework.tools.util.string.StringUtil;
+import top.zopx.goku.framework.web.util.validate.constant.ValidGroup;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,8 @@ import java.util.Objects;
  */
 public class BaseEntity implements Serializable {
 
+    @NotNull(message = "主键不能为空", groups = {ValidGroup.Update.class, ValidGroup.Delete.class})
+    private Long id;
     /**
      * 自定义参数
      */
@@ -26,6 +30,14 @@ public class BaseEntity implements Serializable {
 
     public void setMap(Map<String, Object> map) {
         this.map = map;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public BaseEntity put(String key, Object value) {
