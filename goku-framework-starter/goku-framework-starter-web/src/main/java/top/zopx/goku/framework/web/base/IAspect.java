@@ -29,6 +29,7 @@ public interface IAspect {
     default void doAfterReturn(JoinPoint joinPoint, Object returing) {
     }
 
-    default void doAround(ProceedingJoinPoint joinPoint) {
+    default Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        return joinPoint.proceed();
     }
 }
