@@ -43,7 +43,6 @@
 		<module>goku-framework-tools</module>
 		<module>goku-framework-socket</module>
 		<module>goku-framework-starter</module>
-		<module>goku-framework-sdk</module>
 	</modules>
 	
 	<properties>

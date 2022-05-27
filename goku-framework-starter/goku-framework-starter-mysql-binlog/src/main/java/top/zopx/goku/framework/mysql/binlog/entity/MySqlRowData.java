@@ -1,6 +1,6 @@
-package top.zopx.goku.sdk.mysql.binlog.entity;
+package top.zopx.goku.framework.mysql.binlog.entity;
 
-import top.zopx.goku.sdk.mysql.binlog.constant.OperateTypeCons;
+import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class MySqlRowData implements Serializable {
 
     private List<Map<String, String>> fieldValueMap = new ArrayList<>();
 
-    public MySqlRowData(String database,String tableName, OperateTypeCons operateTypeCons, List<Map<String, String>> fieldValueMap) {
+    public MySqlRowData(String database, String tableName, OperateTypeCons operateTypeCons, List<Map<String, String>> fieldValueMap) {
         this.database = database;
         this.tableName = tableName;
         this.operateTypeCons = operateTypeCons;
