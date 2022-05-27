@@ -40,6 +40,7 @@
 	<name>${groupId}:${artifactId}:${version}</name>
 	
 	<modules>
+		<module>goku-framework-dependency</module>
 		<module>goku-framework-tools</module>
 		<module>goku-framework-socket</module>
 		<module>goku-framework-starter</module>
@@ -77,117 +78,6 @@
 		
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 	</properties>
-	
-	<dependencyManagement>
-		<dependencies>
-			<!--spring boot-->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-parent</artifactId>
-				<version>${spring.boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!--spring boot-->
-			
-			<!--spring cloud-->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring.cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!--spring cloud-->
-			
-			<!--spring cloud alibaba-->
-			<dependency>
-				<groupId>com.alibaba.cloud</groupId>
-				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
-				<version>${spring.cloud.alibaba.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!--spring cloud alibaba-->
-			
-			<!--代码生成器-->
-			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-generator</artifactId>
-				<version>${mybatis.plus.version}</version>
-			</dependency>
-			<!--代码生成器-->
-			
-			<!--zookeeper starter-->
-			<dependency>
-				<groupId>org.apache.curator</groupId>
-				<artifactId>curator-recipes</artifactId>
-				<version>${curator.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.zookeeper</groupId>
-						<artifactId>zookeeper</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.zookeeper</groupId>
-				<artifactId>zookeeper</artifactId>
-				<version>${zookeeper.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<!--zookeeper end-->
-			
-			<!-- bean copy start -->
-			<dependency>
-				<groupId>org.mapstruct</groupId>
-				<artifactId>mapstruct</artifactId>
-				<version>${org.mapstruct.version}</version>
-			</dependency>
-			<!-- bean copy end -->
-
-			<!--动态数据源-->
-			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-				<version>${mybatis.plus.dynamic.version}</version>
-			</dependency>
-			<!--动态数据源-->
-		</dependencies>
-	</dependencyManagement>
-	
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<!--工具类-->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${lang3.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>${collections.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>${codec.version}</version>
-		</dependency>
-	</dependencies>
 	
 	<profiles>
 		<profile>

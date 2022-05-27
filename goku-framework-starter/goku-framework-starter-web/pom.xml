@@ -12,13 +12,8 @@
 	
 	<artifactId>goku-framework-starter-web</artifactId>
 	<description>SpringBoot基本框架</description>
-	<name>${groupId}:${artifactId}:${version}</name>
-	
-	<properties>
-		<java.jwt.version>3.19.1</java.jwt.version>
-		<okhttp.version>4.8.1</okhttp.version>
-	</properties>
-	
+	<name>${groupId}:${artifactId}:${parent.version}</name>
+
 	<dependencies>
 		<!--jwt-->
 		<dependency>

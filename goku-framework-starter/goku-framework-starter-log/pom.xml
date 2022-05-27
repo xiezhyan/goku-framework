@@ -12,7 +12,7 @@
 
     <artifactId>goku-framework-starter-log</artifactId>
     <description>日志处理框架</description>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${groupId}:${artifactId}:${parent.version}</name>
     
     <dependencies>
         <dependency>

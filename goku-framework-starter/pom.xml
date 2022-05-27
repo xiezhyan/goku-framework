@@ -6,13 +6,14 @@
 
     <parent>
         <groupId>top.zopx</groupId>
-        <artifactId>goku-framework</artifactId>
+        <artifactId>goku-framework-dependency</artifactId>
         <version>1.5.0.220601</version>
+        <relativePath>../goku-framework-dependency/pom.xml</relativePath>
     </parent>
 
     <artifactId>goku-framework-starter</artifactId>
     <description>汇总</description>
-    <name>${groupId}:${artifactId}:${version}</name>
+    <name>${groupId}:${artifactId}:${parent.version}</name>
     
     <packaging>pom</packaging>
     

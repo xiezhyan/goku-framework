@@ -6,26 +6,14 @@
 
     <parent>
         <groupId>top.zopx</groupId>
-        <artifactId>goku-framework</artifactId>
+        <artifactId>goku-framework-dependency</artifactId>
         <version>1.5.0.220601</version>
+        <relativePath>../goku-framework-dependency/pom.xml</relativePath>
     </parent>
 
     <artifactId>goku-framework-socket</artifactId>
     <description>基于Netty的网络框架</description>
-    <name>${groupId}:${artifactId}:${version}</name>
-    
-    <properties>
-        <netty.version>4.1.73.Final</netty.version>
-        <protobuf.java.version>3.19.3</protobuf.java.version>
-        <guava.version>31.0.1-jre</guava.version>
-
-        <cli.version>1.5.0</cli.version>
-        
-        <jedis.version>4.2.2</jedis.version>
-        
-        <mybatis.version>3.5.9</mybatis.version>
-        <druid.version>1.2.8</druid.version>
-    </properties>
+    <name>${groupId}:${artifactId}:${parent.version}</name>
     
     <dependencies>
         <dependency>
