@@ -2,9 +2,7 @@ package top.zopx.goku.framework.tools.util.reflection;
 
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -128,6 +126,22 @@ public final class ReflectionClassUtil {
             );
         }
         return fields.stream().filter(field -> !Modifier.isStatic(field.getModifiers())).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取指定类型的泛型类型
+     *
+     * @param clazz 类实现接口的泛型
+     * @return List<Class < ?>>
+     */
+    public static List<Class<?>> getGeneric(Class<?> clazz) {
+        return Arrays.stream(clazz.getGenericInterfaces()).map(type -> {
+            if (type instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) type;
+                return Arrays.stream(parameterizedType.getActualTypeArguments()).map(actualTypeArgument -> (Class<?>) actualTypeArgument).collect(Collectors.toList());
+            }
+            return new ArrayList<Class<?>>(0);
+        }).flatMap(List::stream).collect(Collectors.toList());
     }
 
     private static void invokeSetMethod(Object value, String methodName, Object param, Class<?> clazz) throws Exception {
