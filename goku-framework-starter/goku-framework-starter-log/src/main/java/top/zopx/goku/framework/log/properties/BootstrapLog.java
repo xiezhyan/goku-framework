@@ -18,7 +18,15 @@ public class BootstrapLog {
      */
     private Boolean lasting = false;
 
+    /**
+     * 服务名称
+     */
     private String appName;
+
+    /**
+     * 日志级别
+     */
+    private String level = "debug";
 
     public String getAppName() {
         return appName;
@@ -34,5 +42,13 @@ public class BootstrapLog {
 
     public void setLasting(Boolean lasting) {
         this.lasting = lasting;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }
