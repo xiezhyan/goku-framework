@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import top.zopx.goku.framework.log.annotations.OperatorLogAnnotation;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ApiLogEvent;
-import top.zopx.goku.framework.web.base.IAspect;
+import top.zopx.goku.framework.web.base.IAspectMethod;
 import top.zopx.goku.framework.web.context.GlobalContext;
 import top.zopx.goku.framework.web.context.SpringContext;
 
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Aspect
 @Order(1)
-public class ApiLogAspect implements IAspect {
+public class ApiLogAspect implements IAspectMethod {
 
     @Pointcut(value = "@annotation(top.zopx.goku.framework.log.annotations.OperatorLogAnnotation)")
     public void pointcut() {}
