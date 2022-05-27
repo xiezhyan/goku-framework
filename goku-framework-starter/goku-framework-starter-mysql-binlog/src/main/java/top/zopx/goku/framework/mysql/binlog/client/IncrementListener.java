@@ -63,6 +63,7 @@ public class IncrementListener implements ISendListener {
         // 包装成最后需要投递的数据
         MySqlRowData rowData = new MySqlRowData();
 
+        rowData.setDatabase(table.getDatabase());
         rowData.setTableName(table.getTableName());
         OperateTypeCons opType = OperateTypeCons.to(eventType);
         rowData.setOperateTypeCons(opType);

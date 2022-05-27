@@ -14,13 +14,16 @@ import java.util.Map;
  */
 public class MySqlRowData implements Serializable {
 
+    private String database;
+
     private String tableName;
 
     private OperateTypeCons operateTypeCons;
 
     private List<Map<String, String>> fieldValueMap = new ArrayList<>();
 
-    public MySqlRowData(String tableName, OperateTypeCons operateTypeCons, List<Map<String, String>> fieldValueMap) {
+    public MySqlRowData(String database,String tableName, OperateTypeCons operateTypeCons, List<Map<String, String>> fieldValueMap) {
+        this.database = database;
         this.tableName = tableName;
         this.operateTypeCons = operateTypeCons;
         this.fieldValueMap = fieldValueMap;
@@ -53,10 +56,19 @@ public class MySqlRowData implements Serializable {
         this.fieldValueMap = fieldValueMap;
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
     @Override
     public String toString() {
         return "MySqlRowData{" +
-                "tableName='" + tableName + '\'' +
+                "database='" + database + '\'' +
+                ", tableName='" + tableName + '\'' +
                 ", operateTypeCons=" + operateTypeCons +
                 ", fieldValueMap=" + fieldValueMap +
                 '}';
