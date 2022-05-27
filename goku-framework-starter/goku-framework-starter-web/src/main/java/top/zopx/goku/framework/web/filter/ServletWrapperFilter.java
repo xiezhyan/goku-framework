@@ -18,7 +18,7 @@ public class ServletWrapperFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        ApplicationJsonBodyReadRequestWrapper requestWrapper = new ApplicationJsonBodyReadRequestWrapper(httpServletRequest);
+        RequestWrapper requestWrapper = new RequestWrapper(httpServletRequest);
         ResponseWrapper responseWrapper = new ResponseWrapper(httpServletResponse);
 
         chain.doFilter(requestWrapper, responseWrapper);

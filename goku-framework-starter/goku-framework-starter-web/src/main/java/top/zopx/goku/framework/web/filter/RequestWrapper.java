@@ -16,11 +16,11 @@ import java.nio.charset.StandardCharsets;
  * @email xiezhyan@126.com
  * @date 2022/5/26
  */
-public class ApplicationJsonBodyReadRequestWrapper extends HttpServletRequestWrapper {
+public class RequestWrapper extends HttpServletRequestWrapper {
 
     private final byte[] buff;
 
-    public ApplicationJsonBodyReadRequestWrapper(HttpServletRequest request) throws IOException {
+    public RequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         InputStream is = request.getInputStream();
         buff = IOUtils.toByteArray(is);
