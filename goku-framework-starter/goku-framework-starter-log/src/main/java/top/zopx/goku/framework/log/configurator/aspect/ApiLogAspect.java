@@ -9,6 +9,8 @@ import org.springframework.core.annotation.Order;
 import top.zopx.goku.framework.log.annotations.OperatorLogAnnotation;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ApiLogEvent;
+import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.web.base.IAspect;
 import top.zopx.goku.framework.web.base.IAspectMethod;
 import top.zopx.goku.framework.web.context.GlobalContext;
 import top.zopx.goku.framework.web.context.SpringContext;
@@ -26,12 +28,14 @@ import java.util.Map;
  */
 @Aspect
 @Order(1)
-public class ApiLogAspect implements IAspectMethod {
+public class ApiLogAspect implements IAspect, IAspectMethod {
 
     @Pointcut(value = "@annotation(top.zopx.goku.framework.log.annotations.OperatorLogAnnotation)")
-    public void pointcut() {}
+    @Override
+    public void doPointcut() { /* document why this method is empty */ }
 
-    @Around("pointcut()")
+    @Around("doPointcut()")
+    @Override
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 基本方法设置
         Map<String, Object> map = new HashMap<>();
@@ -69,8 +73,8 @@ public class ApiLogAspect implements IAspectMethod {
         URI uri;
         try {
             uri = new URI(uriStr);
-        } catch (URISyntaxException var3) {
-            throw new RuntimeException(var3);
+        } catch (URISyntaxException e) {
+            throw new BusException(e.getMessage());
         }
 
         return uri.getPath();
