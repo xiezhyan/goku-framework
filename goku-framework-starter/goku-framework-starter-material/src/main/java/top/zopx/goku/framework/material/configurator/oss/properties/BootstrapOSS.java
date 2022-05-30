@@ -1,10 +1,10 @@
-package top.zopx.goku.framework.material.oss.properties;
+package top.zopx.goku.framework.material.configurator.oss.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import static top.zopx.goku.framework.material.minio.properties.BootstrapMinIO.PREFIX;
+import static top.zopx.goku.framework.material.configurator.oss.properties.BootstrapOSS.PREFIX;
 
 /**
  * 文件配置信息

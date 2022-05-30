@@ -52,6 +52,12 @@
             <version>${jaxb.runtime.version}</version>
         </dependency>
         <!-- Java 9及以上的版本 -->
+
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-web</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

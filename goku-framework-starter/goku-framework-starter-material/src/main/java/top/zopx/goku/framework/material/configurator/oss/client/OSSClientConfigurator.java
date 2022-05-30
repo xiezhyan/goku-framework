@@ -1,22 +1,23 @@
-package top.zopx.goku.framework.material.oss.client;
+package top.zopx.goku.framework.material.configurator.oss.client;
 
 import com.aliyun.oss.ClientBuilderConfiguration;
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.comm.Protocol;
-import io.minio.MinioClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.material.minio.properties.BootstrapMinIO;
-import top.zopx.goku.framework.material.oss.properties.BootstrapOSS;
+import top.zopx.goku.framework.material.configurator.oss.properties.BootstrapOSS;
+import top.zopx.goku.framework.material.properties.BootstrapMaterial;
+import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
- *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/5/30
@@ -26,11 +27,27 @@ import java.util.Objects;
 public class OSSClientConfigurator {
 
     @Resource
-    private BootstrapOSS bootstrapOSS;
+    private BootstrapMaterial bootstrapMaterial;
 
     @Bean
+    @ConditionalOnProperty(BootstrapOSS.PREFIX + ".endpoint")
+    public OssMarker ossMarker() {
+        return new OssMarker();
+    }
+
+
+    @Bean
+    @ConditionalOnBean(OssMarker.class)
     @ConditionalOnMissingBean
     public OSS writeOSSClient(ClientBuilderConfiguration createOSSClientConfiguration) {
+        LogHelper.getLogger(OSSClientConfigurator.class).debug("OSS开始配置");
+
+        final BootstrapOSS bootstrapOSS = bootstrapMaterial.getOss();
+        if (Objects.isNull(bootstrapOSS)) {
+            throw new BusException("OSS配置不足");
+        }
+        // 设置连接OSS所使用的协议（HTTP或HTTPS），默认为HTTP。
+        createOSSClientConfiguration.setProtocol(bootstrapOSS.getSupportHttps() ? Protocol.HTTPS : Protocol.HTTP);
         return new OSSClientBuilder()
                 .build(
                         bootstrapOSS.getEndpoint(),
@@ -58,8 +75,9 @@ public class OSSClientConfigurator {
         conf.setMaxErrorRetry(5);
         // 设置是否支持将自定义域名作为Endpoint，默认支持。
         conf.setSupportCname(true);
-        // 设置连接OSS所使用的协议（HTTP或HTTPS），默认为HTTP。
-        conf.setProtocol(bootstrapOSS.getSupportHttps() ? Protocol.HTTPS : Protocol.HTTP);
         return conf;
     }
+
+
+    public static class OssMarker {}
 }

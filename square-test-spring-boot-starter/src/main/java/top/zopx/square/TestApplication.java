@@ -1,7 +1,10 @@
 package top.zopx.square;
 
+import io.minio.MinioClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import javax.annotation.Resource;
 
 /**
  * @author 俗世游子
@@ -9,6 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class TestApplication {
+
+    @Resource
+    private MinioClient writeMinioClient;
 
     public static void main(String[] args) {
         SpringApplication.run(TestApplication.class, args);
