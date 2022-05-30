@@ -6,8 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.socket.handle.ICmdHandler;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * 异步执行
@@ -34,12 +33,17 @@ public final class MainThreadPoolExecutor {
     private final BaseCmdHandlerFactory factory;
 
     public MainThreadPoolExecutor(String threadName, BaseCmdHandlerFactory factory) {
-        executorService = Executors.newSingleThreadExecutor((r) -> {
-            // 创建线程并起个名字
-            Thread t = new Thread(r);
-            t.setName(threadName);
-            return t;
-        });
+        executorService = new ThreadPoolExecutor(
+                1, 1,
+                60L, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(Runtime.getRuntime().availableProcessors() << 4),
+                r -> {
+                    // 创建线程并起个名字
+                    Thread t = new Thread(r);
+                    t.setName(threadName);
+                    return t;
+                }
+        );
 
         this.factory = factory;
     }

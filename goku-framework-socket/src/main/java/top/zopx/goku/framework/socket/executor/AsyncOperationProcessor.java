@@ -3,9 +3,7 @@ package top.zopx.goku.framework.socket.executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * 异步操作处理器
@@ -53,12 +51,17 @@ public final class AsyncOperationProcessor {
             // 线程名称
             final String threadName = processorName + "[" + i + "]";
             // 创建单线程服务
-            esArray[i] = Executors.newSingleThreadExecutor(r -> {
-                // 创建线程并起个名字
-                Thread t = new Thread(r);
-                t.setName(threadName);
-                return t;
-            });
+            esArray[i] = new ThreadPoolExecutor(
+                    1, 1,
+                    60L, TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<>(Runtime.getRuntime().availableProcessors() << 4),
+                    r -> {
+                        // 创建线程并起个名字
+                        Thread t = new Thread(r);
+                        t.setName(threadName);
+                        return t;
+                    }
+            );
         }
     }
 

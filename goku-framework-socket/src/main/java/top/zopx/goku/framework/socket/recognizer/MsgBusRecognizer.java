@@ -101,7 +101,7 @@ public final class MsgBusRecognizer {
                 }
 
                 LOGGER.info("{} <=======> {}", parameterType.getSimpleName(), handler.getSimpleName());
-                CLASS_HANDLE_MAP.put(parameterType, (ICmdHandler<? extends GeneratedMessageV3>) handler.newInstance());
+                CLASS_HANDLE_MAP.put(parameterType, (ICmdHandler<? extends GeneratedMessageV3>) handler.getDeclaredConstructor().newInstance());
             }
             return CLASS_HANDLE_MAP;
         } catch (Exception e) {

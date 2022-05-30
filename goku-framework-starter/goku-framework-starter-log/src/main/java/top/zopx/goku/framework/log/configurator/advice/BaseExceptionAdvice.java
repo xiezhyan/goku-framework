@@ -32,9 +32,9 @@ import java.util.Map;
  * @author 俗世游子
  * @date 2021/4/12
  */
-public abstract class ExceptionAdvice {
+public abstract class BaseExceptionAdvice {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionAdvice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionAdvice.class);
 
     @ExceptionHandler(BusException.class)
     public R<String> handleBusException(BusException e) {

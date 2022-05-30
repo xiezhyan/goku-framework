@@ -14,11 +14,11 @@ import top.zopx.goku.framework.web.util.LogHelper;
  * @email xiezhyan@126.com
  * @date 2022/05/24 19:26
  */
-public abstract class ResponseResultAdvice implements ResponseBodyAdvice<Object> {
+public abstract class BaseResponseResultAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         final boolean b = returnType.getParameterType().equals(R.class);
-        LogHelper.getLogger(ResponseResultAdvice.class).info("开始统一结果，返回是否为R，结果 = {}", b);
+        LogHelper.getLogger(BaseResponseResultAdvice.class).info("开始统一结果，返回是否为R，结果 = {}", b);
         return !b;
     }
 
@@ -31,7 +31,7 @@ public abstract class ResponseResultAdvice implements ResponseBodyAdvice<Object>
             ServerHttpRequest request,
             ServerHttpResponse response
     ) {
-        LogHelper.getLogger(ResponseResultAdvice.class).info("开始统一结果， returnType = {}", returnType.getParameterType().getSimpleName());
+        LogHelper.getLogger(BaseResponseResultAdvice.class).info("开始统一结果， returnType = {}", returnType.getParameterType().getSimpleName());
         return R.result(body);
     }
 }

@@ -10,6 +10,7 @@ import top.zopx.goku.framework.socket.constant.ICos;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -49,8 +50,8 @@ public final class ProtoCodeRecognizer {
 
         for (Enum<?> enumVal : enumValArray) {
             if (!(enumVal instanceof Internal.EnumLite) ||
-                    enumVal.name().equals("_Dummy") ||
-                    enumVal.name().equals("UNRECOGNIZED")) {
+                    Objects.equals(enumVal.name(), "_Dummy") ||
+                    Objects.equals(enumVal.name(), "UNRECOGNIZED")) {
                 continue;
             }
 
