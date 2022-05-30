@@ -65,9 +65,9 @@ public interface IEnum<T> {
      * @return List
      */
     static <T> List<IEnum<T>> getAll(Class<? extends IEnum<T>> clazz) {
-        Map<String, Field> fieldCache = Arrays.stream(clazz.getDeclaredFields()).
-                filter(Field::isEnumConstant).
-                collect(Collectors.toMap(Field::getName, Function.identity()));
+        Map<String, Field> fieldCache = Arrays.stream(clazz.getDeclaredFields())
+                .filter(Field::isEnumConstant)
+                .collect(Collectors.toMap(Field::getName, Function.identity()));
 
         IEnum<T>[] allEnum = clazz.getEnumConstants();
 
@@ -115,8 +115,8 @@ public interface IEnum<T> {
         }
 
         public static List<IEnum<Object>> getDict(String dictName) {
-            Class<? extends IEnum> aClass = ENUM_NAME_MAP.get(dictName);
-            return IEnum.getAll((Class<? extends IEnum<Object>>) aClass);
+            Class<? extends IEnum> clazz = ENUM_NAME_MAP.get(dictName);
+            return IEnum.getAll((Class<? extends IEnum<Object>>) clazz);
         }
 
         static <K extends IEnum<T>, T> DictEnum<T> getDict(K dict) {
