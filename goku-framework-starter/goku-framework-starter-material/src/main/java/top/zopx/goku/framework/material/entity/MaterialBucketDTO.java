@@ -9,7 +9,7 @@ import top.zopx.goku.framework.material.entity.check.Region;
  * @email xiezhyan@126.com
  * @date 2022/5/30
  */
-public class MaterialBucket {
+public class MaterialBucketDTO {
 
     /**
      * 区域
@@ -26,7 +26,7 @@ public class MaterialBucket {
      */
     private MaterialPolicy policy;
 
-    public MaterialBucket(BucketName bucketName, MaterialPolicy policy) {
+    public MaterialBucketDTO(BucketName bucketName, MaterialPolicy policy) {
         this.bucketName = bucketName;
         this.policy = policy;
     }
@@ -66,5 +66,15 @@ public class MaterialBucket {
 
     public void setCustomPolicyMsg(String customPolicyMsg) {
         this.customPolicyMsg = customPolicyMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialBucketDTO{" +
+                "region=" + region +
+                ", bucketName=" + bucketName +
+                ", policy=" + policy +
+                ", customPolicyMsg='" + customPolicyMsg + '\'' +
+                '}';
     }
 }

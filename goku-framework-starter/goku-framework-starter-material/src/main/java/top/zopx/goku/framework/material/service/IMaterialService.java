@@ -1,8 +1,10 @@
 package top.zopx.goku.framework.material.service;
 
-import top.zopx.goku.framework.material.entity.MaterialBucket;
+import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
+import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.Region;
+import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
 
 /**
  * @author 俗世游子
@@ -25,7 +27,7 @@ public interface IMaterialService {
      *
      * @param bucket bucket入参
      */
-    void createBucket(MaterialBucket bucket);
+    void createBucket(MaterialBucketDTO bucket);
 
     /**
      * 移除Bucket
@@ -34,4 +36,12 @@ public interface IMaterialService {
      * @param region     地区
      */
     void removeBucket(BucketName bucketName, Region region);
+
+    /**
+     * 生成防伪链接
+     *
+     * @param materialPreSignDTO materialPreSignDTO
+     * @return MaterialPreSignVO
+     */
+    MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO);
 }
