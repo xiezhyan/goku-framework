@@ -20,6 +20,13 @@ public class ServiceFactory {
     @Resource
     private List<IMaterialService> materialServicesList;
 
+    public List<IMaterialService> getServiceList() {
+        if (CollectionUtils.isEmpty(materialServicesList)) {
+            throw new BusException("尚未完成初始化");
+        }
+        return materialServicesList;
+    }
+
     public IMaterialService get() {
         if (CollectionUtils.isEmpty(materialServicesList)) {
             throw new BusException("尚未完成初始化");
