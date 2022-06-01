@@ -15,13 +15,21 @@ public final class ObjectNameUtil {
      * 基于UUID生成新的文件名称
      *
      * @param originFileName 原始文件名称
+     * @param contentType
      * @return 新文件名称
      */
-    public static String getNewFileName(String originFileName) {
-        return MessageFormat.format(
-                "{0}{1}",
-                StringUtil.uuid(),
-                originFileName.substring(originFileName.lastIndexOf(".")));
+    public static String getNewFileName(String originFileName, String contentType) {
+        if (originFileName.contains(".")) {
+            return MessageFormat.format(
+                    "{0}{1}",
+                    StringUtil.uuid(),
+                    originFileName.substring(originFileName.lastIndexOf(".")));
+        } else {
+            return MessageFormat.format(
+                    "{0}.{1}",
+                    StringUtil.uuid(),
+                    contentType.split("/")[1]);
+        }
     }
 
 }

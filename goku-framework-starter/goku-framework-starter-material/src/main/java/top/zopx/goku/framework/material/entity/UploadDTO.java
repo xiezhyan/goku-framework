@@ -1,7 +1,6 @@
 package top.zopx.goku.framework.material.entity;
 
 import top.zopx.goku.framework.material.entity.check.BucketName;
-import top.zopx.goku.framework.material.entity.check.Region;
 
 import java.util.Arrays;
 
@@ -38,11 +37,6 @@ public class UploadDTO {
     private final BucketName bucketName;
 
     /**
-     * 区域
-     */
-    private final Region region;
-
-    /**
      * 文件大小
      */
     private final Long size;
@@ -62,7 +56,6 @@ public class UploadDTO {
         this.tenantId = builder.tenantId;
         this.originalFilename = builder.originalFilename;
         this.bucketName = builder.bucketName;
-        this.region = builder.region;
         this.size = builder.size;
         this.body = builder.body;
         this.pathObject = builder.pathObject;
@@ -83,10 +76,6 @@ public class UploadDTO {
 
     public BucketName getBucketName() {
         return bucketName;
-    }
-
-    public Region getRegion() {
-        return region;
     }
 
     public Long getSize() {
@@ -136,11 +125,6 @@ public class UploadDTO {
         private BucketName bucketName;
 
         /**
-         * 区域
-         */
-        private Region region;
-
-        /**
          * 文件大小
          */
         private Long size;
@@ -172,11 +156,6 @@ public class UploadDTO {
 
         public Builder setBucketName(BucketName bucketName) {
             this.bucketName = bucketName;
-            return this;
-        }
-
-        public Builder setRegion(Region region) {
-            this.region = region;
             return this;
         }
 
@@ -213,7 +192,6 @@ public class UploadDTO {
                 ", originalFilename='" + originalFilename + '\'' +
                 ", pathObject='" + pathObject + '\'' +
                 ", bucketName=" + bucketName +
-                ", region=" + region +
                 ", size=" + size +
                 ", body=" + Arrays.toString(body) +
                 ", contentType='" + contentType + '\'' +

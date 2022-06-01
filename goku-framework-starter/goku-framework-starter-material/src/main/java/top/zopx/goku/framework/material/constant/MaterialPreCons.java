@@ -12,9 +12,9 @@ public enum MaterialPreCons {
      */
     POST,
     /**
-     * PUT
+     * 直传
      */
-    PUT,
+    DIRECT_UPLOAD,
     /**
      * 查看
      */

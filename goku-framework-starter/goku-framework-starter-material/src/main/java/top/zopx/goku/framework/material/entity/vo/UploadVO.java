@@ -241,7 +241,6 @@ public class UploadVO {
         public Builder setRequest(UploadDTO request) {
             this.contentType = request.getContentType();
             this.bucketName = request.getBucketName();
-            this.region = request.getRegion();
             this.originalFilename = request.getOriginalFilename();
             this.pathObject = request.getPathObject();
             this.size = request.getSize();

@@ -5,7 +5,6 @@ import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.check.Region;
 import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
 import top.zopx.goku.framework.material.entity.vo.UploadVO;
 
@@ -22,10 +21,9 @@ public interface IMaterialService {
      * bucket是否存在
      *
      * @param bucketName 名称
-     * @param region     地区
      * @return 是否
      */
-    boolean existsBucket(BucketName bucketName, Region region);
+    boolean existsBucket(BucketName bucketName);
 
     /**
      * 创建Bucket
@@ -35,12 +33,17 @@ public interface IMaterialService {
     void createBucket(MaterialBucketDTO bucket);
 
     /**
+     * 设置权限信息
+     * @param bucket 参数
+     */
+    void setPolicy(MaterialBucketDTO bucket);
+
+    /**
      * 移除Bucket
      *
      * @param bucketName 名称
-     * @param region     地区
      */
-    void removeBucket(BucketName bucketName, Region region);
+    void removeBucket(BucketName bucketName);
 
     /**
      * 生成防伪链接
@@ -63,8 +66,7 @@ public interface IMaterialService {
      * 删除文件
      *
      * @param bucketName bucket
-     * @param region     区域
      * @param objectName 对象名称
      */
-    void remove(BucketName bucketName, Region region, ObjectName objectName);
+    void remove(BucketName bucketName, ObjectName objectName);
 }

@@ -3,7 +3,6 @@ package top.zopx.goku.framework.material.entity;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.check.Region;
 
 import java.time.Duration;
 import java.util.Map;
@@ -14,11 +13,6 @@ import java.util.Map;
  * @date 2022/5/31
  */
 public class MaterialPreSignDTO {
-
-    /**
-     * 区域
-     */
-    private Region region;
 
     /**
      * 名称
@@ -51,13 +45,6 @@ public class MaterialPreSignDTO {
         this.expireTime = expireTime;
     }
 
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
 
     public BucketName getBucketName() {
         return bucketName;
@@ -102,7 +89,6 @@ public class MaterialPreSignDTO {
     @Override
     public String toString() {
         return "MaterialPreSignDTO{" +
-                "region=" + region +
                 ", bucketName=" + bucketName +
                 ", objectName=" + objectName +
                 ", type=" + type +

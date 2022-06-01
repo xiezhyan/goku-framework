@@ -2,7 +2,6 @@ package top.zopx.goku.framework.material.entity;
 
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.entity.check.BucketName;
-import top.zopx.goku.framework.material.entity.check.Region;
 
 /**
  * @author 俗世游子
@@ -10,11 +9,6 @@ import top.zopx.goku.framework.material.entity.check.Region;
  * @date 2022/5/30
  */
 public class MaterialBucketDTO {
-
-    /**
-     * 区域
-     */
-    private Region region;
 
     /**
      * 名称
@@ -35,14 +29,6 @@ public class MaterialBucketDTO {
      * 自定义内容
      */
     private String customPolicyMsg;
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
 
     public BucketName getBucketName() {
         return bucketName;
@@ -71,7 +57,6 @@ public class MaterialBucketDTO {
     @Override
     public String toString() {
         return "MaterialBucketDTO{" +
-                "region=" + region +
                 ", bucketName=" + bucketName +
                 ", policy=" + policy +
                 ", customPolicyMsg='" + customPolicyMsg + '\'' +
