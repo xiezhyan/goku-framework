@@ -8,10 +8,6 @@ package top.zopx.goku.framework.material.constant;
 public enum MaterialPreCons {
 
     /**
-     * POST
-     */
-    POST,
-    /**
      * 直传
      */
     DIRECT_UPLOAD,

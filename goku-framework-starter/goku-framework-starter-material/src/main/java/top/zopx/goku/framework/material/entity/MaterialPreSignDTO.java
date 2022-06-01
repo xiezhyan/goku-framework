@@ -3,9 +3,11 @@ package top.zopx.goku.framework.material.entity;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
+import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author 俗世游子
@@ -40,7 +42,7 @@ public class MaterialPreSignDTO {
     private Map<String, String> queryParams;
 
     public MaterialPreSignDTO(BucketName bucketName, MaterialPreCons type, Duration expireTime) {
-        this.bucketName = bucketName;
+        this.bucketName = Optional.ofNullable(bucketName).orElseThrow(() -> new BusException("bucket name 不能为空"));
         this.type = type;
         this.expireTime = expireTime;
     }

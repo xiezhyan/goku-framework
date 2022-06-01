@@ -216,8 +216,8 @@ public class MinioServiceImpl implements IMaterialService {
         if (Objects.equals(type, MaterialPreCons.GET)) {
             return Method.GET;
         }
-        if (Objects.equals(type, MaterialPreCons.POST)) {
-            return Method.POST;
+        if (Objects.equals(type, MaterialPreCons.DIRECT_UPLOAD)) {
+            return Method.PUT;
         }
         return Method.PUT;
     }

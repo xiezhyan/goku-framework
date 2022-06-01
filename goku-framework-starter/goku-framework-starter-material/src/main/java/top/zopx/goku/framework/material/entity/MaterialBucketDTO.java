@@ -2,6 +2,9 @@ package top.zopx.goku.framework.material.entity;
 
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.entity.check.BucketName;
+import top.zopx.goku.framework.tools.exceptions.BusException;
+
+import java.util.Optional;
 
 /**
  * @author 俗世游子
@@ -21,7 +24,7 @@ public class MaterialBucketDTO {
     private MaterialPolicy policy;
 
     public MaterialBucketDTO(BucketName bucketName, MaterialPolicy policy) {
-        this.bucketName = bucketName;
+        this.bucketName = Optional.ofNullable(bucketName).orElseThrow(() -> new BusException("bucket name 不能为空"));
         this.policy = policy;
     }
 
