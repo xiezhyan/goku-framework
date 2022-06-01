@@ -46,6 +46,8 @@ public class MinioServiceImpl implements IMaterialService {
     @Override
     public boolean existsBucket(BucketName bucketName, Region region) {
         try {
+            bucketName = Optional.ofNullable(bucketName).orElseThrow(() -> new BusException("bucket 不能为空"));
+
             BucketExistsArgs.Builder bucket = BucketExistsArgs.builder()
                     .bucket(bucketName.getName());
 
@@ -64,6 +66,8 @@ public class MinioServiceImpl implements IMaterialService {
 
     @Override
     public void createBucket(MaterialBucketDTO bucket) {
+        bucket = Optional.ofNullable(bucket).orElseThrow(() -> new BusException("创建Bucket参数为空"));
+
         if (!existsBucket(bucket.getBucketName(), bucket.getRegion())) {
             throw new BusException("当前Bucket已存在");
         }
@@ -109,6 +113,8 @@ public class MinioServiceImpl implements IMaterialService {
 
     @Override
     public void removeBucket(BucketName bucketName, Region region) {
+        bucketName = Optional.ofNullable(bucketName).orElseThrow(() -> new BusException("bucket 不能为空"));
+
         RemoveBucketArgs.Builder builder = RemoveBucketArgs.builder().bucket(bucketName.getName());
         if (Objects.nonNull(region)) {
             builder = builder.region(region.getRegion());
@@ -125,6 +131,8 @@ public class MinioServiceImpl implements IMaterialService {
 
     @Override
     public MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO) {
+        materialPreSignDTO = Optional.ofNullable(materialPreSignDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
+
         GetPresignedObjectUrlArgs.Builder builder =
                 GetPresignedObjectUrlArgs.builder().bucket(materialPreSignDTO.getBucketName().getName());
 
