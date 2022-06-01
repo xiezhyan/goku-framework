@@ -3,6 +3,7 @@ package top.zopx.goku.framework.material.configurator.minio.service;
 import io.minio.*;
 import io.minio.http.Method;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import top.zopx.goku.framework.material.configurator.minio.client.MinIOClientConfigurator;
@@ -140,11 +141,14 @@ public class MinioServiceImpl implements IMaterialService {
             builder = builder.region(materialPreSignDTO.getRegion().getRegion());
         }
 
+        if (MapUtils.isNotEmpty(materialPreSignDTO.getQueryParams())) {
+            builder = builder.extraQueryParams(materialPreSignDTO.getQueryParams());
+        }
+
         try {
             builder = builder
                     .object(materialPreSignDTO.getObjectName().getName())
                     .method(getMethod(materialPreSignDTO.getType()))
-                    .extraQueryParams(materialPreSignDTO.getQueryParams())
                     .expiry(StringUtil.toInteger(materialPreSignDTO.getExpireTime().toMinutes()), TimeUnit.MINUTES);
             final String url = writeMinioClient.getPresignedObjectUrl(builder.build());
             final MaterialPreSignVO result = new MaterialPreSignVO();
