@@ -53,32 +53,8 @@
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		
-		<goku.version>1.5.0.220601</goku.version>
-		
-		<spring.boot.version>2.6.4</spring.boot.version>
-		<spring.cloud.version>2021.0.1</spring.cloud.version>
-		<spring.cloud.alibaba.version>2021.0.1.0</spring.cloud.alibaba.version>
-		
-		<mybatis.plus.version>3.5.1</mybatis.plus.version>
-		<mybatis.plus.dynamic.version>3.5.1</mybatis.plus.dynamic.version>
-		<mysql.version>8.0.22</mysql.version>
-		<collections.version>4.4</collections.version>
-		
-		<junit.version>4.12</junit.version>
-		
-		<lang3.version>3.12.0</lang3.version>
-		<pool2.version>2.11.1</pool2.version>
-		<codec.version>1.15</codec.version>
-		
-		<curator.version>5.2.1</curator.version>
-		<zookeeper.version>3.8.0</zookeeper.version>
-		
-		<validator.version>7.0.4.Final</validator.version>
-		
-		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 	</properties>
-	
+
 	<profiles>
 		<profile>
 			<id>develop</id>
@@ -106,19 +82,6 @@
 							<source>${maven.compiler.source}</source>
 							<target>${maven.compiler.target}</target>
 							<encoding>UTF-8</encoding>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.mapstruct</groupId>
-									<artifactId>mapstruct-processor</artifactId>
-									<version>${org.mapstruct.version}</version>
-								</path>
-								
-								<path>
-									<groupId>org.springframework.boot</groupId>
-									<artifactId>spring-boot-configuration-processor</artifactId>
-									<version>${spring.boot.version}</version>
-								</path>
-							</annotationProcessorPaths>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -147,19 +110,6 @@
 							<source>${maven.compiler.source}</source>
 							<target>${maven.compiler.target}</target>
 							<encoding>UTF-8</encoding>
-							<annotationProcessorPaths>
-								<path>
-									<groupId>org.mapstruct</groupId>
-									<artifactId>mapstruct-processor</artifactId>
-									<version>${org.mapstruct.version}</version>
-								</path>
-								
-								<path>
-									<groupId>org.springframework.boot</groupId>
-									<artifactId>spring-boot-configuration-processor</artifactId>
-									<version>${spring.boot.version}</version>
-								</path>
-							</annotationProcessorPaths>
 						</configuration>
 					</plugin>
 					<!-- 以下都为上传jar默认配置不做修改 -->
