@@ -20,7 +20,7 @@
     <modules>
         <module>goku-framework-starter-web</module>
         <module>goku-framework-starter-log</module>
-        <module>goku-framework-starter-mysql</module>
+        <module>goku-framework-starter-mybatis</module>
         <module>goku-framework-starter-mysql-binlog</module>
         <module>goku-framework-starter-cache</module>
         <module>goku-framework-starter-mq</module>
