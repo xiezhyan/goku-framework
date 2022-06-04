@@ -23,8 +23,9 @@
         <module>goku-framework-starter-mybatis</module>
         <module>goku-framework-starter-mysql-binlog</module>
         <module>goku-framework-starter-cache</module>
-        <module>goku-framework-starter-mq</module>
         <module>goku-framework-starter-material</module>
+        <module>goku-framework-starter-primary</module>
+        <module>goku-framework-starter-mq</module>
         <module>goku-framework-starter-process</module>
         <module>goku-framework-starter-schedule</module>
     </modules>
