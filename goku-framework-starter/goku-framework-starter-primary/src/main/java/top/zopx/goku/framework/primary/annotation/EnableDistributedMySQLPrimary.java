@@ -19,5 +19,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Import({MySQLMarkerConfiguration.class, MySQLInitialConfigurator.class})
-public @interface EnableDistributedMySQLUniqueId {
+public @interface EnableDistributedMySQLPrimary {
 }

@@ -36,7 +36,7 @@ public class ZookeeperInitialConfigurator {
      * @return CuratorFramework
      */
     @Bean
-    @ConditionalOnBean({ZookeeperMarkerConfiguration.ZookeeperUniqueMarker.class})
+    @ConditionalOnBean({ZookeeperMarkerConfiguration.ZookeeperPrimaryMarker.class})
     public CuratorFramework curatorFramework() {
         CuratorFramework client = CuratorFrameworkFactory.newClient(
                 bootstrapSnowflake.getZookeeperHost(),

@@ -24,13 +24,13 @@ public class MySQLInitialConfigurator {
     private IUpdatePlot updatePlot;
 
     @Bean
-    @ConditionalOnBean({MySQLMarkerConfiguration.MySQLUniqueMarker.class})
+    @ConditionalOnBean({MySQLMarkerConfiguration.MySQLPrimaryMarker.class})
     public IBusinessService businessService() {
         return new BusinessService(jdbcTemplate);
     }
 
     @Bean(initMethod = "init")
-    @ConditionalOnBean({MySQLMarkerConfiguration.MySQLUniqueMarker.class})
+    @ConditionalOnBean({MySQLMarkerConfiguration.MySQLPrimaryMarker.class})
     public IDSegmentGetterService segmentGetterService(IBusinessService businessService) {
         return new IDSegmentGetterService(businessService, updatePlot, jdbcTemplate);
     }

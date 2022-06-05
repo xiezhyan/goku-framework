@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
  */
 public class ZookeeperMarkerConfiguration {
     @Bean
-    public ZookeeperUniqueMarker zookeeperUniqueMarker() {
-        return new ZookeeperUniqueMarker();
+    public ZookeeperPrimaryMarker zookeeperUniqueMarker() {
+        return new ZookeeperPrimaryMarker();
     }
 
-    public static class ZookeeperUniqueMarker {
+    public static class ZookeeperPrimaryMarker {
     }
 }

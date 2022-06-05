@@ -17,7 +17,7 @@ import static top.zopx.goku.framework.primary.properties.BootstrapSnowflake.PREF
  */
 @Configuration
 @ConfigurationProperties(value = PREFIX)
-@ConditionalOnBean({ZookeeperMarkerConfiguration.ZookeeperUniqueMarker.class})
+@ConditionalOnBean({ZookeeperMarkerConfiguration.ZookeeperPrimaryMarker.class})
 public class BootstrapSnowflake {
     public static final String PREFIX = "goku.primary.snowflake";
     /**

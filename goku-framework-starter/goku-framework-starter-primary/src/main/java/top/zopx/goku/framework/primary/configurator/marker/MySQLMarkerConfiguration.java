@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
  */
 public class MySQLMarkerConfiguration {
     @Bean
-    public MySQLUniqueMarker mySQLUniqueMarker() {
-        return new MySQLUniqueMarker();
+    public MySQLPrimaryMarker mySQLUniqueMarker() {
+        return new MySQLPrimaryMarker();
     }
 
-    public static class MySQLUniqueMarker {
+    public static class MySQLPrimaryMarker {
     }
 }

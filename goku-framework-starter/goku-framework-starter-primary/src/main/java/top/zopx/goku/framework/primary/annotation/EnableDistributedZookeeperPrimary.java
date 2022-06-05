@@ -22,5 +22,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Import({ZookeeperMarkerConfiguration.class, ZookeeperInitialConfigurator.class})
 @EnableConfigurationProperties(BootstrapSnowflake.class)
-public @interface EnableDistributedZookeeperUniqueId {
+public @interface EnableDistributedZookeeperPrimary {
 }
