@@ -3,7 +3,7 @@ package top.zopx.goku.framework.mybatis.base;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.zopx.goku.framework.log.annotations.OperatorLogAnnotation;
+import top.zopx.goku.framework.log.annotation.OperatorLogAnnotation;
 import top.zopx.goku.framework.mybatis.entity.BaseEntity;
 import top.zopx.goku.framework.mybatis.entity.DataEntity;
 import top.zopx.goku.framework.tools.entity.vo.Page;

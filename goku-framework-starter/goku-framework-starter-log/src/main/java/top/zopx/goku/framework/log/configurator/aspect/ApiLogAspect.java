@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
-import top.zopx.goku.framework.log.annotations.OperatorLogAnnotation;
+import top.zopx.goku.framework.log.annotation.OperatorLogAnnotation;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ApiLogEvent;
 import top.zopx.goku.framework.tools.exceptions.BusException;
@@ -30,7 +30,7 @@ import java.util.Map;
 @Order(1)
 public class ApiLogAspect implements IAspect, IAspectMethod {
 
-    @Pointcut(value = "@annotation(top.zopx.goku.framework.log.annotations.OperatorLogAnnotation)")
+    @Pointcut(value = "@annotation(top.zopx.goku.framework.log.annotation.OperatorLogAnnotation)")
     @Override
     public void doPointcut() { /* document why this method is empty */ }
 

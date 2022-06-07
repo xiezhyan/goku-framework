@@ -39,21 +39,21 @@ public abstract class BaseExceptionAdvice {
     @ExceptionHandler(BusException.class)
     public R<String> handleBusException(BusException e) {
         LOGGER.error("BusException异常信息：{}", e.getMessage());
-        publish(e);
+        doAfter(e);
         return R.failure(e.getMsg(), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
     public R<String> handleException(Exception e) {
         LOGGER.error("通用异常信息：{}", e.getMessage());
-        publish(e);
+        doAfter(e);
         return R.failure(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<String> handleValidationException(MethodArgumentNotValidException e) {
         LOGGER.error("请求参数校验异常信息：{}", e.getMessage());
-        publish(e);
+        doAfter(e);
         return R.failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), HttpStatus.FORBIDDEN.value());
 
     }
@@ -67,17 +67,21 @@ public abstract class BaseExceptionAdvice {
             fieldError = (FieldError) error;
             errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), error.getDefaultMessage());
         }
-        publish(e);
+        doAfter(e);
         return R.failure(SpringContext.getJson().toJson(errorMap), HttpStatus.FORBIDDEN.value());
     }
 
     @ExceptionHandler(Throwable.class)
     public R<String> handleValidationException(Throwable e) {
-        publish(e);
+        doAfter(e);
         return R.failure(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
-    public void publish(Throwable e) {
+    public void doAfter(Throwable e) {
+        publish(e);
+    }
+
+    private void publish(Throwable e) {
         HttpServletRequest request = GlobalContext.CurrentRequest.getRequest();
         Map<String, Object> map = new HashMap<>();
         if (ObjectUtils.isNotEmpty(e)) {
@@ -97,7 +101,7 @@ public abstract class BaseExceptionAdvice {
         SpringContext.publishEvent(new ErrorLogEvent(map));
     }
 
-    public static void addRequestInfo(HttpServletRequest request, Map<String, Object> map) {
+    private static void addRequestInfo(HttpServletRequest request, Map<String, Object> map) {
         map.put(LogConstant.REQUEST_URI, getPath(request.getRequestURI()));
         map.put(LogConstant.IP, GlobalContext.CurrentRequest.getBrowserIp());
         map.put(LogConstant.AGENT, GlobalContext.CurrentRequest.getBrowserAgent());
@@ -106,7 +110,7 @@ public abstract class BaseExceptionAdvice {
         map.put(LogConstant.REQUEST_TYPE, request.getMethod());
     }
 
-    public static String getPath(String uriStr) {
+    private static String getPath(String uriStr) {
         URI uri;
         try {
             uri = new URI(uriStr);
@@ -117,7 +121,7 @@ public abstract class BaseExceptionAdvice {
         return uri.getPath();
     }
 
-    public String printStackTraceToString(Throwable t) {
+    private String printStackTraceToString(Throwable t) {
         try (StringWriter sw = new StringWriter()) {
             t.printStackTrace(new PrintWriter(sw, true));
             return sw.getBuffer().toString();

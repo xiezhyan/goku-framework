@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.material.configurator.minio.properties.BootstrapMinIO;
 import top.zopx.goku.framework.material.properties.BootstrapMaterial;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
@@ -42,15 +43,20 @@ public class MinIOClientConfigurator {
             throw new BusException("MinIO配置不足");
         }
         boolean secure = bootstrapMinIO.getEndpoint().startsWith("https");
+        MinioClient.Builder builder = MinioClient.builder()
+                .credentials(bootstrapMinIO.getAppSecretId(), bootstrapMinIO.getAppSecretKey());
+
+        if (StringUtil.isNotBlank(bootstrapMinIO.getRegion())) {
+            builder = builder.region(bootstrapMinIO.getRegion());
+        }
+
         if (Objects.isNull(bootstrapMinIO.getPort())) {
-            return MinioClient.builder()
+            return builder
                     .endpoint(bootstrapMinIO.getEndpoint(), secure ? 443 : 80, secure)
-                    .credentials(bootstrapMinIO.getAppSecretId(), bootstrapMinIO.getAppSecretKey())
                     .build();
         } else {
-            return MinioClient.builder()
+            return builder
                     .endpoint(bootstrapMinIO.getEndpoint(), bootstrapMinIO.getPort(), secure)
-                    .credentials(bootstrapMinIO.getAppSecretId(), bootstrapMinIO.getAppSecretKey())
                     .build();
         }
     }

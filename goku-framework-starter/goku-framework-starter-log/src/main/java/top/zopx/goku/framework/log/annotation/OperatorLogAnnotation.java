@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.log.annotations;
+package top.zopx.goku.framework.log.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

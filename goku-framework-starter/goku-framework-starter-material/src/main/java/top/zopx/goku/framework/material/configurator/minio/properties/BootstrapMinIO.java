@@ -38,6 +38,11 @@ public class BootstrapMinIO {
      */
     private String appSecretKey;
 
+    /**
+     * region
+     */
+    private String region;
+
     public String getEndpoint() {
         return endpoint;
     }
@@ -70,4 +75,11 @@ public class BootstrapMinIO {
         this.appSecretKey = appSecretKey;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
 }
