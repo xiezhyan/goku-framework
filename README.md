@@ -10,7 +10,7 @@ top.zopx:goku-framework-socket
 top.zopx:goku-framework-starter-web
 top.zopx:goku-framework-starter-log
 top.zopx:goku-framework-starter-cache
-top.zopx:goku-framework-starter-mysql
+top.zopx:goku-framework-starter-mybatis
 top.zopx:goku-framework-starter-mysql-binlog
 top.zopx:goku-framework-starter-material
 top.zopx:goku-framework-starter-mq
