@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.mybatis.binlog.entity;
+package top.zopx.goku.framework.mysql.binlog.entity;
 
 import java.io.Serializable;
 import java.util.List;

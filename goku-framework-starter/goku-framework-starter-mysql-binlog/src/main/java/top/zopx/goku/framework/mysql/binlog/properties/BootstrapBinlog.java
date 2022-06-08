@@ -1,11 +1,11 @@
-package top.zopx.goku.framework.mybatis.binlog.properties;
+package top.zopx.goku.framework.mysql.binlog.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.Serializable;
 
-import static top.zopx.goku.framework.mybatis.binlog.properties.BootstrapBinlog.PREFIX;
+import static top.zopx.goku.framework.mysql.binlog.properties.BootstrapBinlog.PREFIX;
 
 /**
  * @author 俗世游子

@@ -1,6 +1,6 @@
-package top.zopx.goku.framework.mybatis.binlog.send;
+package top.zopx.goku.framework.mysql.binlog.send;
 
-import top.zopx.goku.framework.mybatis.binlog.entity.BinlogRowData;
+import top.zopx.goku.framework.mysql.binlog.entity.BinlogRowData;
 
 /**
  * @author 俗世游子

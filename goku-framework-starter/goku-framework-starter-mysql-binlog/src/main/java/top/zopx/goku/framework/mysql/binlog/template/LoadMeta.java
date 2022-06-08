@@ -1,8 +1,8 @@
-package top.zopx.goku.framework.mybatis.binlog.template;
+package top.zopx.goku.framework.mysql.binlog.template;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.constant.OperateTypeCons;
+import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
 
 import java.util.List;
 

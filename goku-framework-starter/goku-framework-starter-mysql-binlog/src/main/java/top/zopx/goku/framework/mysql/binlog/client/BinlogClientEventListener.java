@@ -1,14 +1,14 @@
-package top.zopx.goku.framework.mybatis.binlog.client;
+package top.zopx.goku.framework.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.entity.BinlogRowData;
-import top.zopx.goku.framework.mybatis.binlog.entity.TableTemplate;
-import top.zopx.goku.framework.mybatis.binlog.send.ISendListener;
-import top.zopx.goku.framework.mybatis.binlog.template.ParseTemplate;
+import top.zopx.goku.framework.mysql.binlog.entity.BinlogRowData;
+import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
+import top.zopx.goku.framework.mysql.binlog.send.ISendListener;
+import top.zopx.goku.framework.mysql.binlog.template.ParseTemplate;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.io.Serializable;

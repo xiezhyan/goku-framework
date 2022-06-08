@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.mybatis.binlog.constant;
+package top.zopx.goku.framework.mysql.binlog.constant;
 
 import com.github.shyiko.mysql.binlog.event.EventType;
 

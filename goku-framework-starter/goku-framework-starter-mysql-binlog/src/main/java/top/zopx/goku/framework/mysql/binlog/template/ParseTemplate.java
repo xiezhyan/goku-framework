@@ -1,8 +1,8 @@
-package top.zopx.goku.framework.mybatis.binlog.template;
+package top.zopx.goku.framework.mysql.binlog.template;
 
-import top.zopx.goku.framework.mybatis.binlog.constant.OperateTypeCons;
-import top.zopx.goku.framework.mybatis.binlog.entity.TableTemplate;
-import top.zopx.goku.framework.mybatis.binlog.entity.TemplateSchema;
+import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
+import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
+import top.zopx.goku.framework.mysql.binlog.entity.TemplateSchema;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.util.*;

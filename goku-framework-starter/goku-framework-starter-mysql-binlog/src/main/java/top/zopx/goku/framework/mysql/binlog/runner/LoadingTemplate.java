@@ -1,12 +1,12 @@
-package top.zopx.goku.framework.mybatis.binlog.runner;
+package top.zopx.goku.framework.mysql.binlog.runner;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.entity.TemplateSchema;
-import top.zopx.goku.framework.mybatis.binlog.properties.BootstrapBinlog;
-import top.zopx.goku.framework.mybatis.binlog.template.ParseTemplate;
+import top.zopx.goku.framework.mysql.binlog.entity.TemplateSchema;
+import top.zopx.goku.framework.mysql.binlog.properties.BootstrapBinlog;
+import top.zopx.goku.framework.mysql.binlog.template.ParseTemplate;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import javax.annotation.PostConstruct;

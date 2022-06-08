@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.mybatis.binlog;
+package top.zopx.goku.framework.mysql.binlog;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
  * @date 2022/05/24 22:24
  */
 @Component
-@ComponentScan("top.zopx.goku.framework.mybatis.binlog")
+@ComponentScan("top.zopx.goku.framework.mysql.binlog")
 public class GokuFrameworkMySqlBinlogAutoConfiguration {
 }

@@ -1,8 +1,8 @@
-package top.zopx.goku.framework.mybatis.binlog.runner;
+package top.zopx.goku.framework.mysql.binlog.runner;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.client.BinlogClient;
+import top.zopx.goku.framework.mysql.binlog.client.BinlogClient;
 
 import javax.annotation.Resource;
 

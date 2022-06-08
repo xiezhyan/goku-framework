@@ -1,11 +1,11 @@
-package top.zopx.goku.framework.mybatis.binlog.client;
+package top.zopx.goku.framework.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.properties.BootstrapBinlog;
+import top.zopx.goku.framework.mysql.binlog.properties.BootstrapBinlog;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import javax.annotation.Resource;

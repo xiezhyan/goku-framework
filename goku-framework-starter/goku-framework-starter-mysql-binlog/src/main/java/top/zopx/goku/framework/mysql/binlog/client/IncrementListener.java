@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.mybatis.binlog.client;
+package top.zopx.goku.framework.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.event.EventType;
 import org.apache.commons.collections4.MapUtils;
@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
-import top.zopx.goku.framework.mybatis.binlog.constant.OperateTypeCons;
-import top.zopx.goku.framework.mybatis.binlog.entity.BinlogRowData;
-import top.zopx.goku.framework.mybatis.binlog.entity.MySqlRowData;
-import top.zopx.goku.framework.mybatis.binlog.entity.TableTemplate;
-import top.zopx.goku.framework.mybatis.binlog.send.ISendListener;
-import top.zopx.goku.framework.mybatis.binlog.send.ISender;
-import top.zopx.goku.framework.mybatis.binlog.template.ParseTemplate;
+import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
+import top.zopx.goku.framework.mysql.binlog.entity.BinlogRowData;
+import top.zopx.goku.framework.mysql.binlog.entity.MySqlRowData;
+import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
+import top.zopx.goku.framework.mysql.binlog.send.ISendListener;
+import top.zopx.goku.framework.mysql.binlog.send.ISender;
+import top.zopx.goku.framework.mysql.binlog.template.ParseTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
