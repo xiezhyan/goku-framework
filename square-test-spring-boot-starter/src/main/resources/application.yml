@@ -1,6 +1,12 @@
 spring:
   application:
     name: square-test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.86.200:12345/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: ZXCvbn789**..
+    type: com.alibaba.druid.pool.DruidDataSource
 
 goku:
   material:
@@ -14,3 +20,12 @@ goku:
       app-secret-id: sadf
       app-secret-key: dfe
       support-https: true
+
+  mysql:
+    binlog:
+      host: 192.168.86.200
+      port: 12345
+      username: root
+      password: ZXCvbn789**..
+      binlog-name: binlog.000019
+      position: 156

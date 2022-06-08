@@ -1,5 +1,6 @@
 package top.zopx.goku.framework.mysql.binlog.template;
 
+import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.mysql.binlog.constant.OperateTypeCons;
 import top.zopx.goku.framework.mysql.binlog.entity.TableTemplate;
 import top.zopx.goku.framework.mysql.binlog.entity.TemplateSchema;
@@ -12,7 +13,8 @@ import java.util.*;
  * @email xiezhyan@126.com
  * @date 2022/05/25 21:49
  */
-public final class ParseTemplate {
+@Component
+public class ParseTemplate {
 
     private ParseTemplate() {
     }

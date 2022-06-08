@@ -54,7 +54,7 @@ public class BootstrapBinlog implements Serializable {
         /**
          * position
          */
-        private Long position;
+        private Long position = -1L;
 
         public String getHost() {
             return host;
