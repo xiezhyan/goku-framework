@@ -108,7 +108,8 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
     /**
      * 将非空的Request转换为Entity
      *
-     * @param dto 入参
+     * @param dto  入参
+     * @param data data
      */
     protected abstract void copyNotNullForRequest(DTO dto, Entity data);
 }

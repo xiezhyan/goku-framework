@@ -51,6 +51,7 @@ public interface IHookService<DTO, Entity extends DataEntity> {
      * 创建成功之后的
      *
      * @param entity 参数
+     * @param dto    dto
      * @return 是否处理成功
      */
     default Boolean doCreateAfter(Entity entity, DTO dto) {
