@@ -40,6 +40,11 @@
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-primary</artifactId>
+            <version>1.5.0.220601</version>
+        </dependency>
+        <dependency>
+            <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-mysql-binlog</artifactId>
             <version>1.5.0.220601</version>
         </dependency>
