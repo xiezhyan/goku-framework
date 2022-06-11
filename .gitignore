@@ -20,6 +20,7 @@
 *.rar
 
 .idea
+.vscode
 */target
 */*.iml
 *.iml
