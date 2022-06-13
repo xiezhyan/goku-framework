@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.zopx.goku.support.mysql.binlog.GokuFrameworkMySqlBinlogAutoConfiguration
+  top.zopx.goku.framework.support.mysql.binlog.GokuFrameworkMySqlBinlogAutoConfiguration
