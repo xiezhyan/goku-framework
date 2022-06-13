@@ -32,7 +32,7 @@
 	
 	<groupId>top.zopx</groupId>
 	<artifactId>goku-framework</artifactId>
-	<version>1.5.0.220601</version>
+	<version>1.5.1.220701</version>
 	<packaging>pom</packaging>
 	<url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
 	
@@ -44,6 +44,7 @@
 		<module>goku-framework-tools</module>
 		<module>goku-framework-socket</module>
 		<module>goku-framework-starter</module>
+		<module>goku-framework-support</module>
 	</modules>
 	
 	<properties>

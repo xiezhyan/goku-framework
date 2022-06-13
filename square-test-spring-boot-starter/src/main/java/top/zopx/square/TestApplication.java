@@ -3,8 +3,8 @@ package top.zopx.square;
 import io.minio.MinioClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import top.zopx.goku.framework.primary.annotation.EnableDistributedMySQLPrimary;
-import top.zopx.goku.framework.primary.annotation.EnableDistributedZookeeperPrimary;
+import top.zopx.goku.support.primary.annotation.EnableDistributedMySQLPrimary;
+import top.zopx.goku.support.primary.annotation.EnableDistributedZookeeperPrimary;
 
 import javax.annotation.Resource;
 

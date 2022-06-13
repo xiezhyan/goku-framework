@@ -7,7 +7,7 @@
     <parent>
         <groupId>top.zopx</groupId>
         <artifactId>goku-framework</artifactId>
-        <version>1.5.0.220601</version>
+        <version>1.5.1.220701</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -24,7 +24,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
-        <goku.version>1.5.0.220601</goku.version>
+        <goku.version>1.5.1.220701</goku.version>
 
         <spring.boot.version>2.6.4</spring.boot.version>
         <spring.cloud.version>2021.0.1</spring.cloud.version>
