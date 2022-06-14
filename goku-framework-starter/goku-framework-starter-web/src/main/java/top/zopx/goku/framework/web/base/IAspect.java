@@ -3,6 +3,8 @@ package top.zopx.goku.framework.web.base;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import top.zopx.goku.framework.tools.util.json.JsonUtil;
+import top.zopx.goku.framework.web.util.LogHelper;
 
 /**
  * @author 俗世游子
@@ -20,15 +22,36 @@ public interface IAspect {
      */
     void doPointcut();
 
+    /**
+     * 在进入方法之前
+     * 可以加入额外参数等信息
+     */
     default void doBefore() {
     }
 
+    /**
+     * 在方法执行之后的操作
+     */
     default void doAfter() {
     }
 
+    /**
+     * 只有方法成功完成后才能在方法执行后运行通知
+     *
+     * @param joinPoint 参数
+     * @param returing  返回结果信息
+     */
     default void doAfterReturn(JoinPoint joinPoint, Object returing) {
+        LogHelper.getLogger(IAspect.class).info("{}", JsonUtil.getInstance().getJson().toJson(returing));
     }
 
+    /**
+     * 环绕通知
+     *
+     * @param joinPoint 参数
+     * @return 处理结果
+     * @throws Throwable 异常
+     */
     default Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         return joinPoint.proceed();
     }
