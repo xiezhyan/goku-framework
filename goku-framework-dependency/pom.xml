@@ -66,6 +66,11 @@
         <cli.version>1.5.0</cli.version>
         <jedis.version>4.2.2</jedis.version>
         <druid.version>1.2.8</druid.version>
+
+        <!--activiti-->
+        <activiti.version>6.0.0</activiti.version>
+        <activiti.modeler.version>5.23.0</activiti.modeler.version>
+        <batik.version>1.8</batik.version>
     </properties>
 
     <dependencyManagement>
