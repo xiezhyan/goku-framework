@@ -12,10 +12,12 @@ top.zopx:goku-framework-starter-log
 top.zopx:goku-framework-starter-cache
 top.zopx:goku-framework-starter-mybatis
 top.zopx:goku-framework-starter-material
-top.zopx:goku-framework-starter-mq
+
 top.zopx:goku-framework-support-mysql-binlog
 top.zopx:goku-framework-support-primary
 top.zopx:goku-framework-support-activiti
+
+【暂未完成】top.zopx:goku-framework-starter-mq
 ```
 
 ## mysql-binlog
@@ -49,3 +51,27 @@ max_binlog_cache_size = 512m
 
 > 验证： `SHOW MASTER LOGS`
 
+## Activiti
+### 基本配置
+```yaml
+spring:
+  datasource:
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.86.200:12345/activiti?useUnicode=true&characterEncoding=utf8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8&useSSL=true&allowMultiQueries=true&autoReconnect=true&nullCatalogMeansCurrent=true
+    username: root
+    password: ZXCvbn789**..
+
+  activiti:
+    database-schema: activiti
+    database-schema-update: true
+    history-level: none
+    check-process-definitions: false
+```
+### 启动配置
+```java
+@SpringBootApplication(
+        exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class}
+)
+```
