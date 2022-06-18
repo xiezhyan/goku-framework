@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/rest")
-public class BusinessActivitiController {
+public class BusinessRestActivitiController {
 
     @Resource
     private IBusinessActivitiService businessActivitiService;
