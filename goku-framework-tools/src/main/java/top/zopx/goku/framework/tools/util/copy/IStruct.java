@@ -35,9 +35,16 @@ public interface IStruct<S, T> {
      * 原始类型转返回类型
      *
      * @param data 原始类型
-     * @return List<DTO>
+     * @return List<T>
      */
-    List<T> copyToList(List<S> data);
+    List<T> copyToTaList(List<S> data);
+
+    /**
+     * 原始类型转返回类型
+     * @param data 原始类型
+     * @return List<S>
+     */
+    List<S> copyToSoList(List<T> data);
 
     /**
      * 忽略空值的copy
