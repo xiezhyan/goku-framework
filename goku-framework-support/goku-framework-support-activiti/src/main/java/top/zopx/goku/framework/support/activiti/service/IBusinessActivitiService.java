@@ -1,5 +1,11 @@
 package top.zopx.goku.framework.support.activiti.service;
 
+import top.zopx.goku.framework.support.activiti.entity.dto.ModelDTO;
+import top.zopx.goku.framework.support.activiti.entity.vo.ModelVO;
+import top.zopx.goku.framework.tools.entity.vo.Pagination;
+
+import java.util.List;
+
 /**
  * @author 俗世游子
  * @date 2021/6/26
@@ -32,4 +38,12 @@ public interface IBusinessActivitiService {
      * @return true | false
      */
     boolean deleteByModelId(String modelId);
+
+    /**
+     * 分页查询列表
+     * @param request 入参
+     * @param pagination 分页参数
+     * @return 请求
+     */
+    List<ModelVO> getList(ModelDTO request, Pagination pagination);
 }

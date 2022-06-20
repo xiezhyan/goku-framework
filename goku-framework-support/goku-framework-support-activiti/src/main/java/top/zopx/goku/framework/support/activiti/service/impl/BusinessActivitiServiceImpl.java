@@ -11,13 +11,17 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
+import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.task.Task;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.zopx.goku.framework.support.activiti.entity.dto.ModelDTO;
+import top.zopx.goku.framework.support.activiti.entity.vo.ModelVO;
 import top.zopx.goku.framework.support.activiti.service.IBusinessActivitiService;
+import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
@@ -25,6 +29,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 俗世游子
@@ -171,5 +176,53 @@ public class BusinessActivitiServiceImpl implements IBusinessActivitiService {
             throw new BusException(e.getMessage());
         }
         return isDelete;
+    }
+
+    @Override
+    public List<ModelVO> getList(ModelDTO request, Pagination pagination) {
+        ModelQuery query = repositoryService.createModelQuery();
+
+        if (StringUtil.isNotEmpty(request.getName())) {
+            // 按照name进行搜索
+            query = query.modelNameLike("%" + request.getName() + "%");
+        }
+
+        if (StringUtil.isNotEmpty(request.getKey())) {
+            // 按照key进行搜索
+            query = query.modelKey(request.getKey());
+        }
+
+        if (StringUtil.isNotEmpty(request.getCategory())) {
+            // 分类
+            query = query.modelCategoryLike("%" + request.getCategory() + "%");
+        }
+
+        if (StringUtil.isNotEmpty(request.getTenantId())) {
+            // 租户
+            query = query.modelTenantId(request.getTenantId());
+        }
+
+        int firstResult = (pagination.getCurrentIndex() - 1) * pagination.getPageSize();
+        List<Model> modelList = query.orderByModelId().asc().listPage(firstResult, pagination.getPageSize());
+
+        return modelList.stream()
+                .map(model ->
+                        {
+                            ModelVO response = new ModelVO(
+                                    model.getId(),
+                                    model.getName(),
+                                    model.getKey(),
+                                    model.getCategory(),
+                                    model.getCreateTime(),
+                                    model.getLastUpdateTime(),
+                                    model.getMetaInfo(),
+                                    model.getDeploymentId(),
+                                    model.getTenantId()
+                            );
+                            response.setVersion(model.getVersion());
+                            return response;
+                        }
+                )
+                .collect(Collectors.toList());
     }
 }

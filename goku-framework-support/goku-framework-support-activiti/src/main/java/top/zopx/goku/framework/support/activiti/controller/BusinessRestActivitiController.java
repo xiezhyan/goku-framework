@@ -13,21 +13,25 @@
 package top.zopx.goku.framework.support.activiti.controller;
 
 import org.springframework.web.bind.annotation.*;
+import top.zopx.goku.framework.support.activiti.entity.dto.ModelDTO;
+import top.zopx.goku.framework.support.activiti.entity.vo.ModelVO;
 import top.zopx.goku.framework.support.activiti.service.IBusinessActivitiService;
+import top.zopx.goku.framework.tools.entity.vo.Page;
+import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
- *
- * @date 2022/06/15
  * @author 俗世游子
+ * @date 2022/06/15
  */
 @RestController
 @RequestMapping("/rest")
-public class BusinessActivitiController {
+public class BusinessRestActivitiController {
 
     @Resource
     private IBusinessActivitiService businessActivitiService;
@@ -45,17 +49,9 @@ public class BusinessActivitiController {
             @RequestParam(value = "modelId", required = false) String modelId,
             @RequestParam(value = "tenantId", required = false) String tenantId,
             @RequestParam(value = "category", required = false) String category,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
         final String redirectUrl = businessActivitiService.saveOrUpdate(modelId, tenantId, category);
-
-//        try {
-////            response.sendRedirect(request.getContextPath() + redirectUrl);
-//        } catch (IOException e) {
-//            LogHelper.getLogger(BusinessActivitiController.class).error("creator异常信息: {}", e.getMessage());
-//            throw new BusException(e.getMessage());
-//        }
         return R.result(request.getContextPath() + redirectUrl);
     }
 
@@ -79,5 +75,33 @@ public class BusinessActivitiController {
     @DeleteMapping("/{modelId}")
     public R<Boolean> deleteByModelId(@PathVariable("modelId") String modelId) {
         return R.status(businessActivitiService.deleteByModelId(modelId));
+    }
+
+    /**
+     * 分页获取流程数据
+     *
+     * @param name       流程名称
+     * @param key        唯一标识
+     * @param category   分类
+     * @param tenantId   租户
+     * @param pagination 分页
+     * @return Page<ModelResponse>
+     */
+    @GetMapping("/page")
+    public R<Page<ModelVO>> getList(
+            Pagination pagination,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "key", required = false) String key,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "tenantId", required = false) String tenantId) {
+
+        ModelDTO request = new ModelDTO();
+        request.setName(name);
+        request.setKey(key);
+        request.setCategory(category);
+        request.setTenantId(tenantId);
+
+        final List<ModelVO> list = businessActivitiService.getList(request, pagination);
+        return R.result(new Page<>(pagination, list));
     }
 }
