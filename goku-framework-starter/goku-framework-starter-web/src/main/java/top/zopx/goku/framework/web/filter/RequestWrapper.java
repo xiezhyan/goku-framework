@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 俗世游子
@@ -55,7 +57,15 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 
     public byte[] getBuff() {
         if(HttpMethod.GET.matches(getMethod())) {
-            return JsonUtil.getInstance().getJson().toJson(getParameterMap()).getBytes(StandardCharsets.UTF_8);
+            final Map<String, Object> paramData = new HashMap<>();
+            getParameterMap().forEach((k, v) -> {
+                if (v.length == 1) {
+                    paramData.put(k, v[0]);
+                } else {
+                    paramData.put(k, v);
+                }
+            });
+            return JsonUtil.getInstance().getJson().toJson(paramData).getBytes(StandardCharsets.UTF_8);
         }
         return buff;
     }
