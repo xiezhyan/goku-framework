@@ -61,25 +61,10 @@ public class StringUtil extends StringUtils {
     }
 
     /**
-     * version:得到UUID
+     * 得到UUID
      */
-    public static String uuid() {
+    @SuppressWarnings("all")
+    public static String genericUUID() {
         return UUID.randomUUID().toString().toUpperCase().replace("-", "");
-    }
-
-    public static int getHash(String str) {
-        int hash = -2128831035;
-        for (int i = 0; i < str.length(); i++) {
-            hash = (hash ^ str.charAt(i)) * 16777619;
-        }
-        hash += (hash << 13);
-        hash ^= hash >> 7;
-        hash += (hash << 3);
-        hash ^= hash >> 17;
-        hash += (hash << 5);
-        if (hash < 0) {
-            hash = Math.abs(hash);
-        }
-        return hash;
     }
 }

@@ -22,12 +22,12 @@ public final class ObjectNameUtil {
         if (originFileName.contains(".")) {
             return MessageFormat.format(
                     "{0}{1}",
-                    StringUtil.uuid(),
+                    StringUtil.genericUUID(),
                     originFileName.substring(originFileName.lastIndexOf(".")));
         } else {
             return MessageFormat.format(
                     "{0}.{1}",
-                    StringUtil.uuid(),
+                    StringUtil.genericUUID(),
                     contentType.split("/")[1]);
         }
     }

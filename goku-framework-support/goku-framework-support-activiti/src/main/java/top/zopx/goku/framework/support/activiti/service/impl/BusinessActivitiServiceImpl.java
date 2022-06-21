@@ -67,7 +67,7 @@ public class BusinessActivitiServiceImpl implements IBusinessActivitiService {
         // 新建过程
         try {
             String modelName = "modelName";
-            String modelKey = StringUtil.uuid();
+            String modelKey = StringUtil.genericUUID();
             String description = "description";
 
             ObjectMapper objectMapper = new ObjectMapper();
