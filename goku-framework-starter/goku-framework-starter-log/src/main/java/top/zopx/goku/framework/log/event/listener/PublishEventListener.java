@@ -2,6 +2,7 @@ package top.zopx.goku.framework.log.event.listener;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.log.properties.BootstrapLog;
 import top.zopx.goku.framework.log.constant.LogConstant;
@@ -29,6 +30,7 @@ public class PublishEventListener {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    @Async
     @EventListener(value = ErrorLogEvent.class)
     @SuppressWarnings("all")
     public void onApplicationEvent(ErrorLogEvent event) {
@@ -37,6 +39,7 @@ public class PublishEventListener {
         logService.saveError(source);
     }
 
+    @Async
     @EventListener(value = ApiLogEvent.class)
     @SuppressWarnings("all")
     public void onApplicationEvent(ApiLogEvent event) {

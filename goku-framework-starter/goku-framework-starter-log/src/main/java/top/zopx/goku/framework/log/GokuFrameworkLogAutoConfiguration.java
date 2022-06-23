@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 import top.zopx.goku.framework.log.configurator.aspect.ApiLogAspect;
 import top.zopx.goku.framework.log.event.listener.PublishEventListener;
 import top.zopx.goku.framework.log.properties.BootstrapLog;
@@ -20,6 +21,7 @@ import top.zopx.goku.framework.log.properties.BootstrapLog;
 @EnableConfigurationProperties({
         BootstrapLog.class
 })
+@EnableAsync
 public class GokuFrameworkLogAutoConfiguration {
 
     @Bean
