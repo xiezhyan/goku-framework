@@ -2,6 +2,7 @@ package top.zopx.goku.framework.mybatis.base;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.zopx.goku.framework.mybatis.entity.BaseEntity;
 import top.zopx.goku.framework.mybatis.entity.DataEntity;
 import top.zopx.goku.framework.tools.entity.vo.Pagination;
 
@@ -14,38 +15,38 @@ import java.util.function.LongConsumer;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public interface IBaseService<DTO, Entity extends DataEntity> extends IService<Entity> {
+public interface IBaseService<VO, DTO extends BaseEntity, DO extends DataEntity> extends IService<DO> {
 
     /**
      * 获取模块列表 分页
      *
      * @param pagination 分页参数
-     * @param request    查询参数
+     * @param query    查询参数
      * @param consumer   分页结果
      * @return List<Response>
      */
-    List<DTO> getList(
+    List<VO> getList(
             Pagination pagination,
-            DTO request,
+            DTO query,
             LongConsumer consumer
     );
 
     /**
      * 新增
      *
-     * @param dto 入参
+     * @param body 入参
      * @return 是否新增成功
      */
-    Boolean create(DTO dto);
+    Boolean create(DTO body);
 
     /**
      * 修改
      *
-     * @param dto 入参
+     * @param body 入参
      * @param id      主键
      * @return 是否修改成功
      */
-    Boolean updateByPriKey(DTO dto, Long id);
+    Boolean updateByPriKey(DTO body, Long id);
 
     /**
      * 逻辑删除
@@ -61,6 +62,5 @@ public interface IBaseService<DTO, Entity extends DataEntity> extends IService<E
      * @param id 主键
      * @return Response
      */
-    DTO getByPriKey(Long id);
-
+    VO getByPriKey(Long id);
 }

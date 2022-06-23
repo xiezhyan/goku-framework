@@ -14,7 +14,7 @@ import java.util.List;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public interface IBaseMapper<Entity extends DataEntity, DTO> extends BaseMapper<Entity> {
+public interface IBaseMapper<DO extends DataEntity, DTO> extends BaseMapper<DO> {
 
     /**
      * 查询列表 并且排序
@@ -23,8 +23,8 @@ public interface IBaseMapper<Entity extends DataEntity, DTO> extends BaseMapper<
      * @param sorteds 排序
      * @return List<Entity>
      */
-    List<Entity> getListOrder(
+    List<DO> getListOrder(
             @Param("req") DTO req,
-            @Param("sort") List<Sorted> sorteds
+            @Param("sorts") List<Sorted> sorteds
     );
 }

@@ -5,11 +5,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.transaction.annotation.Transactional;
 import top.zopx.goku.framework.mybatis.constant.ErrorCodeCons;
+import top.zopx.goku.framework.mybatis.entity.BaseEntity;
 import top.zopx.goku.framework.mybatis.entity.DataEntity;
 import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.entity.vo.Sorted;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.web.util.UserLoginHelper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,59 +25,60 @@ import java.util.stream.Collectors;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper extends IBaseMapper<Entity, DTO>>
-        extends ServiceImpl<Mapper, Entity>
-        implements IBaseService<DTO, Entity>, IHookService<DTO, Entity> {
+public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends DataEntity, Mapper extends IBaseMapper<DO, DTO>>
+        extends ServiceImpl<Mapper, DO>
+        implements IBaseService<VO, DTO, DO>, IHookService<DTO, DO> {
 
     @Override
-    public List<DTO> getList(Pagination pagination, DTO request, LongConsumer consumer) {
-        Page<Entity> page = null;
+    public List<VO> getList(Pagination pagination, DTO query, LongConsumer consumer) {
+        Page<DO> page = null;
         List<Sorted> sorteds = null;
         if (null != pagination) {
             page = PageMethod.startPage(pagination.getCurrentIndex(), pagination.getPageSize());
             sorteds = pagination.getSorteds();
         }
-        doSearchBefore(request);
-        List<Entity> list = baseMapper.getListOrder(request, sorteds);
+        doSearchBefore(query);
+        List<DO> list = baseMapper.getListOrder(query, sorteds);
         if (null != consumer && null != page) {
             consumer.accept(page.getTotal());
         }
 
-        return list.stream().map(this::copyToResponse).collect(Collectors.toList());
+        return list.stream().map(this::copyToVO).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean create(DTO request) {
-        Entity entity = copyToEntity(request);
-        doCreateBefore(entity, request);
+    public Boolean create(DTO body) {
+        DO entity = copyToEntity(body);
+        doCreateBefore(entity, body);
         if (baseMapper.insert(entity) == 1) {
-            return doCreateAfter(entity, request);
+            return doCreateAfter(entity, body);
         }
         throw new BusException(ErrorCodeCons.ERROR_CREATE);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateByPriKey(DTO request, Long id) {
-        Entity entity =
+    public Boolean updateByPriKey(DTO body, Long id) {
+        DO entity =
                 Optional.ofNullable(baseMapper.selectById(id))
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
         // 需要额外处理的操作，钩子函数
-        doUpdateBefore(entity, request);
-        copyNotNullForRequest(request, entity);
+        doUpdateBefore(entity, body);
+        copyNotNullForRequest(body, entity);
         if (baseMapper.updateById(entity) == 1) {
             return doUpdateAfter(entity);
         }
         throw new BusException(ErrorCodeCons.ERROR_UPDATE);
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteByPriKey(Long id) {
-        Entity data = doDeleteBefore(id);
+        DO data = doDeleteBefore(id);
         if (Objects.nonNull(data)) {
+            data.setDeleteTime(LocalDateTime.now());
+            data.setDeleter(UserLoginHelper.getUserIdOrNull());
             return baseMapper.deleteById(data) == 1;
         } else {
             return baseMapper.deleteById(id) == 1;
@@ -82,11 +86,11 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
     }
 
     @Override
-    public DTO getByPriKey(Long id) {
-        Entity entity =
+    public VO getByPriKey(Long id) {
+        DO entity =
                 Optional.ofNullable(baseMapper.selectById(id))
                         .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
-        return copyToResponse(entity);
+        return copyToVO(entity);
     }
 
     /**
@@ -95,7 +99,7 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
      * @param data Entity参数
      * @return Response
      */
-    protected abstract DTO copyToResponse(Entity data);
+    protected abstract VO copyToVO(DO data);
 
     /**
      * 将Request转换为Entity
@@ -103,13 +107,13 @@ public abstract class BaseServiceImpl<DTO, Entity extends DataEntity, Mapper ext
      * @param dto 入参
      * @return Entity
      */
-    protected abstract Entity copyToEntity(DTO dto);
+    protected abstract DO copyToEntity(DTO dto);
 
     /**
      * 将非空的Request转换为Entity
      *
-     * @param dto  入参
+     * @param body  入参
      * @param data data
      */
-    protected abstract void copyNotNullForRequest(DTO dto, Entity data);
+    protected abstract void copyNotNullForRequest(DTO body, DO data);
 }

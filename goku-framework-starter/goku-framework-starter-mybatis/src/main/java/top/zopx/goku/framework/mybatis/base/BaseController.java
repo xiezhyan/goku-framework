@@ -13,7 +13,6 @@ import top.zopx.goku.framework.web.util.validate.constant.ValidGroup;
 
 import javax.validation.groups.Default;
 import java.util.function.LongConsumer;
-import java.util.stream.Collectors;
 
 /**
  * 基础Controller
@@ -23,10 +22,10 @@ import java.util.stream.Collectors;
  */
 @Validated
 public abstract class BaseController<
-        VO extends BaseEntity,
-        DTO,
-        Entity extends DataEntity,
-        Service extends IBaseService<DTO, Entity>
+        VO,
+        DTO extends BaseEntity,
+        DO extends DataEntity,
+        Service extends IBaseService<VO, DTO, DO>
         > {
 
     /**
@@ -37,64 +36,37 @@ public abstract class BaseController<
 
     @GetMapping("/page")
     @OperatorLogAnnotation(value = "获取数据列表")
-    public R<Page<VO>> getList(
-            Pagination pagination,
-            VO vo
-    ) {
+    public R<Page<VO>> getList(Pagination pagination, DTO query) {
         LongConsumer consumer = null;
         if (null != pagination) {
             consumer = pagination::setTotalCount;
         }
         return R.result(
-                new Page<>(
-                        pagination,
-                        baseService.getList(pagination, convertVoToDTO(vo), consumer)
-                                .stream()
-                                .map(this::convertDtoToVO)
-                                .collect(Collectors.toList())
-                )
+                new Page<>(pagination, baseService.getList(pagination, query, consumer))
         );
     }
 
     @GetMapping("/detail")
     @OperatorLogAnnotation(value = "获取数据详情")
     public R<VO> getByPriKey(@RequestParam(value = "id", required = true) Long id) {
-        return R.result(
-                convertDtoToVO(baseService.getByPriKey(id))
-        );
+        return R.result(baseService.getByPriKey(id));
     }
 
     @PostMapping("/save")
     @OperatorLogAnnotation(value = "保存")
-    public R<Boolean> save(@Validated(value = {Default.class, ValidGroup.Create.class}) @RequestBody VO vo) {
-        return R.result(baseService.create(convertVoToDTO(vo)));
+    public R<Boolean> save(@Validated(value = {Default.class, ValidGroup.Create.class}) @RequestBody DTO body) {
+        return R.result(baseService.create(body));
     }
 
     @PutMapping("/update")
     @OperatorLogAnnotation(value = "通过主键修改")
-    public R<Boolean> updateByPriKey(@Validated(value = {Default.class, ValidGroup.Update.class}) @RequestBody VO vo) {
-        return R.result(baseService.updateByPriKey(convertVoToDTO(vo), vo.getId()));
+    public R<Boolean> updateByPriKey(@Validated(value = {Default.class, ValidGroup.Update.class}) @RequestBody DTO body) {
+        return R.result(baseService.updateByPriKey(body, body.getId()));
     }
 
     @DeleteMapping("/delete")
     @OperatorLogAnnotation(value = "通过主键删除")
-    public R<Boolean> deleteByPriKey(@Validated(value = {ValidGroup.Delete.class}) @RequestBody VO vo) {
-        return R.result(baseService.deleteByPriKey(vo.getId()));
+    public R<Boolean> deleteByPriKey(@Validated(value = {ValidGroup.Delete.class}) @RequestBody DTO body) {
+        return R.result(baseService.deleteByPriKey(body.getId()));
     }
-
-    /**
-     * 将VO转换为DTO
-     *
-     * @param vo VO对象
-     * @return DTO
-     */
-    protected abstract DTO convertVoToDTO(VO vo);
-
-    /**
-     * 将DTO转换为VO
-     *
-     * @param dto DTO对象
-     * @return VO
-     */
-    protected abstract VO convertDtoToVO(DTO dto);
 }

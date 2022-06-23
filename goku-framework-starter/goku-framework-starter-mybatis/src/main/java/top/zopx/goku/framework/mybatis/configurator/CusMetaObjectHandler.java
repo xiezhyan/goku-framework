@@ -24,6 +24,7 @@ public class CusMetaObjectHandler implements MetaObjectHandler {
         LOGGER.debug("save开始填充");
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
         this.strictInsertFill(metaObject, "creater", Long.class, UserLoginHelper.getUserIdOrNull());
+        this.strictInsertFill(metaObject, "isDelete", Integer.class, 0);
     }
 
     @Override

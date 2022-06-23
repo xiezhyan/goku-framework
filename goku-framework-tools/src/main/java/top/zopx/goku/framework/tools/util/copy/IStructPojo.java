@@ -13,15 +13,15 @@ import java.util.List;
  * @email xiezhyan@126.com
  * @date 2022/3/9
  */
-public interface IStructPojo<D, V, T> {
+public interface IStructPojo<DO, VO, DTO> extends IStruct<DTO, VO> {
 
     /**
      * 原始类型转返回类型
      *
-     * @param d 原始类型
+     * @param data 原始类型
      * @return 返回类型
      */
-    T copyDataToDTO(D d);
+    VO copyDataToVO(DO data);
 
     /**
      * DTO 转 Data
@@ -29,7 +29,7 @@ public interface IStructPojo<D, V, T> {
      * @param dto DTO
      * @return Data
      */
-    D copyDtoToData(T dto);
+    DO copyDtoToData(DTO dto);
 
     /**
      * 原始类型转返回类型
@@ -37,7 +37,7 @@ public interface IStructPojo<D, V, T> {
      * @param data 原始类型
      * @return List<DTO>
      */
-    List<T> copyDataToDTOList(List<D> data);
+    List<VO> copyDataToVOList(List<DO> data);
 
     /**
      * 忽略空值的copy
@@ -46,21 +46,5 @@ public interface IStructPojo<D, V, T> {
      * @param d copy对象
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void copyIgnoreNull(T dto, @MappingTarget D d);
-
-    /**
-     * VO 转 DTO
-     *
-     * @param vo VO
-     * @return DTO
-     */
-    T copyVoToDTO(V vo);
-
-    /**
-     * DTO 转 VO
-     *
-     * @param dto DTO
-     * @return VO
-     */
-    V copyDtoToVO(T dto);
+    void copyDtoToDoIgnoreNull(DTO dto, @MappingTarget DO d);
 }

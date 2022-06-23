@@ -10,6 +10,18 @@ import top.zopx.goku.framework.tools.exceptions.IBus;
  */
 public enum ErrorCodeCons implements IBus {
     /**
+     * 未传入Token信息
+     */
+    TOKEN_NOT_ERROR("未传入Token信息", 1000),
+    /**
+     * Token异常
+     */
+    TOKEN_EXISTS("Token异常",  1001),
+    /**
+     * 权限校验异常
+     */
+    TOKEN_NOT_AUTH("权限校验异常",  1002),
+    /**
      * 主键查询结果不存在
      */
     NOT_ENTITY("主键查询结果不存在", 1101),
