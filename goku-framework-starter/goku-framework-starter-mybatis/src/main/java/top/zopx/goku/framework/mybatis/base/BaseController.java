@@ -48,7 +48,7 @@ public abstract class BaseController<
 
     @GetMapping("/detail")
     @OperatorLogAnnotation(value = "获取数据详情")
-    public R<VO> getByPriKey(@RequestParam(value = "id", required = true) Long id) {
+    public R<VO> getByPriKey(@RequestParam(value = "id") Long id) {
         return R.result(baseService.getByPriKey(id));
     }
 
