@@ -3,6 +3,7 @@ package top.zopx.goku.framework.mybatis.base;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import top.zopx.goku.framework.mybatis.entity.BaseEntity;
 import top.zopx.goku.framework.mybatis.entity.DataEntity;
 import top.zopx.goku.framework.tools.entity.vo.Sorted;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @author 俗世游子
  * @date 2022/05/12
  */
-public interface IBaseMapper<DO extends DataEntity, DTO> extends BaseMapper<DO> {
+public interface IBaseMapper<DO extends DataEntity, DTO extends BaseEntity> extends BaseMapper<DO> {
 
     /**
      * 查询列表 并且排序

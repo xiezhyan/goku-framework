@@ -1,12 +1,19 @@
 package top.zopx.goku.framework.support.primary.core.entity;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+import static top.zopx.goku.framework.support.primary.core.entity.BootstrapSnowflakeItem.PREFIX;
+
 /**
  * @author 俗世游子
  * @date 2022/1/24
  * @email xiezhyan@126.com
  */
+@Configuration
+@ConfigurationProperties(value = PREFIX)
 public class BootstrapSnowflakeItem {
-
+    public static final String PREFIX = "goku.primary.snowflake.snowflake";
     /**
      * 服务IP
      */

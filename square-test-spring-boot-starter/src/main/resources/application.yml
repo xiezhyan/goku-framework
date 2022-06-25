@@ -29,3 +29,15 @@ goku:
       password: ZXCvbn789**..
       binlog-name: binlog.000019
       position: 156
+
+  log:
+    lasting: false
+    level: info
+    app-name: ${spring.application.name}
+
+  devtools:
+    author: 俗世游子
+
+  primary:
+    snowflake:
+      retry: 3
