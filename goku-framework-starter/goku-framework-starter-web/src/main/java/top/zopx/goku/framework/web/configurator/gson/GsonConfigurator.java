@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.configurator;
+package top.zopx.goku.framework.web.configurator.gson;
 
 import com.google.gson.Gson;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -10,8 +10,8 @@ import top.zopx.goku.framework.log.annotation.OperatorLogAnnotation;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ApiLogEvent;
 import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.web.base.IAspect;
-import top.zopx.goku.framework.web.base.IAspectMethod;
+import top.zopx.goku.framework.web.configurator.base.IAspect;
+import top.zopx.goku.framework.web.configurator.base.IAspectMethod;
 import top.zopx.goku.framework.web.context.GlobalContext;
 import top.zopx.goku.framework.web.context.SpringContext;
 

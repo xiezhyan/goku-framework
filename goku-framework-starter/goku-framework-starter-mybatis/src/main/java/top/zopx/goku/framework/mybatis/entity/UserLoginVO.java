@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.entity;
+package top.zopx.goku.framework.mybatis.entity;
 
 /**
  * @author 俗世游子

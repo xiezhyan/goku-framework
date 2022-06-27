@@ -2,7 +2,7 @@ package top.zopx.goku.framework.mybatis.util;
 
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.web.constant.UserBusCons;
-import top.zopx.goku.framework.web.entity.UserLoginVO;
+import top.zopx.goku.framework.mybatis.entity.UserLoginVO;
 
 import java.util.Optional;
 

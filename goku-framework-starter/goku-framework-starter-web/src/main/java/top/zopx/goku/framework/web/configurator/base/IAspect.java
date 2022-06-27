@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.base;
+package top.zopx.goku.framework.web.configurator.base;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
