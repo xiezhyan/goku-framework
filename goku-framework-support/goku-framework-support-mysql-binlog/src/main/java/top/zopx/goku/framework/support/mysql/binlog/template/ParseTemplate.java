@@ -1,12 +1,16 @@
 package top.zopx.goku.framework.support.mysql.binlog.template;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.support.mysql.binlog.constant.OperateTypeCons;
 import top.zopx.goku.framework.support.mysql.binlog.entity.TableTemplate;
-import top.zopx.goku.framework.support.mysql.binlog.entity.TemplateSchema;
+import top.zopx.goku.framework.support.mysql.binlog.entity.Template;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 俗世游子
@@ -24,12 +28,12 @@ public class ParseTemplate {
      */
     public static final Map<String, TableTemplate> MAP = new HashMap<>();
 
-    public static void parse(TemplateSchema templateSchema) {
-        if (Objects.isNull(templateSchema)) {
+    public static void parse(List<Template> templates) {
+        if (CollectionUtils.isEmpty(templates)) {
             throw new BusException("json格式解析内容异常");
         }
 
-        templateSchema.getSchema().forEach(schema ->
+        templates.forEach(schema ->
                 schema.getTableList().forEach(jsonTable -> {
                     final TableTemplate tableTemplate = new TableTemplate(schema.getDatabase(), jsonTable.getTableName());
                     MAP.put(jsonTable.getTableName(), tableTemplate);
