@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.util;
+package top.zopx.goku.framework.mybatis.util;
 
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.web.constant.UserBusCons;

@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.annotation;
+package top.zopx.goku.framework.mybatis.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -10,7 +10,7 @@ import top.zopx.goku.framework.mybatis.entity.DataEntity;
 import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.entity.vo.Sorted;
 import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.web.util.UserLoginHelper;
+import top.zopx.goku.framework.mybatis.util.UserLoginHelper;
 
 import java.time.LocalDateTime;
 import java.util.List;
