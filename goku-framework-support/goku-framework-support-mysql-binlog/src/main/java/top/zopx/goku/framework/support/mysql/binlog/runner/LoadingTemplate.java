@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.support.mysql.binlog.entity.Template;
-import top.zopx.goku.framework.support.mysql.binlog.entity.TemplateSchema;
 import top.zopx.goku.framework.support.mysql.binlog.properties.BootstrapBinlog;
 import top.zopx.goku.framework.support.mysql.binlog.template.ParseTemplate;
 import top.zopx.goku.framework.tools.exceptions.BusException;
@@ -45,7 +44,6 @@ public class LoadingTemplate {
         if (Objects.isNull(inputStream)) {
             throw new BusException("fail load template.json");
         }
-//        final TemplateSchema schema = writeGson.fromJson(new BufferedReader(new InputStreamReader(inputStream)), TemplateSchema.class);
         List<Template> templates = writeGson.fromJson(new BufferedReader(new InputStreamReader(inputStream)), new TypeToken<List<Template>>(){}.getType());
         LOGGER.info("{} parse data = {}", bootstrapBinlog.getTemplate(), templates);
         ParseTemplate.parse(templates);

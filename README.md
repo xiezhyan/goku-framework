@@ -51,6 +51,35 @@ max_binlog_cache_size = 512m
 
 > 验证： `SHOW MASTER LOGS`
 
+## template.json格式
+```json
+[
+  {
+    "database": "",
+    "tableList": [
+      {
+        "tableName": "",
+        "insert": [
+          {
+            "column": ""
+          }
+        ],
+        "update": [
+          {
+            "column": ""
+          }
+        ],
+        "delete": [
+          {
+            "column": ""
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
 ## Activiti
 ### 基本配置
 ```yaml
