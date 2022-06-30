@@ -1,8 +1,8 @@
 package top.zopx.goku.framework.mybatis.util;
 
-import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.web.constant.UserBusCons;
+import top.zopx.goku.framework.mybatis.constant.ErrorCodeCons;
 import top.zopx.goku.framework.mybatis.entity.UserLoginVO;
+import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class UserLoginHelper {
         try {
             return Optional.of(THREAD_LOCAL.get()).isPresent();
         } catch (Exception e) {
-            throw new BusException(UserBusCons.NOT_LOGIN);
+            throw new BusException(ErrorCodeCons.TOKEN_NOT_ERROR);
         }
     }
 
