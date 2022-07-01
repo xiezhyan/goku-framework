@@ -21,32 +21,32 @@
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-material</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-log</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-cache</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-mybatis</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-support-primary</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
         <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-support-mysql-binlog</artifactId>
-            <version>1.5.1.220701</version>
+            <version>1.5.1.0815</version>
         </dependency>
     </dependencies>
 
