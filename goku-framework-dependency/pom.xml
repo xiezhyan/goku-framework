@@ -39,7 +39,7 @@
         <druid.boot.version>1.2.8</druid.boot.version>
         <collections.version>4.4</collections.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.2</junit.version>
 
         <lang3.version>3.12.0</lang3.version>
         <pool2.version>2.11.1</pool2.version>

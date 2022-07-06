@@ -15,11 +15,11 @@
     <name>${groupId}:${artifactId}:${parent.version}</name>
 
     <properties>
-        <minio.version>8.4.0</minio.version>
+        <minio.version>8.4.2</minio.version>
 
-        <aliyun.oss.version>3.10.2</aliyun.oss.version>
-        <jaxb.api.version>2.3.1</jaxb.api.version>
-        <jaxb.runtime.version>2.3.3</jaxb.runtime.version>
+        <aliyun.oss.version>3.15.0</aliyun.oss.version>
+        <jaxb.api.version>2.4.0-b180830.0359</jaxb.api.version>
+        <jaxb.runtime.version>4.0.0</jaxb.runtime.version>
         <activation.version>1.1.1</activation.version>
     </properties>
 
