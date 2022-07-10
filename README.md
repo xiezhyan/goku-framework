@@ -104,3 +104,12 @@ spring:
         exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class}
 )
 ```
+
+## 更新日志
+### 1.5.1.0815
+1. goku-framework-socket重新规划
+2. Bind/BindDict/Binding等工具类的实现
+3. 基础版本升级
+
+### 1.5.1.220701
+### 1.5.1.220601
