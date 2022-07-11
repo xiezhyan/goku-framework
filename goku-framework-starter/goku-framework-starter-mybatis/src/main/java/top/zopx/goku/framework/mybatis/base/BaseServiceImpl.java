@@ -41,6 +41,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         List<DO> list = baseMapper.getListOrder(query, sorteds);
         if (null != consumer && null != page) {
             consumer.accept(page.getTotal());
+            page.close();
         }
 
         return list.stream().map(this::copyToVO).collect(Collectors.toList());
