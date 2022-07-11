@@ -61,12 +61,10 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateByPriKey(DTO body, Long id) {
-        DO entity =
-                Optional.ofNullable(baseMapper.selectById(id))
-                        .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
+        DO entity = getById(id);
         // 需要额外处理的操作，钩子函数
-        doUpdateBefore(entity, body);
         copyNotNullForRequest(body, entity);
+        doUpdateBefore(entity, body);
         if (baseMapper.updateById(entity) == 1) {
             return doUpdateAfter(entity);
         }
@@ -88,10 +86,18 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
 
     @Override
     public VO getByPriKey(Long id) {
-        DO entity =
-                Optional.ofNullable(baseMapper.selectById(id))
-                        .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
-        return copyToVO(entity);
+        return copyToVO(getById(id));
+    }
+
+    /**
+     * 通过ID获取Entity
+     *
+     * @param id ID
+     * @return DO
+     */
+    private DO getById(Long id) {
+        return Optional.ofNullable(baseMapper.selectById(id))
+                .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
     }
 
     /**
@@ -113,7 +119,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     /**
      * 将非空的Request转换为Entity
      *
-     * @param body  入参
+     * @param body 入参
      * @param data data
      */
     protected abstract void copyNotNullForRequest(DTO body, DO data);
