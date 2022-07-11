@@ -1,10 +1,10 @@
-package top.zopx.goku.framework.web.bind.registry.wrapper;
+package top.zopx.goku.framework.web.util.bind.registry.wrapper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
-import top.zopx.goku.framework.web.bind.registry.BaseBindingAdapter;
-import top.zopx.goku.framework.web.bind.registry.TranslateGenericConvert;
+import top.zopx.goku.framework.web.util.bind.registry.BaseBindingAdapter;
+import top.zopx.goku.framework.web.util.bind.registry.TranslateGenericConvert;
 
 /**
  * @author 俗世游子

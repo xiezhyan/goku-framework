@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.bind.registry;
+package top.zopx.goku.framework.web.util.bind.registry;
 
 import java.util.function.Function;
 

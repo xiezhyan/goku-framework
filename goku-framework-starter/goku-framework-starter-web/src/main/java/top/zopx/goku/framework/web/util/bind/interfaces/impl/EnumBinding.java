@@ -1,8 +1,8 @@
-package top.zopx.goku.framework.web.bind.interfaces.impl;
+package top.zopx.goku.framework.web.util.bind.interfaces.impl;
 
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.constant.IEnum;
-import top.zopx.goku.framework.web.bind.interfaces.IBinding;
+import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
 
 import java.util.Objects;
 import java.util.stream.Stream;

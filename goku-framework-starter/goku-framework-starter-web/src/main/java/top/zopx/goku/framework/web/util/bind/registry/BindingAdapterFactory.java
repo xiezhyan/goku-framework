@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.bind.registry;
+package top.zopx.goku.framework.web.util.bind.registry;
 
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;

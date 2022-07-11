@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.bind.interfaces;
+package top.zopx.goku.framework.web.util.bind.interfaces;
 
 import top.zopx.goku.framework.tools.constant.IEnum;
 

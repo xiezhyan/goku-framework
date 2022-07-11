@@ -1,9 +1,9 @@
-package top.zopx.goku.framework.web.bind.annotation;
+package top.zopx.goku.framework.web.util.bind.annotation;
 
 import top.zopx.goku.framework.tools.constant.DictEnum;
 import top.zopx.goku.framework.tools.constant.IEnum;
-import top.zopx.goku.framework.web.bind.interfaces.IBinding;
-import top.zopx.goku.framework.web.bind.interfaces.impl.EnumBinding;
+import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
+import top.zopx.goku.framework.web.util.bind.interfaces.impl.EnumBinding;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

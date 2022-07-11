@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.bind.annotation;
+package top.zopx.goku.framework.web.util.bind.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

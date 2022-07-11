@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.web.bind.aop;
+package top.zopx.goku.framework.web.util.bind.aop;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.lang.JoinPoint;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.constant.IEnum;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
-import top.zopx.goku.framework.web.bind.annotation.Bind;
-import top.zopx.goku.framework.web.bind.annotation.Binding;
-import top.zopx.goku.framework.web.bind.interfaces.IBinding;
-import top.zopx.goku.framework.web.bind.registry.BindingAdapterFactory;
-import top.zopx.goku.framework.web.bind.registry.TranslateGenericConvert;
+import top.zopx.goku.framework.web.util.bind.annotation.Bind;
+import top.zopx.goku.framework.web.util.bind.annotation.Binding;
+import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
+import top.zopx.goku.framework.web.util.bind.registry.BindingAdapterFactory;
+import top.zopx.goku.framework.web.util.bind.registry.TranslateGenericConvert;
 import top.zopx.goku.framework.web.configurator.base.IAspect;
 import top.zopx.goku.framework.web.context.SpringContext;
 
@@ -34,7 +34,7 @@ public class TranslatorAspect implements IAspect {
     private BindingAdapterFactory bindingAdapter;
 
     @Override
-    @Pointcut("@annotation(top.zopx.goku.framework.web.bind.annotation.Bind)")
+    @Pointcut("@annotation(top.zopx.goku.framework.web.util.bind.annotation.Bind)")
     public void doPointcut() {
         // TODO document why this method is empty
     }
