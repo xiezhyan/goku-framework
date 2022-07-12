@@ -9,7 +9,7 @@ import top.zopx.goku.framework.tools.constant.IEnum;
  * @email xiezhyan@126.com
  * @date 2022/07/11 18:16
  */
-public interface IBinding<T> {
+public interface IBinding<T, K> {
 
     /**
      * 处理
@@ -19,6 +19,6 @@ public interface IBinding<T> {
      * @param param  额外参数
      * @return K
      */
-    String translate(T origin, Class<? extends IEnum> data, String param);
+    K translate(T origin, Class<? extends IEnum> data, String param);
 
 }

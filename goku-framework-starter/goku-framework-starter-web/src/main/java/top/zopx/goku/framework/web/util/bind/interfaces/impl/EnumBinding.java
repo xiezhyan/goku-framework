@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @date 2022/07/11 18:24
  */
 @Component
-public class EnumBinding implements IBinding<Object> {
+public class EnumBinding implements IBinding<Object, String> {
 
     @Override
     public String translate(Object origin, Class<? extends IEnum> data, String param) {

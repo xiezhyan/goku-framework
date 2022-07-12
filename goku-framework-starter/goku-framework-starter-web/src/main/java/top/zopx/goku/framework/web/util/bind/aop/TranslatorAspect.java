@@ -9,14 +9,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.constant.IEnum;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
-import top.zopx.goku.framework.tools.util.string.StringUtil;
+import top.zopx.goku.framework.web.configurator.base.IAspect;
+import top.zopx.goku.framework.web.context.SpringContext;
 import top.zopx.goku.framework.web.util.bind.annotation.Bind;
 import top.zopx.goku.framework.web.util.bind.annotation.Binding;
 import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
 import top.zopx.goku.framework.web.util.bind.registry.BindingAdapterFactory;
 import top.zopx.goku.framework.web.util.bind.registry.TranslateGenericConvert;
-import top.zopx.goku.framework.web.configurator.base.IAspect;
-import top.zopx.goku.framework.web.context.SpringContext;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
@@ -100,10 +99,10 @@ public class TranslatorAspect implements IAspect {
         }
 
         // 得到对应的转换器
-        IBinding<Object> binding = SpringContext.getBean(annotation.translate());
+        IBinding<Object, Object> binding = SpringContext.getBean(annotation.translate());
         // 拿出转化结果
-        String translate = binding.translate(originValue, annotation.dataSource(), annotation.param());
-        if (StringUtil.isBlank(translate)) {
+        Object translate = binding.translate(originValue, annotation.dataSource(), annotation.param());
+        if (Objects.isNull(translate)) {
             return;
         }
         // 复制到对应的字段中
