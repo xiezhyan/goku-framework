@@ -9,10 +9,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.constant.IEnum;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.web.configurator.base.IAspect;
 import top.zopx.goku.framework.web.context.SpringContext;
 import top.zopx.goku.framework.web.util.bind.annotation.Bind;
 import top.zopx.goku.framework.web.util.bind.annotation.Binding;
+import top.zopx.goku.framework.web.util.bind.annotation.Desensitization;
 import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
 import top.zopx.goku.framework.web.util.bind.registry.BindingAdapterFactory;
 import top.zopx.goku.framework.web.util.bind.registry.TranslateGenericConvert;
@@ -105,7 +107,64 @@ public class TranslatorAspect implements IAspect {
         if (Objects.isNull(translate)) {
             return;
         }
-        // 复制到对应的字段中
-        ReflectionClassUtil.invokeSetMethod(vo, field, translate);
+
+        desensitizationField(vo, field, translate);
+    }
+
+    /**
+     * 脱敏处理
+     *
+     * @param vo        对象
+     * @param field     字段
+     * @param translate 转换结果
+     */
+    private void desensitizationField(Object vo, Field field, Object translate) {
+        if (translate instanceof String) {
+            if (field.isAnnotationPresent(Desensitization.class)) {
+                final Desensitization annotation = field.getAnnotation(Desensitization.class);
+                Object result = extracted(vo, field, translate, annotation);
+                ReflectionClassUtil.invokeSetMethod(vo, field, result);
+            }
+        } else {
+            // 复制到对应的字段中
+            ReflectionClassUtil.invokeSetMethod(vo, field, translate);
+        }
+    }
+
+    private Object extracted(Object vo, Field field, Object translate, Desensitization annotation) {
+        String desensitizeResult = translate.toString();
+
+        if (StringUtil.isBlank(desensitizeResult)) {
+            // 空字符串不处理，直接返回
+            return translate;
+        }
+
+        final int length = desensitizeResult.length();
+        if (length < annotation.startIndex()) {
+            // 不够开始位置，直接返回
+            return translate;
+        }
+
+        // 最后还留着的位数
+        int middleLen = 0;
+        if ((middleLen = (length - annotation.startIndex())) < annotation.endIndex()) {
+            // 计算出中间的长度
+            if (Objects.equals(middleLen, 0)) {
+                return translate;
+            }
+            // 进行拼接
+            return desensitizeResult.substring(0, annotation.startIndex()) + append(middleLen, annotation.mask());
+        }
+
+        middleLen -= annotation.endIndex();
+        return desensitizeResult.substring(0, annotation.startIndex()) + append(middleLen, annotation.mask()) + desensitizeResult.substring(annotation.startIndex() + annotation.endIndex() + 1);
+    }
+
+    private String append(int middleLen, String mask) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < middleLen; i++) {
+            sb.append(mask);
+        }
+        return sb.toString();
     }
 }
