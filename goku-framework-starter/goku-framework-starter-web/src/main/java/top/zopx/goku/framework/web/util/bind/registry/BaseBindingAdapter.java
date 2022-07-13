@@ -19,12 +19,12 @@ public abstract class BaseBindingAdapter implements SmartLifecycle {
      * 类型转换器
      * @return
      */
-    public abstract TranslateGenericConvert addtranslateGenericConvert();
+    public abstract TranslateGenericConvert addTranslateGenericConvert();
 
     @Override
     public void start() {
         LogHelper.getLogger(BaseBindingAdapter.class).info("ResultWrapperConvert 开始注入，加入到缓存中。。。");
-        bindingAdapter.convertToCache(addtranslateGenericConvert());
+        bindingAdapter.convertToCache(addTranslateGenericConvert());
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ResultWrapperConvert {
     public BaseBindingAdapter initResultConvert() {
         return new BaseBindingAdapter() {
             @Override
-            public TranslateGenericConvert addtranslateGenericConvert() {
+            public TranslateGenericConvert addTranslateGenericConvert() {
                 return new ResultWrapperTranslateTypeConvert();
             }
         };
