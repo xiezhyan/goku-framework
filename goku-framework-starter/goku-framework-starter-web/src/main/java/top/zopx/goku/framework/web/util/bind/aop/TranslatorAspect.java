@@ -119,16 +119,21 @@ public class TranslatorAspect implements IAspect {
      * @param translate 转换结果
      */
     private void desensitizationField(Object vo, Field field, Object translate) {
-        if (translate instanceof String) {
-            if (field.isAnnotationPresent(Desensitization.class)) {
-                final Desensitization annotation = field.getAnnotation(Desensitization.class);
-                Object result = extracted(vo, field, translate, annotation);
-                ReflectionClassUtil.invokeSetMethod(vo, field, result);
-            }
-        } else {
-            // 复制到对应的字段中
+        // 不是字符串类型，直接处理
+        if (!(translate instanceof String)) {
             ReflectionClassUtil.invokeSetMethod(vo, field, translate);
+            return;
         }
+
+        // 没有Desensitization注解，继续处理业务
+        if (!field.isAnnotationPresent(Desensitization.class)) {
+            ReflectionClassUtil.invokeSetMethod(vo, field, translate);
+            return;
+        }
+
+        // 脱敏处理
+        final Desensitization annotation = field.getAnnotation(Desensitization.class);
+        ReflectionClassUtil.invokeSetMethod(vo, field, extracted(vo, field, translate, annotation));
     }
 
     private Object extracted(Object vo, Field field, Object translate, Desensitization annotation) {
