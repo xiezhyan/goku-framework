@@ -14,6 +14,7 @@ import java.util.Objects;
 
 /**
  * Binlog客户端连接
+ *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/24 22:38
@@ -42,8 +43,10 @@ public class BinlogClient {
                     binlog.getPassword()
             );
 
-            if (StringUtil.isNotBlank(binlog.getBinlogName()) && !Objects.equals(binlog.getPosition(), -1L)) {
+            if (StringUtil.isNotBlank(binlog.getBinlogName())) {
                 binaryLogClient.setBinlogFilename(binlog.getBinlogName());
+            }
+            if (!Objects.equals(binlog.getPosition(), -1L)) {
                 binaryLogClient.setBinlogPosition(binlog.getPosition());
             }
 
