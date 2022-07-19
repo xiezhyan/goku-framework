@@ -30,8 +30,10 @@ public enum RSAUtil {
     ;
 
     private static final String SECRET_KEY_SPEC_RSA = "RSA";
+
     /**
      * 生成公钥和私钥
+     *
      * @return RsaKey
      */
     public RsaKey genKeyPair() {
@@ -58,12 +60,13 @@ public enum RSAUtil {
 
     /**
      * 公钥加密
+     *
      * @return 加密之后的数据
      */
     public String encrypt(String text, String publicKey) throws Exception {
         //base64编码的公钥
         byte[] decoded = Base64Util.INSTANCE.decode(publicKey);
-        RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(decoded));
+        RSAPublicKey pubKey = getPublicKey(decoded);
         //RSA加密
         Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
         cipher.init(Cipher.ENCRYPT_MODE, pubKey);
@@ -72,6 +75,7 @@ public enum RSAUtil {
 
     /**
      * 私钥解密
+     *
      * @return 解密之后的数据，需要通过base64进行转码
      */
     public String decrypt(String text, String privateKey) throws Exception {
@@ -79,10 +83,32 @@ public enum RSAUtil {
         byte[] inputByte = Base64Util.INSTANCE.decode(text);
         //base64编码的私钥
         byte[] decoded = Base64Util.INSTANCE.decode(privateKey);
-        RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(decoded));
+        RSAPrivateKey priKey = getPrivateKey(decoded);
         //RSA解密
         Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
         cipher.init(Cipher.DECRYPT_MODE, priKey);
         return Base64Util.INSTANCE.encode(cipher.doFinal(inputByte));
+    }
+
+    /**
+     * 得到RSAPublicKey
+     *
+     * @param bytes 公钥字符串  Base64Util.INSTANCE.decode(publicKey);
+     * @return RSAPublicKey
+     * @throws Exception 转换异常
+     */
+    RSAPublicKey getPublicKey(byte[] bytes) throws Exception {
+        return (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(bytes));
+    }
+
+    /**
+     * 得到RSAPrivateKey
+     *
+     * @param bytes 私钥字符串 Base64Util.INSTANCE.decode(privateKey);
+     * @return RSAPrivateKey
+     * @throws Exception 转换异常
+     */
+    RSAPrivateKey getPrivateKey(byte[] bytes) throws Exception {
+        return (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
     }
 }
