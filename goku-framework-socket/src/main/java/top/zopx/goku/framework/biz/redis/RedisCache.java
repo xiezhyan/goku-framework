@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.biz;
+package top.zopx.goku.framework.biz.redis;
 
 import com.google.gson.JsonObject;
 import org.apache.commons.collections4.MapUtils;
@@ -28,7 +28,7 @@ public final class RedisCache {
     /**
      * 服务类型和线程池
      */
-    private static final Map<String, JedisPool> JEDIS_POOL_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, JedisPool> JEDIS_POOL_MAP = new ConcurrentHashMap<>(1 << 4);
 
     /**
      * 初始化连接池

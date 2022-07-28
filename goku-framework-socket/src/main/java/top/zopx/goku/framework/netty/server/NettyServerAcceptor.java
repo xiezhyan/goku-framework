@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -18,7 +18,10 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.socket.handle.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.bind.entity.AppClient;
+import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
+import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
+import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.time.Duration;
@@ -92,7 +95,7 @@ public class NettyServerAcceptor {
 
     private final BaseChannelHandlerFactory factory;
 
-    public NettyServerAcceptor(NettyServer server) {
+    public NettyServerAcceptor(ServerAcceptor server) {
         this.app = server.getApp();
         this.ws = server.getWs();
 
@@ -139,7 +142,7 @@ public class NettyServerAcceptor {
      * @param boss 主线程组
      * @param work 工作线程组
      */
-    private void destory(EventLoopGroup boss, EventLoopGroup work) {
+    private void destroy(EventLoopGroup boss, EventLoopGroup work) {
         if (null != boss && !boss.isShutdown() && !boss.isShuttingDown()) {
             boss.shutdownGracefully();
         }
@@ -151,9 +154,9 @@ public class NettyServerAcceptor {
     /**
      * 服务停止之后执行该方法
      */
-    public void destory() {
-        this.destory(this.appBoss, this.appWork);
-        this.destory(this.websocketBoss, this.websocketWork);
+    public void destroy() {
+        this.destroy(this.appBoss, this.appWork);
+        this.destroy(this.websocketBoss, this.websocketWork);
     }
 
     /**
@@ -161,7 +164,7 @@ public class NettyServerAcceptor {
      */
     public void start() {
         if (null == factory) {
-            throw new BusException("HandleFactory处理器异常");
+            throw new BusException("BaseChannelHandlerFactory is null ");
         }
 
         if (null != app) {
@@ -183,7 +186,7 @@ public class NettyServerAcceptor {
         ChannelFuture channelFuture = createServerBootstrap(ws.getHost(), ws.getPort(), ch -> {
             LOGGER.info("WS Server init Handler");
 
-            final ChannelHandler msgHandler = factory.createWSMsgHandler();
+            final ChannelHandler msgHandler = factory.createWebsocketMsgHandler();
 
             ChannelHandler[] handlers = {
                     new HttpServerCodec(),
@@ -210,13 +213,13 @@ public class NettyServerAcceptor {
                 .addListener(future -> {
                     String log =
                             "\n_____________________________________________________________________\n" +
-                                    "   WebSocket服务启动成功,绑定设置：【ws://{}:{}{}】                                 \n" +
+                                    "   WebSocket服务启动成功,绑定设置：【{}】                                 \n" +
                                     "_____________________________________________________________________";
-                    LOGGER.info(log, ws.getHost(), ws.getPort(), path);
+                    LOGGER.info(log, ws.getShowPath());
                 });
         serverChannel
                 .closeFuture()
-                .addListener(future -> this.destory(this.websocketBoss, this.websocketWork));
+                .addListener(future -> this.destroy(this.websocketBoss, this.websocketWork));
     }
 
     /**
@@ -256,7 +259,7 @@ public class NettyServerAcceptor {
                 });
         serverChannel
                 .closeFuture()
-                .addListener(future -> this.destory(this.appBoss, this.appWork));
+                .addListener(future -> this.destroy(this.appBoss, this.appWork));
     }
 
     /**
@@ -290,7 +293,16 @@ public class NettyServerAcceptor {
         return isLinux() ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
     }
 
-    public static boolean isLinux() {
+    private boolean isLinux() {
         return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("linux");
+    }
+
+    public static void main(String[] args) {
+        NettyServerAcceptor acceptor = new NettyServerAcceptor(
+                ServerAcceptor.create()
+                        .setApp(AppClient.create().build())
+                        .build()
+        );
+        acceptor.start();
     }
 }

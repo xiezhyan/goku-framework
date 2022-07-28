@@ -5,7 +5,7 @@
     <environments default="OFFICIAL">
         <environment id="OFFICIAL">
             <transactionManager type="JDBC"/>
-            <dataSource type="top.zopx.goku.framework.socket.biz.CustomDataSourceFactory">
+            <dataSource type="top.zopx.goku.framework.biz.dao.CustomDataSourceFactory">
                 <property name="driver" value="${driver}"/>
                 <property name="url" value="jdbc:mysql://${serverHost}:${serverPort}/${db}?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;autoReconnectForPools=true&amp;allowMultiQueries=true&amp;useAffectedRows=true"/>
                 <property name="username" value="${userName}"/>

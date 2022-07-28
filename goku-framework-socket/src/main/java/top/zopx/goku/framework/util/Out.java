@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.util;
+package top.zopx.goku.framework.util;
 
 /**
  * 输出额外参数

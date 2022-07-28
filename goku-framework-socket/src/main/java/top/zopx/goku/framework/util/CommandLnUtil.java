@@ -1,23 +1,18 @@
-package top.zopx.goku.framework.socket.util;
+package top.zopx.goku.framework.util;
 
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 俗世游子
  * @date 2022/2/4
  * @email xiezhyan@126.com
  */
-public enum CommandLnUtil {
-
-
-    /**
-     * 单例
-     */
-    INSTANCE,
-    ;
-
+public class CommandLnUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandLnUtil.class);
 
     /**
@@ -27,7 +22,7 @@ public enum CommandLnUtil {
      * @param configs 具体命令
      * @return 命令行对象
      */
-    public CommandLine create(String[] args, Config... configs) {
+    public static Map<String, String> create(String[] args, Config... configs) {
         final Options options = new Options();
         for (Config config : configs) {
             options.addRequiredOption(
@@ -39,7 +34,10 @@ public enum CommandLnUtil {
         }
         final CommandLineParser parser = new DefaultParser();
         try {
-            return parser.parse(options, args);
+            CommandLine parse = parser.parse(options, args);
+            return options.getOptions()
+                    .stream()
+                    .collect(Collectors.toMap(Option::getLongOpt, parse::getOptionValue));
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -48,10 +46,11 @@ public enum CommandLnUtil {
 
     public static class Config {
 
-        private String opt;
-        private String longOpt;
-        private String desc;
-        private boolean hasArg;
+        //  SERVER_HOST("h", "server_host", "服务器主机地址", true),
+        private final String opt;
+        private final String longOpt;
+        private final String desc;
+        private final boolean hasArg;
 
         public Config(String opt, String longOpt, String desc, boolean hasArg) {
             this.opt = opt;
@@ -64,32 +63,16 @@ public enum CommandLnUtil {
             return opt;
         }
 
-        public void setOpt(String opt) {
-            this.opt = opt;
-        }
-
         public String getLongOpt() {
             return longOpt;
-        }
-
-        public void setLongOpt(String longOpt) {
-            this.longOpt = longOpt;
         }
 
         public String getDesc() {
             return desc;
         }
 
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
-
         public boolean isHasArg() {
             return hasArg;
-        }
-
-        public void setHasArg(boolean hasArg) {
-            this.hasArg = hasArg;
         }
     }
 }

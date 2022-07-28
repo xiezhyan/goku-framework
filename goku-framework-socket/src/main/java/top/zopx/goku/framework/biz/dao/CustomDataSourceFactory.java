@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.biz;
+package top.zopx.goku.framework.biz.dao;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import org.apache.ibatis.datasource.DataSourceFactory;

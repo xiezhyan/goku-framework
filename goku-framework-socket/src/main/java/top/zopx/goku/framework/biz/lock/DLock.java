@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.util;
+package top.zopx.goku.framework.biz.lock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

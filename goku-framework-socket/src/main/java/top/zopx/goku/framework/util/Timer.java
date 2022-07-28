@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.util;
+package top.zopx.goku.framework.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class Timer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Timer.class);
 
     private static final ScheduledThreadPoolExecutor SCHEDULED_THREAD_POOL_EXECUTOR =
-            new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), r -> new Thread(r, "ReportCurrServer-"));
+            new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), r -> new Thread(r, "goku-timer-"));
 
     private Timer() {
     }

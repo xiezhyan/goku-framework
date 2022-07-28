@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.util;
+package top.zopx.goku.framework.util;
 
 import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.Channel;

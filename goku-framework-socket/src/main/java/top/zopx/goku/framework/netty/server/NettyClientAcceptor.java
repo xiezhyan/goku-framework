@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.server;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -16,11 +16,11 @@ import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.socket.handle.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
+import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.net.URI;
-import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +55,7 @@ public final class NettyClientAcceptor {
     /**
      * 额外信息字典
      */
-    private Map<String, String> extraInfoMap;
+    private final Map<String, String> extraInfoMap = new ConcurrentHashMap<>();
 
     /**
      * 客户端信道
@@ -87,23 +87,14 @@ public final class NettyClientAcceptor {
      * @param val 字符串值
      */
     public void putExtraInfo(String key, String val) {
-        if (null == key) {
+        if (null == key && null == val) {
             return;
-        }
-
-        if (null == val &&
-                null == extraInfoMap) {
-            return;
-        }
-
-        if (null == extraInfoMap) {
-            extraInfoMap = new ConcurrentHashMap<>();
         }
 
         extraInfoMap.put(key, val);
     }
 
-    public boolean isLinux() {
+    private boolean isLinux() {
         return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("linux");
     }
 
@@ -121,32 +112,26 @@ public final class NettyClientAcceptor {
      */
     public void connect(EventLoopGroup work) {
         try {
-            final URI serverURI = new URI(MessageFormat.format(
-                    "{0}://{1}:{2}/{3}",
-                    client.getWsPrefix(),
-                    client.getServerHost(),
-                    String.valueOf(client.getServerPort()),
-                    client.getPath()
-            ));
+            final URI serverUri = new URI(client.getWebsocketPath());
 
-            final DefaultHttpHeaders headerz = new DefaultHttpHeaders();
+            final DefaultHttpHeaders header = new DefaultHttpHeaders();
 
             if (null != extraInfoMap) {
                 for (Map.Entry<String, String> entry : extraInfoMap.entrySet()) {
                     if (null != entry.getValue()) {
-                        headerz.add(
+                        header.add(
                                 entry.getKey(), entry.getValue()
                         );
                     }
                 }
             }
 
-            final WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(
-                    serverURI,
+            final WebSocketClientHandshaker websocketHandShaker = WebSocketClientHandshakerFactory.newHandshaker(
+                    serverUri,
                     WebSocketVersion.V13,
                     null,
                     true,
-                    headerz
+                    header
             );
 
             Bootstrap b = new Bootstrap();
@@ -176,15 +161,15 @@ public final class NettyClientAcceptor {
                     ChannelHandler msgHandler = null;
 
                     if (null != f) {
-                        msgHandler = f.createWSMsgHandler();
+                        msgHandler = f.createWebsocketMsgHandler();
                     }
 
                     // 如果是WS的形式，那么才会加入这些
-                    if (client.getServerType() == ConnectClient.WS) {
+                    if (client.getServerType() == ConnectClient.Constant.WS) {
                         ChannelHandler[] hArray = {
                                 new HttpClientCodec(), // Http 客户端编解码器
                                 new HttpObjectAggregator(65535), // 内容长度限制
-                                new WebSocketClientProtocolHandler(handshaker), // WebSocket 协议处理器, 在这里处理握手、ping、pong 等消息
+                                new WebSocketClientProtocolHandler(websocketHandShaker), // WebSocket 协议处理器, 在这里处理握手、ping、pong 等消息
                                 msgHandler, // 消息处理器
                         };
 
@@ -232,18 +217,18 @@ public final class NettyClientAcceptor {
             });
 
             // 只有是WS的形式，才需要升级握手
-            if (client.getServerType() == ConnectClient.WS) {
+            if (client.getServerType() == ConnectClient.Constant.WS) {
                 // 用 CD 来等待握手
                 final CountDownLatch cdL = new CountDownLatch(32);
 
                 while (cdL.getCount() > 0 &&
-                        !handshaker.isHandshakeComplete()) {
+                        !websocketHandShaker.isHandshakeComplete()) {
                     // 在这里等待握手成功
                     cdL.await(200, TimeUnit.MILLISECONDS);
                     cdL.countDown();
                 }
 
-                if (!handshaker.isHandshakeComplete()) {
+                if (!websocketHandShaker.isHandshakeComplete()) {
                     return;
                 }
             }

@@ -1,6 +1,6 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.bind.entity;
 
-import top.zopx.goku.framework.socket.handle.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 
 import java.time.Duration;
 
@@ -9,7 +9,7 @@ import java.time.Duration;
  * @date 2021/10/3
  * @email xiezhyan@126.com
  */
-public class NettyServer {
+public class ServerAcceptor {
 
     /**
      * 读操作检测时间
@@ -46,8 +46,7 @@ public class NettyServer {
      */
     private final BaseChannelHandlerFactory factory;
 
-
-    public NettyServer(Builder builder) {
+    public ServerAcceptor(Builder builder) {
         this.readTimeout = builder.readTimeout;
         this.writeTimeout = builder.writeTimeout;
         this.bossThreadPool = builder.bossThreadPool;
@@ -55,6 +54,10 @@ public class NettyServer {
         this.app = builder.app;
         this.ws = builder.ws;
         this.factory = builder.factory;
+    }
+
+    public static Builder create() {
+        return new Builder();
     }
 
     public static class Builder {
@@ -129,8 +132,8 @@ public class NettyServer {
             return this;
         }
 
-        public NettyServer build() {
-            return new NettyServer(this);
+        public ServerAcceptor build() {
+            return new ServerAcceptor(this);
         }
     }
 

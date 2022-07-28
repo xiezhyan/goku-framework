@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.bind.entity;
 
 /**
  * @author 俗世游子

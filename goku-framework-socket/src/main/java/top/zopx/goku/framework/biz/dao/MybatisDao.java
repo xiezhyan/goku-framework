@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.biz;
+package top.zopx.goku.framework.biz.dao;
 
 import com.google.gson.JsonObject;
 import org.apache.ibatis.io.Resources;

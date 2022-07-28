@@ -1,4 +1,6 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.bind.entity;
+
+import java.text.MessageFormat;
 
 /**
  * @author 俗世游子
@@ -26,15 +28,30 @@ public class WebsocketClient {
      */
     private final String path;
 
+    /**
+     * 完成地址: ws://host:port/path
+     */
+    private final String showPath;
+
     public WebsocketClient(Builder builder) {
         this.host = builder.host;
         this.port = builder.port;
         this.path = builder.path;
         this.safe = builder.safe;
+        this.showPath = initWebsocketPath(builder);
     }
 
-    public static WebsocketClient.Builder create() {
-        return new WebsocketClient.Builder();
+    private String initWebsocketPath(Builder builder) {
+        String protoc = "ws";
+        if (builder.safe) {
+            protoc = "wss";
+        }
+        String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;
+        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.host, builder.port, path);
+    }
+
+    public static Builder create() {
+        return new Builder();
     }
 
     public static class Builder {
@@ -55,7 +72,7 @@ public class WebsocketClient {
         /**
          * ws 地址
          */
-        private String path = "/";
+        private String path = "/ws";
 
         public Builder setHost(String host) {
             this.host = host;
@@ -96,5 +113,9 @@ public class WebsocketClient {
 
     public String getPath() {
         return path;
+    }
+
+    public String getShowPath() {
+        return showPath;
     }
 }

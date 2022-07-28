@@ -1,12 +1,13 @@
-package top.zopx.goku.framework.socket.parse;
+package top.zopx.goku.framework.netty.bind.entity;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import top.zopx.goku.framework.socket.handle.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.server.NettyClientAcceptor;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
+import java.text.MessageFormat;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -16,15 +17,19 @@ import java.util.Set;
  */
 public final class ConnectClient {
 
-    /**
-     * C/S连接模式
-     */
-    public static final int APP = 1;
+    public interface Constant {
+        /**
+         * C/S连接模式
+         */
+        int APP = 1;
 
-    /**
-     * WebSocket连接模式
-     */
-    public static final int WS = 2;
+        /**
+         * WebSocket连接模式
+         */
+        int WS = 2;
+
+    }
+
 
     /**
      * 服务器类型
@@ -54,18 +59,12 @@ public final class ConnectClient {
     /**
      * 服务器端口号
      */
-
     private final int serverPort;
 
     /**
-     * WebSocket连接地址
+     * websocket地址
      */
-    private final String path;
-
-    /**
-     * 是否为安全连接
-     */
-    private final Boolean safe;
+    private final String websocketPath;
 
     /**
      * 信道处理器工厂
@@ -86,25 +85,29 @@ public final class ConnectClient {
         this.serverJobTypeSet = builder.serverJobTypeSet;
         this.serverHost = builder.serverHost;
         this.serverPort = builder.serverPort;
-        this.path = builder.path;
-        this.safe = builder.safe;
+        this.websocketPath = initWebsocketPath(builder);
         this.channelHandlerFactory = builder.channelHandlerFactory;
         this.closeCallback = builder.closeCallback;
+    }
+
+    private String initWebsocketPath(Builder builder) {
+        String protoc = "ws";
+        if (builder.safe) {
+            protoc = "wss";
+        }
+        String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;
+        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.serverHost, builder.serverPort, path);
     }
 
     public static Builder create() {
         return new Builder();
     }
 
-    public String getWsPrefix() {
-        return Optional.ofNullable(safe).orElse(false) ? "wss" : "ws";
-    }
-
     public static class Builder {
         /**
          * 服务器类型
          */
-        private int serverType = WS;
+        private int serverType = Constant.WS;
 
         /**
          * 服务器 Id
@@ -135,7 +138,7 @@ public final class ConnectClient {
         /**
          * WebSocket连接地址
          */
-        private String path;
+        private String path = "/ws";
 
         /**
          * 是否为安全连接
@@ -247,12 +250,8 @@ public final class ConnectClient {
         return serverPort;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public Boolean getSafe() {
-        return safe;
+    public String getWebsocketPath() {
+        return websocketPath;
     }
 
     public BaseChannelHandlerFactory getChannelHandlerFactory() {
