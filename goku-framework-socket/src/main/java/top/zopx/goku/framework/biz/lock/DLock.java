@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
-import top.zopx.goku.framework.socket.biz.RedisCache;
+import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.util.Map;

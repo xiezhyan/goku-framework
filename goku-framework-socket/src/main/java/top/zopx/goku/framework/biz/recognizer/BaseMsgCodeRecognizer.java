@@ -1,11 +1,10 @@
-package top.zopx.goku.framework.socket.codec;
+package top.zopx.goku.framework.biz.recognizer;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.socket.constant.ICos;
-import top.zopx.goku.framework.socket.recognizer.ProtoCodeRecognizer;
+import top.zopx.goku.framework.biz.constant.IKey;
 
 /**
  * 消息处理器
@@ -43,8 +42,9 @@ public abstract class BaseMsgCodeRecognizer {
 
     /**
      * 尝试初始化
+     * CmdHandlerMsgRecognizer.tryInit();
      */
-    protected abstract void init();
+    protected void init() {}
 
     /**
      * 通过消息类获取消息编码
@@ -54,7 +54,7 @@ public abstract class BaseMsgCodeRecognizer {
      */
     public int getCodeByMsgObj(Class<? extends GeneratedMessageV3> clazz) {
         tryInit();
-        return ProtoCodeRecognizer.getMsgCodeByClazz(clazz);
+        return CmdHandlerMsgRecognizer.getMsgCodeByClazz(clazz);
     }
 
     /**
@@ -65,14 +65,17 @@ public abstract class BaseMsgCodeRecognizer {
      */
     public Message.Builder getMsgBuilderByMsgCode(int msgCode) {
         tryInit();
-        return ProtoCodeRecognizer.getClazzByMsgCode(msgCode);
+        return CmdHandlerMsgRecognizer.getClazzByMsgCode(msgCode);
     }
 
-    public ICos getServerTypeByMsgCode(int msgCode) {
+    /**
+     * 通过消息编码获取服务器类型
+     *
+     * @param msgCode 消息编码
+     * @return IKey
+     */
+    public IKey getServerTypeByMsgCode(int msgCode) {
         tryInit();
-        return ProtoCodeRecognizer.getServerJobTypeByMsgCode(msgCode);
-    }
-
-    public static void main(String[] args) {
+        return CmdHandlerMsgRecognizer.getServerJobTypeByMsgCode(msgCode);
     }
 }

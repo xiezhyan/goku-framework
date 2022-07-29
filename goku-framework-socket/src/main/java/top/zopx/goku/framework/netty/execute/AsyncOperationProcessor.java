@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.executor;
+package top.zopx.goku.framework.netty.execute;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

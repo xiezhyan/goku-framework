@@ -1,11 +1,11 @@
-package top.zopx.goku.framework.socket.constant;
+package top.zopx.goku.framework.biz.constant;
 
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/04/18 16:15
  */
-public interface ICos {
+public interface IKey {
 
     /**
      * 获取编码

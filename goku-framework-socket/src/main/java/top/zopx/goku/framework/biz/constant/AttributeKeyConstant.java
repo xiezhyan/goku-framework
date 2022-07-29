@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.constant;
+package top.zopx.goku.framework.biz.constant;
 
 import io.netty.util.AttributeKey;
 

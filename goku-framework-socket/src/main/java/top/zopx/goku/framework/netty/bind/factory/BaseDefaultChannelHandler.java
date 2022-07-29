@@ -24,7 +24,7 @@ public abstract class BaseDefaultChannelHandler extends ChannelDuplexHandler {
      *
      * @return ChannelHandler[]
      */
-    abstract ChannelHandler[] getChannelHandlerArray();
+    protected abstract ChannelHandler[] getChannelHandlerArray();
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {

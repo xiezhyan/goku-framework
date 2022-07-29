@@ -96,7 +96,7 @@ public final class ConnectClient {
             protoc = "wss";
         }
         String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;
-        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.serverHost, builder.serverPort, path);
+        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.serverHost, String.valueOf(builder.serverPort), path);
     }
 
     public static Builder create() {

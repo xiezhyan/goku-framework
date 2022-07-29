@@ -47,7 +47,7 @@ public class WebsocketClient {
             protoc = "wss";
         }
         String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;
-        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.host, builder.port, path);
+        return MessageFormat.format("{0}://{1}:{2}{3}", protoc, builder.host, String.valueOf(builder.port), path);
     }
 
     public static Builder create() {

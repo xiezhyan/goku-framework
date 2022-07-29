@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.socket.constant;
+package top.zopx.goku.framework.biz.constant;
 
 /**
  * 工作模式定义
