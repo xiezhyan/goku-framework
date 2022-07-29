@@ -20,11 +20,13 @@ public final class GlobalContext {
     private final static String TOKEN_KEY = "token";
 
     public static class CurrentRequest {
-        private CurrentRequest() {}
+        private CurrentRequest() {
+        }
+
         /**
          * 从RequestHeader 中获取key
          *
-         * @param key     key
+         * @param key key
          * @return value
          */
         public static String getBrowserByKey(String key) {
@@ -69,6 +71,7 @@ public final class GlobalContext {
 
         /**
          * 从RequestHeader中获取host
+         *
          * @return ip
          */
         public static String getBrowserIp() {
@@ -111,7 +114,9 @@ public final class GlobalContext {
     }
 
     public static class CurrentResponse {
-        private CurrentResponse() {}
+        private CurrentResponse() {
+        }
+
         /**
          * 将token写入到response中
          *
@@ -124,8 +129,8 @@ public final class GlobalContext {
         /**
          * 将指定的值写入到response中
          *
-         * @param key      key
-         * @param value    value
+         * @param key   key
+         * @param value value
          */
         public static void set(String key, String value) {
             final HttpServletResponse response = getResponse();
@@ -135,12 +140,28 @@ public final class GlobalContext {
 
         /**
          * 通过Response将内容写出去
+         *
          * @param msg 发送内容
          * @throws IOException IOException
          */
         public static void write(String msg) throws IOException {
             final HttpServletResponse response = getResponse();
 
+            response.setContentType("application/json;charset=utf-8");
+            try (final PrintWriter writer = response.getWriter()) {
+                writer.write(msg);
+                writer.flush();
+            }
+        }
+
+        /**
+         * 通过Response将内容写出去
+         *
+         * @param msg      发送内容
+         * @param response Response
+         * @throws IOException IOException
+         */
+        public static void write(String msg, HttpServletResponse response) throws IOException {
             response.setContentType("application/json;charset=utf-8");
             try (final PrintWriter writer = response.getWriter()) {
                 writer.write(msg);
