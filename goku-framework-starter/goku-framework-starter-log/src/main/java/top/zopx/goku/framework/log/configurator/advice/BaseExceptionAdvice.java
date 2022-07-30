@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ErrorLogEvent;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
@@ -32,7 +33,8 @@ import java.util.Map;
  * @author 俗世游子
  * @date 2021/4/12
  */
-public abstract class BaseExceptionAdvice {
+@RestControllerAdvice
+public class BaseExceptionAdvice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionAdvice.class);
 
