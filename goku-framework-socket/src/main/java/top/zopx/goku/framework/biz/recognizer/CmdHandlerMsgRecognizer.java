@@ -114,7 +114,7 @@ public final class CmdHandlerMsgRecognizer {
      * @param msgCode 指定的消息编号
      * @return 服务器工作类型
      */
-    static IKey getServerJobTypeByMsgCode(int msgCode) {
+    public static IKey getServerJobTypeByMsgCode(int msgCode) {
         if (msgCode < 0) {
             LOGGER.error("根据消息编号获取服务器工作类型处理异常，异常code：{}", msgCode);
             return null;
@@ -129,7 +129,7 @@ public final class CmdHandlerMsgRecognizer {
      * @param clazz 消息对象
      * @return 消息编码
      */
-    static int getMsgCodeByClazz(Class<? extends GeneratedMessageV3> clazz) {
+    public static int getMsgCodeByClazz(Class<? extends GeneratedMessageV3> clazz) {
         if (null == clazz) {
             LOGGER.error("通过messageV3 得到对应的编码处理异常，异常原因：参数为空");
             return -1;
@@ -164,7 +164,7 @@ public final class CmdHandlerMsgRecognizer {
      * @param code 消息编码
      * @return Message.Builder
      */
-    static Message.Builder getClazzByMsgCode(int code) {
+    public static Message.Builder getClazzByMsgCode(int code) {
         final GeneratedMessageV3 messageV3 = CODE_CLASS_MAP.get(code);
         if (null == messageV3) {
             LOGGER.error("消息对象获取异常");

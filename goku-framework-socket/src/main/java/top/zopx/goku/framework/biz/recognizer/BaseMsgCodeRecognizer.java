@@ -17,9 +17,6 @@ public abstract class BaseMsgCodeRecognizer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseMsgCodeRecognizer.class);
 
-    protected BaseMsgCodeRecognizer() {
-    }
-
     private static boolean initOk = false;
 
     private void tryInit() {

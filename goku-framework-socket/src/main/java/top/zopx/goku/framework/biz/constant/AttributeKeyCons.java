@@ -7,7 +7,7 @@ import io.netty.util.AttributeKey;
  * @date 2021/10/9
  * @email xiezhyan@126.com
  */
-public interface AttributeKeyConstant {
+public interface AttributeKeyCons {
 
     /**
      * 登录之后绑定
@@ -28,4 +28,9 @@ public interface AttributeKeyConstant {
      * 远程sessionID
      */
     AttributeKey<Integer> SESSION_ID = AttributeKey.valueOf("SESSION_ID");
+
+    /**
+     * 网关ID
+     */
+    AttributeKey<Integer> GATEWAY_SERVER_ID = AttributeKey.valueOf("GATEWAY_SERVER_ID");
 }

@@ -4,10 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
+import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +17,9 @@ import java.util.concurrent.TimeUnit;
  * @email xiezhyan@126.com
  * @date 2022/04/28
  */
-public final class Subscribe {
+public final class RedisSubscribe {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Subscribe.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RedisSubscribe.class);
 
     private static final ThreadPoolExecutor ES =
             new ThreadPoolExecutor(1, 1,
@@ -89,36 +87,5 @@ public final class Subscribe {
             // 记录错误日志
             LOGGER.error(ex.getMessage(), ex);
         }
-    }
-
-    public static class SubscribeGroup implements ISubscribe {
-        private final List<ISubscribe> subscribeList = new ArrayList<>();
-
-        public SubscribeGroup add(ISubscribe handler) {
-            if (null != handler) {
-                this.subscribeList.add(handler);
-            }
-            return this;
-        }
-
-        @Override
-        public void onMsg(String channel, String msg) {
-            if (null == channel ||
-                    null == msg) {
-                return;
-            }
-
-            subscribeList.stream().filter(Objects::nonNull).forEach(handle -> handle.onMsg(channel, msg));
-        }
-    }
-
-    public interface ISubscribe {
-        /**
-         * 消息订阅处理
-         *
-         * @param channel 信道
-         * @param msg     订阅消息
-         */
-        void onMsg(String channel, String msg);
     }
 }

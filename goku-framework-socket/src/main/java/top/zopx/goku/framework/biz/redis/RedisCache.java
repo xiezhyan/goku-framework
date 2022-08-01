@@ -25,6 +25,8 @@ public final class RedisCache {
 
     private static Config config;
 
+    private RedisCache() {}
+
     /**
      * 服务类型和线程池
      */
