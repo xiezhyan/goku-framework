@@ -16,6 +16,23 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 消息code和消息体之间的关系
  *
+ *  enum CommMsgCodeDef {
+ *     _Dummy = 0;
+ *
+ *     _PingRequest = 1;
+ *     _PingResponse = 2;
+ *  }
+ *
+ *  // 指令
+ * message PingRequest {
+ *     sint32 pingId = 1;
+ * }
+ *
+ * // 结果
+ * message PingResponse {
+ *     sint32 pingId = 1;
+ * }
+ *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/04/04 22:35
@@ -140,26 +157,6 @@ public final class CmdHandlerMsgRecognizer {
 
     /**
      * 通过消息编码获取消息体
-     * Message.Builder msgBuilder = getClazzByMsgCode(msgCode);
-     * byte[] array;
-     * if (in.hasArray()) {
-     * //堆缓冲
-     * ByteBuf slice = in.slice();
-     * array = slice.array();
-     * } else {
-     * // 直接缓冲
-     * array = new byte[len];
-     * in.readBytes(array, 0, len);
-     * }
-     * <p>
-     * // 构建消息对象
-     * msgBuilder.clear();
-     * msgBuilder.mergeFrom(array);
-     * <p>
-     * Message message = msgBuilder.build();
-     * if (null != message) {
-     * out.add(message);
-     * }
      *
      * @param code 消息编码
      * @return Message.Builder

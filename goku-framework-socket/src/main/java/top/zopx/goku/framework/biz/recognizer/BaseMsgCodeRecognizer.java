@@ -39,7 +39,13 @@ public abstract class BaseMsgCodeRecognizer {
 
     /**
      * 尝试初始化
-     * CmdHandlerMsgRecognizer.tryInit();
+     * for (ServerType key : ServerType.values()) {
+     *     CmdHandlerMsgRecognizer.tryInit(
+     *             Core.class,
+     *             Core.CommMsgCodeDef.values(),
+     *             key
+     *     );
+     * }
      */
     protected void init() {}
 
