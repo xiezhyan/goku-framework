@@ -27,8 +27,8 @@ goku:
       port: 12345
       username: root
       password: ZXCvbn789**..
-      binlog-name: binlog.000019
-      position: 156
+#      binlog-name: binlog.000019
+#      position: 156
 
   log:
     lasting: false

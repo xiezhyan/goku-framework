@@ -4,8 +4,9 @@ import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.netty.bind.entity.BaseInnerMsg;
+import top.zopx.goku.framework.cluster.entity.BaseInnerMsg;
 import top.zopx.goku.framework.netty.test.execute.MsgCodeRecognizer;
+import top.zopx.goku.framework.tools.entity.wrapper.R;
 
 /**
  * 内部类
@@ -66,10 +67,8 @@ public final class InnerMsg extends BaseInnerMsg {
         }
     }
 
-    /**
-     * 释放资源
-     */
-    public void free() {
-       setData(null);
+    @Override
+    public int addError(R<?> resultX) {
+        return 0;
     }
 }
