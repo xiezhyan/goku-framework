@@ -44,6 +44,10 @@ public class CommandLnUtil {
         return null;
     }
 
+    public static void main(String[] args) {
+        Map<String, String> map = create(args, new Config("h", "server_host", "服务器主机", true));
+        System.out.println(map.get("server_host"));
+    }
     public static class Config {
 
         //  SERVER_HOST("h", "server_host", "服务器主机地址", true),
