@@ -15,11 +15,18 @@ public interface ISubscribe {
 
     /**
      * 消息订阅处理
+     * @param chArray 通道
+     * @param h 消息处理器
+     */
+    default void subscribe(String[] chArray, ISubscribe h) {}
+
+    /**
+     * 消息订阅处理
      *
      * @param channel 信道
      * @param msg     订阅消息
      */
-    void onMsg(String channel, String msg);
+    default void onMsg(String channel, String msg) {}
 
     class SubscribeGroup implements ISubscribe {
         private final List<ISubscribe> subscribeList = new ArrayList<>();

@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
+import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
 
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @email xiezhyan@126.com
  * @date 2022/04/28
  */
-public final class RedisSubscribe {
+public final class RedisSubscribe implements ISubscribe{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisSubscribe.class);
 
@@ -35,7 +38,8 @@ public final class RedisSubscribe {
      * @throws IllegalArgumentException if null == chArray or chArray.length <= 0
      * @throws IllegalArgumentException if null == h
      */
-    public static void subscribe(String[] chArray, ISubscribe h) {
+    @Override
+    public void subscribe(String[] chArray, ISubscribe h) {
         if (null == chArray ||
                 chArray.length <= 0) {
             throw new IllegalArgumentException("chArray is null or empty");
@@ -73,7 +77,7 @@ public final class RedisSubscribe {
      * @param strMsg 字符串消息
      * @param h      消息处理器
      */
-    private static void onMsg(String ch, String strMsg, ISubscribe h) {
+    private void onMsg(String ch, String strMsg, ISubscribe h) {
         if (null == ch ||
                 null == strMsg ||
                 null == h) {
@@ -87,5 +91,24 @@ public final class RedisSubscribe {
             // 记录错误日志
             LOGGER.error(ex.getMessage(), ex);
         }
+    }
+
+    public static void main(String[] args) {
+        final SubscribeGroup subscribeGroup = new SubscribeGroup();
+        subscribeGroup.add(new ISubscribe() {
+            @Override
+            public void onMsg(String channel, String msg) {
+                // 服务发布
+                if (!Objects.equals(channel, PublishCons.REGISTER_SERVER)) {
+                    return;
+                }
+                // 服务ID
+                int serverId = StringUtil.toInteger(msg);
+                // 从Redis中取出对应的信息
+                // 加入到服务器集合中
+            }
+        });
+        ISubscribe subscribe = new RedisSubscribe();
+        subscribe.subscribe(new String[]{PublishCons.REGISTER_SERVER}, subscribeGroup);
     }
 }
