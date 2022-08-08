@@ -92,7 +92,7 @@ public final class ConnectClient {
 
     private String initWebsocketPath(Builder builder) {
         String protoc = "ws";
-        if (builder.safe) {
+        if (Boolean.TRUE.equals(builder.safe)) {
             protoc = "wss";
         }
         String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;
@@ -272,5 +272,11 @@ public final class ConnectClient {
          * @param closeClient 关闭客户端
          */
         void apply(NettyClientAcceptor closeClient);
+    }
+
+    public static void main(String[] args) {
+        ConnectClient client = ConnectClient.create().setServerHost("123").setServerPort(555).setPath("/ws").build();
+        System.out.println(client.getWebsocketPath());
+
     }
 }

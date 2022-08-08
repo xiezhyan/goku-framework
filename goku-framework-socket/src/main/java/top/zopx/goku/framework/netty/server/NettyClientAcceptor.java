@@ -116,13 +116,9 @@ public final class NettyClientAcceptor {
 
             final DefaultHttpHeaders header = new DefaultHttpHeaders();
 
-            if (null != extraInfoMap) {
-                for (Map.Entry<String, String> entry : extraInfoMap.entrySet()) {
-                    if (null != entry.getValue()) {
-                        header.add(
-                                entry.getKey(), entry.getValue()
-                        );
-                    }
+            for (Map.Entry<String, String> entry : extraInfoMap.entrySet()) {
+                if (null != entry.getValue()) {
+                    header.add(entry.getKey(), entry.getValue());
                 }
             }
 

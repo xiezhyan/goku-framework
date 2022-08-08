@@ -9,7 +9,6 @@ import top.zopx.goku.framework.biz.recognizer.BaseMsgCodeRecognizer;
  * @date 2022/7/29
  */
 public class MsgCodeRecognizer extends BaseMsgCodeRecognizer {
-
     public static final MsgCodeRecognizer INSTANCE = new MsgCodeRecognizer();
     @Override
     protected void init() {

@@ -2,8 +2,6 @@ package top.zopx.goku.framework.netty.test.entity;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.cluster.entity.BaseInnerMsg;
 import top.zopx.goku.framework.netty.test.execute.MsgCodeRecognizer;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
@@ -16,12 +14,7 @@ import top.zopx.goku.framework.tools.entity.wrapper.R;
  * @date 2022/04/26
  */
 public final class InnerMsg extends BaseInnerMsg {
-    private static final Logger LOGGER = LoggerFactory.getLogger(InnerMsg.class);
-    /**
-     * 设置消息
-     *
-     * @param msg Protobuf消息
-     */
+
     public void putMsg(GeneratedMessageV3 msg) {
         if (null == msg) {
             return;
@@ -31,11 +24,6 @@ public final class InnerMsg extends BaseInnerMsg {
         setData(msg.toByteArray());
     }
 
-    /**
-     * 获取当前编码消息体
-     *
-     * @return 消息体
-     */
     public GeneratedMessageV3 getProtoMsg() {
         // 获取消息构建器
         Message.Builder msgBuilder = MsgCodeRecognizer.INSTANCE.getMsgBuilderByMsgCode(getMsgCode());

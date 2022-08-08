@@ -7,7 +7,21 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.biz.constant.IKey;
 
 /**
- * 消息处理器
+ * 消息处理器，用来处理消息、编码、消息内容间的关系
+ * {@link CmdHandlerMsgRecognizer}
+ * <pre>
+ * {@code
+ *  public class MsgCodeRecognizer extends BaseMsgCodeRecognizer {
+ *     public static final MsgCodeRecognizer INSTANCE = new MsgCodeRecognizer();
+ *     @Override
+ *     protected void init() {
+ *         // 针对各种消息服务器处理的类型，进行消息映射
+ *         CmdHandlerMsgRecognizer.tryInit();
+ *         CmdHandlerMsgRecognizer.tryInit();
+ *     }
+ *  }
+ * }
+ * </pre>
  *
  * @author 俗世游子
  * @email xiezhyan@126.com
