@@ -7,6 +7,67 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 基础业务处理类
+ * <pre>
+ * {@code
+ *  public final class UserLoginRequestHandler implements ICmdHandler<Account.UserLoginRequest> {
+ *
+ *     private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginRequestHandler.class);
+ *
+ *     @Override
+ *     public void cmd(ChannelHandlerContext ctx, Account.UserLoginRequest cmd, int sessionId, int fromUserId) {
+ *         ICmdHandler.super.cmd(ctx, cmd, sessionId, fromUserId);
+ *
+ *         if (null == cmd) {
+ *             return;
+ *         }
+ *
+ *         LOGGER.debug(
+ *                 "收到用户登录消息, propertyStr = {}",
+ *                 cmd.getPropertyStr()
+ *         );
+ *
+ *         UserLogin.getInstance().doLoginSync(
+ *                 cmd.getLoginMethod(),
+ *                 cmd.getPropertyStr(),
+ *                 (result) -> buildResultMsgAndSend(ctx, sessionId, fromUserId, result)
+ *         );
+ *     }
+ *
+ *
+ *     static private void buildResultMsgAndSend(
+ *             ChannelHandlerContext ctx, int remoteSessionId, int fromUserId, R<UserLoginResult> resultX) {
+ *         if (null == ctx ||
+ *                 null == resultX) {
+ *             return;
+ *         }
+ *
+ *         final InnerMsg newMsg = new InnerMsg();
+ *         newMsg.setRemoteSessionId(remoteSessionId);
+ *         newMsg.setFromUserId(fromUserId);
+ *
+ *         if (R.success != newMsg.addError(resultX)) {
+ *             ctx.writeAndFlush(newMsg);
+ *             return;
+ *         }
+ *
+ *         // 获取最终结果
+ *         final UserLoginResult loginResult = resultX.getData();
+ *
+ *         // 登录成功
+ *         Account.UserLoginResponse.Builder b = Account.UserLoginResponse.newBuilder();
+ *         b.setUserId(loginResult.getUserId());
+ *         b.setUserName(loginResult.getUserName());
+ *         b.setTicket(loginResult.getTicket());
+ *         b.setUkey(loginResult.getUkey());
+ *         b.setUkeyExpireAt(loginResult.getUkeyExpireAt());
+ *
+ *         newMsg.putMsg(b.build());
+ *
+ *         ctx.writeAndFlush(newMsg);
+ *     }
+ * }
+ * }
+ * </pre>
  *
  * @author 俗世游子
  * @email xiezhyan@126.com
