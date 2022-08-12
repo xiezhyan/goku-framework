@@ -35,7 +35,7 @@ public class TranslatorAspect implements IAspect {
     private BindingAdapterFactory bindingAdapter;
 
     @Override
-    @Pointcut("@annotation(top.zopx.goku.framework.web.util.bind.annotation.Bind)")
+    @Pointcut("@annotation(top.zopx.goku.framework.web.util.bind.annotation.Bind)||@within(top.zopx.goku.framework.web.util.bind.annotation.Bind)")
     public void doPointcut() {
         // TODO document why this method is empty
     }
