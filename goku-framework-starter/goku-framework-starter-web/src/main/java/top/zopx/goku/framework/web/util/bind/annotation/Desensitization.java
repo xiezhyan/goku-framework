@@ -23,6 +23,12 @@ public @interface Desensitization {
     int endIndex();
 
     /**
+     * 指定位置之前的处理
+     * <p>邮箱</p>
+     */
+    String charMaskLast() default "";
+
+    /**
      * 掩盖字符
      */
     String mask() default "*";

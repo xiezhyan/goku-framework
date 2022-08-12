@@ -35,7 +35,7 @@ public class TranslatorAspect implements IAspect {
     private BindingAdapterFactory bindingAdapter;
 
     @Override
-    @Pointcut("@annotation(top.zopx.goku.framework.web.util.bind.annotation.Bind)||@within(top.zopx.goku.framework.web.util.bind.annotation.Bind)")
+    @Pointcut("@annotation(top.zopx.goku.framework.web.util.bind.annotation.Bind) || @within(top.zopx.goku.framework.web.util.bind.annotation.Bind)")
     public void doPointcut() {
         // TODO document why this method is empty
     }
@@ -131,7 +131,7 @@ public class TranslatorAspect implements IAspect {
         ReflectionClassUtil.invokeSetMethod(result, field, desensitization(originValue, field, annotation));
     }
 
-    private Object desensitization(Object originValue, Field field,  Desensitization annotation) {
+    private Object desensitization(Object originValue, Field field, Desensitization annotation) {
         if (!(originValue instanceof String)) {
             // 不是字符串 直接返回
             return originValue;
@@ -143,25 +143,41 @@ public class TranslatorAspect implements IAspect {
             return desensitizeResult;
         }
 
-        final int length = desensitizeResult.length();
-        if (length < annotation.startIndex()) {
+        return desensitization(desensitizeResult, annotation.startIndex(), annotation.endIndex(), annotation.charMaskLast());
+    }
+
+    private String desensitization(String desensitizeResult, int start, int end, String charMaskLast) {
+        int length = StringUtil.isNotBlank(charMaskLast) ? desensitizeResult.indexOf(charMaskLast) : desensitizeResult.length();
+
+        if (length < start) {
             // 不够开始位置，直接返回
             return desensitizeResult;
         }
 
-        // 最后还留着的位数
-        int middleLen = 0;
-        if ((middleLen = (length - annotation.startIndex())) < annotation.endIndex()) {
-            // 计算出中间的长度
-            if (Objects.equals(middleLen, 0)) {
-                return desensitizeResult;
-            }
-            // 进行拼接
-            return desensitizeResult.substring(0, annotation.startIndex()) + append(middleLen, annotation.mask());
+        if (start == 0 && end == 0) {
+            // 全部替换
+            return append(length, "*") + (StringUtil.isNotBlank(charMaskLast) ? desensitizeResult.substring(length) : "");
         }
 
-        middleLen -= annotation.endIndex();
-        return desensitizeResult.substring(0, annotation.startIndex()) + append(middleLen, annotation.mask()) + desensitizeResult.substring(annotation.startIndex() + annotation.endIndex() + 1);
+        if (start != 0 && end == 0) {
+            // 替换start之后
+            return desensitizeResult.substring(0, start) + append(length - start, "*");
+        }
+
+        if (start == 0 && end != 0) {
+            // 替换end之前的
+            return append(length - end, "*") + desensitizeResult.substring(length - end);
+        }
+
+        if (length < start + end) {
+            // 不够start + end的位置，直接将start之后的全部去掉，换成*
+            return desensitizeResult.substring(0, start) + append(length - start, "*");
+        }
+
+        // 最后还留着的位数
+        int middleLen = length - start - end;
+
+        return desensitizeResult.substring(0, start) + append(middleLen, "*") + desensitizeResult.substring(start + middleLen);
     }
 
     private String append(int middleLen, String mask) {
