@@ -71,6 +71,8 @@ public class TranslatorAspect implements IAspect {
         List<Field> fields = ReflectionClassUtil.getFieldList(result);
         // 翻译当前对象字段
         fields.stream().filter(field -> field.isAnnotationPresent(Binding.class)).forEach(field -> translateField(result, field));
+        // 脱敏当前字段数据
+        fields.stream().filter(field -> field.isAnnotationPresent(Desensitization.class)).forEach(field -> desensitizationField(result, field));
 
         // 如果内部字段存在Bind注解，说明属性为对象，需要继续处理
         fields.stream().filter(field -> field.isAnnotationPresent(Bind.class)).forEach(field -> {
@@ -108,46 +110,43 @@ public class TranslatorAspect implements IAspect {
             return;
         }
 
-        desensitizationField(vo, field, translate);
+        ReflectionClassUtil.invokeSetMethod(vo, field, translate);
     }
+
 
     /**
      * 脱敏处理
      *
-     * @param vo        对象
-     * @param field     字段
-     * @param translate 转换结果
+     * @param result result
+     * @param field  需要设置内容的字段
      */
-    private void desensitizationField(Object vo, Field field, Object translate) {
-        // 不是字符串类型，直接处理
-        if (!(translate instanceof String)) {
-            ReflectionClassUtil.invokeSetMethod(vo, field, translate);
+    private void desensitizationField(Object result, Field field) {
+        Desensitization annotation = field.getAnnotation(Desensitization.class);
+
+        Object originValue = ReflectionClassUtil.invokeGetMethod(result, field);
+        if (Objects.isNull(originValue)) {
             return;
         }
 
-        // 没有Desensitization注解，继续处理业务
-        if (!field.isAnnotationPresent(Desensitization.class)) {
-            ReflectionClassUtil.invokeSetMethod(vo, field, translate);
-            return;
-        }
-
-        // 脱敏处理
-        final Desensitization annotation = field.getAnnotation(Desensitization.class);
-        ReflectionClassUtil.invokeSetMethod(vo, field, extracted(vo, field, translate, annotation));
+        ReflectionClassUtil.invokeSetMethod(result, field, desensitization(originValue, field, annotation));
     }
 
-    private Object extracted(Object vo, Field field, Object translate, Desensitization annotation) {
-        String desensitizeResult = translate.toString();
+    private Object desensitization(Object originValue, Field field,  Desensitization annotation) {
+        if (!(originValue instanceof String)) {
+            // 不是字符串 直接返回
+            return originValue;
+        }
+        String desensitizeResult = originValue.toString();
 
         if (StringUtil.isBlank(desensitizeResult)) {
             // 空字符串不处理，直接返回
-            return translate;
+            return desensitizeResult;
         }
 
         final int length = desensitizeResult.length();
         if (length < annotation.startIndex()) {
             // 不够开始位置，直接返回
-            return translate;
+            return desensitizeResult;
         }
 
         // 最后还留着的位数
@@ -155,7 +154,7 @@ public class TranslatorAspect implements IAspect {
         if ((middleLen = (length - annotation.startIndex())) < annotation.endIndex()) {
             // 计算出中间的长度
             if (Objects.equals(middleLen, 0)) {
-                return translate;
+                return desensitizeResult;
             }
             // 进行拼接
             return desensitizeResult.substring(0, annotation.startIndex()) + append(middleLen, annotation.mask());
