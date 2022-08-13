@@ -20,4 +20,14 @@ public class DictEnum<T> implements IEnum<T> {
         this.code = code;
         this.msg = msg;
     }
+
+    @Override
+    public T getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMsg() {
+        return msg;
+    }
 }
