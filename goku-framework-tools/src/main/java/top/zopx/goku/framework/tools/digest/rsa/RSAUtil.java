@@ -97,7 +97,7 @@ public enum RSAUtil {
      * @return RSAPublicKey
      * @throws Exception 转换异常
      */
-    RSAPublicKey getPublicKey(byte[] bytes) throws Exception {
+    public RSAPublicKey getPublicKey(byte[] bytes) throws Exception {
         return (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(bytes));
     }
 
@@ -108,7 +108,7 @@ public enum RSAUtil {
      * @return RSAPrivateKey
      * @throws Exception 转换异常
      */
-    RSAPrivateKey getPrivateKey(byte[] bytes) throws Exception {
+    public RSAPrivateKey getPrivateKey(byte[] bytes) throws Exception {
         return (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
     }
 }
