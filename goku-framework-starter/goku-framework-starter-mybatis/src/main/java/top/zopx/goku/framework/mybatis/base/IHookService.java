@@ -35,7 +35,7 @@ public interface IHookService<DTO extends BaseEntity, Entity extends DataEntity>
      * @param data 入参
      * @return 是否处理成功
      */
-    default Boolean doUpdateAfter(Entity data) {
+    default Boolean doUpdateAfter(Entity data, DTO body) {
         return true;
     }
 

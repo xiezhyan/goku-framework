@@ -66,7 +66,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         copyNotNullForRequest(body, entity);
         doUpdateBefore(entity, body);
         if (baseMapper.updateById(entity) == 1) {
-            return doUpdateAfter(entity);
+            return doUpdateAfter(entity, body);
         }
         throw new BusException(ErrorCodeCons.ERROR_UPDATE);
     }
