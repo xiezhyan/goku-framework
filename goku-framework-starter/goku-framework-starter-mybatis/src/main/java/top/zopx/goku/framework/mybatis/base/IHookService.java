@@ -33,10 +33,9 @@ public interface IHookService<DTO extends BaseEntity, Entity extends DataEntity>
      * 修改钩子函数
      *
      * @param data 入参
-     * @return 是否处理成功
      */
-    default Boolean doUpdateAfter(Entity data, DTO body) {
-        return true;
+    default void doUpdateAfter(Entity data, DTO body) {
+
     }
 
     /**
@@ -53,10 +52,8 @@ public interface IHookService<DTO extends BaseEntity, Entity extends DataEntity>
      *
      * @param entity 参数
      * @param body   dto
-     * @return 是否处理成功
      */
-    default Boolean doCreateAfter(Entity entity, DTO body) {
-        return true;
+    default void doCreateAfter(Entity entity, DTO body) {
     }
 
     /**
@@ -67,6 +64,14 @@ public interface IHookService<DTO extends BaseEntity, Entity extends DataEntity>
      */
     default Entity doDeleteBefore(Long id) {
         return null;
+    }
+
+    /**
+     * 删除钩子函数
+     *
+     * @param id 主键
+     */
+    default void doDeleteAfter(Long id) {
     }
 
 }

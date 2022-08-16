@@ -53,7 +53,8 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         DO entity = copyToEntity(body);
         doCreateBefore(entity, body);
         if (baseMapper.insert(entity) == 1) {
-            return doCreateAfter(entity, body);
+            doCreateAfter(entity, body);
+            return true;
         }
         throw new BusException(ErrorCodeCons.ERROR_CREATE);
     }
@@ -62,11 +63,12 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateByPriKey(DTO body, Long id) {
         DO entity = getById(id);
-        // 需要额外处理的操作，钩子函数
         copyNotNullForRequest(body, entity);
+        // 需要额外处理的操作，钩子函数
         doUpdateBefore(entity, body);
         if (baseMapper.updateById(entity) == 1) {
-            return doUpdateAfter(entity, body);
+            doUpdateAfter(entity, body);
+            return true;
         }
         throw new BusException(ErrorCodeCons.ERROR_UPDATE);
     }
@@ -78,10 +80,17 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         if (Objects.nonNull(data)) {
             data.setDeleteTime(LocalDateTime.now());
             data.setDeleter(UserLoginHelper.getUserIdOrNull());
-            return baseMapper.deleteById(data) == 1;
+            if(baseMapper.deleteById(data) == 1) {
+                doDeleteAfter(id);
+                return true;
+            }
         } else {
-            return baseMapper.deleteById(id) == 1;
+            if(baseMapper.deleteById(id) == 1) {
+                doDeleteAfter(id);
+                return true;
+            }
         }
+        throw new BusException(ErrorCodeCons.ERROR_DELETE);
     }
 
     @Override

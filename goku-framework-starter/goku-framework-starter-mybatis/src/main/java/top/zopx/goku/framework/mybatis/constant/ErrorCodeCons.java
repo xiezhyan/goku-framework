@@ -30,6 +30,10 @@ public enum ErrorCodeCons implements IBus {
      */
     ERROR_UPDATE("修改数据发生异常", 1101),
     /**
+     * 修改数据失败
+     */
+    ERROR_DELETE("删除数据发生异常", 1101),
+    /**
      *
      */
     ERROR_CREATE("创建数据发生异常", 1102),
