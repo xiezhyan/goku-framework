@@ -41,4 +41,10 @@ public @interface Binding {
      */
     String param() default "";
 
+    /**
+     * 执行条件:
+     *  默认：列表，查看，编辑都处理
+     */
+    String[] condition() default {"LIST", "VIEW", "DETAIL"};
+
 }

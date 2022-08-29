@@ -107,7 +107,7 @@ public class TranslatorAspect implements IAspect {
         // 得到对应的转换器
         IBinding<Object, Object> binding = SpringContext.getBean(annotation.translate());
         // 拿出转化结果
-        Object translate = binding.translate(originValue, annotation.dataSource(), annotation.param());
+        Object translate = binding.translate(originValue, annotation.dataSource(), annotation.param(), annotation.condition());
         if (Objects.isNull(translate)) {
             return;
         }

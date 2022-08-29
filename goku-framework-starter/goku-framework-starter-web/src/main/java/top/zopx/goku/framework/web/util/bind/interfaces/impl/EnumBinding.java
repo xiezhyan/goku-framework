@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class EnumBinding implements IBinding<Object, String> {
 
     @Override
-    public String translate(Object origin, Class<? extends IEnum> data, String param) {
+    public String translate(Object origin, Class<? extends IEnum> data, String param, String[] condition) {
         return Stream.of(data.getEnumConstants())
                 .filter(item -> Objects.equals(item.getCode(), origin))
                 .map(IEnum::getMsg).findFirst().orElse(null);
