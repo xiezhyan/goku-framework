@@ -40,14 +40,17 @@ SpringBoot时代下极大的简化了整个系统的搭建，而**goku-framework
 > 基于`goku-framework`架构的[享阅读II](https://gitee.com/mr_sanq/enjoy-read-ii)正在火热研发中！！！
 
 
-## mysql-binlog
 
-### binlog记录模式
+## 扩展
+
+### mysql-binlog
+
+#### binlog记录模式
 - statement：基于SQL语句的模式，某些语句和函数如UUID, LOAD DATA INFILE等在复制过程可能导致数据不一致甚至出错。
 - row：基于行的模式，记录的是行的变化，很安全。但是binlog会比其他两种模式大很多，在一些大表中清除大量数据时在binlog中会生成很多条语句，可能导致从库延迟变大。
 - mixed：混合模式，根据语句来选用是statement还是row模式
 
-### 开启MySQL的binlog
+#### 开启MySQL的binlog
 ```
 [mysqld]
 #设置记录模式
@@ -71,7 +74,12 @@ max_binlog_cache_size = 512m
 
 > 验证： `SHOW MASTER LOGS`
 
-## template.json格式
+### goku-framework-support-mysql-binlog
+
+####  template.json格式
+
+> 将需要处理的字段已如下格式进行配置，方便解析处理
+
 ```json
 [
   {
@@ -100,8 +108,14 @@ max_binlog_cache_size = 512m
 ]
 ```
 
-## Activiti
-### 基本配置
+### Activiti
+
+#### 内置接口
+
+[接口文档点击查看](./doc/activiti-api.md)
+
+#### 基本配置
+
 ```yaml
 spring:
   datasource:
@@ -118,14 +132,17 @@ spring:
     history-level: none
     check-process-definitions: false
 ```
-### 启动配置
+#### 启动配置
 ```java
 @SpringBootApplication(
         exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class}
 )
 ```
 
+
+
 ## 更新日志
+
 ### 1.5.1.0815
 1. goku-framework-socket重新规划
 2. Bind/Binding等工具类的实现
