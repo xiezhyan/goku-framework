@@ -41,6 +41,12 @@ SpringBoot时代下极大的简化了整个系统的搭建，而**goku-framework
 
 
 
+### 特别提供
+
+如果大家采用EasyCode的话，基于`goku-framework`的代码生成配置可以帮助到大家
+
+[EasyCode基础配置](./doc/EasyCodeConfig.json)
+
 ## 扩展
 
 ### mysql-binlog
@@ -144,7 +150,7 @@ spring:
 ## 更新日志
 
 - [ ] 1.5.1.1001
-  
+
 - [x] 1.5.1.0815
 
 1. goku-framework-socket重新规划
