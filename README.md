@@ -1,23 +1,43 @@
 
 ## goku-framework
+![logo](./doc/logo.png)
 ### 简介
+SpringBoot时代下极大的简化了整个系统的搭建，而**goku-framework**能够更快的处理整个开发流程下的问题。
+
+作为基础架构层的存在：
+- 对依赖版本进行严格控制，并且覆盖进行自定义版本
+- 基于Netty的网络开发，分为单机版本和集群版本，对标游戏架构，简化处理中的疑难业务
+- 日志信息怎么存储随你来定，CRUD快到不适应
+- 内置Activiti可视化流程图，分布式ID，binlog解析等方案。
+- ...
+
 
 ### 架构
 ```text
-├─goku-framework-dependency
-├─goku-framework-socket
-├─goku-framework-starter
-│  ├─goku-framework-starter-cache
-│  ├─goku-framework-starter-log
-│  ├─goku-framework-starter-material
-│  ├─goku-framework-starter-mybatis
-│  └─goku-framework-starter-web
-├─goku-framework-support
-│  ├─goku-framework-support-activiti
-│  ├─goku-framework-support-mysql-binlog
-│  └─goku-framework-support-primary
-├─goku-framework-tools
+├─goku-framework-dependency                           // 依赖管理          
+├─goku-framework-socket                               // Netty网络开发          
+├─goku-framework-starter                              //                   
+│  ├─goku-framework-starter-cache                     // Redis基本配置                    
+│  ├─goku-framework-starter-log                       // 日志处理                  
+│  ├─goku-framework-starter-material                  // MinIO，阿里OSS                        
+│  ├─goku-framework-starter-mybatis                   // CRUD操作                      
+│  └─goku-framework-starter-web                       // SpringBoot开发最小单元 
+├─goku-framework-support                              //               
+│  ├─goku-framework-support-activiti                  // Activiti工作流         
+│  ├─goku-framework-support-mysql-binlog              // MySQL binlog解析       
+│  └─goku-framework-support-primary                   // 分布式ID               
+├─goku-framework-tools                                // 核心类库            
 ```
+
+### 使用
+关于整个架构如何使用，关注示例项目
+- `square-test-spring-boot-starter`
+
+更多详细介绍，关注博客：
+- [俗世游子【谢先生】的掘金](https://juejin.cn/user/3359725700263694)
+- [俗世游子【谢先生】的51CTO](https://blog.51cto.com/u_14948012)
+
+> 基于`goku-framework`架构的[享阅读II](https://gitee.com/mr_sanq/enjoy-read-ii)正在火热研发中！！！
 
 
 ## mysql-binlog
