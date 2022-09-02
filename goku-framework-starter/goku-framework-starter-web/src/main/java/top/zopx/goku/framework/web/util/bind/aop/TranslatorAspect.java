@@ -11,6 +11,7 @@ import top.zopx.goku.framework.tools.constant.IEnum;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.web.configurator.base.IAspect;
+import top.zopx.goku.framework.web.configurator.base.IAspectMethod;
 import top.zopx.goku.framework.web.context.SpringContext;
 import top.zopx.goku.framework.web.util.bind.annotation.Bind;
 import top.zopx.goku.framework.web.util.bind.annotation.Binding;
@@ -21,6 +22,7 @@ import top.zopx.goku.framework.web.util.bind.registry.TranslateGenericConvert;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +31,7 @@ import java.util.Objects;
 @Component
 @Order(2)
 @SuppressWarnings("all")
-public class TranslatorAspect implements IAspect {
+public class TranslatorAspect implements IAspect, IAspectMethod {
 
     @Resource
     private BindingAdapterFactory bindingAdapter;
@@ -46,6 +48,7 @@ public class TranslatorAspect implements IAspect {
     @AfterReturning(pointcut = "doPointcut()", returning = "returing")
     @SuppressWarnings("all")
     public void doAfterReturn(JoinPoint joinPoint, Object returing) {
+        Method method = resolveMethod(joinPoint);
         // 处理泛型
         final TranslateGenericConvert<Object> translateGenericConvert = bindingAdapter.getTranslateGenericConvert((Class<Object>) returing.getClass());
         Object result;
@@ -60,19 +63,19 @@ public class TranslatorAspect implements IAspect {
             if (CollectionUtils.isEmpty(list)) {
                 return;
             }
-            list.forEach(this::translateObject);
+            list.forEach(item -> translateObject(item, method));
         } else {
-            this.translateObject(result);
+            this.translateObject(result,method);
         }
     }
 
-    private void translateObject(Object result) {
+    private void translateObject(Object result, Method method) {
         if (Objects.isNull(result)) {
             return;
         }
         List<Field> fields = ReflectionClassUtil.getFieldList(result);
         // 翻译当前对象字段
-        fields.stream().filter(field -> field.isAnnotationPresent(Binding.class)).forEach(field -> translateField(result, field));
+        fields.stream().filter(field -> field.isAnnotationPresent(Binding.class)).forEach(field -> translateField(result, field, method));
         // 脱敏当前字段数据
         fields.stream().filter(field -> field.isAnnotationPresent(Desensitization.class)).forEach(field -> desensitizationField(result, field));
 
@@ -80,9 +83,9 @@ public class TranslatorAspect implements IAspect {
         fields.stream().filter(field -> field.isAnnotationPresent(Bind.class)).forEach(field -> {
             Object subObject = ReflectionClassUtil.invokeGetMethod(result, field);
             if (subObject instanceof Collection<?>) {
-                ((Collection<?>) subObject).forEach(this::translateObject);
+                ((Collection<?>) subObject).forEach(result1 -> translateObject(result1, method));
             } else {
-                this.translateObject(subObject);
+                this.translateObject(subObject, method);
             }
         });
     }
@@ -90,11 +93,12 @@ public class TranslatorAspect implements IAspect {
     /**
      * 对具体字段属性进行处理
      *
-     * @param vo    result
-     * @param field 需要设置内容的字段
+     * @param vo     result
+     * @param field  需要设置内容的字段
+     * @param method
      */
     @SuppressWarnings("unchecked")
-    private void translateField(Object vo, Field field) {
+    private void translateField(Object vo, Field field, Method method) {
         Binding annotation = field.getAnnotation(Binding.class);
         Class<? extends IEnum> enunDataSourceClazz = annotation.dataSource();
 
@@ -107,7 +111,7 @@ public class TranslatorAspect implements IAspect {
         // 得到对应的转换器
         IBinding<Object, Object> binding = SpringContext.getBean(annotation.translate());
         // 拿出转化结果
-        Object translate = binding.translate(originValue, annotation.dataSource(), annotation.param(), annotation.condition());
+        Object translate = binding.translate(originValue, annotation.dataSource(), annotation.param(), annotation.condition(), method);
         if (Objects.isNull(translate)) {
             return;
         }

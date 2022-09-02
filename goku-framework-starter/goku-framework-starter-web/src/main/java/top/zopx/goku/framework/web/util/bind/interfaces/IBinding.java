@@ -2,6 +2,8 @@ package top.zopx.goku.framework.web.util.bind.interfaces;
 
 import top.zopx.goku.framework.tools.constant.IEnum;
 
+import java.lang.reflect.Method;
+
 /**
  * 消息处理接口
  *
@@ -18,8 +20,9 @@ public interface IBinding<T, K> {
      * @param data      枚举数据源
      * @param param     额外参数
      * @param condition 执行条件
+     * @param method    执行方法
      * @return K
      */
-    K translate(T origin, Class<? extends IEnum> data, String param, String[] condition);
+    K translate(T origin, Class<? extends IEnum> data, String param, String[] condition, Method method);
 
 }

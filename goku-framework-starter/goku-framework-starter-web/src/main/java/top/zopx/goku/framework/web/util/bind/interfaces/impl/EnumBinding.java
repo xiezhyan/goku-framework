@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import top.zopx.goku.framework.tools.constant.IEnum;
 import top.zopx.goku.framework.web.util.bind.interfaces.IBinding;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 public class EnumBinding implements IBinding<Object, String> {
 
     @Override
-    public String translate(Object origin, Class<? extends IEnum> data, String param, String[] condition) {
+    public String translate(Object origin, Class<? extends IEnum> data, String param, String[] condition, Method method) {
         return Stream.of(data.getEnumConstants())
                 .filter(item -> Objects.equals(item.getCode(), origin))
                 .map(IEnum::getMsg).findFirst().orElse(null);
