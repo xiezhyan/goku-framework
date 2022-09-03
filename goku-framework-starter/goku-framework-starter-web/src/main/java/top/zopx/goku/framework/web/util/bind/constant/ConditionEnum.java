@@ -10,17 +10,13 @@ import top.zopx.goku.framework.tools.constant.IEnum;
 public enum ConditionEnum implements IEnum<String> {
 
     /**
-     * 查看
-     */
-    VIEW,
-    /**
-     * 编辑
-     */
-    DETAIL,
-    /**
      * 列表
      */
-    LIST,
+    GETLIST,
+    /**
+     * 查看
+     */
+    GETBYPRIKEY,
     ;
 
     ConditionEnum() {
