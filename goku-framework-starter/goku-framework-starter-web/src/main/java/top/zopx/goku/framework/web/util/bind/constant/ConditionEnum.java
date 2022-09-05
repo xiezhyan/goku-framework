@@ -1,25 +1,18 @@
 package top.zopx.goku.framework.web.util.bind.constant;
 
-import top.zopx.goku.framework.tools.constant.IEnum;
-
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/22 8:43
  */
-public enum ConditionEnum implements IEnum<String> {
+public interface ConditionEnum {
 
     /**
      * 列表
      */
-    GETLIST,
+    String GET_LIST = "GETLIST";
     /**
-     * 查看
+     * 详情
      */
-    GETBYPRIKEY,
-    ;
-
-    ConditionEnum() {
-        this.init(name(), name());
-    }
+    String GET_BY_PRIKEY = "GETBYPRIKEY";
 }
