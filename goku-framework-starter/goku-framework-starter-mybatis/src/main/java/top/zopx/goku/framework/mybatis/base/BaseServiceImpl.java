@@ -63,9 +63,10 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateByPriKey(DTO body, Long id) {
         DO entity = getById(id);
-        copyNotNullForRequest(body, entity);
         // 需要额外处理的操作，钩子函数
         doUpdateBefore(entity, body);
+        // 前置操作处理之后，才需要继续进行处理
+        copyNotNullForRequest(body, entity);
         if (baseMapper.updateById(entity) == 1) {
             doUpdateAfter(entity, body);
             return true;
