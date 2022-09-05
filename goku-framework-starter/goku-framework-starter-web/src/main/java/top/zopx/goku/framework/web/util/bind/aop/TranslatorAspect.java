@@ -48,6 +48,10 @@ public class TranslatorAspect implements IAspect, IAspectMethod {
     @AfterReturning(pointcut = "doPointcut()", returning = "returing")
     @SuppressWarnings("all")
     public void doAfterReturn(JoinPoint joinPoint, Object returing) {
+        if (returing instanceof String || returing instanceof Boolean || returing instanceof Number) {
+            // 不需要处理的返回类型，直接跳过不操作
+            return;
+        }
         Method method = resolveMethod(joinPoint);
         // 处理泛型
         final TranslateGenericConvert<Object> translateGenericConvert = bindingAdapter.getTranslateGenericConvert((Class<Object>) returing.getClass());
@@ -65,7 +69,7 @@ public class TranslatorAspect implements IAspect, IAspectMethod {
             }
             list.forEach(item -> translateObject(item, method));
         } else {
-            this.translateObject(result,method);
+            this.translateObject(result, method);
         }
     }
 
