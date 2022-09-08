@@ -79,6 +79,7 @@ public final class JsonUtil {
                                         LocalDate.parse(json.getAsJsonPrimitive().getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atTime(LocalTime.MIDNIGHT).atZone(ZoneId.systemDefault()).toInstant()
                                 )
                 )
+                .serializeNulls()
                 .create();
     }
 }
