@@ -6,7 +6,6 @@ import com.aliyun.oss.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
-import top.zopx.goku.framework.material.configurator.minio.service.MinioServiceImpl;
 import top.zopx.goku.framework.material.configurator.oss.client.OSSClientConfigurator;
 import top.zopx.goku.framework.material.configurator.oss.properties.BootstrapOSS;
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
@@ -145,7 +144,7 @@ public class OSSServiceImpl implements IMaterialService {
                                 .build()
                 );
             } catch (Exception e) {
-                LogHelper.getLogger(MinioServiceImpl.class).error(e.getMessage(), e);
+                LogHelper.getLogger(OSSServiceImpl.class).error(e.getMessage(), e);
                 throw new BusException(e.getMessage());
             }
         });
