@@ -158,6 +158,12 @@ public class TranslatorAspect implements IAspect, IAspectMethod {
         return desensitization(desensitizeResult, annotation.startIndex(), annotation.endIndex(), annotation.charMaskLast());
     }
 
+    public static void main(String[] args) {
+        System.out.println(new TranslatorAspect().desensitization("张三", 1, 1, ""));
+        System.out.println(new TranslatorAspect().desensitization("张三三", 1, 1, ""));
+        System.out.println(new TranslatorAspect().desensitization("张三三三", 1, 1, ""));
+    }
+
     private String desensitization(String desensitizeResult, int start, int end, String charMaskLast) {
         int length = StringUtil.isNotBlank(charMaskLast) ? desensitizeResult.indexOf(charMaskLast) : desensitizeResult.length();
 
@@ -181,7 +187,7 @@ public class TranslatorAspect implements IAspect, IAspectMethod {
             return append(length - end, "*") + desensitizeResult.substring(length - end);
         }
 
-        if (length < start + end) {
+        if (length <= start + end) {
             // 不够start + end的位置，直接将start之后的全部去掉，换成*
             return desensitizeResult.substring(0, start) + append(length - start, "*");
         }

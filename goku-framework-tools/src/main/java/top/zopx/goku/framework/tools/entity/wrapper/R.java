@@ -21,7 +21,8 @@ public final class R<T> implements Serializable {
 
     private T data;
 
-    public R() {}
+    public R() {
+    }
 
     public R(Meta meta, T data) {
         this.meta = meta;
@@ -62,15 +63,10 @@ public final class R<T> implements Serializable {
      * @return R<Boolean>
      */
     public static R<Boolean> status(boolean data, String msg) {
-        if (data) {
-            return result(
-                    true,
-                    new Meta(true, msg, 200)
-            );
-        }
         return result(
-                false,
-                new Meta(true, StringUtil.isNotBlank(msg) ? msg : ERROR, 400)
+                data,
+                new Meta(true, StringUtil.isNotBlank(msg) ? msg : ERROR, 200)
+
         );
     }
 
@@ -119,7 +115,7 @@ public final class R<T> implements Serializable {
     /**
      * 失败
      *
-     * @param bus  消息编码
+     * @param bus 消息编码
      * @return R<T>
      */
     public static <T> R<T> failure(IBus bus) {
@@ -140,7 +136,8 @@ public final class R<T> implements Serializable {
          */
         private Integer code;
 
-        public Meta() {}
+        public Meta() {
+        }
 
         public Meta(Boolean success, String message, Integer code) {
             this.success = success;

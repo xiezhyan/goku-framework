@@ -105,7 +105,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
      * @param id ID
      * @return DO
      */
-    private DO getById(Long id) {
+    protected DO getById(Long id) {
         return Optional.ofNullable(baseMapper.selectById(id))
                 .orElseThrow(() -> new BusException(ErrorCodeCons.NOT_ENTITY));
     }

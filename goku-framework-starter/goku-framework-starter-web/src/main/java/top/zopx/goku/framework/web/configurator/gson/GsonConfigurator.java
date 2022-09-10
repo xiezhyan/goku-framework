@@ -1,7 +1,6 @@
 package top.zopx.goku.framework.web.configurator.gson;
 
 import com.google.gson.Gson;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +35,6 @@ public class GsonConfigurator {
     }
 
     @Bean
-    @ConditionalOnBean(name = "writeGson")
     public GsonHttpMessageConverter gsonHttpMessageConverter(Gson writeGson) {
         GsonHttpMessageConverter gsonHttpConverter = new GsonHttpMessageConverter(writeGson);
         gsonHttpConverter.setDefaultCharset(Charset.defaultCharset());
