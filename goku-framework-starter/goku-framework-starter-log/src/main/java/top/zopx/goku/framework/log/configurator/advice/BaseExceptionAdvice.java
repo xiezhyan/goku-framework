@@ -34,7 +34,7 @@ import java.util.Map;
  * @date 2021/4/12
  */
 @RestControllerAdvice
-public class BaseExceptionAdvice {
+public class BaseExceptionAdvice implements IMsg{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionAdvice.class);
 
@@ -42,7 +42,7 @@ public class BaseExceptionAdvice {
     public R<String> handleBusException(BusException e) {
         LOGGER.error("BusException异常信息：{}", e.getMessage());
         doAfter(e);
-        return R.failure(e.getMsg(), e.getCode());
+        return R.failure(getErrorMsg(e.getMsg()), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
@@ -56,7 +56,7 @@ public class BaseExceptionAdvice {
     public R<String> handleValidationException(MethodArgumentNotValidException e) {
         LOGGER.error("请求参数校验异常信息：{}", e.getMessage());
         doAfter(e);
-        return R.failure(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), HttpStatus.FORBIDDEN.value());
+        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.FORBIDDEN.value());
 
     }
 
@@ -67,7 +67,7 @@ public class BaseExceptionAdvice {
         FieldError fieldError;
         for (ObjectError error : e.getBindingResult().getAllErrors()) {
             fieldError = (FieldError) error;
-            errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), error.getDefaultMessage());
+            errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), getErrorMsg(error.getDefaultMessage()));
         }
         doAfter(e);
         return R.failure(SpringContext.getJson().toJson(errorMap), HttpStatus.FORBIDDEN.value());
@@ -89,7 +89,7 @@ public class BaseExceptionAdvice {
         if (ObjectUtils.isNotEmpty(e)) {
             map.put(LogConstant.STACK_TRACE, printStackTraceToString(e));
             map.put(LogConstant.EXCEPTION_NAME, e.getClass().getName());
-            map.put(LogConstant.ERROR_MESSAGE, e.getMessage());
+            map.put(LogConstant.ERROR_MESSAGE, getErrorMsg(e.getMessage()));
             StackTraceElement[] elements = e.getStackTrace();
             if (ObjectUtils.isNotEmpty(elements)) {
                 StackTraceElement element = elements[0];
