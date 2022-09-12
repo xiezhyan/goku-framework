@@ -1,3 +1,4 @@
+[中文](./README.md) | [English](./README.en.md)
 
 ## goku-framework
 ![logo](./doc/logo.png)
