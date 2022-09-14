@@ -62,11 +62,11 @@ public final class R<T> implements Serializable {
      * @param msg  返回消息
      * @return R<Boolean>
      */
+    @SuppressWarnings("all")
     public static R<Boolean> status(boolean data, String msg) {
         return result(
                 data,
-                new Meta(true, StringUtil.isNotBlank(msg) ? msg : ERROR, 200)
-
+                new Meta(true, data ? OK : StringUtil.isNotBlank(msg) ? msg : ERROR, data ? 200 : 400)
         );
     }
 
