@@ -139,7 +139,13 @@ public class OSSServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setEndpoint(bootstrapOSS.getEndpoint())
+                                .setEndpoint(
+                                        MessageFormat.format("{0}://{1}.{2}",
+                                                Boolean.TRUE.equals(bootstrapOSS.getSupportHttps()) ? "https" : "http",
+                                                uploadDTO.getBucketName().getName(),
+                                                bootstrapOSS.getEndpoint()
+                                        )
+                                )
                                 .setServer(UploadServerEnum.OSS)
                                 .setNewFileName(newFileName)
                                 .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365)))

@@ -185,7 +185,13 @@ public class MinioServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setEndpoint(bootstrapMinIO.getEndpoint())
+                                .setEndpoint(
+                                        MessageFormat.format("{0}{1}/{2}",
+                                                bootstrapMinIO.getEndpoint(),
+                                                Objects.isNull(bootstrapMinIO.getPort()) ? "" : ":" + bootstrapMinIO.getPort(),
+                                                uploadDTO.getBucketName().getName()
+                                        )
+                                )
                                 .setNewFileName(newFileName)
                                 .setServer(UploadServerEnum.MINIO)
                                 .setOverFileUrl(writeMinioClient.getPresignedObjectUrl(getPresignedBuild.build()))
