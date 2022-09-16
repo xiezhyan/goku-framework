@@ -7,8 +7,10 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import top.zopx.goku.framework.material.configurator.minio.client.MinIOClientConfigurator;
+import top.zopx.goku.framework.material.configurator.minio.properties.BootstrapMinIO;
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
+import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
 import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
@@ -40,6 +42,8 @@ public class MinioServiceImpl implements IMaterialService {
 
     @Resource
     private MinioClient writeMinioClient;
+    @Resource
+    private BootstrapMinIO bootstrapMinIO;
 
     @Override
     public boolean existsBucket(BucketName bucketName) {
@@ -62,7 +66,7 @@ public class MinioServiceImpl implements IMaterialService {
     public void createBucket(MaterialBucketDTO bucket) {
         bucket = Optional.ofNullable(bucket).orElseThrow(() -> new BusException("创建Bucket参数为空"));
 
-        if (!existsBucket(bucket.getBucketName())) {
+        if (existsBucket(bucket.getBucketName())) {
             throw new BusException("当前Bucket已存在");
         }
 
@@ -181,9 +185,10 @@ public class MinioServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setUploadServerId(1)
+                                .setEndpoint(bootstrapMinIO.getEndpoint())
                                 .setNewFileName(newFileName)
-                                .setMaterialFileUrl(writeMinioClient.getPresignedObjectUrl(getPresignedBuild.build()))
+                                .setServer(UploadServerEnum.MINIO)
+                                .setOverFileUrl(writeMinioClient.getPresignedObjectUrl(getPresignedBuild.build()))
                                 .build()
                 );
             } catch (Exception e) {

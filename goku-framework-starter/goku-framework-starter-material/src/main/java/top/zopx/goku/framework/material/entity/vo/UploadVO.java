@@ -1,5 +1,6 @@
 package top.zopx.goku.framework.material.entity.vo;
 
+import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.Region;
@@ -51,9 +52,9 @@ public class UploadVO {
     private final String newFileName;
 
     /**
-     * 上传文件地址
+     * 上传文件完整地址
      */
-    private final String materialFileUrl;
+    private final String overFileUrl;
 
     /**
      * 文件类型
@@ -63,7 +64,12 @@ public class UploadVO {
     /**
      * 上传服务
      */
-    private final Integer uploadServerId;
+    private final String endpoint;
+
+    /**
+     * 上传服务
+     */
+    private final UploadServerEnum server;
 
     private UploadVO(Builder builder) {
         this.userId = builder.userId;
@@ -74,9 +80,10 @@ public class UploadVO {
         this.size = builder.size;
         this.pathObject = builder.pathObject;
         this.newFileName = builder.newFileName;
-        this.materialFileUrl = builder.materialFileUrl;
+        this.overFileUrl = builder.overFileUrl;
         this.contentType = builder.contentType;
-        this.uploadServerId = builder.uploadServerId;
+        this.endpoint = builder.endpoint;
+        this.server = builder.server;
     }
 
     public Long getUserId() {
@@ -111,16 +118,16 @@ public class UploadVO {
         return newFileName;
     }
 
-    public String getMaterialFileUrl() {
-        return materialFileUrl;
+    public String getOverFileUrl() {
+        return overFileUrl;
     }
 
     public String getContentType() {
         return contentType;
     }
 
-    public Integer getUploadServerId() {
-        return uploadServerId;
+    public String getEndpoint() {
+        return endpoint;
     }
 
     public static Builder create() {
@@ -171,7 +178,7 @@ public class UploadVO {
         /**
          * 上传文件地址
          */
-        private String materialFileUrl;
+        private String overFileUrl;
 
         /**
          * 文件类型
@@ -181,7 +188,12 @@ public class UploadVO {
         /**
          * 上传服务
          */
-        private Integer uploadServerId;
+        private String endpoint;
+
+        /**
+         * 上传服务
+         */
+        private UploadServerEnum server;
 
         public Builder setUserId(Long userId) {
             this.userId = userId;
@@ -223,8 +235,8 @@ public class UploadVO {
             return this;
         }
 
-        public Builder setMaterialFileUrl(String materialFileUrl) {
-            this.materialFileUrl = materialFileUrl;
+        public Builder setOverFileUrl(String overFileUrl) {
+            this.overFileUrl = overFileUrl;
             return this;
         }
 
@@ -233,8 +245,13 @@ public class UploadVO {
             return this;
         }
 
-        public Builder setUploadServerId(Integer uploadServerId) {
-            this.uploadServerId = uploadServerId;
+        public Builder setEndpoint(String endpoint) {
+            this.endpoint = endpoint;
+            return this;
+        }
+
+        public Builder setServer(UploadServerEnum server) {
+            this.server = server;
             return this;
         }
 
@@ -263,9 +280,9 @@ public class UploadVO {
                 ", bucketName='" + bucketName + '\'' +
                 ", size=" + size +
                 ", newFileName='" + newFileName + '\'' +
-                ", materialFileUrl='" + materialFileUrl + '\'' +
+                ", materialFileUrl='" + overFileUrl + '\'' +
                 ", contentType='" + contentType + '\'' +
-                ", uploadServerId=" + uploadServerId +
+                ", endpoint=" + endpoint +
                 '}';
     }
 }

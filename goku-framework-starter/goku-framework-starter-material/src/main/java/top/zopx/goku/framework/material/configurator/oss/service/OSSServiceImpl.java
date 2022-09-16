@@ -10,6 +10,7 @@ import top.zopx.goku.framework.material.configurator.oss.client.OSSClientConfigu
 import top.zopx.goku.framework.material.configurator.oss.properties.BootstrapOSS;
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
+import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
 import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
@@ -56,7 +57,7 @@ public class OSSServiceImpl implements IMaterialService {
     public void createBucket(MaterialBucketDTO bucket) {
         bucket = Optional.ofNullable(bucket).orElseThrow(() -> new BusException("创建Bucket参数为空"));
 
-        if (!existsBucket(bucket.getBucketName())) {
+        if (existsBucket(bucket.getBucketName())) {
             throw new BusException("当前Bucket已存在");
         }
 
@@ -138,9 +139,10 @@ public class OSSServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setUploadServerId(1)
+                                .setEndpoint(bootstrapOSS.getEndpoint())
+                                .setServer(UploadServerEnum.OSS)
                                 .setNewFileName(newFileName)
-                                .setMaterialFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365)))
+                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365)))
                                 .build()
                 );
             } catch (Exception e) {
