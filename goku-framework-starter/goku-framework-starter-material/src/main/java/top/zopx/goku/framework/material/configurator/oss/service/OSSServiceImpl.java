@@ -1,8 +1,10 @@
 package top.zopx.goku.framework.material.configurator.oss.service;
 
+import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.*;
+import io.minio.http.Method;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
@@ -84,37 +86,14 @@ public class OSSServiceImpl implements IMaterialService {
         materialPreDTO = Optional.ofNullable(materialPreDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
         final MaterialPreVO result = new MaterialPreVO();
 
-        if (Objects.equals(materialPreDTO.getType(), MaterialPreCons.GET)) {
-            result.setHost(
-                    generatePresignedUrl(materialPreDTO.getBucketName(), materialPreDTO.getObjectName(), materialPreDTO.getExpireTime())
-            );
-            return result;
-        }
-
-        if (Objects.equals(materialPreDTO.getType(), MaterialPreCons.DIRECT_UPLOAD)) {
-            long expireEndTime = System.currentTimeMillis() + materialPreDTO.getExpireTime().toMillis();
-            Date expiration = new Date(expireEndTime);
-            PolicyConditions policyConds = new PolicyConditions();
-            policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-
-            String path = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-
-            policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, path);
-
-            String postPolicy = writeOSSClient.generatePostPolicy(expiration, policyConds);
-            byte[] binaryData = postPolicy.getBytes(StandardCharsets.UTF_8);
-            String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-            String postSignature = writeOSSClient.calculatePostSignature(postPolicy);
-
-            result.setAccessid(bootstrapOSS.getAppSecretId());
-            result.setPolicy(encodedPolicy);
-            result.setSignature(postSignature);
-            result.setExpire(String.valueOf(expireEndTime / 1000));
-            result.setHost(MessageFormat.format("https://{0}.{1}", materialPreDTO.getBucketName().getName(), bootstrapOSS.getEndpoint()));
-            result.setDir(path);
-            return result;
-        }
-
+        result.setHost(
+                generatePresignedUrl(
+                        materialPreDTO.getBucketName(),
+                        materialPreDTO.getObjectName(),
+                        materialPreDTO.getExpireTime(),
+                        getMethod(materialPreDTO.getType())
+                )
+        );
         return result;
     }
 
@@ -148,7 +127,7 @@ public class OSSServiceImpl implements IMaterialService {
                                 )
                                 .setServer(UploadServerEnum.OSS)
                                 .setNewFileName(newFileName)
-                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365)))
+                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365), HttpMethod.GET))
                                 .build()
                 );
             } catch (Exception e) {
@@ -176,10 +155,10 @@ public class OSSServiceImpl implements IMaterialService {
      * @param expireTime 过期时间 单位
      * @return 地址
      */
-    private String generatePresignedUrl(BucketName bucketName, ObjectName objectName, Duration expireTime) {
+    private String generatePresignedUrl(BucketName bucketName, ObjectName objectName, Duration expireTime, HttpMethod method) {
         Date expiration = new Date(System.currentTimeMillis() + expireTime.toMillis());
         // 生成以GET方法访问的签名URL，访客可以直接通过浏览器访问相关内容。
-        URL url = writeOSSClient.generatePresignedUrl(bucketName.getName(), objectName.getName(), expiration);
+        URL url = writeOSSClient.generatePresignedUrl(bucketName.getName(), objectName.getName(), expiration, method);
         return url.toString();
     }
 
@@ -196,4 +175,10 @@ public class OSSServiceImpl implements IMaterialService {
         return CannedAccessControlList.Default;
     }
 
+    private HttpMethod getMethod(MaterialPreCons type) {
+        if (Objects.equals(type, MaterialPreCons.GET)) {
+            return HttpMethod.GET;
+        }
+        return HttpMethod.PUT;
+    }
 }

@@ -23,13 +23,11 @@ import java.util.List;
 public class GsonConfigurator {
 
     @Bean
-    @ConditionalOnMissingBean
     public Gson writeGson() {
         return JsonUtil.getInstance().getGson();
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public IJson json(Gson writeGson) {
         return new GJson(writeGson);
     }
