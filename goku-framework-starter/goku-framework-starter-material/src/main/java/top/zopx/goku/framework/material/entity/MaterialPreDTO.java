@@ -14,7 +14,7 @@ import java.util.Optional;
  * @email xiezhyan@126.com
  * @date 2022/5/31
  */
-public class MaterialPreSignDTO {
+public class MaterialPreDTO {
 
     /**
      * 名称
@@ -41,8 +41,9 @@ public class MaterialPreSignDTO {
      */
     private Map<String, String> queryParams;
 
-    public MaterialPreSignDTO(BucketName bucketName, MaterialPreCons type, Duration expireTime) {
+    public MaterialPreDTO(BucketName bucketName, ObjectName objectName, MaterialPreCons type, Duration expireTime) {
         this.bucketName = Optional.ofNullable(bucketName).orElseThrow(() -> new BusException("bucket name 不能为空"));
+        this.objectName = objectName;
         this.type = type;
         this.expireTime = expireTime;
     }

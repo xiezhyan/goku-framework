@@ -130,6 +130,10 @@ public class UploadVO {
         return endpoint;
     }
 
+    public UploadServerEnum getServer() {
+        return server;
+    }
+
     public static Builder create() {
         return new Builder();
     }

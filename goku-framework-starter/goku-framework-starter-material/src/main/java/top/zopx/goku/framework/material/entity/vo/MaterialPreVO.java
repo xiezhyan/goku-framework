@@ -5,7 +5,7 @@ package top.zopx.goku.framework.material.entity.vo;
  * @email xiezhyan@126.com
  * @date 2022/5/31
  */
-public class MaterialPreSignVO {
+public class MaterialPreVO {
 
     /**
      *

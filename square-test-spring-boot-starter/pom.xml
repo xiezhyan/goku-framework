@@ -19,33 +19,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-starter-web</artifactId>
+            <version>1.5.1.1001</version>
+        </dependency>
+        <dependency>
             <groupId>top.zopx</groupId>
             <artifactId>goku-framework-starter-material</artifactId>
-            <version>1.5.1.1001</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-log</artifactId>
-            <version>1.5.1.1001</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-cache</artifactId>
-            <version>1.5.1.1001</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-mybatis</artifactId>
-            <version>1.5.1.1001</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-support-primary</artifactId>
-            <version>1.5.1.1001</version>
-        </dependency>
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-support-mysql-binlog</artifactId>
             <version>1.5.1.1001</version>
         </dependency>
     </dependencies>

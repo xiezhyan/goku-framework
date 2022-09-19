@@ -12,11 +12,11 @@ import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
 import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
-import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
+import top.zopx.goku.framework.material.entity.MaterialPreDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
+import top.zopx.goku.framework.material.entity.vo.MaterialPreVO;
 import top.zopx.goku.framework.material.entity.vo.UploadVO;
 import top.zopx.goku.framework.material.service.IMaterialService;
 import top.zopx.goku.framework.material.util.ObjectNameUtil;
@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -79,25 +80,24 @@ public class OSSServiceImpl implements IMaterialService {
     }
 
     @Override
-    public MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO) {
-        materialPreSignDTO = Optional.ofNullable(materialPreSignDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
-        final MaterialPreSignVO result = new MaterialPreSignVO();
+    public MaterialPreVO uploadPre(MaterialPreDTO materialPreDTO) {
+        materialPreDTO = Optional.ofNullable(materialPreDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
+        final MaterialPreVO result = new MaterialPreVO();
 
-        if (Objects.equals(materialPreSignDTO.getType(), MaterialPreCons.GET)) {
+        if (Objects.equals(materialPreDTO.getType(), MaterialPreCons.GET)) {
             result.setHost(
-                    generatePresignedUrl(materialPreSignDTO.getBucketName(), materialPreSignDTO.getObjectName(), materialPreSignDTO.getExpireTime())
+                    generatePresignedUrl(materialPreDTO.getBucketName(), materialPreDTO.getObjectName(), materialPreDTO.getExpireTime())
             );
             return result;
         }
 
-        if (Objects.equals(materialPreSignDTO.getType(), MaterialPreCons.DIRECT_UPLOAD)) {
-            long expireEndTime = System.currentTimeMillis() + materialPreSignDTO.getExpireTime().toMillis();
+        if (Objects.equals(materialPreDTO.getType(), MaterialPreCons.DIRECT_UPLOAD)) {
+            long expireEndTime = System.currentTimeMillis() + materialPreDTO.getExpireTime().toMillis();
             Date expiration = new Date(expireEndTime);
             PolicyConditions policyConds = new PolicyConditions();
             policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
 
-            LocalDate now = LocalDate.now();
-            String path = MessageFormat.format("{0}/{1}/{2}", String.valueOf(now.getYear()), String.format("%02d", now.getMonthValue()), String.format("%02d", now.getDayOfMonth()));
+            String path = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
             policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, path);
 
@@ -110,7 +110,7 @@ public class OSSServiceImpl implements IMaterialService {
             result.setPolicy(encodedPolicy);
             result.setSignature(postSignature);
             result.setExpire(String.valueOf(expireEndTime / 1000));
-            result.setHost(MessageFormat.format("https://{0}.{1}", materialPreSignDTO.getBucketName().getName(), bootstrapOSS.getEndpoint()));
+            result.setHost(MessageFormat.format("https://{0}.{1}", materialPreDTO.getBucketName().getName(), bootstrapOSS.getEndpoint()));
             result.setDir(path);
             return result;
         }

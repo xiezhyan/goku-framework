@@ -3,6 +3,8 @@ package top.zopx.goku.framework.material.entity.check;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
+import java.text.MessageFormat;
+
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
@@ -10,6 +12,9 @@ import top.zopx.goku.framework.tools.util.string.StringUtil;
  */
 public class ObjectName {
 
+    /**
+     * newFileName
+     */
     private final String name;
 
     public ObjectName(String name) {
