@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 默认Json方法
@@ -17,7 +19,7 @@ import java.util.Date;
  * @email xiezhyan@126.com
  * @date 2022/2/11
  */
-public final class JsonUtil {
+public final class JsonUtil implements IJson {
 
     private final IJson json;
 
@@ -28,6 +30,26 @@ public final class JsonUtil {
         json = new GJson(getDefaultGson());
     }
 
+    @Override
+    public <T> String toJson(T obj) {
+        return json.toJson(obj);
+    }
+
+    @Override
+    public <T> T toObject(String jsonText, Class<T> clazz) {
+        return json.toObject(jsonText, clazz);
+    }
+
+    @Override
+    public <T> List<T> toObjList(String jsonText, Class<T[]> clazz) {
+        return json.toObjList(jsonText, clazz);
+    }
+
+    @Override
+    public <K, V> Map<K, V> toMap(String jsonText) {
+        return json.toMap(jsonText);
+    }
+
     private static class Holder {
         public static final JsonUtil INSTANCE = new JsonUtil();
     }
@@ -36,12 +58,13 @@ public final class JsonUtil {
         return Holder.INSTANCE;
     }
 
-    public IJson getJson() {
-        return json;
-    }
-
     public Gson getGson() {
         return gson;
+    }
+
+    @Deprecated
+    public IJson getJson() {
+        return json;
     }
 
     private Gson getDefaultGson() {
