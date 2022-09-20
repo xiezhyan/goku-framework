@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.support.primary.core;
+package top.zopx.goku.framework.tools.util.id;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

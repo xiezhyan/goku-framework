@@ -3,7 +3,7 @@ package top.zopx.goku.framework.support.primary.core.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.support.primary.core.SnowFlake;
+import top.zopx.goku.framework.tools.util.id.SnowFlake;
 import top.zopx.goku.framework.support.primary.core.entity.BootstrapSnowflakeItem;
 import top.zopx.goku.framework.support.primary.core.entity.Node;
 import top.zopx.goku.framework.support.primary.core.service.IIDGetterService;
