@@ -1,0 +1,51 @@
+{
+  "ukey": {
+    "ukeyPassword": "123456",
+    "ukeyTTL": 234555
+  },
+  "redis": {
+    "server": {
+      "serverHost": "192.168.86.200",
+      "serverPort": 6379,
+      "index": 10,
+      "password": ""
+    },
+    "pubsub": {
+      "serverHost": "192.168.86.200",
+      "serverPort": 6379,
+      "index": 11,
+      "password": ""
+    }
+  },
+  "db": {
+    "biz": {
+      "serverHost": "192.168.86.200",
+      "serverPort": 12345,
+      "db": "test",
+      "userName": "root",
+      "password": "ZXCvbn789**..",
+      "initialSize": 1,
+      "minIdle": 1,
+      "maxActive": 32,
+      "maxWait": 2000
+    },
+    "log": {
+      "serverHost": "192.168.86.200",
+      "serverPort": 12345,
+      "db": "test",
+      "userName": "root",
+      "password": "ZXCvbn789**..",
+      "initialSize": 1,
+      "minIdle": 1,
+      "maxActive": 32,
+      "maxWait": 2000
+    }
+  },
+  "sms": {
+    "ali": {
+      "accessKeyId": "",
+      "accessKeySecret": "",
+      "workerCount": 8
+    }
+  }
+}
