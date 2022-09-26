@@ -1,11 +1,11 @@
 package top.zopx.goku.framework.netty.execute;
 
 import com.google.protobuf.GeneratedMessageV3;
-import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.biz.recognizer.BaseCmdHandlerFactory;
-import top.zopx.goku.framework.netty.bind.handler.ICmdHandler;
+import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
+import top.zopx.goku.framework.netty.bind.handler.ICmdContextHandler;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -52,13 +52,7 @@ public final class MainThreadPoolExecutor {
         this.factory = factory;
     }
 
-    /**
-     * 主线程开始执行逻辑
-     *
-     * @param ctx    通道上下文
-     * @param cmdMsg 消息体
-     */
-    public void process(ChannelHandlerContext ctx, GeneratedMessageV3 cmdMsg) {
+    public void process(BaseCmdHandleContext ctx, GeneratedMessageV3 cmdMsg) {
         if (null == ctx ||
                 null == cmdMsg) {
             return;
@@ -67,7 +61,7 @@ public final class MainThreadPoolExecutor {
         this.process(() -> {
             // 获取命令类
             final Class<?> cmdClazz = cmdMsg.getClass();
-            final ICmdHandler<? extends GeneratedMessageV3> cmdHandler = factory.create(cmdClazz);
+            final ICmdContextHandler<? extends BaseCmdHandleContext, ? extends GeneratedMessageV3> cmdHandler = factory.create(cmdClazz);
 
             if (null == cmdHandler) {
                 LOGGER.error(
@@ -82,14 +76,16 @@ public final class MainThreadPoolExecutor {
                     cmdClazz.getName()
             );
 
-            cmdHandler.cmd(ctx, cast(cmdMsg));
+            cmdHandler.cmd(castCtx(ctx), castMsg(cmdMsg));
         });
     }
 
-    private <T extends GeneratedMessageV3> T cast(GeneratedMessageV3 cmdMsg) {
-        @SuppressWarnings("unchecked")
-        T tempObj = (T) cmdMsg;
-        return tempObj;
+    private <CTX extends BaseCmdHandleContext> CTX castCtx(BaseCmdHandleContext ctx) {
+        return (CTX) ctx;
+    }
+
+    private <T extends GeneratedMessageV3> T castMsg(GeneratedMessageV3 cmdMsg) {
+        return (T) cmdMsg;
     }
 
     /**
@@ -103,42 +99,6 @@ public final class MainThreadPoolExecutor {
                     new SafeRunner(runnable)
             );
         }
-    }
-
-    /**
-     * 主线程开始执行逻辑
-     *
-     * @param ctx        通道上下文
-     * @param sessionId  网关服务器 SessionID
-     * @param fromUserId 来源用户 ID
-     * @param cmdMsg     消息体
-     */
-    public void process(ChannelHandlerContext ctx, int sessionId, int fromUserId, GeneratedMessageV3 cmdMsg) {
-        if (null == ctx ||
-                null == cmdMsg) {
-            return;
-        }
-
-        this.process(() -> {
-            // 获取命令类
-            final Class<?> cmdClazz = cmdMsg.getClass();
-            final ICmdHandler<? extends GeneratedMessageV3> cmdHandler = factory.create(cmdClazz);
-
-            if (null == cmdHandler) {
-                LOGGER.error(
-                        "未找到命令处理器, cmdClazz = {}",
-                        cmdClazz
-                );
-                return;
-            }
-
-            LOGGER.debug(
-                    "处理命令, cmdClazz = {}",
-                    cmdClazz.getName()
-            );
-
-            cmdHandler.cmd(ctx, cast(cmdMsg), sessionId, fromUserId);
-        });
     }
 
     private static class SafeRunner implements Runnable {
