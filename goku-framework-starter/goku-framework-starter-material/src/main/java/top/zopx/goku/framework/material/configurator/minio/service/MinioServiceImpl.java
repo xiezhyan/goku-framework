@@ -21,6 +21,7 @@ import top.zopx.goku.framework.material.entity.vo.UploadVO;
 import top.zopx.goku.framework.material.service.IMaterialService;
 import top.zopx.goku.framework.material.util.ObjectNameUtil;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
@@ -151,6 +152,7 @@ public class MinioServiceImpl implements IMaterialService {
             final String url = writeMinioClient.getPresignedObjectUrl(
                     builder
                             .object(materialPreDTO.getObjectName().getName())
+                            .expiry(StringUtil.toInteger(materialPreDTO.getExpireTime().getSeconds()))
                             .method(getMethod(materialPreDTO.getType())).build()
             );
             final MaterialPreVO result = new MaterialPreVO();
