@@ -9,7 +9,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.zopx.goku.framework.log.constant.LogConstant;
 import top.zopx.goku.framework.log.event.ErrorLogEvent;
 import top.zopx.goku.framework.tools.entity.wrapper.R;
@@ -33,28 +32,24 @@ import java.util.Map;
  * @author 俗世游子
  * @date 2021/4/12
  */
-@RestControllerAdvice
-public class BaseExceptionAdvice implements IMsg{
+public abstract class BaseExceptionAdvice implements IMsg{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionAdvice.class);
 
     @ExceptionHandler(BusException.class)
     public R<String> handleBusException(BusException e) {
-        LOGGER.error("BusException异常信息：{}", e.getMessage());
         doAfter(e);
         return R.failure(getErrorMsg(e.getMsg()), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
     public R<String> handleException(Exception e) {
-        LOGGER.error("通用异常信息：{}", e.getMessage());
         doAfter(e);
         return R.failure(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<String> handleValidationException(MethodArgumentNotValidException e) {
-        LOGGER.error("请求参数校验异常信息：{}", e.getMessage());
         doAfter(e);
         return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.FORBIDDEN.value());
 
@@ -62,7 +57,6 @@ public class BaseExceptionAdvice implements IMsg{
 
     @ExceptionHandler(BindException.class)
     public R<String> handleValidationException(BindException e) {
-        LOGGER.error("校验参数异常信息：{}", e.getMessage());
         Map<String, String> errorMap = new HashMap<>();
         FieldError fieldError;
         for (ObjectError error : e.getBindingResult().getAllErrors()) {
