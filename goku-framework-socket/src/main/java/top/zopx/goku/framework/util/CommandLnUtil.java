@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class CommandLnUtil {
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     public static void main(String[] args) {
