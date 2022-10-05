@@ -120,7 +120,7 @@ public final class ReflectionClassUtil {
         List<Field> fields = Arrays.stream(value.getClass().getDeclaredFields()).collect(Collectors.toList());
 
         Class<?> superclass = value.getClass().getSuperclass();
-        if (Objects.nonNull(superclass) && Objects.equals(superclass, Object.class)) {
+        if (Objects.nonNull(superclass) && !Objects.equals(superclass, Object.class)) {
             fields.addAll(
                     Stream.of(superclass.getDeclaredFields()).collect(Collectors.toList())
             );
