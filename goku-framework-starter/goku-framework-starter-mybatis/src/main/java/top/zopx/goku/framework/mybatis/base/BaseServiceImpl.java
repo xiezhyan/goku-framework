@@ -34,7 +34,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         Page<DO> page = null;
         List<Sorted> sorteds = null;
         if (null != pagination) {
-            page = PageMethod.startPage(pagination.getCurrentIndex(), pagination.getPageSize());
+            page = PageMethod.startPage(pagination.getCurrentIndex(), Math.min(pagination.getPageSize(), 1000));
             sorteds = pagination.getSorteds();
         }
         doSearchBefore(query);
