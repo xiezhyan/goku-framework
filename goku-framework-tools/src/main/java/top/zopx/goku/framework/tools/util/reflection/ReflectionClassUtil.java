@@ -3,10 +3,7 @@ package top.zopx.goku.framework.tools.util.reflection;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,7 +142,17 @@ public final class ReflectionClassUtil {
     }
 
     private static void invokeSetMethod(Object value, String methodName, Object param, Class<?> clazz) throws Exception {
-        Method method = getMethod(clazz, methodName, param.getClass());
+        Class<?> paramClazz = param.getClass();
+        if (param instanceof List) {
+            paramClazz = List.class;
+        }
+        if (param instanceof Set) {
+            paramClazz = Set.class;
+        }
+        if (param instanceof Map) {
+            paramClazz = Map.class;
+        }
+        Method method = getMethod(clazz, methodName, paramClazz);
         method.invoke(value, param);
     }
 
