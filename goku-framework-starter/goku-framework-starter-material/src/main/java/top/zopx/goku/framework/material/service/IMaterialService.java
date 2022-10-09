@@ -18,6 +18,14 @@ import java.util.List;
 public interface IMaterialService {
 
     /**
+     * 常量
+     */
+    String MINIO_SERVER = "minio";
+    /**
+     * 常量
+     */
+    String OSS_SERVER = "oss";
+    /**
      * bucket是否存在
      *
      * @param bucketName 名称

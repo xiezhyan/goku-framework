@@ -40,7 +40,7 @@ import java.util.*;
  * @email xiezhyan@126.com
  * @date 2022/05/22 9:31
  */
-@Service("oss")
+@Service(IMaterialService.OSS_SERVER)
 @ConditionalOnBean(OSSClientConfigurator.OssMarker.class)
 public class OSSServiceImpl implements IMaterialService {
 

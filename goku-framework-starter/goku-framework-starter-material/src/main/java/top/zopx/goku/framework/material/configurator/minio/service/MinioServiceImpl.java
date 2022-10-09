@@ -39,7 +39,7 @@ import java.util.Optional;
  * @email xiezhyan@126.com
  * @date 2022/05/22 9:31
  */
-@Service("minio")
+@Service(IMaterialService.MINIO_SERVER)
 @ConditionalOnBean(MinIOClientConfigurator.MinIOMarker.class)
 public class MinioServiceImpl implements IMaterialService {
 

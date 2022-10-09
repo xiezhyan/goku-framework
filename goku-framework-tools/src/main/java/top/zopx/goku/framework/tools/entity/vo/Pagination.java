@@ -13,16 +13,24 @@ public class Pagination implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // 当前显示的条数,默认显示100条
+    /**
+     * 当前显示的条数,默认显示10条
+     */
     private int pageSize = 10;
 
-    // 当前显示的页数
+    /**
+     * 当前显示的页数
+     */
     private int currentIndex = 1;
 
-    // 查询总数
+    /**
+     * 查询总数
+     */
     private long totalCount;
 
-    // 排序方式
+    /**
+     * 排序方式
+     */
     private List<Sorted> sorteds;
 
     public Pagination() {
