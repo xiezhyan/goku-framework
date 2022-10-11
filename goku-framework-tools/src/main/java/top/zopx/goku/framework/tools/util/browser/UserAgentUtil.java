@@ -2,10 +2,12 @@ package top.zopx.goku.framework.tools.util.browser;
 
 import cz.mallat.uasparser.OnlineUpdater;
 import cz.mallat.uasparser.UASparser;
+import org.apache.commons.lang3.StringUtils;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * 对提交的UserAgent进行操作， 获取系统
@@ -15,14 +17,19 @@ import java.io.IOException;
  */
 public class UserAgentUtil {
 
-    public static final ThreadLocal<UASparser> LOCAL = ThreadLocal.withInitial(() -> {
+    private static UASparser UA_SPARSER = null;
+    static {
         try {
-            return new UASparser(OnlineUpdater.getVendoredInputStream());
+            UA_SPARSER = getUaSparser();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new BusException(e.getMessage());
         }
-        return null;
-    });
+    }
+
+    private static UASparser getUaSparser() throws IOException {
+        return new UASparser(OnlineUpdater.getVendoredInputStream());
+    }
+
 
     /**
      * 获取UserAgent信息
@@ -32,12 +39,20 @@ public class UserAgentUtil {
      */
     public static UserAgentInfo analyticUserAgent(String userAgent) {
         UserAgentInfo result = null;
-        if (StringUtil.isBlank(userAgent)) {
+        if (StringUtils.isBlank(userAgent)) {
             return result;
         }
 
+        if (Objects.isNull(UA_SPARSER)) {
+            try {
+                UA_SPARSER = getUaSparser();
+            } catch (IOException e) {
+                throw new BusException(e.getMessage());
+            }
+        }
+
         try {
-            cz.mallat.uasparser.UserAgentInfo info = LOCAL.get().parse(userAgent);
+            cz.mallat.uasparser.UserAgentInfo info = UA_SPARSER.parse(userAgent);
             result = new UserAgentInfo();
             result.setBrowserName(info.getUaFamily());
             result.setBrowserVersion(info.getBrowserVersionInfo());

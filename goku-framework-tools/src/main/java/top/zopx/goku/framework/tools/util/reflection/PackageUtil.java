@@ -2,6 +2,7 @@ package top.zopx.goku.framework.tools.util.reflection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public enum PackageUtil {
      * @throws ClassNotFoundException ClassNotFoundException
      */
     public List<Class<?>> getFileList(String packageName, Class<?> superClass, boolean isRecursion) throws IOException, ClassNotFoundException {
-        if (null == superClass || StringUtil.isBlank(packageName)) {
+        if (null == superClass || StringUtils.isBlank(packageName)) {
             return Collections.emptyList();
         } else {
             return getFileListBySuperClass(packageName, isRecursion, superClass::isAssignableFrom);
