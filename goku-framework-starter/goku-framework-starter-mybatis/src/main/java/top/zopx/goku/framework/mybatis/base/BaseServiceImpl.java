@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import top.zopx.goku.framework.mybatis.constant.ErrorCodeCons;
 import top.zopx.goku.framework.mybatis.entity.BaseEntity;
 import top.zopx.goku.framework.mybatis.entity.DataEntity;
+import top.zopx.goku.framework.mybatis.util.UserLoginHelper;
 import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.entity.vo.Sorted;
 import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.mybatis.util.UserLoginHelper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,11 +62,10 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateByPriKey(DTO body, Long id) {
-        DO entity = getById(id);
-        // 需要额外处理的操作，钩子函数
-        doUpdateBefore(entity, body);
-        // 前置操作处理之后，才需要继续进行处理
-        copyNotNullForRequest(body, entity);
+        // 如果需要和原始数据做比较的需要用到
+        doUpdateBefore(getById(id), body);
+        DO entity = copyToEntity(body);
+        entity.setId(id);
         if (baseMapper.updateById(entity) == 1) {
             doUpdateAfter(entity, body);
             return true;
@@ -125,12 +124,4 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
      * @return Entity
      */
     protected abstract DO copyToEntity(DTO dto);
-
-    /**
-     * 将非空的Request转换为Entity
-     *
-     * @param body 入参
-     * @param data data
-     */
-    protected abstract void copyNotNullForRequest(DTO body, DO data);
 }
