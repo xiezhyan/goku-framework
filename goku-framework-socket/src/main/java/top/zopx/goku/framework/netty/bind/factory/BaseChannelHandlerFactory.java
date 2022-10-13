@@ -24,6 +24,29 @@ import io.netty.channel.ChannelHandler;
  *                  )
  *       channelActive()    // 有链接
  *       channelInactive()  // 连接断开
+ *       userEventTriggered() {
+ *         if (null == ctx ||
+ *             !(objEvent instanceof WebSocketServerProtocolHandler.HandshakeComplete)) {
+ *             return;
+ *         }
+ *         WebSocketServerProtocolHandler.HandshakeComplete
+ *             handshakeComplete = (WebSocketServerProtocolHandler.HandshakeComplete) objEvent;
+ *         // 获取代理服务器 Id
+ *         String strServerId = handshakeComplete.requestHeaders().get("proxyServerId");
+ *         if (null == strServerId ||
+ *             strServerId.isEmpty()) {
+ *             return;
+ *         }
+ *         LOGGER.info(
+ *             "代理服务器已接入, proxyServerId = {}",
+ *             strServerId
+ *         );
+ *         IdSetterGetter.putProxyServerId(
+ *             ctx, Integer.parseInt(strServerId)
+ *         );
+ *         // 添加到服务器分组
+ *         ProxyServerChannelGroup.add(ctx);
+ *     }
  *  }
  * </pre>
  * @author 俗世游子

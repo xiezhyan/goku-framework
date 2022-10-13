@@ -36,11 +36,11 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/2/3
  * @email xiezhyan@126.com
  */
-public final class NettyClientAcceptor {
+public final class GatewayToBizServerAcceptor {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientAcceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayToBizServerAcceptor.class);
 
     private static final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "goku-websocket-client-work");
 
@@ -72,7 +72,7 @@ public final class NettyClientAcceptor {
      *
      * @param client 使用配置
      */
-    public NettyClientAcceptor(ConnectClient client) {
+    public GatewayToBizServerAcceptor(ConnectClient client) {
         if (null == client) {
             throw new BusException("usingConf is null");
         }
@@ -194,7 +194,7 @@ public final class NettyClientAcceptor {
             channel = f.channel();
             channel.closeFuture().addListener(x -> {
                 // 获取已关闭的客户端
-                NettyClientAcceptor closeClient = NettyClientAcceptor.this;
+                GatewayToBizServerAcceptor closeClient = GatewayToBizServerAcceptor.this;
 
                 LOGGER.warn(
                         "XXX 注意: 服务器连接关闭! {} XXX",
