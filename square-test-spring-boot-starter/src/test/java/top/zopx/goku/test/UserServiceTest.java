@@ -12,11 +12,6 @@ import top.zopx.testGoku.service.UserService;
 
 import javax.annotation.Resource;
 
-/**
- * @author 谢先生
- * @email xiezhongyan@chinasofti.com
- * @date 2022/10/12
- */
 @SpringBootTest(classes = GokuTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserServiceTest {

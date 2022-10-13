@@ -36,6 +36,11 @@
             <artifactId>goku-framework-starter-mybatis</artifactId>
             <version>${goku.version}</version>
         </dependency>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-socket</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
