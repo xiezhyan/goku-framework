@@ -7,23 +7,28 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import top.zopx.goku.framework.material.configurator.minio.client.MinIOClientConfigurator;
+import top.zopx.goku.framework.material.configurator.minio.properties.BootstrapMinIO;
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
+import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
-import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
+import top.zopx.goku.framework.material.entity.MaterialPreDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
+import top.zopx.goku.framework.material.entity.vo.MaterialPreVO;
 import top.zopx.goku.framework.material.entity.vo.UploadVO;
 import top.zopx.goku.framework.material.service.IMaterialService;
 import top.zopx.goku.framework.material.util.ObjectNameUtil;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,12 +39,14 @@ import java.util.Optional;
  * @email xiezhyan@126.com
  * @date 2022/05/22 9:31
  */
-@Service("minio")
+@Service(IMaterialService.MINIO_SERVER)
 @ConditionalOnBean(MinIOClientConfigurator.MinIOMarker.class)
 public class MinioServiceImpl implements IMaterialService {
 
     @Resource
     private MinioClient writeMinioClient;
+    @Resource
+    private BootstrapMinIO bootstrapMinIO;
 
     @Override
     public boolean existsBucket(BucketName bucketName) {
@@ -62,7 +69,7 @@ public class MinioServiceImpl implements IMaterialService {
     public void createBucket(MaterialBucketDTO bucket) {
         bucket = Optional.ofNullable(bucket).orElseThrow(() -> new BusException("创建Bucket参数为空"));
 
-        if (!existsBucket(bucket.getBucketName())) {
+        if (existsBucket(bucket.getBucketName())) {
             throw new BusException("当前Bucket已存在");
         }
 
@@ -129,24 +136,28 @@ public class MinioServiceImpl implements IMaterialService {
     }
 
     @Override
-    public MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO) {
-        materialPreSignDTO = Optional.ofNullable(materialPreSignDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
+    public MaterialPreVO uploadPre(MaterialPreDTO materialPreDTO) {
+        materialPreDTO = Optional.ofNullable(materialPreDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
 
         GetPresignedObjectUrlArgs.Builder builder =
-                GetPresignedObjectUrlArgs.builder().bucket(materialPreSignDTO.getBucketName().getName());
+                GetPresignedObjectUrlArgs.builder().bucket(materialPreDTO.getBucketName().getName());
 
-        if (MapUtils.isNotEmpty(materialPreSignDTO.getQueryParams())) {
-            builder = builder.extraQueryParams(materialPreSignDTO.getQueryParams());
+        if (MapUtils.isNotEmpty(materialPreDTO.getQueryParams())) {
+            builder = builder.extraQueryParams(materialPreDTO.getQueryParams());
         }
+
+        String path = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
         try {
             final String url = writeMinioClient.getPresignedObjectUrl(
                     builder
-                            .object(materialPreSignDTO.getObjectName().getName())
-                            .method(getMethod(materialPreSignDTO.getType())).build()
+                            .object(materialPreDTO.getObjectName().getName())
+                            .expiry(StringUtil.toInteger(materialPreDTO.getExpireTime().getSeconds()))
+                            .method(getMethod(materialPreDTO.getType())).build()
             );
-            final MaterialPreSignVO result = new MaterialPreSignVO();
+            final MaterialPreVO result = new MaterialPreVO();
             result.setHost(url);
+            result.setDir(path);
             return result;
         } catch (Exception e) {
             LogHelper.getLogger(MinioServiceImpl.class).error(e.getMessage(), e);
@@ -181,9 +192,16 @@ public class MinioServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setUploadServerId(1)
+                                .setEndpoint(
+                                        MessageFormat.format("{0}{1}/{2}",
+                                                bootstrapMinIO.getEndpoint(),
+                                                Objects.isNull(bootstrapMinIO.getPort()) ? "" : ":" + bootstrapMinIO.getPort(),
+                                                uploadDTO.getBucketName().getName()
+                                        )
+                                )
                                 .setNewFileName(newFileName)
-                                .setMaterialFileUrl(writeMinioClient.getPresignedObjectUrl(getPresignedBuild.build()))
+                                .setServer(UploadServerEnum.MINIO)
+                                .setOverFileUrl(writeMinioClient.getPresignedObjectUrl(getPresignedBuild.build()))
                                 .build()
                 );
             } catch (Exception e) {
@@ -204,7 +222,8 @@ public class MinioServiceImpl implements IMaterialService {
             writeMinioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName.getName())
-                            .object(objectName.getName()).build()
+                            .object(objectName.getName())
+                            .build()
             );
         } catch (Exception e) {
             LogHelper.getLogger(MinioServiceImpl.class).error(e.getMessage(), e);
@@ -215,9 +234,6 @@ public class MinioServiceImpl implements IMaterialService {
     private Method getMethod(MaterialPreCons type) {
         if (Objects.equals(type, MaterialPreCons.GET)) {
             return Method.GET;
-        }
-        if (Objects.equals(type, MaterialPreCons.DIRECT_UPLOAD)) {
-            return Method.PUT;
         }
         return Method.PUT;
     }

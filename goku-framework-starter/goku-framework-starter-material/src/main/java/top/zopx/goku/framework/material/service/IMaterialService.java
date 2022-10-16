@@ -1,11 +1,11 @@
 package top.zopx.goku.framework.material.service;
 
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
-import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
+import top.zopx.goku.framework.material.entity.MaterialPreDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
+import top.zopx.goku.framework.material.entity.vo.MaterialPreVO;
 import top.zopx.goku.framework.material.entity.vo.UploadVO;
 
 import java.util.List;
@@ -17,6 +17,14 @@ import java.util.List;
  */
 public interface IMaterialService {
 
+    /**
+     * 常量
+     */
+    String MINIO_SERVER = "minio";
+    /**
+     * 常量
+     */
+    String OSS_SERVER = "oss";
     /**
      * bucket是否存在
      *
@@ -48,10 +56,10 @@ public interface IMaterialService {
     /**
      * 生成防伪链接
      *
-     * @param materialPreSignDTO materialPreSignDTO
+     * @param materialPreDTO materialPreSignDTO
      * @return MaterialPreSignVO
      */
-    MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO);
+    MaterialPreVO uploadPre(MaterialPreDTO materialPreDTO);
 
     /**
      * 基础文件上传

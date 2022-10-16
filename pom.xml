@@ -13,9 +13,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>https://gitee.com/thanks_studio/square-boot-starter.git</connection>
-		<developerConnection>https://gitee.com/thanks_studio/square-boot-starter.git</developerConnection>
-		<url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
+		<connection>https://github.com/xiezhyan/goku-framework</connection>
+		<developerConnection>https://github.com/xiezhyan/goku-framework</developerConnection>
+		<url>https://github.com/xiezhyan/goku-framework</url>
 	</scm>
 	
 	<developers>
@@ -34,7 +34,7 @@
 	<artifactId>goku-framework</artifactId>
 	<version>1.5.1.1001</version>
 	<packaging>pom</packaging>
-	<url>https://gitee.com/thanks_studio/square-boot-starter.git</url>
+	<url>https://github.com/xiezhyan/goku-framework</url>
 	
 	<description>${project.artifactId}快速开发架构，够快才够酷</description>
 	<name>${groupId}:${artifactId}:${version}</name>

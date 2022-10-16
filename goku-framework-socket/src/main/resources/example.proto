@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package msg;
+option java_package = "top.zopx.goku.framework";
+
+// 通用消息编号
+enum CommMsgCodeDef {
+    _Dummy = 0;
+    _PingCmd = 1;
+    _PingResult = 2;
+};
+
+// Ping 命令
+//*********************************************************************
+// 指令
+message PingCmd {
+    sint32 pingId = 1;
+}
+// Ping 命令
+//*********************************************************************
+// 结果
+message PingResult {
+    sint32 pingId = 1;
+}
+
+//
+// 成功提示
+//*********************************************************************
+// 结果
+message SuccezzHintResult {
+    // 成功信息
+    string succezzInfo = 1;
+}
+
+// 错误提示
+//*********************************************************************
+// 结果
+message ErrorHintResult {
+    // 错误编号
+    sint32 errorCode = 1;
+    // 错误消息
+    string errorMsg = 2;
+}

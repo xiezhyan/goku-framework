@@ -22,7 +22,14 @@ public enum Crc32Util {
 
     private static final CRC32 CRC_32 = new CRC32();
 
-    public long encode(String joining, String...values) {
+    /**
+     * 编码
+     *
+     * @param joining 连接符
+     * @param values  具体参数
+     * @return CRC32编码结果
+     */
+    public long encode(String joining, String... values) {
         if (ArrayUtils.isEmpty(values)) {
             return -1L;
         }

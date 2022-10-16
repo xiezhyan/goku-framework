@@ -43,7 +43,7 @@ public class WebsocketClient {
 
     private String initWebsocketPath(Builder builder) {
         String protoc = "ws";
-        if (builder.safe) {
+        if (Boolean.TRUE.equals(builder.safe)) {
             protoc = "wss";
         }
         String path = builder.path.startsWith("/") ? builder.path : "/" + builder.path;

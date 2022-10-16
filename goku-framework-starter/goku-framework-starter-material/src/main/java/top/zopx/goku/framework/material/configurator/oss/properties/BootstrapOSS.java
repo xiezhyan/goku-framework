@@ -38,7 +38,7 @@ public class BootstrapOSS {
     /**
      * 是否支持Https
      */
-    private Boolean supportHttps;
+    private Boolean supportHttps = true;
 
     public String getAppSecretId() {
         return appSecretId;

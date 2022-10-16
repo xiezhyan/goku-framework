@@ -73,6 +73,11 @@ public abstract class BaseInnerMsg {
      * 来自用户
      */
     private int fromUserId;
+
+    /**
+     * 客户端IP
+     */
+    private String clientIp;
     /**
      * 消息编码
      */
@@ -105,6 +110,14 @@ public abstract class BaseInnerMsg {
 
     public void setFromUserId(int fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
     public int getMsgCode() {

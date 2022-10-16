@@ -27,7 +27,7 @@ public class RedisReportServerInfo implements IReportServerInfo{
             final int expireTime = 10;
 
             // 设置缓存数据并在合适的时候过期
-            redisCache.set(redisKey, JsonUtil.getInstance().getJson().toJson(newInfo), SetParams.setParams().ex(expireTime));
+            redisCache.set(redisKey, JsonUtil.getInstance().toJson(newInfo), SetParams.setParams().ex(expireTime));
 
             // 发布新服务器 Id
             redisPublish.pub(PublishCons.REGISTER_SERVER, String.valueOf(newInfo.getServerId()));

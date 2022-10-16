@@ -52,7 +52,7 @@ public class MinIOClientConfigurator {
 
         if (Objects.isNull(bootstrapMinIO.getPort())) {
             return builder
-                    .endpoint(bootstrapMinIO.getEndpoint(), secure ? 443 : 80, secure)
+                    .endpoint(bootstrapMinIO.getEndpoint())
                     .build();
         } else {
             return builder

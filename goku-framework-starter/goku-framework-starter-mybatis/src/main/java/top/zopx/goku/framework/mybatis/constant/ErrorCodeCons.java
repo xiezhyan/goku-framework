@@ -12,7 +12,7 @@ public enum ErrorCodeCons implements IBus {
     /**
      * 未传入Token信息
      */
-    TOKEN_NOT_ERROR("未传入Token信息", 1000),
+    TOKEN_NOT_ERROR("未传入Token信息", 1001),
     /**
      * Token异常
      */
@@ -36,7 +36,7 @@ public enum ErrorCodeCons implements IBus {
     /**
      *
      */
-    ERROR_CREATE("创建数据发生异常", 1102),
+    ERROR_CREATE("保存数据发生异常", 1101),
     ;
 
     /**

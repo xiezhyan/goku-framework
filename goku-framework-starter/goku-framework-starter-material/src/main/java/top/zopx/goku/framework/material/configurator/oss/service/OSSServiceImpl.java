@@ -1,22 +1,24 @@
 package top.zopx.goku.framework.material.configurator.oss.service;
 
+import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.*;
+import io.minio.http.Method;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
-import top.zopx.goku.framework.material.configurator.minio.service.MinioServiceImpl;
 import top.zopx.goku.framework.material.configurator.oss.client.OSSClientConfigurator;
 import top.zopx.goku.framework.material.configurator.oss.properties.BootstrapOSS;
 import top.zopx.goku.framework.material.constant.MaterialPolicy;
 import top.zopx.goku.framework.material.constant.MaterialPreCons;
+import top.zopx.goku.framework.material.constant.UploadServerEnum;
 import top.zopx.goku.framework.material.entity.MaterialBucketDTO;
-import top.zopx.goku.framework.material.entity.MaterialPreSignDTO;
+import top.zopx.goku.framework.material.entity.MaterialPreDTO;
 import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.ObjectName;
-import top.zopx.goku.framework.material.entity.vo.MaterialPreSignVO;
+import top.zopx.goku.framework.material.entity.vo.MaterialPreVO;
 import top.zopx.goku.framework.material.entity.vo.UploadVO;
 import top.zopx.goku.framework.material.service.IMaterialService;
 import top.zopx.goku.framework.material.util.ObjectNameUtil;
@@ -30,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -37,7 +40,7 @@ import java.util.*;
  * @email xiezhyan@126.com
  * @date 2022/05/22 9:31
  */
-@Service("oss")
+@Service(IMaterialService.OSS_SERVER)
 @ConditionalOnBean(OSSClientConfigurator.OssMarker.class)
 public class OSSServiceImpl implements IMaterialService {
 
@@ -57,7 +60,7 @@ public class OSSServiceImpl implements IMaterialService {
     public void createBucket(MaterialBucketDTO bucket) {
         bucket = Optional.ofNullable(bucket).orElseThrow(() -> new BusException("创建Bucket参数为空"));
 
-        if (!existsBucket(bucket.getBucketName())) {
+        if (existsBucket(bucket.getBucketName())) {
             throw new BusException("当前Bucket已存在");
         }
 
@@ -79,42 +82,18 @@ public class OSSServiceImpl implements IMaterialService {
     }
 
     @Override
-    public MaterialPreSignVO genPreSignUrl(MaterialPreSignDTO materialPreSignDTO) {
-        materialPreSignDTO = Optional.ofNullable(materialPreSignDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
-        final MaterialPreSignVO result = new MaterialPreSignVO();
+    public MaterialPreVO uploadPre(MaterialPreDTO materialPreDTO) {
+        materialPreDTO = Optional.ofNullable(materialPreDTO).orElseThrow(() -> new BusException("生成防伪链接参数为空"));
+        final MaterialPreVO result = new MaterialPreVO();
 
-        if (Objects.equals(materialPreSignDTO.getType(), MaterialPreCons.GET)) {
-            result.setHost(
-                    generatePresignedUrl(materialPreSignDTO.getBucketName(), materialPreSignDTO.getObjectName(), materialPreSignDTO.getExpireTime())
-            );
-            return result;
-        }
-
-        if (Objects.equals(materialPreSignDTO.getType(), MaterialPreCons.DIRECT_UPLOAD)) {
-            long expireEndTime = System.currentTimeMillis() + materialPreSignDTO.getExpireTime().toMillis();
-            Date expiration = new Date(expireEndTime);
-            PolicyConditions policyConds = new PolicyConditions();
-            policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-
-            LocalDate now = LocalDate.now();
-            String path = MessageFormat.format("{0}/{1}/{2}", String.valueOf(now.getYear()), String.format("%02d", now.getMonthValue()), String.format("%02d", now.getDayOfMonth()));
-
-            policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, path);
-
-            String postPolicy = writeOSSClient.generatePostPolicy(expiration, policyConds);
-            byte[] binaryData = postPolicy.getBytes(StandardCharsets.UTF_8);
-            String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-            String postSignature = writeOSSClient.calculatePostSignature(postPolicy);
-
-            result.setAccessid(bootstrapOSS.getAppSecretId());
-            result.setPolicy(encodedPolicy);
-            result.setSignature(postSignature);
-            result.setExpire(String.valueOf(expireEndTime / 1000));
-            result.setHost(MessageFormat.format("https://{0}.{1}", materialPreSignDTO.getBucketName().getName(), bootstrapOSS.getEndpoint()));
-            result.setDir(path);
-            return result;
-        }
-
+        result.setHost(
+                generatePresignedUrl(
+                        materialPreDTO.getBucketName(),
+                        materialPreDTO.getObjectName(),
+                        materialPreDTO.getExpireTime(),
+                        getMethod(materialPreDTO.getType())
+                )
+        );
         return result;
     }
 
@@ -139,13 +118,20 @@ public class OSSServiceImpl implements IMaterialService {
                 resultList.add(
                         UploadVO.create()
                                 .setRequest(uploadDTO)
-                                .setUploadServerId(1)
+                                .setEndpoint(
+                                        MessageFormat.format("{0}://{1}.{2}",
+                                                Boolean.TRUE.equals(bootstrapOSS.getSupportHttps()) ? "https" : "http",
+                                                uploadDTO.getBucketName().getName(),
+                                                bootstrapOSS.getEndpoint()
+                                        )
+                                )
+                                .setServer(UploadServerEnum.OSS)
                                 .setNewFileName(newFileName)
-                                .setMaterialFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365)))
+                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365), HttpMethod.GET))
                                 .build()
                 );
             } catch (Exception e) {
-                LogHelper.getLogger(MinioServiceImpl.class).error(e.getMessage(), e);
+                LogHelper.getLogger(OSSServiceImpl.class).error(e.getMessage(), e);
                 throw new BusException(e.getMessage());
             }
         });
@@ -169,10 +155,10 @@ public class OSSServiceImpl implements IMaterialService {
      * @param expireTime 过期时间 单位
      * @return 地址
      */
-    private String generatePresignedUrl(BucketName bucketName, ObjectName objectName, Duration expireTime) {
+    private String generatePresignedUrl(BucketName bucketName, ObjectName objectName, Duration expireTime, HttpMethod method) {
         Date expiration = new Date(System.currentTimeMillis() + expireTime.toMillis());
         // 生成以GET方法访问的签名URL，访客可以直接通过浏览器访问相关内容。
-        URL url = writeOSSClient.generatePresignedUrl(bucketName.getName(), objectName.getName(), expiration);
+        URL url = writeOSSClient.generatePresignedUrl(bucketName.getName(), objectName.getName(), expiration, method);
         return url.toString();
     }
 
@@ -189,4 +175,10 @@ public class OSSServiceImpl implements IMaterialService {
         return CannedAccessControlList.Default;
     }
 
+    private HttpMethod getMethod(MaterialPreCons type) {
+        if (Objects.equals(type, MaterialPreCons.GET)) {
+            return HttpMethod.GET;
+        }
+        return HttpMethod.PUT;
+    }
 }

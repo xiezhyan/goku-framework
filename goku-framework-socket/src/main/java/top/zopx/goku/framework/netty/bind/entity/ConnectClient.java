@@ -3,7 +3,7 @@ package top.zopx.goku.framework.netty.bind.entity;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.NettyClientAcceptor;
+import top.zopx.goku.framework.netty.server.GatewayToBizServerAcceptor;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import java.text.MessageFormat;
@@ -68,6 +68,38 @@ public final class ConnectClient {
 
     /**
      * 信道处理器工厂
+     * <pre>
+     * {@code
+     *     userEventTriggered(ChannelHandlerContext ctx, Object eventObj) {
+     *         if (null == ctx ||
+     *             !(eventObj instanceof ClientHandshakeStateEvent)) {
+     *             return;
+     *         }
+     *         ClientHandshakeStateEvent
+     *             realEvent = (ClientHandshakeStateEvent) eventObj;
+     *         if (ClientHandshakeStateEvent.HANDSHAKE_COMPLETE != realEvent) {
+     *             return;
+     *         }
+     *         // 执行 Ping 心跳
+     *         ScheduledFuture<?> _pingHeartbeat = Timer.scheduleWithFixedDelay(
+     *             () -> doPing(ctx),
+     *             PING_INTERVAL_TIME, PING_INTERVAL_TIME,
+     *             TimeUnit.MILLISECONDS
+     *         );
+     *     }
+     *
+     *     channelRead() {
+     *      ClientChannelGroup.writeAndFlushBySessionId(
+     *          realMsg, // 该消息会经过 ClientMsgEncoder 编码
+     *          realMsg.getRemoteSessionId()
+     *      );
+     *     }
+     *
+     *     channelInactive() {
+     *      _pingHeartbeat.cancel(true);
+     *     }
+     * }
+     * </pre>
      */
     @Expose(serialize = false, deserialize = false)
     private final BaseChannelHandlerFactory channelHandlerFactory;
@@ -271,7 +303,7 @@ public final class ConnectClient {
          *
          * @param closeClient 关闭客户端
          */
-        void apply(NettyClientAcceptor closeClient);
+        void apply(GatewayToBizServerAcceptor closeClient);
     }
 
     public static void main(String[] args) {

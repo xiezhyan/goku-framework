@@ -5,7 +5,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.netty.bind.handler.ICmdHandler;
+import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
+import top.zopx.goku.framework.netty.bind.handler.ICmdContextHandler;
 import top.zopx.goku.framework.tools.util.reflection.PackageUtil;
 
 import java.lang.reflect.Method;
@@ -25,7 +26,7 @@ public abstract class BaseCmdHandlerFactory {
     /**
      * 缓存类
      */
-    private static final Map<Class<?>, ICmdHandler<? extends GeneratedMessageV3>> CLASS_HANDLE_MAP = new ConcurrentHashMap<>(4 << 4);
+    private static final Map<Class<?>, ICmdContextHandler<? extends BaseCmdHandleContext, ? extends GeneratedMessageV3>> CLASS_HANDLE_MAP = new ConcurrentHashMap<>(4 << 4);
     /**
      * 初始化是否完成
      */
@@ -51,7 +52,7 @@ public abstract class BaseCmdHandlerFactory {
      * @param cmdClazz 消息类
      * @return 消息处理器
      */
-    public ICmdHandler<? extends GeneratedMessageV3> create(Class<?> cmdClazz) {
+    public ICmdContextHandler<? extends BaseCmdHandleContext, ? extends GeneratedMessageV3> create(Class<?> cmdClazz) {
         if (null == cmdClazz) {
             return null;
         }
@@ -79,7 +80,7 @@ public abstract class BaseCmdHandlerFactory {
         }
 
         try {
-            final List<Class<?>> fileList = PackageUtil.INSTANCE.getFileList(packageName, ICmdHandler.class, true);
+            final List<Class<?>> fileList = PackageUtil.INSTANCE.getFileList(packageName, ICmdContextHandler.class, true);
             if (CollectionUtils.isEmpty(fileList)) {
                 return;
             }
@@ -109,7 +110,7 @@ public abstract class BaseCmdHandlerFactory {
                 }
 
                 LOGGER.info("{} <=======> {}", parameterType.getSimpleName(), handler.getSimpleName());
-                CLASS_HANDLE_MAP.put(parameterType, (ICmdHandler<? extends GeneratedMessageV3>) handler.getDeclaredConstructor().newInstance());
+                CLASS_HANDLE_MAP.put(parameterType, (ICmdContextHandler<? extends BaseCmdHandleContext, ? extends GeneratedMessageV3>) handler.getDeclaredConstructor().newInstance());
             }
         } catch (Exception e) {
             LOGGER.error("异常信息：", e);

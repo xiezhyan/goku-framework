@@ -1,7 +1,6 @@
 package top.zopx.goku.framework.web.configurator.base;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import top.zopx.goku.framework.tools.util.reflection.ReflectionClassUtil;
 
@@ -22,7 +21,7 @@ public interface IAspectMethod {
      * @param joinPoint 参数
      * @return Method
      */
-    default Method resolveMethod(ProceedingJoinPoint joinPoint) {
+    default Method resolveMethod(JoinPoint joinPoint) {
         MethodSignature signature = resolveMethodSignature(joinPoint);
         Class<?> targetClass = joinPoint.getTarget().getClass();
 
@@ -34,7 +33,7 @@ public interface IAspectMethod {
         return method;
     }
 
-    default MethodSignature resolveMethodSignature(ProceedingJoinPoint joinPoint) {
+    default MethodSignature resolveMethodSignature(JoinPoint joinPoint) {
         return (MethodSignature) joinPoint.getSignature();
     }
 

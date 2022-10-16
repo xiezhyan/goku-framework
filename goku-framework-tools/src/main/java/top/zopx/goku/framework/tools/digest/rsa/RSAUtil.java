@@ -40,7 +40,7 @@ public enum RSAUtil {
         try {
             // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
             KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(SECRET_KEY_SPEC_RSA);
-            // 初始化密钥对生成器，密钥大小为96-1024位
+            // 初始化密钥对生成器
             keyPairGen.initialize(2048, new SecureRandom());
             // 生成一个密钥对，保存在keyPair中
             KeyPair keyPair = keyPairGen.generateKeyPair();
@@ -48,11 +48,8 @@ public enum RSAUtil {
             RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
             // 得到公钥
             RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            String publicKeyString = Base64Util.INSTANCE.encode(publicKey.getEncoded());
-            // 得到私钥字符串
-            String privateKeyString = Base64Util.INSTANCE.encode(privateKey.getEncoded());
-            // 将公钥和私钥保存
-            return new RsaKey(publicKeyString, privateKeyString);
+            // 将公钥和私钥保存   得到私钥字符串
+            return new RsaKey(Base64Util.INSTANCE.encode(publicKey.getEncoded()), Base64Util.INSTANCE.encode(privateKey.getEncoded()));
         } catch (Exception e) {
             throw new BusException(e.getMessage());
         }
