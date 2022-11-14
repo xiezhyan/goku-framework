@@ -39,7 +39,7 @@ public abstract class BaseExceptionAdvice implements IMsg{
     @ExceptionHandler(BusException.class)
     public R<String> handleBusException(BusException e) {
         doAfter(e);
-        return R.failure(getErrorMsg(e.getMsg()), e.getCode());
+        return R.failure(getErrorMsg(e.getMsg(), e), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
@@ -51,7 +51,7 @@ public abstract class BaseExceptionAdvice implements IMsg{
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<String> handleValidationException(MethodArgumentNotValidException e) {
         doAfter(e);
-        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.FORBIDDEN.value());
+        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), e), HttpStatus.FORBIDDEN.value());
 
     }
 
@@ -61,7 +61,7 @@ public abstract class BaseExceptionAdvice implements IMsg{
         FieldError fieldError;
         for (ObjectError error : e.getBindingResult().getAllErrors()) {
             fieldError = (FieldError) error;
-            errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), getErrorMsg(error.getDefaultMessage()));
+            errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), getErrorMsg(error.getDefaultMessage(), e));
         }
         doAfter(e);
         return R.failure(SpringContext.getJson().toJson(errorMap), HttpStatus.FORBIDDEN.value());
@@ -83,7 +83,7 @@ public abstract class BaseExceptionAdvice implements IMsg{
         if (ObjectUtils.isNotEmpty(e)) {
             map.put(LogConstant.STACK_TRACE, printStackTraceToString(e));
             map.put(LogConstant.EXCEPTION_NAME, e.getClass().getName());
-            map.put(LogConstant.ERROR_MESSAGE, getErrorMsg(e.getMessage()));
+            map.put(LogConstant.ERROR_MESSAGE, getErrorMsg(e.getMessage(), e));
             StackTraceElement[] elements = e.getStackTrace();
             if (ObjectUtils.isNotEmpty(elements)) {
                 StackTraceElement element = elements[0];

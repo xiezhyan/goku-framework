@@ -21,4 +21,12 @@ public interface IBus {
      */
     String getMsg();
 
+    /**
+     * 可用于国际化标识
+     *
+     * @return 可用于国际化标识
+     */
+    default String getKey() {
+        return getMsg();
+    }
 }

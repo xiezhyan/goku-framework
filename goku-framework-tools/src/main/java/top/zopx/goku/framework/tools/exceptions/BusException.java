@@ -10,21 +10,32 @@ public class BusException extends RuntimeException {
 
     private final String msg;
     private final Integer code;
+    private final String key;
 
+
+    /**
+     * @deprecated 缺少必要条件
+     *
+     * @param msg 异常信息
+     */
+    @Deprecated
     public BusException(String msg) {
-        super(msg);
-        this.msg = msg;
-        this.code = 400;
+        this(msg, 400, msg);
     }
 
     public BusException(String msg, Integer code) {
-        super(msg);
-        this.msg = msg;
-        this.code = code;
+        this(msg, code, msg);
     }
 
     public BusException(IBus bus) {
-        this(bus.getMsg(), bus.getCode());
+        this(bus.getMsg(), bus.getCode(), bus.getKey());
+    }
+
+    public BusException(String msg, Integer code, String key) {
+        super(msg);
+        this.msg = msg;
+        this.code = code;
+        this.key = key;
     }
 
     public String getMsg() {
@@ -35,4 +46,7 @@ public class BusException extends RuntimeException {
         return code;
     }
 
+    public String getKey() {
+        return key;
+    }
 }
