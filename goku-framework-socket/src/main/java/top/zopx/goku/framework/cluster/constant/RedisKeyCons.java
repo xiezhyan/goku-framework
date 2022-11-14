@@ -7,5 +7,5 @@ package top.zopx.goku.framework.cluster.constant;
  */
 public interface RedisKeyCons {
 
-    String SERVER_X_PREFIX = "redis:server_";
+    String SERVER_X_PREFIX = "goku:server:current_info:server_";
 }

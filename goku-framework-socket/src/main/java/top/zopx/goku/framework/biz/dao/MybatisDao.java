@@ -173,6 +173,7 @@ public final class MybatisDao {
      * 配置
      */
     public static class Config {
+        public static final String JSON_KEY = "db";
         /**
          * 配置项字典
          */
@@ -185,20 +186,20 @@ public final class MybatisDao {
          * @return 配置项
          */
         public static Config fromJsonData(JsonObject jsonObj) {
-            if (Objects.isNull(jsonObj) || !jsonObj.has("db")) {
+            if (Objects.isNull(jsonObj) || !jsonObj.has(JSON_KEY)) {
                 LOGGER.error("没有对应的配置项，无法加载");
                 return null;
             }
 
             // MySQL 套件配置
-            JsonObject dbObj = jsonObj.getAsJsonObject("db");
+            JsonObject dbObj = jsonObj.getAsJsonObject(JSON_KEY);
 
             if (null == dbObj) {
                 return null;
             }
 
             Config newConf = new Config();
-            newConf.itemMap = new ConcurrentHashMap<>();
+            newConf.itemMap = new ConcurrentHashMap<>(16);
 
             dbObj.entrySet().forEach(entry ->
                     newConf.itemMap.put(

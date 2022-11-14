@@ -109,6 +109,8 @@ public final class RedisCache {
 
     public static class Config {
 
+        public static final String JSON_KEY = "redis";
+
         private static final Map<String, RedisCacheItemConfig> MAP = new ConcurrentHashMap<>();
 
         public Map<String, RedisCacheItemConfig> getMap() {
@@ -119,13 +121,13 @@ public final class RedisCache {
          * 从配置文件中加载配置
          */
         public static Config fromJsonData(JsonObject jsonObj) {
-            if (Objects.isNull(jsonObj) || !jsonObj.has("redis")) {
+            if (Objects.isNull(jsonObj) || !jsonObj.has(JSON_KEY)) {
                 LOGGER.error("没有对应的配置项，无法加载");
                 return null;
             }
             Config config = new Config();
 
-            JsonObject redisObj = jsonObj.getAsJsonObject("redis");
+            JsonObject redisObj = jsonObj.getAsJsonObject(JSON_KEY);
             redisObj.entrySet().forEach(entry ->
                     MAP.put(
                             entry.getKey(),

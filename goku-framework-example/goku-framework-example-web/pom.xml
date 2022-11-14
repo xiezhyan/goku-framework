@@ -15,6 +15,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>top.zopx</groupId>
+			<artifactId>goku-framework-starter-cache</artifactId>
+			<version>${goku.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>top.zopx</groupId>
+			<artifactId>goku-framework-starter-mybatis</artifactId>
+			<version>${goku.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>top.zopx</groupId>
 			<artifactId>goku-framework-starter-log</artifactId>
 			<version>${goku.version}</version>
 		</dependency>

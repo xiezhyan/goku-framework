@@ -1,0 +1,40 @@
+{
+  "redis": {
+    "cache": {
+      "serverHost": "192.168.10.201",
+      "serverPort": 16379,
+      "index": 10,
+      "password": ""
+    },
+    "pubsub": {
+      "serverHost": "192.168.10.201",
+      "serverPort": 16379,
+      "index": 11,
+      "password": ""
+    }
+  },
+  "db": {
+    "bizDb": {
+      "serverHost": "192.168.10.201",
+      "serverPort": 13306,
+      "db": "test",
+      "userName": "root",
+      "password": "JKLjkl789**..",
+      "initialSize": 1,
+      "minIdle": 1,
+      "maxActive": 32,
+      "maxWait": 2000
+    },
+    "logDb": {
+      "serverHost": "192.168.10.201",
+      "serverPort": 13306,
+      "db": "test",
+      "userName": "root",
+      "password": "JKLjkl789**..",
+      "initialSize": 1,
+      "minIdle": 1,
+      "maxActive": 32,
+      "maxWait": 2000
+    }
+  }
+}
