@@ -53,7 +53,7 @@ public final class RedisCache {
                 JedisPool jedisPool = new JedisPool(
                         item.getServerHost(), item.getServerPort()
                 );
-                LOGGER.debug("JedisPool初始化成功， host={}, port={}", item.getServerHost(), item.getServerPort());
+                LOGGER.debug("JedisPool初始化成功， key={}, host={}, port={}", key, item.getServerHost(), item.getServerPort());
                 JEDIS_POOL_MAP.put(key, jedisPool);
             } catch (Exception e) {
                 LOGGER.error("初始化异常", e);

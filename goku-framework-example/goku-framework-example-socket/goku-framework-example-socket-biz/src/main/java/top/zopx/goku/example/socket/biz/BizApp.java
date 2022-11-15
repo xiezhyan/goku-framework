@@ -84,6 +84,7 @@ public class BizApp implements BaseChannelHandlerFactory {
     }
 
     private static void startReportCurrServer() {
+        LOGGER.info("开始上报信息");
         ReportServer.Config config = new ReportServer.Config();
         config.setServerInfo(() -> {
             final IServerInfo.ServerInfo serverInfo = new IServerInfo.ServerInfo();
