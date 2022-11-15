@@ -32,7 +32,6 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayApp.class);
 
-
     private static int serverId;
     private static String serverName;
     private static String serverIp;

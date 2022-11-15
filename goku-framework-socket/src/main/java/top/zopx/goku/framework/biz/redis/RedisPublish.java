@@ -32,6 +32,7 @@ public final class RedisPublish implements IPublish {
         try (Jedis jedis = RedisCache.getPubsub()) {
             jedis.publish(channel, msg);
         } catch (Exception ex) {
+            ex.printStackTrace();
             // 记录错误日志
             LOGGER.error(ex.getMessage(), ex);
         }

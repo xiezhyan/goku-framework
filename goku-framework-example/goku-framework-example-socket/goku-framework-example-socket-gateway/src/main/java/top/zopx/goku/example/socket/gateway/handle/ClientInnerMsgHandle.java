@@ -1,35 +1,19 @@
 package top.zopx.goku.example.socket.gateway.handle;
 
-import com.google.gson.JsonObject;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
-import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
-import top.zopx.goku.example.socket.common.constant.RedisPubsubEnum;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
-import top.zopx.goku.example.socket.common.util.IdUtil;
-import top.zopx.goku.example.socket.gateway.GatewayApp;
-import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
-import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;
-import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.cluster.util.Timer;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
-import static io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler.HandshakeComplete;
 
 /**
  * 客户端消息处理器

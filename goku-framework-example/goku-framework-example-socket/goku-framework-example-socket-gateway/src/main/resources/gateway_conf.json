@@ -1,13 +1,13 @@
 {
   "redis": {
-    "cache": {
-      "serverHost": "192.168.10.201",
+    "server": {
+      "serverHost": "test.zopx.top",
       "serverPort": 16379,
       "index": 10,
       "password": ""
     },
     "pubsub": {
-      "serverHost": "192.168.10.201",
+      "serverHost": "test.zopx.top",
       "serverPort": 16379,
       "index": 11,
       "password": ""

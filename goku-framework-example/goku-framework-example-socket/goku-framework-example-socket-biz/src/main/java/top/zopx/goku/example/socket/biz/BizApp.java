@@ -9,6 +9,7 @@ import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
 import top.zopx.goku.framework.biz.dao.MybatisDao;
 import top.zopx.goku.framework.biz.redis.RedisCache;
+import top.zopx.goku.framework.biz.redis.RedisPublish;
 import top.zopx.goku.framework.biz.report.RedisReportServerInfo;
 import top.zopx.goku.framework.biz.report.ReportServer;
 import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
@@ -84,20 +85,24 @@ public class BizApp implements BaseChannelHandlerFactory {
     }
 
     private static void startReportCurrServer() {
-        LOGGER.info("开始上报信息");
-        ReportServer.Config config = new ReportServer.Config();
-        config.setServerInfo(() -> {
-            final IServerInfo.ServerInfo serverInfo = new IServerInfo.ServerInfo();
-            serverInfo.setServerId(serverId);
-            serverInfo.setServerName(serverName);
-            serverInfo.setServerIp(serverIp);
-            serverInfo.setServerPort(serverPort);
-            serverInfo.setServerJobTypeSet(serverJobTypeSet);
 
-            serverInfo.setLoadCount(0);
-            return serverInfo;
-        });
-        config.setReportServerInfo(new RedisReportServerInfo());
+        RedisPublish redisPublish = new RedisPublish();
+
+        LOGGER.info("开始上报信息");
+        ReportServer.Config config =
+                new ReportServer.Config()
+                        .setServerInfo(() -> {
+                            final IServerInfo.ServerInfo serverInfo = new IServerInfo.ServerInfo();
+                            serverInfo.setServerId(serverId);
+                            serverInfo.setServerName(serverName);
+                            serverInfo.setServerIp(serverIp);
+                            serverInfo.setServerPort(serverPort);
+                            serverInfo.setServerJobTypeSet(serverJobTypeSet);
+
+                            serverInfo.setLoadCount(0);
+                            return serverInfo;
+                        })
+                        .setReportServerInfo(new RedisReportServerInfo(redisPublish));
         new ReportServer(config).start();
     }
 

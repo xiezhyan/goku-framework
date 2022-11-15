@@ -44,9 +44,6 @@ public final class GatewayToBizServerAcceptor {
 
     private static final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "goku-websocket-client-work");
 
-    private static final EpollEventLoopGroup EPOLL_EVENT_LOOP_GROUP = new EpollEventLoopGroup(THREAD_FACTORY);
-    private static final NioEventLoopGroup NIO_EVENT_LOOP_GROUP = new NioEventLoopGroup(THREAD_FACTORY);
-
     /**
      * 使用配置
      */
@@ -134,8 +131,8 @@ public final class GatewayToBizServerAcceptor {
             b.group(
                     null == work ?
                             isLinux() ?
-                                    EPOLL_EVENT_LOOP_GROUP :
-                                    NIO_EVENT_LOOP_GROUP :
+                                    new EpollEventLoopGroup(THREAD_FACTORY) :
+                                    new NioEventLoopGroup(THREAD_FACTORY) :
                             work
             );
 

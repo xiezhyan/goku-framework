@@ -16,7 +16,11 @@ import top.zopx.goku.framework.tools.util.json.JsonUtil;
  */
 public class RedisReportServerInfo implements IReportServerInfo{
 
-    private final RedisPublish redisPublish = new RedisPublish();
+    private final RedisPublish redisPublish;
+
+    public RedisReportServerInfo(RedisPublish redisPublish) {
+        this.redisPublish = redisPublish;
+    }
 
     @Override
     public void report(IServerInfo.ServerInfo newInfo) {

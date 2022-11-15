@@ -24,7 +24,7 @@ public class ReportServer {
 
         IServerInfo serverInfo;
 
-        IReportServerInfo reportServerInfo = new RedisReportServerInfo();
+        IReportServerInfo reportServerInfo;
 
         public int getReportInterval() {
             return reportInterval;

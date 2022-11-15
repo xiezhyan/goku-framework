@@ -52,9 +52,10 @@ public class NewServerConnectSub implements
             return;
         }
 
-        LOGGER.info("发现新服务连入");
-
         Integer bizServerId = StringUtil.toInteger(msg);
+
+        LOGGER.debug("发现新服务连入, biz_server_id = {}", bizServerId);
+
         try (Jedis jedis = RedisCache.getServerCache()) {
             // 获取服务器信息
             String key = RedisKeyCons.KEY_SERVER_X_PREFIX.format(bizServerId);
