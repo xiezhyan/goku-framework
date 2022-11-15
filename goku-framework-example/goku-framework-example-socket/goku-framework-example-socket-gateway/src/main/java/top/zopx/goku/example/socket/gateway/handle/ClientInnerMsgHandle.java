@@ -1,0 +1,146 @@
+package top.zopx.goku.example.socket.gateway.handle;
+
+import com.google.gson.JsonObject;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.websocketx.WebSocketClientProtocolHandler;
+import io.netty.util.AttributeKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
+import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
+import top.zopx.goku.example.socket.common.constant.RedisPubsubEnum;
+import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
+import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.example.socket.common.util.IdUtil;
+import top.zopx.goku.example.socket.gateway.GatewayApp;
+import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
+import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;
+import top.zopx.goku.framework.biz.redis.RedisCache;
+import top.zopx.goku.framework.cluster.util.Timer;
+import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler.HandshakeComplete;
+
+/**
+ * 客户端消息处理器
+ * @author 俗世游子
+ */
+public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
+    /**
+     * 日志对象
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientInnerMsgHandle.class);
+    /**
+     * Ping 间隔时间
+     */
+    private static final int PING_INTERVAL_TIME = 5000;
+    /**
+     * Ping 心跳
+     */
+    private ScheduledFuture<?> pingHeartbeat;
+
+    private static final AtomicInteger ID_PING = new AtomicInteger(0);
+
+    @Override
+    protected ChannelHandler[] getChannelHandlerArray() {
+        return new ChannelHandler[]{
+            new ClientInnerMsgCodec()
+        };
+    }
+
+    @Override
+    public void userEventTriggered(
+            ChannelHandlerContext ctx, Object eventObj) {
+        if (null == ctx ||
+                !(eventObj instanceof WebSocketClientProtocolHandler.ClientHandshakeStateEvent)) {
+            return;
+        }
+
+        WebSocketClientProtocolHandler.ClientHandshakeStateEvent
+                realEvent = (WebSocketClientProtocolHandler.ClientHandshakeStateEvent) eventObj;
+
+        if (WebSocketClientProtocolHandler.ClientHandshakeStateEvent.HANDSHAKE_COMPLETE != realEvent) {
+            return;
+        }
+
+        // 执行 Ping 心跳
+        pingHeartbeat = Timer.scheduleWithFixedDelay(
+                () -> doPing(ctx),
+                PING_INTERVAL_TIME, PING_INTERVAL_TIME,
+                TimeUnit.MILLISECONDS
+        );
+    }
+
+    private void doPing(ChannelHandlerContext ctx) {
+        if (null == ctx) {
+            return;
+        }
+
+        final ClientInnerMsg innerMsg = new ClientInnerMsg();
+        ID_PING.incrementAndGet();
+//        CommProtocol.PingCmd.Builder b = CommProtocol.PingCmd.newBuilder();
+//        b.setPingId(ID_PING.incrementAndGet());
+//        CommProtocol.PingCmd cmdObj = b.build();
+//
+//        innerMsg.setGatewayId(GatewayApp.getServerId());
+//        innerMsg.setRemoteSessionId(-1);
+//        innerMsg.setFromUserId(-1);
+//        innerMsg.setMsgCode(CommProtocol.CommMsgCodeDef._PingCmd_VALUE);
+//        innerMsg.setData(cmdObj.toByteArray());
+
+        ctx.writeAndFlush(innerMsg);
+    }
+
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        if (null == ctx) {
+            return;
+        }
+
+        if (null != pingHeartbeat) {
+            LOGGER.debug("停止 Ping");
+            pingHeartbeat.cancel(true);
+        }
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
+        if (null == ctx ||
+                !(msgObj instanceof ClientInnerMsg innerMsg)) {
+            return;
+        }
+
+        // 获取内部服务器消息
+        // 一般是由 BizServer 应答给当前服务器 ( 也就是 ProxyServer ) 的消息...
+        // 如果是由服务器发回来的 Ping 结果,
+        // 则直接跳过...
+
+        LOGGER.info(
+                "收到内部服务器返回消息, msgCode = {}",
+                innerMsg.getMsgCode()
+        );
+
+        //
+        // GatewayServer 收到服务器内部消息 ( ClientInnerMsg ) 时,
+        // 一般做法就是:
+        // 将这个消息拆包装, 把实际消息返回给客户端...
+        // @see ClientMsgEncode
+        //
+        // 根据会话 Id 写出消息
+        ClientChannelGroup.writeAndFlushBySessionId(
+                innerMsg, // 该消息会经过 ClientMsgEncoder 编码
+                innerMsg.getRemoteSessionId()
+        );
+    }
+}

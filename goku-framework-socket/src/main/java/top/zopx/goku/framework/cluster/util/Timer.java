@@ -3,6 +3,7 @@ package top.zopx.goku.framework.cluster.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,15 @@ public class Timer {
                              long delay,
                              TimeUnit unit) {
         SCHEDULED_THREAD_POOL_EXECUTOR.scheduleWithFixedDelay(
+                new SafeRunner(command), initialDelay, delay, unit
+        );
+    }
+
+    public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable command,
+                                                            long initialDelay,
+                                                            long delay,
+                                                            TimeUnit unit) {
+        return SCHEDULED_THREAD_POOL_EXECUTOR.scheduleWithFixedDelay(
                 new SafeRunner(command), initialDelay, delay, unit
         );
     }

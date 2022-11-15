@@ -5,8 +5,14 @@ import io.netty.channel.ChannelHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
+import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandler;
+import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
+import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
+import top.zopx.goku.framework.biz.redis.RedisSubscribe;
+import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
 import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
@@ -69,6 +75,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         }
 
         startGatewayServerApp();
+        startSubServer();
     }
 
     private static void startGatewayServerApp() {
@@ -83,7 +90,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
                                 WebsocketClient.create()
                                         .setHost(serverIp)
                                         .setPort(serverPort)
-                                        .setPath("/ws")
+                                        .setPath(Constant.WEBSOCKET_PATH)
                                         .build()
                         )
                         .build()
@@ -91,9 +98,21 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         LOGGER.info("--> 网关服务:{} 已启动 <--", serverName);
     }
 
+    private static void startSubServer() {
+        String[] channelArr = {
+                PublishCons.REGISTER_SERVER
+        };
+
+        ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();
+        group.add(new NewServerConnectSub());
+
+        new RedisSubscribe().subscribe(channelArr, group);
+    }
+
+
     @Override
     public ChannelHandler createWebsocketMsgHandler() {
-        return BaseChannelHandlerFactory.super.createWebsocketMsgHandler();
+        return new ClientMsgHandler();
     }
 
     public static int getServerId() {

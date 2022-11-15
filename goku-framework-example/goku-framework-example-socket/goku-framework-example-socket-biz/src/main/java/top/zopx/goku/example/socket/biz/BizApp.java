@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
 import top.zopx.goku.framework.biz.dao.MybatisDao;
 import top.zopx.goku.framework.biz.redis.RedisCache;
@@ -91,6 +92,7 @@ public class BizApp implements BaseChannelHandlerFactory {
             serverInfo.setServerIp(serverIp);
             serverInfo.setServerPort(serverPort);
             serverInfo.setServerJobTypeSet(serverJobTypeSet);
+
             serverInfo.setLoadCount(0);
             return serverInfo;
         });
@@ -110,7 +112,7 @@ public class BizApp implements BaseChannelHandlerFactory {
                                 WebsocketClient.create()
                                         .setHost(serverIp)
                                         .setPort(serverPort)
-                                        .setPath("/ws")
+                                        .setPath(Constant.WEBSOCKET_PATH)
                                         .build()
                         )
                         .build()
