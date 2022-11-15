@@ -95,7 +95,6 @@ public final class ServerSelector {
     }
 
     private static Client getServerConnByServerId(NewServerConnectSub instance, int selectServerId, Out<Long> out) {
-
         // 获取服务器资料
         Client.ServerProfile profile = instance.getServerProfileById(selectServerId);
 
@@ -104,7 +103,6 @@ public final class ServerSelector {
                 !profile.getClient().isReady()) {
             return null;
         }
-
 
         return profile.getClient();
     }
