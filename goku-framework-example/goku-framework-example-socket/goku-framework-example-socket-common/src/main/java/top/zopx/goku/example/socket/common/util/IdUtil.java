@@ -72,4 +72,14 @@ public final class IdUtil {
             return getSessionId(ctx.channel());
         }
     }
+
+    public static void putUserId(ChannelHandlerContext ctx, long userId) {
+        if (null != ctx) {
+            putUserId(ctx.channel(), userId);
+        }
+    }
+
+    private static void putUserId(Channel channel, long userId) {
+        ChannelUtil.set(channel, AttributeKeyCons.USER_ATTR, userId);
+    }
 }

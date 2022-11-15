@@ -12,7 +12,12 @@ public enum ServerTypeEnum implements IKey {
     /**
      * 登录
      */
-    AUTH(0, "AUTH");
+    AUTH(0, "AUTH"),
+    /**
+     * CHAT
+     */
+    CHAT(1, "CHAT"),
+    ;
 
     private final int msgCode;
     private final String msgType;

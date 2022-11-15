@@ -7,4 +7,13 @@ package top.zopx.goku.example.socket.common.constant;
  */
 public class Constant {
     public static final String WEBSOCKET_PATH = "/ws";
+
+    /**
+     * 用户所在代理服务器 Id
+     */
+    public static final String USER_AT_PROXY_SERVER_ID = "user_at_gateway_server_id";
+    /**
+     * 用户远程会话 Id
+     */
+    public static final String USER_REMOTE_SESSION_ID = "user_remote_session_id";
 }

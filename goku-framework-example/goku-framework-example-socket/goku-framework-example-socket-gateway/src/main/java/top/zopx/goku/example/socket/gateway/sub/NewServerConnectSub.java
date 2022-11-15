@@ -1,13 +1,11 @@
 package top.zopx.goku.example.socket.gateway.sub;
 
-import com.google.gson.JsonObject;
 import io.netty.channel.ChannelHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.constant.Constant;
-import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.gateway.handle.ClientInnerMsgHandle;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
@@ -40,6 +38,14 @@ public class NewServerConnectSub implements
 
     private List<Client.ServerProfile> serverProfileList;
 
+    public static NewServerConnectSub getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    private static class Holder {
+        public static final NewServerConnectSub INSTANCE = new NewServerConnectSub();
+    }
+
     @Override
     public void onMsg(String channel, String msg) {
         if (!Objects.equals(channel, PublishCons.REGISTER_SERVER) || StringUtils.isBlank(msg)) {
@@ -51,7 +57,7 @@ public class NewServerConnectSub implements
         Integer bizServerId = StringUtil.toInteger(msg);
         try (Jedis jedis = RedisCache.getServerCache()) {
             // 获取服务器信息
-            String key = RedisKeyCons.SERVER_X_PREFIX + bizServerId;
+            String key = RedisKeyCons.KEY_SERVER_X_PREFIX.format(bizServerId);
             String serverInfoStr = jedis.get(key);
             if (StringUtils.isBlank(serverInfoStr)) {
                 LOGGER.error("未查询到服务的基本信息， serverId = {}", bizServerId);

@@ -14,7 +14,7 @@ public interface PublishCons {
      */
     String REGISTER_SERVER = "goku:server:publish:register_server";
     /**
-     * 断线重连通知
+     * 连接转移
      */
     String CONNECTION_TRANSFER_NOTICE = "goku:server:publish:connection_transfer_notice";
     /**

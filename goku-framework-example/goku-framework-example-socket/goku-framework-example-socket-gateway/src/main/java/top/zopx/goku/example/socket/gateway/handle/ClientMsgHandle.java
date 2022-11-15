@@ -16,7 +16,6 @@ import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 
-import javax.sound.midi.MidiUnavailableException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,11 @@ import static io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHand
  * 客户端消息处理器
  * @author 俗世游子
  */
-public class ClientMsgHandler extends BaseDefaultChannelHandler {
+public class ClientMsgHandle extends BaseDefaultChannelHandler {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientMsgHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientMsgHandle.class);
 
     /**
      * HTTP 头前缀
@@ -43,7 +42,16 @@ public class ClientMsgHandler extends BaseDefaultChannelHandler {
     protected ChannelHandler[] getChannelHandlerArray() {
         return new ChannelHandler[]{
                 new ClientMsgDecode(),
-                new ClientMsgEncode()
+                new ClientMsgEncode(),
+                // ping处理
+                // 重新连接处理
+                new ReconnCmdHandle(),
+                // 检票处理
+                new CheckInTicketCmdHandle(),
+                // 最后的检测
+                new UserIdValidatorHandle(),
+                // 内部消息转发
+                new ClientMsgRoute()
         };
     }
 

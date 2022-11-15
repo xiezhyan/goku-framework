@@ -72,7 +72,7 @@ public abstract class BaseInnerMsg {
     /**
      * 来自用户
      */
-    private int fromUserId;
+    private long fromUserId;
 
     /**
      * 客户端IP
@@ -104,11 +104,11 @@ public abstract class BaseInnerMsg {
         this.remoteSessionId = remoteSessionId;
     }
 
-    public int getFromUserId() {
+    public long getFromUserId() {
         return fromUserId;
     }
 
-    public void setFromUserId(int fromUserId) {
+    public void setFromUserId(long fromUserId) {
         this.fromUserId = fromUserId;
     }
 

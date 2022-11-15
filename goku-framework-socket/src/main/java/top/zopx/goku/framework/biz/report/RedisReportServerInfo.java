@@ -22,7 +22,7 @@ public class RedisReportServerInfo implements IReportServerInfo{
     public void report(IServerInfo.ServerInfo newInfo) {
         try (Jedis redisCache = RedisCache.getServerCache()) {
             // 缓存关键字
-            final String redisKey = RedisKeyCons.SERVER_X_PREFIX + newInfo.getServerId();
+            final String redisKey = RedisKeyCons.KEY_SERVER_X_PREFIX.format(newInfo.getServerId());
             // 缓存过期时间
             final int expireTime = 10;
 

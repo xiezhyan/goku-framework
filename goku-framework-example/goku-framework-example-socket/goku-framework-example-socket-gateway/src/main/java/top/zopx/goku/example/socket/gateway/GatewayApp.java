@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
-import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandler;
+import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
@@ -35,7 +35,6 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
     private static int serverId;
     private static String serverName;
-    private static String serverJobTypeSet;
     private static String serverIp;
     private static int serverPort;
 
@@ -57,7 +56,6 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
         serverId = StringUtil.toInteger(commandLnMap.get(ServerCommandLineEnum.SERVER_ID.getLongOpt()));
         serverName = commandLnMap.get(ServerCommandLineEnum.SERVER_NAME.getLongOpt());
-        serverJobTypeSet = commandLnMap.get(ServerCommandLineEnum.SERVER_JOB_TYPE.getLongOpt());
         serverIp = commandLnMap.get(ServerCommandLineEnum.SERVER_HOST.getLongOpt());
         serverPort = StringUtil.toInteger(commandLnMap.get(ServerCommandLineEnum.SERVER_PORT.getLongOpt()));
 
@@ -104,7 +102,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         };
 
         ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();
-        group.add(new NewServerConnectSub());
+        group.add(NewServerConnectSub.getInstance());
 
         new RedisSubscribe().subscribe(channelArr, group);
     }
@@ -112,7 +110,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
     @Override
     public ChannelHandler createWebsocketMsgHandler() {
-        return new ClientMsgHandler();
+        return new ClientMsgHandle();
     }
 
     public static int getServerId() {

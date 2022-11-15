@@ -78,4 +78,22 @@ public final class ClientChannelGroup {
     private static Channel getChannelBySessionId(int remoteSessionId) {
         return CHANNEL_SESSION_MAP.get(remoteSessionId);
     }
+
+    public static void relative(long userId, int sessionId) {
+        USER_ID_AND_SESSION_ID_MAP.put(userId, sessionId);
+    }
+
+    public static Channel getChannelByUserId(long userId) {
+        Integer sessionId = USER_ID_AND_SESSION_ID_MAP.get(userId);
+        if (null == sessionId) {
+            return null;
+        }
+
+        Channel channel = CHANNEL_SESSION_MAP.get(sessionId);
+        if (null == channel) {
+            USER_ID_AND_SESSION_ID_MAP.remove(userId);
+        }
+        return channel;
+
+    }
 }
