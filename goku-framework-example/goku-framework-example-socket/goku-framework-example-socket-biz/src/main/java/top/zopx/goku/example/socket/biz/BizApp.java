@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.goku.example.socket.biz.handle.BizMsgHandle;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
 import top.zopx.goku.example.socket.common.util.UKey;
@@ -138,7 +139,7 @@ public class BizApp implements BaseChannelHandlerFactory {
 
     @Override
     public ChannelHandler createWebsocketMsgHandler() {
-        return BaseChannelHandlerFactory.super.createWebsocketMsgHandler();
+        return new BizMsgHandle();
     }
 
 

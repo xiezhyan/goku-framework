@@ -47,11 +47,11 @@ public final class ClientInnerMsgCodec extends CombinedChannelDuplexHandler<Clie
                 // 创建内部服务器消息
                 ClientInnerMsg innerMsg = new ClientInnerMsg();
 
-                innerMsg.setGatewayId(byteBuf.readInt());    // proxyServerId
+                innerMsg.setGatewayId(byteBuf.readInt());    // gatewayId
                 innerMsg.setRemoteSessionId(byteBuf.readInt()); // remoteSessionId
                 innerMsg.setClientIp(readStr(byteBuf));         // clientIP
-                innerMsg.setFromUserId(byteBuf.readInt());      // fromUserId
-                innerMsg.setMsgCode(byteBuf.readInt());         // msgCode
+                innerMsg.setFromUserId(byteBuf.readLong());      // fromUserId
+                innerMsg.setMsgCode(byteBuf.readShort());         // msgCode
 
                 // 消息内容
                 byte[] msgBody = new byte[byteBuf.readableBytes()];

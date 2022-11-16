@@ -14,7 +14,7 @@ public abstract class BaseCmdHandleContext {
     /**
      * 代理服务器 Id
      */
-    private String gatewayServerId = null;
+    private int gatewayServerId;
 
     /**
      * 远程会话 Id
@@ -29,13 +29,13 @@ public abstract class BaseCmdHandleContext {
     /**
      * 来自用户 Id
      */
-    private int fromUserId = -1;
+    private long fromUserId = -1L;
 
-    public String getGatewayServerId() {
+    public int getGatewayServerId() {
         return gatewayServerId;
     }
 
-    public BaseCmdHandleContext setGatewayServerId(String gatewayServerId) {
+    public BaseCmdHandleContext setGatewayServerId(int gatewayServerId) {
         this.gatewayServerId = gatewayServerId;
         return this;
     }
@@ -58,11 +58,11 @@ public abstract class BaseCmdHandleContext {
         return this;
     }
 
-    public int getFromUserId() {
+    public long getFromUserId() {
         return fromUserId;
     }
 
-    public BaseCmdHandleContext setFromUserId(int fromUserId) {
+    public BaseCmdHandleContext setFromUserId(long fromUserId) {
         this.fromUserId = fromUserId;
         return this;
     }

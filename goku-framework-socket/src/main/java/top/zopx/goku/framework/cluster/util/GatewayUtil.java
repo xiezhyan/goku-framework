@@ -20,9 +20,9 @@ public final class GatewayUtil {
     }
 
     /**
-     * 信道字典, key = proxyServerId
+     * 信道字典, key = gatewayId
      */
-    private static final Map<Integer, Channel> GATEWAY_CHANNEL_MAP = new ConcurrentHashMap<>();
+    private static final Map<Integer, Channel> GATEWAY_CHANNEL_MAP = new ConcurrentHashMap<>(64);
 
 
     /**
