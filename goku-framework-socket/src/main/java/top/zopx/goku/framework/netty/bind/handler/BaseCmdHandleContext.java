@@ -86,7 +86,7 @@ public abstract class BaseCmdHandleContext {
      * @param errorMsg  错误消息
      * @return 信道预期
      */
-    public abstract ChannelFuture sendError(int errorCode, String errorMsg);
+    public abstract ChannelFuture send(int errorCode, String errorMsg);
 
     /**
      * 写出消息

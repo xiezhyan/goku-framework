@@ -30,7 +30,8 @@ public class CmdHandleContext extends BaseCmdHandleContext {
      * @param errorMsg  错误消息
      * @return 信道预期
      */
-    public ChannelFuture sendError(int errorCode, String errorMsg) {
+    @Override
+    public ChannelFuture send(int errorCode, String errorMsg) {
         Common.Response response = Common.Response.newBuilder()
                 .setMsg(errorMsg)
                 .setCode(errorCode)
@@ -45,6 +46,7 @@ public class CmdHandleContext extends BaseCmdHandleContext {
      * @param msgObj 消息对象
      * @return 信道预期
      */
+    @Override
     public ChannelFuture writeAndFlush(Object msgObj) {
         if (!(msgObj instanceof GeneratedMessageV3 messageV3) ||
                 null == channel ||
