@@ -44,6 +44,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
                 new ClientMsgDecode(),
                 new ClientMsgEncode(),
                 // ping处理
+                new PingHandle(),
                 // 重新连接处理
                 new ReconnCmdHandle(),
                 // 检票处理

@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
+import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.constant.IKey;
 import top.zopx.goku.framework.biz.recognizer.BaseMsgCodeRecognizer;
 import top.zopx.goku.framework.biz.recognizer.CmdHandlerMsgRecognizer;
@@ -35,8 +36,11 @@ public final class MsgRecognizer extends BaseMsgCodeRecognizer {
     @Override
     protected void init() {
         for (IKey key : ServerTypeEnum.values()) {
-            CmdHandlerMsgRecognizer.tryInit(null, null, key);
+            CmdHandlerMsgRecognizer.tryInit(
+                    Common.class,
+                    Common.CommonDef.values(),
+                    key
+            );
         }
-        CmdHandlerMsgRecognizer.tryInit(null, null, null);
     }
 }

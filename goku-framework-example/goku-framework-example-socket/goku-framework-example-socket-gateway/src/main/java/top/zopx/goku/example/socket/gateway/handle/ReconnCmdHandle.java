@@ -10,11 +10,15 @@ import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
 import top.zopx.goku.example.socket.common.util.IdUtil;
+import top.zopx.goku.example.socket.common.util.UKey;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
+import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 客户端消息处理器
@@ -37,18 +41,31 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
         }
 
         // 如果不是重连命令，直接return
-        // semiClientMsg.getMsgCode()
+        int msgCode = semiClientMsg.getMsgCode();
+        if (Common.CommonDef._ReconnRequest_VALUE != msgCode) {
+            super.channelRead(ctx, msg);
+            return;
+        }
 
-        long userId = 0L;
-        // Ukey校验，或者基础校验
-        if (false) {
+        Common.ReconnRequest reconnRequest = Common.ReconnRequest.parseFrom(semiClientMsg.getData());
+
+        long userId = reconnRequest.getUserId();
+
+        if (!UKey.vertify(userId, reconnRequest.getUkey(), reconnRequest.getUkeyExpireAt())) {
             ctx.disconnect();
             return;
         }
 
         if (renewConn(ctx, userId, null)) {
             // 构建重连结果
+            Common.ReconnResponse response = Common.ReconnResponse.newBuilder()
+                    .setOk(true)
+                    .setUserId(userId)
+                    .setUkey(reconnRequest.getUkey())
+                    .setUkeyExpire(reconnRequest.getUkeyExpireAt())
+                    .build();
             // 发送重连结果
+            ctx.writeAndFlush(response);
         }
     }
 
@@ -71,14 +88,13 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
             String userInfoKey = RedisKeyCons.KEY_USER_INFO.format(userId);
             // 如果已经标记所在代理服务器,
             // 那么就删除这个标记!
-            Long delOther = jedis.hdel(
+            long delOther = jedis.hdel(
                     userInfoKey,
                     Constant.USER_AT_PROXY_SERVER_ID,
                     Constant.USER_REMOTE_SESSION_ID
             );
 
-            if (null != delOther &&
-                    delOther > 0) {
+            if (delOther > 0) {
                 // 如果删除成功,
                 // 则说明用户已经在其他代理服务器上建立连接,
                 // 通过 RECONNECT_USER_NOTICE 通知其断开连接!
@@ -109,12 +125,12 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
                 ClientMsgHandle msgHandler = oldCh.pipeline().get(ClientMsgHandle.class);
                 msgHandler.setConnAlreadyTransfer(true);
 
-//                CommProtocol.KickOutUserResult resultMsg = CommProtocol.KickOutUserResult.newBuilder()
-//                        .setReason("已经连接到其他服务器")
-//                        .build();
-//
-//                oldCh.writeAndFlush(resultMsg);
-//                oldCh.disconnect().sync().await(2, TimeUnit.SECONDS);
+                Common.KickOutUserResponse response = Common.KickOutUserResponse.newBuilder()
+                        .setReason("成功连接到其他服务器")
+                        .build();
+
+                oldCh.writeAndFlush(response);
+                oldCh.disconnect().sync().await(2, TimeUnit.SECONDS);
             }
 
             LOGGER.info("检票成功, 设置用户 Id = {}", userId);

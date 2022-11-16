@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
+import top.zopx.goku.example.socket.common.util.UKey;
 import top.zopx.goku.framework.biz.dao.MybatisDao;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisPublish;
@@ -76,6 +77,11 @@ public class BizApp implements BaseChannelHandlerFactory {
         final MybatisDao.Config mybatisConf = MybatisDao.Config.fromJsonData(configObj);
         if (null != mybatisConf) {
             MybatisDao.init(mybatisConf, BizApp.class);
+        }
+
+        final UKey.Config config = UKey.Config.fromJsonData(configObj);
+        if (null != config) {
+            UKey.init(config);
         }
 
         // 启动服务

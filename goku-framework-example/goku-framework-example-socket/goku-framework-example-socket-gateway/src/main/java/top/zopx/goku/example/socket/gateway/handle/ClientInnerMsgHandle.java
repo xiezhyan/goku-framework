@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.example.socket.gateway.GatewayApp;
+import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.cluster.util.Timer;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 
@@ -71,16 +73,16 @@ public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
         }
 
         final ClientInnerMsg innerMsg = new ClientInnerMsg();
-        ID_PING.incrementAndGet();
-//        CommProtocol.PingCmd.Builder b = CommProtocol.PingCmd.newBuilder();
-//        b.setPingId(ID_PING.incrementAndGet());
-//        CommProtocol.PingCmd cmdObj = b.build();
-//
-//        innerMsg.setGatewayId(GatewayApp.getServerId());
-//        innerMsg.setRemoteSessionId(-1);
-//        innerMsg.setFromUserId(-1);
-//        innerMsg.setMsgCode(CommProtocol.CommMsgCodeDef._PingCmd_VALUE);
-//        innerMsg.setData(cmdObj.toByteArray());
+
+        Common.PingRequest pingRequest = Common.PingRequest.newBuilder()
+                .setPingId(ID_PING.incrementAndGet())
+                .build();
+
+        innerMsg.setGatewayId(GatewayApp.getServerId());
+        innerMsg.setRemoteSessionId(-1);
+        innerMsg.setFromUserId(-1);
+        innerMsg.setMsgCode(Common.CommonDef._PingRequest_VALUE);
+        innerMsg.setData(pingRequest.toByteArray());
 
         ctx.writeAndFlush(innerMsg);
     }

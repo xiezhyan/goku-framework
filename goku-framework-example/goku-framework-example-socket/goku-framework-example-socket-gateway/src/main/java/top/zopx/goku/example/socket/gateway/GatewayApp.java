@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
+import top.zopx.goku.example.socket.common.util.UKey;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
@@ -69,6 +70,11 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         final RedisCache.Config redisConf = RedisCache.Config.fromJsonData(configObj);
         if (null != redisConf) {
             RedisCache.init(redisConf);
+        }
+
+        final UKey.Config config = UKey.Config.fromJsonData(configObj);
+        if (null != config) {
+            UKey.init(config);
         }
 
         startGatewayServerApp();

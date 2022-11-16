@@ -1,4 +1,8 @@
 {
+  "ukey": {
+    "uKeyPassword": "123456",
+    "uKeyTTL": 2592000000
+  },
   "redis": {
     "server": {
       "serverHost": "test.zopx.top",
