@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.goku.framework.tools.exceptions.BusException;
 
 /**
  * 基础业务处理类

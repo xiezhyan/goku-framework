@@ -1,8 +1,10 @@
 package top.zopx.goku.example.socket.gateway.router;
 
+import com.google.gson.JsonObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
@@ -14,8 +16,10 @@ import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.gateway.selector.ServerSelector;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
+import top.zopx.goku.example.socket.proto.auth.Auth;
 import top.zopx.goku.framework.biz.constant.IKey;
 import top.zopx.goku.framework.biz.selector.Client;
+import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.net.InetSocketAddress;
@@ -71,11 +75,11 @@ public class AuthRoute extends ChannelInboundHandlerAdapter {
             return;
         }
 
-//        if (semiClientMsg.getMsgCode() == PassportServerProtocol.PassportServerMsgCodeDef._UserLoginCmd_VALUE) {
-        // 如果是用户登陆命令,
-        // 执行补充逻辑
-        supplyUserLoginCmd(ctx, semiClientMsg);
-//        }
+        if (semiClientMsg.getMsgCode() == Auth.AuthDef._LoginRequest_VALUE) {
+            // 如果是用户登陆命令,
+            // 执行补充逻辑
+            supplyUserLoginCmd(ctx, semiClientMsg);
+        }
 
         final ClientInnerMsg innerMsg = new ClientInnerMsg();
         innerMsg.setGatewayId(GatewayApp.getServerId());
@@ -119,18 +123,17 @@ public class AuthRoute extends ChannelInboundHandlerAdapter {
             LOGGER.info("client ip = {}", clientIpAddr);
 
             // 解析为用户登陆命令
-//            PassportServerProtocol.UserLoginCmd cmdObj = PassportServerProtocol.UserLoginCmd.parseFrom(clientMsg.getMsgBody());
-//
-//            JSONObject jsonObj = JSONObject.parseObject(cmdObj.getPropertyStr());
-//            jsonObj.put("clientIpAddr", clientIpAddr);
-//
-//            // 创建构建器重新设置登陆方式和属性字符串
-//            PassportServerProtocol.UserLoginCmd.Builder b = cmdObj.newBuilderForType();
-//            b.setLoginMethod(cmdObj.getLoginMethod());
-//            b.setPropertyStr(jsonObj.toJSONString());
-//
+            final Auth.LoginRequest loginRequest = Auth.LoginRequest.parseFrom(clientMsg.getData());
+            JsonObject jsonObj = JsonUtil.getInstance().toObject(loginRequest.getLogin(), JsonObject.class);
+            jsonObj.addProperty("clientIp", clientIpAddr);
+
 //            // 修改消息体字节数组
-//            clientMsg.setData(b.build().toByteArray());
+            clientMsg.setData(
+                    loginRequest.newBuilderForType()
+                            .setLoginType(loginRequest.getLoginType())
+                            .setLogin(jsonObj.toString())
+                            .build().toByteArray()
+            );
         } catch (Exception ex) {
             // 记录错误日志
             LOGGER.error(ex.getMessage(), ex);

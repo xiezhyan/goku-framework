@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
+import top.zopx.goku.example.socket.proto.auth.Auth;
 
 /**
  * 用户 Id 验证器
@@ -29,7 +30,7 @@ public class UserIdValidatorHandle extends ChannelInboundHandlerAdapter {
             boolean izSafeMsg;
 
             switch (semiClientMsg.getMsgCode()) {
-                case 1:
+                case Auth.AuthDef._LoginRequest_VALUE:
                     izSafeMsg = true;
                     break;
                 default:

@@ -98,6 +98,7 @@ public class NewServerConnectSub implements
                         .setServerName(serverInfoObj.getServerName())
                         .setServerType(ConnectClient.Constant.WS)
                         .setPath(Constant.WEBSOCKET_PATH)
+                        .setServerJobTypeSet(serverInfoObj.getServerJobTypeSet())
                         .setChannelHandlerFactory(this)
                         .setCloseCallback(this)
                         .build(),
