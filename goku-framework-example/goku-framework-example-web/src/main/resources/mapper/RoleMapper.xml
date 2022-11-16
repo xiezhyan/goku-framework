@@ -36,7 +36,7 @@
 				</foreach>
 			</if>
 		</where>
-		<if test="sorts != null and sorts.length > 0">
+		<if test="sorts != null and sorts.size > 0">
 			ORDER BY
 			<foreach collection="sorts" item="sort" separator=",">
 				#{sort.lineField} #{sort.orderBy}

@@ -1,5 +1,7 @@
 package top.zopx.goku.framework.tools.entity.vo;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +27,7 @@ public class Sorted implements Serializable {
     /**
      * 转换之后字段
      */
-    private String lineField = "id";
+    transient private String lineField = "id";
 
     public String getField() {
         if (this.field.contains("_")) {

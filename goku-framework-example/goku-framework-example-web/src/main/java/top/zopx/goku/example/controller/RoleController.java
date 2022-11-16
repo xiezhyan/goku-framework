@@ -18,5 +18,7 @@ import top.zopx.goku.framework.web.util.bind.annotation.Bind;
 @RestController
 @RequestMapping("/role")
 public class RoleController extends BaseController<RoleVO, RoleDTO, Role, RoleService> {
+
+    // /role/page?sorteds[0].field=createTime
 }
 
