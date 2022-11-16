@@ -1,6 +1,7 @@
 package top.zopx.goku.example.configurator;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import top.zopx.goku.example.util.MessageUtil;
 import top.zopx.goku.framework.log.configurator.advice.BaseExceptionAdvice;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 
@@ -14,7 +15,7 @@ public class GlobalExceptionAdvice extends BaseExceptionAdvice {
     @Override
     public String getErrorMsg(String sourceMsg, Throwable e) {
         if (e instanceof BusException busE) {
-            return busE.getKey();
+            return MessageUtil.getMessage(busE.getKey());
         }
         return super.getErrorMsg(sourceMsg, e);
     }

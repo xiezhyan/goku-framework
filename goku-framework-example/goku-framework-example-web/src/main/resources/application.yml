@@ -33,6 +33,10 @@ spring:
   application:
     name: goku-example-web
 
+  messages:
+    basename: i18n/messages
+
+
 mybatis-plus:
   global-config:
     db-config:
