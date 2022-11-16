@@ -2,14 +2,11 @@ package top.zopx.goku.example.socket.common.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.collection.IntObjectMap;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
-import top.zopx.goku.framework.biz.constant.AttributeKeyCons;
-import top.zopx.goku.framework.util.ChannelUtil;
+import top.zopx.goku.framework.util.IdUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author 谢先生

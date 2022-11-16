@@ -1,20 +1,14 @@
-package top.zopx.goku.example.socket.common.util;
+package top.zopx.goku.framework.biz.ukey;
 
 import com.google.gson.JsonObject;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
-import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.tools.digest.md5.Md5Util;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.util.Out;
 
 import java.text.MessageFormat;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author 谢先生

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.constant.RedisPubsubEnum;
 import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
-import top.zopx.goku.example.socket.common.util.IdUtil;
+import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;

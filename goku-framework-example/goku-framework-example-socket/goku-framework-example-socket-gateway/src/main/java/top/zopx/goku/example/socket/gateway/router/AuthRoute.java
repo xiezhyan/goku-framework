@@ -2,15 +2,13 @@ package top.zopx.goku.example.socket.gateway.router;
 
 import com.google.gson.JsonObject;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.common.recognizer.MsgRecognizer;
-import top.zopx.goku.example.socket.common.util.IdUtil;
+import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
@@ -21,10 +19,7 @@ import top.zopx.goku.framework.biz.constant.IKey;
 import top.zopx.goku.framework.biz.selector.Client;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
-import javax.sound.midi.MidiUnavailableException;
 import java.net.InetSocketAddress;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 随机选择业务端处理
@@ -74,6 +69,12 @@ public class AuthRoute extends ChannelInboundHandlerAdapter {
             );
             return;
         }
+
+        LOGGER.info(
+                "转发消息到内部服务器, msgCode = {}, targetServer = {}",
+                msgCode,
+                serverConn.getClientName()
+        );
 
         if (semiClientMsg.getMsgCode() == Auth.AuthDef._LoginRequest_VALUE) {
             // 如果是用户登陆命令,

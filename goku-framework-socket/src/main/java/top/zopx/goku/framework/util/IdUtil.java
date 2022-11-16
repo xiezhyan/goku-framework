@@ -1,21 +1,11 @@
-package top.zopx.goku.example.socket.common.util;
+package top.zopx.goku.framework.util;
 
-import com.google.gson.JsonObject;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.AttributeKey;
-import org.apache.commons.lang3.StringUtils;
 import top.zopx.goku.framework.biz.constant.AttributeKeyCons;
-import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.tools.util.json.JsonUtil;
-import top.zopx.goku.framework.util.ChannelUtil;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.IllegalFormatCodePointException;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 /**
  * @author 谢先生
@@ -41,7 +31,7 @@ public final class IdUtil {
         }
     }
 
-    public static int getSessionId(Channel ch) {
+    public static Integer getSessionId(Channel ch) {
         if (null == ch) {
             return -1;
         } else {
@@ -53,11 +43,11 @@ public final class IdUtil {
         if (null == ch) {
             return -1L;
         } else {
-            return ChannelUtil.get(ch, AttributeKeyCons.USER_ATTR);
+            return Optional.ofNullable(ChannelUtil.get(ch, AttributeKeyCons.USER_ATTR)).orElse(-1L);
         }
     }
 
-    public static long getUserId(ChannelHandlerContext ctx) {
+    public static Long getUserId(ChannelHandlerContext ctx) {
         if (null == ctx) {
             return -1L;
         } else {
@@ -65,7 +55,7 @@ public final class IdUtil {
         }
     }
 
-    public static int getSessionId(ChannelHandlerContext ctx) {
+    public static Integer getSessionId(ChannelHandlerContext ctx) {
         if (null == ctx) {
             return -1;
         } else {

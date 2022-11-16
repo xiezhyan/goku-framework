@@ -1,26 +1,16 @@
 package top.zopx.goku.example.socket.gateway.handle;
 
-import com.google.gson.JsonObject;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
-import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
 import top.zopx.goku.example.socket.common.recognizer.MsgRecognizer;
-import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
-import top.zopx.goku.example.socket.common.util.IdUtil;
-import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.gateway.router.AuthRoute;
 import top.zopx.goku.example.socket.gateway.router.ChatRoute;
 import top.zopx.goku.framework.biz.constant.IKey;
-import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

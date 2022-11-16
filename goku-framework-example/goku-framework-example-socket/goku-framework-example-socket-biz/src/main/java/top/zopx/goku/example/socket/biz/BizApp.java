@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.biz.handle.BizMsgHandle;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
-import top.zopx.goku.example.socket.common.util.UKey;
+import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.framework.biz.dao.MybatisDao;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisPublish;

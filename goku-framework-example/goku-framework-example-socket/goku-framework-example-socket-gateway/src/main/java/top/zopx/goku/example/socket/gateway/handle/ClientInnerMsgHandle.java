@@ -80,7 +80,7 @@ public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
 
         innerMsg.setGatewayId(GatewayApp.getServerId());
         innerMsg.setRemoteSessionId(-1);
-        innerMsg.setFromUserId(-1);
+        innerMsg.setFromUserId(-1L);
         innerMsg.setMsgCode(Common.CommonDef._PingRequest_VALUE);
         innerMsg.setData(pingRequest.toByteArray());
 
