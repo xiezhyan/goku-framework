@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zopx.goku.example.mapper.RoleMapper">
+	
+	<resultMap type="top.zopx.goku.example.entity.Role" id="BaseResultMap">
+		<id column="id" property="id"/>
+		<result property="roleName" column="role_name"/>
+		<result property="state" column="state"/>
+		<result property="roleKey" column="role_key"/>
+		<result property="showLoc" column="show_loc"/>
+		<result property="isUniversal" column="is_universal"/>
+		<result property="creater" column="creater"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updater" column="updater"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="deleter" column="deleter"/>
+		<result property="deleteTime" column="delete_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		`id`
+		,              `role_name` ,       `role_key`,       `state` ,              `show_loc` ,       `is_universal`,       `creater` ,              `create_time` ,              `updater` ,              `update_time` ,              `deleter` ,              `delete_time` ,              `is_delete` ,              `version`           </sql>
+	
+	<select id="getListOrder" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM tbl_role
+		<where>
+			is_delete = 0
+			<if test="req != null">
+				
+				<foreach collection="req.map.entrySet()" index="key" item="val">
+					AND #{key} = #{val}
+				</foreach>
+			</if>
+		</where>
+		<if test="sorts != null and sorts.length > 0">
+			ORDER BY
+			<foreach collection="sorts" item="sort" separator=",">
+				#{sort.lineField} #{sort.orderBy}
+			</foreach>
+		</if>
+	</select>
+</mapper>
+

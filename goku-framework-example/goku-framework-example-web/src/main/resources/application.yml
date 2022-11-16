@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.10.201:13306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://test.zopx.top:13306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: JKLjkl789**..
     type: com.alibaba.druid.pool.DruidDataSource
@@ -26,6 +26,23 @@ spring:
       test-on-return: false
       keep-alive: true
       phy-max-use-count: 1000
+
   redis:
-    host: 192.168.10.201
+    host: test.zopx.top
     port: 16379
+  application:
+    name: goku-example-web
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: 'is_delete'
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: assign_id
+    banner: false
+  configuration:
+    lazy-loading-enabled: true
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+  type-aliases-package: top.zopx.goku.example.**.entity

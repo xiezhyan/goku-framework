@@ -23,10 +23,6 @@ public class BusException extends RuntimeException {
         this(msg, 400, msg);
     }
 
-    public BusException(String msg, Integer code) {
-        this(msg, code, msg);
-    }
-
     public BusException(IBus bus) {
         this(bus.getMsg(), bus.getCode(), bus.getKey());
     }
