@@ -33,12 +33,11 @@ public final class ClientInnerMsgCodec extends CombinedChannelDuplexHandler<Clie
         public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
             try {
                 if (null == ctx ||
-                        !(msgObj instanceof BinaryWebSocketFrame)) {
+                        !(msgObj instanceof BinaryWebSocketFrame inputFrame)) {
                     super.channelRead(ctx, msgObj);
                     return;
                 }
 
-                BinaryWebSocketFrame inputFrame = (BinaryWebSocketFrame) msgObj;
                 ByteBuf byteBuf = inputFrame.content();
 
                 // 读掉消息长度
