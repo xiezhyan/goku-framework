@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
+import top.zopx.goku.example.socket.gateway.sub.ConnectionTransferSub;
 import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
@@ -103,11 +104,13 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
     private static void startSubServer() {
         String[] channelArr = {
-                PublishCons.REGISTER_SERVER
+                PublishCons.REGISTER_SERVER,
+                PublishCons.CONNECTION_TRANSFER_NOTICE
         };
 
         ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();
         group.add(NewServerConnectSub.getInstance());
+        group.add(new ConnectionTransferSub());
 
         new RedisSubscribe().subscribe(channelArr, group);
     }

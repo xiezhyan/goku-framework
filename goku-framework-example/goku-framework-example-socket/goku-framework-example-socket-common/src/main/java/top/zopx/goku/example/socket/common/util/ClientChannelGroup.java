@@ -36,7 +36,7 @@ public final class ClientChannelGroup {
     }
 
     public static void remove(ChannelHandlerContext ctx) {
-        if (null != ctx){
+        if (null != ctx) {
             remove(ctx.channel());
         }
     }
@@ -92,5 +92,14 @@ public final class ClientChannelGroup {
         }
         return channel;
 
+    }
+
+
+    public static Channel removeByUserId(Long userId) {
+        Integer sessionId = USER_ID_AND_SESSION_ID_MAP.remove(userId);
+        if (null != sessionId) {
+            return CHANNEL_SESSION_MAP.remove(sessionId);
+        }
+        return null;
     }
 }
