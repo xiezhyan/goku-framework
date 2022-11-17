@@ -21,6 +21,7 @@ import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author 谢先生
@@ -37,6 +38,8 @@ public class NewServerConnectSub implements
     private static final Map<Integer, Client.ServerProfile> ID_SERVER_MAP = new ConcurrentHashMap<>(64);
 
     private List<Client.ServerProfile> serverProfileList;
+
+    private final AtomicLong REV = new AtomicLong(0);
 
     public static NewServerConnectSub getInstance() {
         return Holder.INSTANCE;
@@ -71,7 +74,7 @@ public class NewServerConnectSub implements
             if (null == profile) {
                 // 初始化
                 ID_SERVER_MAP.put(bizServerId, new Client.ServerProfile());
-                serverProfileList =  null;
+                serverProfileList = null;
                 profile = ID_SERVER_MAP.get(bizServerId);
             }
             profile.setLoadCount(serverInfoObj.getLoadCount());
@@ -87,6 +90,10 @@ public class NewServerConnectSub implements
                 );
             }
         }
+    }
+
+    public long getRev() {
+        return REV.get();
     }
 
     private Client renewClient(IServerInfo.ServerInfo serverInfoObj) {
@@ -105,10 +112,10 @@ public class NewServerConnectSub implements
                 serverInfoObj.getServerId()
         );
         client.connect();
-        for (int i = 0; i < 3; i++) {
-            if (client.isReady()) {
-                return client;
-            }
+        // 设置版本号
+        REV.set(System.currentTimeMillis());
+        if (client.isReady()) {
+            return client;
         }
         return null;
     }
@@ -135,7 +142,7 @@ public class NewServerConnectSub implements
 
     public List<Client.ServerProfile> getServerProfileList() {
         if (null == serverProfileList) {
-            serverProfileList  = new ArrayList<>(ID_SERVER_MAP.values());
+            serverProfileList = new ArrayList<>(ID_SERVER_MAP.values());
             serverProfileList.sort(Comparator.comparing(Client.ServerProfile::getServerId));
         }
         return serverProfileList;

@@ -14,6 +14,7 @@ import top.zopx.goku.example.socket.gateway.selector.ServerSelector;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.constant.IKey;
 import top.zopx.goku.framework.biz.selector.Client;
+import top.zopx.goku.framework.util.Out;
 import top.zopx.goku.framework.util.RouteTable;
 
 /**
@@ -56,18 +57,25 @@ public class ChatRoute extends ChannelInboundHandlerAdapter {
         RouteTable rt = RouteTable.getOrCreate(ctx);
         // 获取已经选择的服务器 Id
         int selectServerId = rt.getServerId(ServerTypeEnum.CHAT);
+        // 最新版本号
+        Out<Long> newRevOut = new Out<>();
 
         Client serverConn = ServerSelector.getServerConnByServerId(
                 NewServerConnectSub.getInstance(),
-                selectServerId
+                selectServerId,
+                newRevOut
         );
 
         if (null == serverConn ||
-                !serverConn.isReady()) {
+                !serverConn.isReady() ||
+                // 为了当扩容机器的时候，新机器也加入到被选择的行列
+                rt.getRev(currJobType) != Out.get(newRevOut, -1L)
+        ) {
             // 重新选择服务器
             serverConn = ServerSelector.randomAServerConnByServerJobType(
                     NewServerConnectSub.getInstance(),
-                    ServerTypeEnum.CHAT
+                    ServerTypeEnum.CHAT,
+                    newRevOut
             );
         }
 
@@ -80,7 +88,11 @@ public class ChatRoute extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        rt.putServerId(ServerTypeEnum.CHAT, serverConn.getClientId());
+        rt.putServerIdAndRev(
+                ServerTypeEnum.CHAT,
+                serverConn.getClientId(),
+                Out.get(newRevOut, -1L)
+        );
 
         final ClientInnerMsg innerMsg = new ClientInnerMsg();
         innerMsg.setGatewayId(GatewayApp.getServerId());

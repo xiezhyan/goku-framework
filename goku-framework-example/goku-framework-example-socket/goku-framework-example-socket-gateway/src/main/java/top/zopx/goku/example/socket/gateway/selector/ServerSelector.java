@@ -45,7 +45,7 @@ public final class ServerSelector {
      * @param currJobType         类型
      * @return Client
      */
-    private static Client randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType, Out<Long> out) {
+    public static Client randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType, Out<Long> out) {
         if (null == currJobType) {
             return null;
         }
@@ -83,6 +83,7 @@ public final class ServerSelector {
         Client.ServerProfile profile = tempList.get(selectedIndex);
 
         // 设置版本号
+        Out.putVal(out, newServerConnectSub.getRev());
         return profile.getClient();
     }
 
@@ -92,7 +93,7 @@ public final class ServerSelector {
         );
     }
 
-    private static Client getServerConnByServerId(NewServerConnectSub instance, int selectServerId, Out<Long> out) {
+    public static Client getServerConnByServerId(NewServerConnectSub instance, int selectServerId, Out<Long> out) {
         // 获取服务器资料
         Client.ServerProfile profile = instance.getServerProfileById(selectServerId);
 
@@ -102,6 +103,8 @@ public final class ServerSelector {
             return null;
         }
 
+        // 设置版本号
+        Out.putVal(out, instance.getRev());
         return profile.getClient();
     }
 }
