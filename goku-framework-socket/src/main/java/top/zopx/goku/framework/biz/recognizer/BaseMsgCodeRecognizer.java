@@ -35,12 +35,12 @@ public abstract class BaseMsgCodeRecognizer {
 
     private void tryInit() {
         if (initOk) {
-            LOGGER.error("已经完成加载");
+            LOGGER.debug("已经完成加载");
             return;
         }
         synchronized (BaseMsgCodeRecognizer.class) {
             if (initOk) {
-                LOGGER.error("已经完成加载");
+                LOGGER.debug("已经完成加载");
                 return;
             }
 
