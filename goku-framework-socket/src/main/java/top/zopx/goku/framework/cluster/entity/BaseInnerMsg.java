@@ -155,12 +155,4 @@ public abstract class BaseInnerMsg {
      * @return 消息体
      */
     public abstract GeneratedMessageV3 getProtoMsg();
-
-    /**
-     * 设置异常返回
-     *
-     * @param resultX R
-     * @return code
-     */
-    public abstract int addError(R<?> resultX);
 }

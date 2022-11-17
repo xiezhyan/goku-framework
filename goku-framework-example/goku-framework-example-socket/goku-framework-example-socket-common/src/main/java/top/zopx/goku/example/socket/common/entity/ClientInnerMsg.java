@@ -56,16 +56,11 @@ public class ClientInnerMsg extends BaseInnerMsg {
 
         Message message = builder.build();
 
-        if (message instanceof GeneratedMessageV3 msg) {
+        if (message instanceof GeneratedMessageV3) {
             // 如果是 Protobuf 消息,
-            return msg;
+            return (GeneratedMessageV3) message;
         } else {
             return null;
         }
-    }
-
-    @Override
-    public int addError(R<?> resultX) {
-        return 0;
     }
 }

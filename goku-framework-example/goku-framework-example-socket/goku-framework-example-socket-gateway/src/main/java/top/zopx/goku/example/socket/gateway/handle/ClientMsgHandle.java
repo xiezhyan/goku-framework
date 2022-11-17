@@ -129,9 +129,11 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
             ChannelHandlerContext ctx, Object objEvent) {
         if (null == ctx ||
                 null == ctx.channel() ||
-                !(objEvent instanceof final HandshakeComplete handshakeComplete)) {
+                !(objEvent instanceof HandshakeComplete)) {
             return;
         }
+
+        HandshakeComplete handshakeComplete = (HandshakeComplete) objEvent;
 
         final HttpHeaders h = handshakeComplete.requestHeaders();
 

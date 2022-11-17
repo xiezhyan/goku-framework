@@ -28,13 +28,15 @@ public class ChatRoute extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
-        if (!(msgObj instanceof SemiClientMsgFinished semiClientMsg)) {
+        if (!(msgObj instanceof SemiClientMsgFinished)) {
             if (null != ctx) {
                 ctx.fireChannelRead(msgObj);
             }
 
             return;
         }
+
+        SemiClientMsgFinished semiClientMsg = (SemiClientMsgFinished) msgObj;
 
         final int msgCode = semiClientMsg.getMsgCode();
 

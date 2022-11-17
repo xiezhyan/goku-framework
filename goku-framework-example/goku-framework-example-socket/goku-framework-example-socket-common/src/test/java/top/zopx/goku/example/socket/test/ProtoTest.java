@@ -48,5 +48,6 @@ public class ProtoTest {
                         .setLogin(JsonUtil.getInstance().toJson(map))
                         .build()
         ));
+        // AC4AZAgCEih7InBhc3N3b3JkIjoiMTIzNDU2IiwidXNlcm5hbWUiOiJhZG1pbiJ9
     }
 }

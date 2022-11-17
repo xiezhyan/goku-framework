@@ -33,11 +33,13 @@ public final class ClientInnerMsgCodec extends CombinedChannelDuplexHandler<Clie
         public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
             try {
                 if (null == ctx ||
-                        !(msgObj instanceof BinaryWebSocketFrame inputFrame)) {
+                        !(msgObj instanceof BinaryWebSocketFrame)) {
                     super.channelRead(ctx, msgObj);
                     return;
                 }
 
+
+                BinaryWebSocketFrame inputFrame = (BinaryWebSocketFrame) msgObj;
                 ByteBuf byteBuf = inputFrame.content();
 
                 // 读掉消息长度
@@ -73,12 +75,14 @@ public final class ClientInnerMsgCodec extends CombinedChannelDuplexHandler<Clie
         @Override
         public void write(ChannelHandlerContext ctx, Object msgObj, ChannelPromise promise) {
             try {
-                if (!(msgObj instanceof ClientInnerMsg innerMsg)) {
+                if (!(msgObj instanceof ClientInnerMsg)) {
                     super.write(ctx, msgObj, promise);
                     return;
                 }
 
                 // 转型为内部服务器消息
+
+                ClientInnerMsg innerMsg = (ClientInnerMsg) msgObj;
 
                 if (null == innerMsg.getData()) {
                     // 确保消息体不为空

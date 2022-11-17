@@ -14,7 +14,8 @@ import top.zopx.goku.framework.tools.exceptions.BusException;
 public class GlobalExceptionAdvice extends BaseExceptionAdvice {
     @Override
     public String getErrorMsg(String sourceMsg, Throwable e) {
-        if (e instanceof BusException busE) {
+        if (e instanceof BusException) {
+            BusException busE = (BusException) e;
             return MessageUtil.getMessage(busE.getKey());
         }
         return super.getErrorMsg(sourceMsg, e);

@@ -21,11 +21,13 @@ public class UserIdValidatorHandle extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
         try {
             if (null == ctx ||
-                    !(msgObj instanceof SemiClientMsgFinished semiClientMsg)) {
+                    !(msgObj instanceof SemiClientMsgFinished)) {
                 // 如果接到的不是客户端半成品消息,
                 super.channelRead(ctx, msgObj);
                 return;
             }
+
+            SemiClientMsgFinished semiClientMsg = (SemiClientMsgFinished) msgObj;
 
             boolean izSafeMsg;
 

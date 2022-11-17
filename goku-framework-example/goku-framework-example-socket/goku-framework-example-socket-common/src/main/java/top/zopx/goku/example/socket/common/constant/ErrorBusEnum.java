@@ -12,8 +12,20 @@ public enum ErrorBusEnum implements IBus {
     /**
      * 参数传递异常
      */
-    ERROR_CTX_CMD("参数传递异常", 400, "参数传递异常"),
-    ;
+    ERROR("参数传递异常", 400, "参数传递异常"),
+
+    /**
+     * 登录参数为空
+     */
+    LOGIN_EMPTY("登录参数为空", 1000, "登录参数为空"),
+    /**
+     * 未知的登录方式
+     */
+    LOGIN_TYPE_NOT_FIND("未知的登录方式", 1001, "未知的登录方式"),
+    /**
+     * 登录失败
+     */
+    LOGIN_ERROR("登录失败", 1002, "登录失败");
 
     private final String msg;
     private final int code;

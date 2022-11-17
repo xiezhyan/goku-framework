@@ -36,8 +36,9 @@ public class ClientMsgEncode extends ChannelOutboundHandlerAdapter {
             int msgCode;
             byte[] msgBody;
 
-            if (msg instanceof ClientInnerMsg innerMsg) {
+            if (msg instanceof ClientInnerMsg) {
                 // 如果是内部服务器消息
+                ClientInnerMsg innerMsg = (ClientInnerMsg) msg;
                 msgCode = innerMsg.getMsgCode();
                 msgBody = innerMsg.getData();
                 // 释放资源

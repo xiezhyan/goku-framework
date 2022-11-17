@@ -21,11 +21,13 @@ public class PingHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (null == ctx ||
-                !(msg instanceof SemiClientMsgFinished semiClientMsg)) {
+                !(msg instanceof SemiClientMsgFinished)) {
             // 如果接到的不是客户端半成品消息,
             super.channelRead(ctx, msg);
             return;
         }
+
+        SemiClientMsgFinished semiClientMsg = (SemiClientMsgFinished) msg;
 
         if (Common.CommonDef._PingRequest_VALUE != semiClientMsg.getMsgCode()) {
             // 接收到的不是Ping指令

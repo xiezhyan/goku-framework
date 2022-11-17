@@ -1,6 +1,6 @@
 package top.zopx.goku.framework.cluster.entity;
 
-import top.zopx.goku.framework.cluster.constant.IErrorBus;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import java.io.Serializable;
 
@@ -29,6 +29,17 @@ public final class R<T> implements Serializable {
         return data;
     }
 
+
+    /**
+     * 失败
+     *
+     * @param bus 消息编码
+     * @return R<T>
+     */
+    public static <T> R<T> failure(IBus bus) {
+        return result(null, new Meta(false, bus.getMsg(), bus.getCode()));
+    }
+
     /**
      * Builder构建
      *
@@ -55,14 +66,14 @@ public final class R<T> implements Serializable {
     }
 
     public static class Builder<T> {
-        private Meta meta;
+        private Meta meta = new Meta(true, "OK", 200);
         private T data;
 
         private Builder() {
         }
 
-        public Builder<T> setMeta(IErrorBus cons) {
-            this.meta = new Meta(cons.getSuccess(), cons.getMessage(), cons.getCode());
+        public Builder<T> setMeta(IBus cons) {
+            this.meta = new Meta(false, cons.getMsg(), cons.getCode());
             return this;
         }
 

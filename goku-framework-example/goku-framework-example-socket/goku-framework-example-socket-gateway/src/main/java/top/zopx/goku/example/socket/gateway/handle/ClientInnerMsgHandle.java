@@ -103,7 +103,7 @@ public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msgObj) {
         if (null == ctx ||
-                !(msgObj instanceof ClientInnerMsg innerMsg)) {
+                !(msgObj instanceof ClientInnerMsg)) {
             return;
         }
 
@@ -112,6 +112,7 @@ public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
         // 如果是由服务器发回来的 Ping 结果,
         // 则直接跳过...
 
+        ClientInnerMsg innerMsg = (ClientInnerMsg) msgObj;
         LOGGER.info(
                 "收到内部服务器返回消息, msgCode = {}",
                 innerMsg.getMsgCode()

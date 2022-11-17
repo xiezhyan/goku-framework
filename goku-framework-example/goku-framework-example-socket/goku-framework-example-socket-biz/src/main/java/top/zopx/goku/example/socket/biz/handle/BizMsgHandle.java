@@ -35,10 +35,11 @@ public class BizMsgHandle extends BaseDefaultChannelHandler {
     @Override
     public void channelRead(ChannelHandlerContext nettyCtx, Object msgObj) {
         if (null == nettyCtx ||
-                !(msgObj instanceof ClientInnerMsg innerMsg)) {
+                !(msgObj instanceof ClientInnerMsg)) {
             return;
         }
 
+        ClientInnerMsg innerMsg = (ClientInnerMsg) msgObj;
         // 获取协议消息
         GeneratedMessageV3 protoMsg = innerMsg.getProtoMsg();
 

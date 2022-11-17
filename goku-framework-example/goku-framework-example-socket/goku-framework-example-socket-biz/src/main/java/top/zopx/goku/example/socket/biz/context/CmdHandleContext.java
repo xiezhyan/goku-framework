@@ -48,11 +48,13 @@ public class CmdHandleContext extends BaseCmdHandleContext {
      */
     @Override
     public ChannelFuture writeAndFlush(Object msgObj) {
-        if (!(msgObj instanceof GeneratedMessageV3 messageV3) ||
+        if (!(msgObj instanceof GeneratedMessageV3) ||
                 null == channel ||
                 !channel.isWritable()) {
             return null;
         }
+
+        GeneratedMessageV3 messageV3 = (GeneratedMessageV3) msgObj;
 
         ClientInnerMsg innerMsg = new ClientInnerMsg();
         innerMsg.setGatewayId(getGatewayServerId());

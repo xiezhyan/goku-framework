@@ -16,4 +16,8 @@ public class Constant {
      * 用户远程会话 Id
      */
     public static final String USER_REMOTE_SESSION_ID = "user_remote_session_id";
+    /**
+     * 用户详情
+     */
+    public static final String USER_DETAIL = "user_detail";
 }

@@ -35,13 +35,14 @@ public class ClientMsgRoute extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (!(msg instanceof SemiClientMsgFinished semiClientMsg)) {
+        if (!(msg instanceof SemiClientMsgFinished)) {
             if (null != ctx) {
                 ctx.fireChannelRead(msg);
             }
-
             return;
         }
+
+        SemiClientMsgFinished semiClientMsg = (SemiClientMsgFinished) msg;
 
         final int msgCode = semiClientMsg.getMsgCode();
 

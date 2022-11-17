@@ -19,12 +19,13 @@ public class ClientMsgDecode extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (null == ctx || !(msg instanceof BinaryWebSocketFrame binary)) {
+        if (null == ctx || !(msg instanceof BinaryWebSocketFrame)) {
             super.channelRead(ctx, msg);
             return;
         }
 
         try {
+            BinaryWebSocketFrame binary = (BinaryWebSocketFrame) msg;
             ByteBuf dataByteBuf = binary.content();
 
             // 长度

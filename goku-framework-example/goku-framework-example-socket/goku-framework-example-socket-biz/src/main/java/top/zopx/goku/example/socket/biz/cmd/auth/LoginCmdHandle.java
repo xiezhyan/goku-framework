@@ -1,6 +1,9 @@
 package top.zopx.goku.example.socket.biz.cmd.auth;
 
+import top.zopx.goku.example.socket.biz.entity.bo.LoginResult;
+import top.zopx.goku.example.socket.biz.service.user.UserService;
 import top.zopx.goku.example.socket.proto.auth.Auth;
+import top.zopx.goku.framework.cluster.entity.R;
 import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
 import top.zopx.goku.framework.netty.bind.handler.ICmdContextHandler;
 
@@ -18,5 +21,40 @@ public class LoginCmdHandle implements ICmdContextHandler<BaseCmdHandleContext, 
         }
 
         LOGGER.debug("loginType = {}, login = {}", cmd.getLoginType(), cmd.getLogin());
+
+        UserService.getInstance().doLoginAsync(
+                cmd.getLoginType(),
+                cmd.getLogin(),
+                resultX -> buildResultMsgAndSend(
+                        ctx, resultX
+                )
+        );
+    }
+
+    private void buildResultMsgAndSend(BaseCmdHandleContext ctx, R<LoginResult> resultX) {
+        if (null == ctx ||
+                null == resultX) {
+            return;
+        }
+
+        if (Boolean.FALSE.equals(resultX.getMeta().getSuccess())) {
+            // 写出错误消息
+            ctx.send(
+                    resultX.getMeta().getCode(), resultX.getMeta().getMessage()
+            );
+            return;
+        }
+
+        LoginResult loginResult = resultX.getData();
+
+        ctx.writeAndFlush(
+                Auth.LoginResponse.newBuilder()
+                        .setUserId(loginResult.getUserId())
+                        .setUserName(loginResult.getUserName())
+                        .setTicket(loginResult.getTicket())
+                        .setUkey(loginResult.getUkey())
+                        .setUkeyExpireAt(loginResult.getUkeyExpireAt())
+                        .build()
+        );
     }
 }
