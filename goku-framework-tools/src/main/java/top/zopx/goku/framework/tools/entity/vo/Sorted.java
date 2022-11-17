@@ -1,7 +1,5 @@
 package top.zopx.goku.framework.tools.entity.vo;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
