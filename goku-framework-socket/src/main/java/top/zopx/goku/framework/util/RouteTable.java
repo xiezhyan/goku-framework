@@ -1,4 +1,4 @@
-package top.zopx.goku.example.socket.gateway.router;
+package top.zopx.goku.framework.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,12 +10,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 路由表, 主要是记录客户端到具体的业务服务器 Id
+ *
+ * @author 俗世游子
+ * @date 2022/2/4
+ * @email xiezhyan@126.com
  */
 public final class RouteTable {
     /**
      * 会话主键
      */
-    public static final String SESSION_KEY_ROUTE_TABLE = "mj_route_table";
+    public static final String SESSION_KEY_ROUTE_TABLE = "route_table";
 
     /**
      * 已经选择的服务器字典

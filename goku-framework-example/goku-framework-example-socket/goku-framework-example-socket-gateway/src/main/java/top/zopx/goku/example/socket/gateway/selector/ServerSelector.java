@@ -1,35 +1,19 @@
 package top.zopx.goku.example.socket.gateway.selector;
 
-import com.google.gson.JsonObject;
-import io.netty.channel.ChannelHandler;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.example.socket.common.constant.Constant;
-import top.zopx.goku.example.socket.common.util.ReadFileUtil;
-import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.constant.IKey;
-import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.biz.redis.RedisSubscribe;
 import top.zopx.goku.framework.biz.selector.Client;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
-import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
-import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
-import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.NettyServerAcceptor;
-import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.util.Out;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
+ * 业务服务选择
+ *
  * @author 谢先生
  * @email xiezhyan@126.com
  * @date 2022/11/14 20:12
@@ -41,12 +25,26 @@ public final class ServerSelector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerSelector.class);
 
+    /**
+     * 根据服务器类型随机选择
+     *
+     * @param newServerConnectSub 业务服集合
+     * @param currJobType         类型
+     * @return Client
+     */
     public static Client randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType) {
         return randomAServerConnByServerJobType(
                 newServerConnectSub, currJobType, null
         );
     }
 
+    /**
+     * 根据服务器类型随机选择
+     *
+     * @param newServerConnectSub 业务服集合
+     * @param currJobType         类型
+     * @return Client
+     */
     private static Client randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType, Out<Long> out) {
         if (null == currJobType) {
             return null;
