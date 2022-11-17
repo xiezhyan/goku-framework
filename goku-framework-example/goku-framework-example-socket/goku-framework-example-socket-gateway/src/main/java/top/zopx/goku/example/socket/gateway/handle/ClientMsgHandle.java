@@ -7,8 +7,8 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import top.zopx.goku.example.socket.common.constant.RedisPubsubEnum;
 import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
@@ -115,7 +115,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
 
             // 记录日志信息
             redisPubSub.publish(
-                    RedisPubsubEnum.OFFLINE_USER_NOTICE.name(),
+                    PublishCons.USER_LOGOUT_NOTICE,
                     offlineUserJsonObj.toString()
             );
         } catch (Exception ex) {
