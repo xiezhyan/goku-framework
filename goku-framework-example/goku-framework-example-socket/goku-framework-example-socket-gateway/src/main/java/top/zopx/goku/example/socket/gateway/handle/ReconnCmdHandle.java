@@ -52,7 +52,7 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
 
         long userId = reconnRequest.getUserId();
 
-        if (!UKey.vertify(userId, reconnRequest.getUkey(), reconnRequest.getUkeyExpireAt())) {
+        if (!UKey.check(userId, reconnRequest.getUkey(), reconnRequest.getUkeyExpireAt())) {
             ctx.disconnect();
             return;
         }

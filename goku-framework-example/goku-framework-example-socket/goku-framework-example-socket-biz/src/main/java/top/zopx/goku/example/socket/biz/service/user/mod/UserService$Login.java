@@ -95,7 +95,7 @@ public interface UserService$Login {
             result.setUserName("");
             result.setTicket(TicketUtil.getTicket(userId));
             Out<Long> outUkeyExpireAt = new Out<>();
-            result.setUkey(UKey.getuKeyStr(userId, outUkeyExpireAt));
+            result.setUkey(UKey.getUkey(userId, outUkeyExpireAt));
             result.setUkeyExpireAt(outUkeyExpireAt.getVal());
 
             builder.setData(result);

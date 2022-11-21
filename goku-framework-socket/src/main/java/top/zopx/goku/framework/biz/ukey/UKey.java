@@ -33,7 +33,7 @@ public final class UKey {
         UKey.config = config;
     }
 
-    public static String getuKeyStr(long userId, Out<Long> out) {
+    public static String getUkey(long userId, Out<Long> out) {
         // 获取当前时间戳并计算过期时间
         final long ukeyExpireAt = System.currentTimeMillis() + config.getuKeyTTL();
 
@@ -53,7 +53,7 @@ public final class UKey {
         );
     }
 
-    public static boolean vertify(long userId, String uKeyStr, long ukeyExpireAt) {
+    public static boolean check(long userId, String uKeyStr, long ukeyExpireAt) {
         if (ukeyExpireAt <= System.currentTimeMillis()) {
             // 如果 Ukey 已经过期
             return false;
