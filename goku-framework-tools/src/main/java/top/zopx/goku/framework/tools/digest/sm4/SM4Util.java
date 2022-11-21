@@ -6,6 +6,7 @@ import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -122,33 +123,11 @@ public class SM4Util {
         return cipher.doFinal(cipherText);
     }
 
-    /**
-     * @Description:密码校验
-     */
     public static boolean verifyEcb(String hexKey, String cipherText, String paramStr) throws Exception {
-        boolean flag = false;
         byte[] keyData = ByteUtils.fromHexString(hexKey);
         byte[] cipherData = ByteUtils.fromHexString(cipherText);
         byte[] decryptData = decryptEcbPadding(keyData, cipherData);
-        byte[] srcData = paramStr.getBytes(ENCODING);
+        byte[] srcData = paramStr.getBytes(StandardCharsets.UTF_8);
         return Arrays.equals(decryptData, srcData);
-    }
-
-    /**
-     */
-    public static void main(String[] args) {
-        try {
-            String json = "{\"name\":\"color\",\"sex\":\"man\"}";
-            // 自定义的32位16进制密钥
-            String key = generateKey();
-            System.out.println("key == " + key);
-            String cipher = SM4Util.encrypt(key, json, ENCODING);
-            System.out.println("cipher == " + cipher);
-//            System.out.println(SM4Util.verifyEcb(key, cipher, json));
-            json = SM4Util.decrypt(key, cipher, ENCODING);
-            System.out.println(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

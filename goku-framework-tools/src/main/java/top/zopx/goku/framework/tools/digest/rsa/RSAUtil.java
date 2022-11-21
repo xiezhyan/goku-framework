@@ -29,7 +29,7 @@ public enum RSAUtil {
     INSTANCE,
     ;
 
-    private static final String SECRET_KEY_SPEC_RSA = "RSA";
+    private static final String SECRET_KEY_SPEC_RSA = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
 
     /**
      * 生成公钥和私钥

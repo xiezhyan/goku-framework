@@ -1,6 +1,7 @@
 package top.zopx.goku.framework.biz.dao;
 
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
@@ -218,6 +219,7 @@ public final class MybatisDao {
             private String serverHost;
             private int serverPort;
             private String db;
+            private String schema = "";
             private String userName;
             private String password;
             private int initialSize;
@@ -247,6 +249,14 @@ public final class MybatisDao {
 
             public void setDb(String db) {
                 this.db = db;
+            }
+
+            public String getSchema() {
+                return schema;
+            }
+
+            public void setSchema(String schema) {
+                this.schema = schema;
             }
 
             public String getUserName() {
@@ -302,6 +312,10 @@ public final class MybatisDao {
                 newProp.setProperty("serverHost", serverHost);
                 newProp.setProperty("serverPort", String.valueOf(serverPort));
                 newProp.setProperty("db", db);
+                if (StringUtils.isNotBlank(schema)) {
+                    schema += "&";
+                }
+                newProp.setProperty("schema", schema);
                 newProp.setProperty("userName", userName);
                 newProp.setProperty("password", password);
                 newProp.setProperty("initialSize", String.valueOf(initialSize));
