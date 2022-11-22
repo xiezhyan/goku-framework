@@ -6,14 +6,18 @@ import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.biz.handle.BizMsgHandle;
+import top.zopx.goku.example.socket.biz.sub.UserLogoutSub;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
+import top.zopx.goku.framework.biz.pubsub.ISubscribe;
+import top.zopx.goku.framework.biz.redis.RedisSubscribe;
 import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.framework.biz.dao.MybatisDao;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisPublish;
 import top.zopx.goku.framework.biz.report.RedisReportServerInfo;
 import top.zopx.goku.framework.biz.report.ReportServer;
+import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
 import top.zopx.goku.framework.cluster.entity.IServerInfo;
 import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
@@ -89,6 +93,8 @@ public class BizApp implements BaseChannelHandlerFactory {
         startBizServerApp();
         // 定时上报自身信息
         startReportCurrServer();
+        // 开始订阅消息
+        startSubServer();
     }
 
     private static void startReportCurrServer() {
@@ -137,10 +143,19 @@ public class BizApp implements BaseChannelHandlerFactory {
         );
     }
 
+    private static void startSubServer() {
+        String[] channelArr = {
+                PublishCons.USER_LOGOUT_NOTICE
+        };
+
+        ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();
+        group.add(new UserLogoutSub());
+
+        new RedisSubscribe().subscribe(channelArr, group);
+    }
+
     @Override
     public ChannelHandler createWebsocketMsgHandler() {
         return new BizMsgHandle();
     }
-
-
 }
