@@ -31,7 +31,7 @@ SpringBoot时代下极大的简化了整个系统的搭建，而**goku-framework
 
 ### 使用
 关于整个架构如何使用，关注示例项目
-- `square-test-spring-boot-starter`
+- `goku-framework-example`
 
 更多详细介绍，关注博客：
 - [俗世游子【谢先生】的掘金](https://juejin.cn/user/3359725700263694)
