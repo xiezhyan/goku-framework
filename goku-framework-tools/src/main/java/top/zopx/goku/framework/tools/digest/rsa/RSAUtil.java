@@ -3,6 +3,7 @@ package top.zopx.goku.framework.tools.digest.rsa;
 
 import top.zopx.goku.framework.tools.digest.base64.Base64Util;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +40,7 @@ public enum RSAUtil {
     public RsaKey genKeyPair() {
         try {
             // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(SECRET_KEY_SPEC_RSA);
+            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
             // 初始化密钥对生成器
             keyPairGen.initialize(2048, new SecureRandom());
             // 生成一个密钥对，保存在keyPair中
@@ -51,7 +52,7 @@ public enum RSAUtil {
             // 将公钥和私钥保存   得到私钥字符串
             return new RsaKey(Base64Util.INSTANCE.encode(publicKey.getEncoded()), Base64Util.INSTANCE.encode(privateKey.getEncoded()));
         } catch (Exception e) {
-            throw new BusException(e.getMessage());
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
     }
 
@@ -94,8 +95,12 @@ public enum RSAUtil {
      * @return RSAPublicKey
      * @throws Exception 转换异常
      */
-    public RSAPublicKey getPublicKey(byte[] bytes) throws Exception {
-        return (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(bytes));
+    public RSAPublicKey getPublicKey(byte[] bytes) {
+        try {
+            return (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(bytes));
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 
     /**
@@ -105,7 +110,11 @@ public enum RSAUtil {
      * @return RSAPrivateKey
      * @throws Exception 转换异常
      */
-    public RSAPrivateKey getPrivateKey(byte[] bytes) throws Exception {
-        return (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
+    public RSAPrivateKey getPrivateKey(byte[] bytes) {
+        try {
+            return (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 }

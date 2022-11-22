@@ -2,6 +2,8 @@ package top.zopx.goku.framework.tools.digest.sm4;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -22,7 +24,7 @@ public class SM4Util {
     public static final String ENCODING = "UTF-8";
     private static final String ALGORIGTHM_NAME = "SM4";
     private static final String ALGORITHM_NAME_ECB_PADDING = "SM4/ECB/PKCS7Padding";
-    private static final int DEFAULT_KEY_SIZE = 128;
+    private static final int DEFAULT_KEY_SIZE = 2048;
 
     private SM4Util() {
     }
@@ -34,11 +36,15 @@ public class SM4Util {
     /**
      * 生成ecb暗号
      */
-    private static Cipher generateEcbCipher(String algorithmName, int mode, byte[] key) throws Exception {
-        Cipher cipher = Cipher.getInstance(algorithmName, BouncyCastleProvider.PROVIDER_NAME);
-        Key sm4Key = new SecretKeySpec(key, ALGORIGTHM_NAME);
-        cipher.init(mode, sm4Key);
-        return cipher;
+    private static Cipher generateEcbCipher(String algorithmName, int mode, byte[] key) {
+        try {
+            Cipher cipher = Cipher.getInstance(algorithmName, BouncyCastleProvider.PROVIDER_NAME);
+            Key sm4Key = new SecretKeySpec(key, ALGORIGTHM_NAME);
+            cipher.init(mode, sm4Key);
+            return cipher;
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 
     /**
@@ -47,11 +53,7 @@ public class SM4Util {
      * @return 秘钥
      */
     public static String generateKey() {
-        try {
-            return generateKey(DEFAULT_KEY_SIZE);
-        } catch (Exception e) {
-            return "";
-        }
+        return generateKey(DEFAULT_KEY_SIZE);
     }
 
     public static String generateKey(int keySize) {
@@ -60,7 +62,7 @@ public class SM4Util {
             kg.init(keySize, new SecureRandom());
             return ByteUtils.toHexString(kg.generateKey().getEncoded());
         } catch (Exception e) {
-            return "";
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
     }
 
@@ -71,9 +73,8 @@ public class SM4Util {
      * @param data    需要加密数据
      * @param charset 编码
      * @return 加密后数据
-     * @throws Exception 异常信息
      */
-    public static String encrypt(String key, String data, String charset) throws Exception {
+    public static String encrypt(String key, String data, String charset) {
         String cipherText = "";
         if (null != data && !"".equals(data)) {
             byte[] keyData = ByteUtils.fromHexString(key);
@@ -81,16 +82,25 @@ public class SM4Util {
             if (charset.length() <= 0) {
                 charset = ENCODING;
             }
-            byte[] srcData = data.getBytes(charset);
-            byte[] cipherArray = encryptEcbPadding(keyData, srcData);
-            cipherText = ByteUtils.toHexString(cipherArray);
+
+            try {
+                byte[] srcData = data.getBytes(charset);
+                byte[] cipherArray = encryptEcbPadding(keyData, srcData);
+                cipherText = ByteUtils.toHexString(cipherArray);
+            } catch (Exception e) {
+                throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+            }
         }
         return cipherText;
     }
 
-    private static byte[] encryptEcbPadding(byte[] key, byte[] data) throws Exception {
-        Cipher cipher = generateEcbCipher(ALGORITHM_NAME_ECB_PADDING, Cipher.ENCRYPT_MODE, key);
-        return cipher.doFinal(data);
+    private static byte[] encryptEcbPadding(byte[] key, byte[] data) {
+        try {
+            Cipher cipher = generateEcbCipher(ALGORITHM_NAME_ECB_PADDING, Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 
     /**
@@ -102,32 +112,43 @@ public class SM4Util {
      * @return 返回原数据
      * @throws Exception 异常
      */
-    public static String decrypt(String key, String data, String charset) throws Exception {
+    public static String decrypt(String key, String data, String charset) {
         String decryptStr = "";
         byte[] keyData = ByteUtils.fromHexString(key);
         byte[] cipherData = ByteUtils.fromHexString(data);
-        byte[] srcData = decryptEcbPadding(keyData, cipherData);
-        charset = charset.trim();
-        if (charset.length() <= 0) {
-            charset = ENCODING;
+        try {
+            byte[] srcData = decryptEcbPadding(keyData, cipherData);
+            charset = charset.trim();
+            if (charset.length() <= 0) {
+                charset = ENCODING;
+            }
+            decryptStr = new String(srcData, charset);
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
-        decryptStr = new String(srcData, charset);
         return decryptStr;
     }
 
     /**
-     * @Description:解密
      */
-    private static byte[] decryptEcbPadding(byte[] key, byte[] cipherText) throws Exception {
-        Cipher cipher = generateEcbCipher(ALGORITHM_NAME_ECB_PADDING, Cipher.DECRYPT_MODE, key);
-        return cipher.doFinal(cipherText);
+    private static byte[] decryptEcbPadding(byte[] key, byte[] cipherText) {
+        try {
+            Cipher cipher = generateEcbCipher(ALGORITHM_NAME_ECB_PADDING, Cipher.DECRYPT_MODE, key);
+            return cipher.doFinal(cipherText);
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 
-    public static boolean verifyEcb(String hexKey, String cipherText, String paramStr) throws Exception {
-        byte[] keyData = ByteUtils.fromHexString(hexKey);
-        byte[] cipherData = ByteUtils.fromHexString(cipherText);
-        byte[] decryptData = decryptEcbPadding(keyData, cipherData);
-        byte[] srcData = paramStr.getBytes(StandardCharsets.UTF_8);
-        return Arrays.equals(decryptData, srcData);
+    public static boolean check(String hexKey, String cipherText, String paramStr) {
+        try {
+            byte[] keyData = ByteUtils.fromHexString(hexKey);
+            byte[] cipherData = ByteUtils.fromHexString(cipherText);
+            byte[] decryptData = decryptEcbPadding(keyData, cipherData);
+            byte[] srcData = paramStr.getBytes(StandardCharsets.UTF_8);
+            return Arrays.equals(decryptData, srcData);
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+        }
     }
 }

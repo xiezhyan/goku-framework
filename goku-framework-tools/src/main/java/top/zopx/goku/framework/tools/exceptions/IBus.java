@@ -7,6 +7,8 @@ package top.zopx.goku.framework.tools.exceptions;
  */
 public interface IBus {
 
+    int ERROR_CODE = 400;
+
     /**
      * 获取异常编码
      *

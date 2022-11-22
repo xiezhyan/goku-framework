@@ -9,28 +9,25 @@ import org.bouncycastle.jcajce.provider.asymmetric.util.ECUtil;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import top.zopx.goku.framework.tools.digest.base64.Base64Util;
 import top.zopx.goku.framework.tools.digest.rsa.RsaKey;
+import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Objects;
 
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/22 8:06
  */
-@SuppressWarnings("all")
 public class SM2Util {
 
+    private SM2Util() {}
 
-    public static RsaKey generKey() {
+    public static RsaKey genKeyPair() {
         KeyPair keyGen = getKeyGen();
-        if (Objects.isNull(keyGen)) {
-            throw new RuntimeException("");
-        }
-
         return new RsaKey(
                 Base64Util.INSTANCE.encode(keyGen.getPublic().getEncoded()),
                 Base64Util.INSTANCE.encode(keyGen.getPrivate().getEncoded())
@@ -52,7 +49,7 @@ public class SM2Util {
             byte[] encryptData = engine.processBlock(data.getBytes(), 0, data.getBytes().length);
             return Base64.encodeBase64String(encryptData);
         } catch (Exception e) {
-            return "";
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
     }
 
@@ -72,7 +69,7 @@ public class SM2Util {
             byte[] plainText = engine.processBlock(decryptData, 0, decryptData.length);
             return new String(plainText);
         } catch (Exception e) {
-            return "";
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
     }
 
@@ -84,11 +81,9 @@ public class SM2Util {
             SecureRandom random = new SecureRandom();
             // 使用SM2的算法区域初始化密钥生成器
             kpg.initialize(sm2Spec, random);
-
-            KeyPair keyPair = kpg.generateKeyPair();
-            return keyPair;
+            return kpg.generateKeyPair();
         } catch (Exception e) {
-            return null;
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
     }
 
