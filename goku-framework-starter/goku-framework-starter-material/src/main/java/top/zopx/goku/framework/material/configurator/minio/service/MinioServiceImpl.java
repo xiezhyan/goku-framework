@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 俗世游子
@@ -178,6 +179,7 @@ public class MinioServiceImpl implements IMaterialService {
 
                 GetPresignedObjectUrlArgs.Builder getPresignedBuild = GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
+                        .expiry(1, TimeUnit.HOURS)
                         .bucket(uploadDTO.getBucketName().getName())
                         .object(objectName);
 

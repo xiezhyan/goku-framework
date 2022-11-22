@@ -23,6 +23,7 @@ import top.zopx.goku.framework.material.entity.vo.UploadVO;
 import top.zopx.goku.framework.material.service.IMaterialService;
 import top.zopx.goku.framework.material.util.ObjectNameUtil;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 import top.zopx.goku.framework.web.util.LogHelper;
 
 import javax.annotation.Resource;
@@ -127,12 +128,12 @@ public class OSSServiceImpl implements IMaterialService {
                                 )
                                 .setServer(UploadServerEnum.OSS)
                                 .setNewFileName(newFileName)
-                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(10L * 365), HttpMethod.GET))
+                                .setOverFileUrl(generatePresignedUrl(uploadDTO.getBucketName(), new ObjectName(objectName), Duration.ofDays(1), HttpMethod.GET))
                                 .build()
                 );
             } catch (Exception e) {
                 LogHelper.getLogger(OSSServiceImpl.class).error(e.getMessage(), e);
-                throw new BusException(e.getMessage());
+                throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
             }
         });
 
