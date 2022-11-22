@@ -7,14 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.common.util.ReadFileUtil;
-import top.zopx.goku.example.socket.gateway.sub.ConnectionTransferSub;
-import top.zopx.goku.example.socket.gateway.sub.KickOutUserSub;
-import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
+import top.zopx.goku.example.socket.gateway.sub.ConnectionTransferSub;
+import top.zopx.goku.example.socket.gateway.sub.DisconnectDuplicateLoginSub;
+import top.zopx.goku.example.socket.gateway.sub.KickOutUserSub;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisSubscribe;
+import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
 import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
@@ -107,13 +108,15 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         String[] channelArr = {
                 PublishCons.REGISTER_SERVER,
                 PublishCons.CONNECTION_TRANSFER_NOTICE,
-                PublishCons.KICK_OUT_USER_NOTICE
+                PublishCons.KICK_OUT_USER_NOTICE,
+                PublishCons.DISCONNECT_DUPLICATE_LOGIN
         };
 
         ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();
         group.add(NewServerConnectSub.getInstance());
         group.add(new ConnectionTransferSub());
         group.add(new KickOutUserSub());
+        group.add(new DisconnectDuplicateLoginSub());
 
         new RedisSubscribe().subscribe(channelArr, group);
     }

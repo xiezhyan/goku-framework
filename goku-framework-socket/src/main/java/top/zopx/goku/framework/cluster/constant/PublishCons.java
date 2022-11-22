@@ -26,4 +26,9 @@ public interface PublishCons {
      * 踢出用户通知
      */
     String KICK_OUT_USER_NOTICE = "goku:server:publish:kick_out_notice";
+
+    /**
+     * 重复登录通知
+     */
+    String DISCONNECT_DUPLICATE_LOGIN = "goku:server:publish:disconnect_duplicate_login";
 }

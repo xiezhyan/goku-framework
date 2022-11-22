@@ -1,20 +1,26 @@
 package top.zopx.goku.example.socket.gateway.handle;
 
 import com.google.gson.JsonObject;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import top.zopx.goku.framework.util.ClientChannelUtil;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.util.IdUtil;
+import top.zopx.goku.example.socket.common.async.AsyncOperationProcessorSingleton;
+import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;
 import top.zopx.goku.framework.biz.redis.RedisCache;
+import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
+import top.zopx.goku.framework.tools.util.string.StringUtil;
+import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.IdUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +29,7 @@ import static io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHand
 
 /**
  * 客户端消息处理器
+ *
  * @author 俗世游子
  */
 public class ClientMsgHandle extends BaseDefaultChannelHandler {
@@ -43,6 +50,8 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         return new ChannelHandler[]{
                 new ClientMsgDecode(),
                 new ClientMsgEncode(),
+                // 验证是否重复登录
+                new CheckDuplicateLoginHandle(),
                 // ping处理
                 new PingHandle(),
                 // 重新连接处理
@@ -99,29 +108,42 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         // 获取会话 Id
         int sessionId = IdUtil.getSessionId(ctx);
 
-        try (Jedis redisPubSub = RedisCache.getPubsub()) {
-            // 构建下线的用户
-            JsonObject offlineUserJsonObj = new JsonObject();
-            offlineUserJsonObj.addProperty("gatewayServerId", GatewayApp.getServerId());
-            offlineUserJsonObj.addProperty("remoteSessionId", sessionId);
-            offlineUserJsonObj.addProperty("userId", userId);
+        // 下线
+        AsyncOperationProcessorSingleton.getInstance()
+                .process(
+                        StringUtil.toInteger(userId),
+                        () -> {
+                            try (Jedis jedis = RedisCache.getServerCache()) {
+                                // TODO 最好采用Lua脚本
+                                jedis.hdel(RedisKeyCons.KEY_USER_INFO.format(userId), Constant.USER_AT_PROXY_SERVER_ID);
+                                jedis.hdel(RedisKeyCons.GATEWAY_USER_LIST.format(GatewayApp.getServerId()), String.valueOf(userId));
+                            }
 
-            LOGGER.info(
-                    "发布用户离线通知, gatewayServerId = {}, remoteSessionId = {}, userId = {}",
-                    GatewayApp.getServerId(),
-                    sessionId,
-                    userId
-            );
+                            try (Jedis redisPubSub = RedisCache.getPubsub()) {
+                                // 构建下线的用户
+                                JsonObject offlineUserJsonObj = new JsonObject();
+                                offlineUserJsonObj.addProperty("gatewayServerId", GatewayApp.getServerId());
+                                offlineUserJsonObj.addProperty("remoteSessionId", sessionId);
+                                offlineUserJsonObj.addProperty("userId", userId);
 
-            // 记录日志信息
-            redisPubSub.publish(
-                    PublishCons.USER_LOGOUT_NOTICE,
-                    offlineUserJsonObj.toString()
-            );
-        } catch (Exception ex) {
-            // 记录错误日志
-            LOGGER.error(ex.getMessage(), ex);
-        }
+                                LOGGER.info(
+                                        "发布用户离线通知, gatewayServerId = {}, remoteSessionId = {}, userId = {}",
+                                        GatewayApp.getServerId(),
+                                        sessionId,
+                                        userId
+                                );
+
+                                // 记录日志信息
+                                redisPubSub.publish(
+                                        PublishCons.USER_LOGOUT_NOTICE,
+                                        offlineUserJsonObj.toString()
+                                );
+                            } catch (Exception ex) {
+                                // 记录错误日志
+                                LOGGER.error(ex.getMessage(), ex);
+                            }
+                        }
+                );
     }
 
     @Override

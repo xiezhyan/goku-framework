@@ -69,7 +69,7 @@ public final class IdUtil {
         }
     }
 
-    private static void putUserId(Channel channel, long userId) {
+    public static void putUserId(Channel channel, long userId) {
         ChannelOpeUtil.set(channel, AttributeKeyCons.USER_ATTR, userId);
     }
 
@@ -79,7 +79,7 @@ public final class IdUtil {
         }
     }
 
-    private static void putPlatform(Channel channel, String platform) {
+    public static void putPlatform(Channel channel, String platform) {
         ChannelOpeUtil.set(channel, AttributeKeyCons.PLATFORM, platform);
     }
 
@@ -89,7 +89,7 @@ public final class IdUtil {
         }
     }
 
-    private static void putDeviceId(Channel channel, String deviceId) {
+    public static void putDeviceId(Channel channel, String deviceId) {
         ChannelOpeUtil.set(channel, AttributeKeyCons.DEVICE_ID, deviceId);
     }
 }

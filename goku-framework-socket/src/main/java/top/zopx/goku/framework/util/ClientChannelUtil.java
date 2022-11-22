@@ -71,7 +71,7 @@ public final class ClientChannelUtil {
         }
     }
 
-    private static Channel getChannelBySessionId(int remoteSessionId) {
+    public static Channel getChannelBySessionId(int remoteSessionId) {
         return CHANNEL_SESSION_MAP.get(remoteSessionId);
     }
 

@@ -22,6 +22,11 @@ public enum RedisKeyCons {
      * 检票
      */
     TICKET_X_PREFIX("goku:server:ticket:ticket_%s"),
+
+    /**
+     * 网关
+     */
+    GATEWAY_USER_LIST("goku:server:gateway:gateway_%s")
     ;
 
     private final String key;
