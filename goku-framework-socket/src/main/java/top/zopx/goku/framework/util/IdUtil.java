@@ -27,7 +27,7 @@ public final class IdUtil {
 
     private static void attachSessionId(Channel ch) {
         if (null != ch) {
-            ChannelUtil.set(ch, AttributeKeyCons.SESSION_ID, ID_GEN.incrementAndGet());
+            ChannelOpeUtil.set(ch, AttributeKeyCons.SESSION_ID, ID_GEN.incrementAndGet());
         }
     }
 
@@ -35,7 +35,7 @@ public final class IdUtil {
         if (null == ch) {
             return -1;
         } else {
-            return ChannelUtil.get(ch, AttributeKeyCons.SESSION_ID);
+            return ChannelOpeUtil.get(ch, AttributeKeyCons.SESSION_ID);
         }
     }
 
@@ -43,7 +43,7 @@ public final class IdUtil {
         if (null == ch) {
             return -1L;
         } else {
-            return Optional.ofNullable(ChannelUtil.get(ch, AttributeKeyCons.USER_ATTR)).orElse(-1L);
+            return Optional.ofNullable(ChannelOpeUtil.get(ch, AttributeKeyCons.USER_ATTR)).orElse(-1L);
         }
     }
 
@@ -70,6 +70,26 @@ public final class IdUtil {
     }
 
     private static void putUserId(Channel channel, long userId) {
-        ChannelUtil.set(channel, AttributeKeyCons.USER_ATTR, userId);
+        ChannelOpeUtil.set(channel, AttributeKeyCons.USER_ATTR, userId);
+    }
+
+    public static void putPlatform(ChannelHandlerContext ctx, String platform) {
+        if (null != ctx) {
+            putPlatform(ctx.channel(), platform);
+        }
+    }
+
+    private static void putPlatform(Channel channel, String platform) {
+        ChannelOpeUtil.set(channel, AttributeKeyCons.PLATFORM, platform);
+    }
+
+    public static void putDeviceId(ChannelHandlerContext ctx, String deviceId) {
+        if (null != ctx) {
+            putDeviceId(ctx.channel(), deviceId);
+        }
+    }
+
+    private static void putDeviceId(Channel channel, String deviceId) {
+        ChannelOpeUtil.set(channel, AttributeKeyCons.DEVICE_ID, deviceId);
     }
 }

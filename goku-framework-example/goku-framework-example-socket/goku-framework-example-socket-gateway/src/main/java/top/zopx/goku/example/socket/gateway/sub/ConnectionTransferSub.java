@@ -2,32 +2,19 @@ package top.zopx.goku.example.socket.gateway.sub;
 
 import com.google.gson.JsonObject;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
-import top.zopx.goku.example.socket.common.constant.Constant;
-import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.framework.util.ClientChannelUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
-import top.zopx.goku.example.socket.gateway.handle.ClientInnerMsgHandle;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.biz.selector.Client;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
-import top.zopx.goku.framework.cluster.entity.IServerInfo;
-import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
-import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.GatewayToBizServerAcceptor;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
-import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.util.IdUtil;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,7 +42,7 @@ public class ConnectionTransferSub implements ISubscribe {
         }
         Long userId = jsonObject.get("userId").getAsLong();
 
-        Channel oldChannel = ClientChannelGroup.removeByUserId(userId);
+        Channel oldChannel = ClientChannelUtil.removeByUserId(userId);
 
         if (null != oldChannel) {
             LOGGER.info(

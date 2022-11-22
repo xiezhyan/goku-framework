@@ -15,5 +15,6 @@
 > 随后需要从如下方面考虑`goku-framework-socket`的扩展
 > 1. Redis订阅如何替换
 > 2. 如MySQL，Redis等初始化配置如何操作
+> 3. 单设备操作
 
 - `goku-framework-example-web`目前是关于`goku-framework-starter`相关的示例，基础配置，快速CRUD，国际化

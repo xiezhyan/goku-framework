@@ -13,7 +13,7 @@ import java.util.Objects;
  * @email xiezhyan@126.com
  * @date 2022/05/15 19:07
  */
-public final class ChannelUtil {
+public final class ChannelOpeUtil {
 
     /**
      * 设置AttributeKey

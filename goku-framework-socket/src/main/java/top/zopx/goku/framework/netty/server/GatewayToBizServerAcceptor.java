@@ -44,6 +44,7 @@ public final class GatewayToBizServerAcceptor {
 
     private static final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "goku-websocket-client-work");
 
+
     /**
      * 使用配置
      */
@@ -64,6 +65,9 @@ public final class GatewayToBizServerAcceptor {
      */
     private boolean ready = false;
 
+    private EpollEventLoopGroup epollEventLoopGroup;
+    private NioEventLoopGroup nioEventLoopGroup;
+
     /**
      * 类参数构造器
      *
@@ -75,6 +79,11 @@ public final class GatewayToBizServerAcceptor {
         }
 
         this.client = client;
+        if (isLinux()) {
+            epollEventLoopGroup = new EpollEventLoopGroup(THREAD_FACTORY);
+        } else {
+            nioEventLoopGroup = new NioEventLoopGroup(THREAD_FACTORY);
+        }
     }
 
     /**
@@ -131,8 +140,8 @@ public final class GatewayToBizServerAcceptor {
             b.group(
                     null == work ?
                             isLinux() ?
-                                    new EpollEventLoopGroup(THREAD_FACTORY) :
-                                    new NioEventLoopGroup(THREAD_FACTORY) :
+                                    epollEventLoopGroup :
+                                    nioEventLoopGroup :
                             work
             );
 

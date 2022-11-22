@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.constant.Constant;
-import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.framework.util.ClientChannelUtil;
 import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
@@ -117,7 +117,7 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
             }
 
             // 获取本地服务器上的连接
-            Channel oldCh = ClientChannelGroup.getChannelByUserId(userId);
+            Channel oldCh = ClientChannelUtil.getChannelByUserId(userId);
 
             if (null != oldCh &&
                     oldCh != ctx.channel()) {
@@ -138,7 +138,7 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
 
             // 设置用户 Id
             IdUtil.putUserId(ctx, userId);
-            ClientChannelGroup.relative(userId, IdUtil.getSessionId(ctx));
+            ClientChannelUtil.relative(userId, IdUtil.getSessionId(ctx));
 
             // 标记所在代理服务器 Id
             jedis.hset(

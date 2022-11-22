@@ -17,7 +17,7 @@ public interface AttributeKeyCons {
     /**
      * 终端版本
      */
-    AttributeKey<Integer> PLATFORM = AttributeKey.valueOf("PLAT_FORM");
+    AttributeKey<String> PLATFORM = AttributeKey.valueOf("PLAT_FORM");
 
     /**
      * 应用ID

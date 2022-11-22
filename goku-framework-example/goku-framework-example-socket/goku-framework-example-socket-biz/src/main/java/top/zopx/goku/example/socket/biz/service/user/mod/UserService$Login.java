@@ -18,7 +18,7 @@ import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 import top.zopx.goku.framework.cluster.entity.R;
 import top.zopx.goku.framework.util.Out;
-import top.zopx.goku.framework.util.TicketUtil;
+import top.zopx.goku.framework.biz.redis.TicketUtil;
 
 /**
  * @author 谢先生

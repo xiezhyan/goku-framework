@@ -1,9 +1,8 @@
-package top.zopx.goku.example.socket.common.util;
+package top.zopx.goku.framework.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
-import top.zopx.goku.framework.util.IdUtil;
+import top.zopx.goku.framework.cluster.entity.BaseInnerMsg;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @email xiezhyan@126.com
  * @date 2022/11/14 20:59
  */
-public final class ClientChannelGroup {
-    private ClientChannelGroup() {
+public final class ClientChannelUtil {
+    private ClientChannelUtil() {
     }
 
     private static final Map<Long, Integer> USER_ID_AND_SESSION_ID_MAP = new ConcurrentHashMap<>(64);
@@ -59,7 +58,7 @@ public final class ClientChannelGroup {
         );
     }
 
-    public static void writeAndFlushBySessionId(ClientInnerMsg innerMsg, int remoteSessionId) {
+    public static void writeAndFlushBySessionId(BaseInnerMsg innerMsg, int remoteSessionId) {
         if (null == innerMsg) {
             return;
         }

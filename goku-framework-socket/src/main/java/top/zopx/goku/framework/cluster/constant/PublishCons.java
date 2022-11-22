@@ -22,4 +22,8 @@ public interface PublishCons {
      */
     String USER_LOGOUT_NOTICE = "goku:server:publish:user_logout_notice";
 
+    /**
+     * 踢出用户通知
+     */
+    String KICK_OUT_USER_NOTICE = "goku:server:publish:kick_out_notice";
 }

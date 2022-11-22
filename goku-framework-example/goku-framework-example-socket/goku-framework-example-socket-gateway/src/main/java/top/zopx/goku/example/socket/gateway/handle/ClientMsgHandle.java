@@ -7,7 +7,7 @@ import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
-import top.zopx.goku.example.socket.common.util.ClientChannelGroup;
+import top.zopx.goku.framework.util.ClientChannelUtil;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
@@ -68,7 +68,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         // ctx附着会话ID
         IdUtil.attachSessionId(ctx);
         // 并且将ctx添加到组中，随后校验之后需要将sessionId和userId进行绑定
-        ClientChannelGroup.add(ctx);
+        ClientChannelUtil.add(ctx);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         }
 
         // 移除客户端信道
-        ClientChannelGroup.remove(ctx);
+        ClientChannelUtil.remove(ctx);
 
         if (connAlreadyTransfer) {
             LOGGER.info("客户端连接已转移...");
