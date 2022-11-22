@@ -3,7 +3,7 @@ package top.zopx.goku.example.socket.common.async;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.netty.execute.AsyncOperationProcessor;
+import top.zopx.goku.framework.biz.execute.AsyncOperationProcessor;
 
 import java.util.concurrent.Executor;
 

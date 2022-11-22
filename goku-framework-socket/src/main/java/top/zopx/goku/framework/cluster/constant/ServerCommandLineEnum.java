@@ -47,7 +47,7 @@ public enum ServerCommandLineEnum {
     /**
      * 服务处理类型
      */
-    SERVER_JOB_TYPE(null, "server_job_type_set", "服务处理类型", true);
+    SERVER_JOB_TYPE(null, "server_job_type_set", "服务处理类型", false);
 
     private final String opt;
     private final String longOpt;
