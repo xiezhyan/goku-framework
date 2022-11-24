@@ -5,7 +5,7 @@ import io.netty.channel.Channel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.proto.common.Common;
@@ -42,7 +42,7 @@ public class ConnectionTransferSub implements ISubscribe {
         }
         Long userId = jsonObject.get("userId").getAsLong();
 
-        Channel oldChannel = ClientChannelUtil.removeByUserId(userId);
+        Channel oldChannel = ChannelUtil.removeByUserId(userId);
 
         if (null != oldChannel) {
             LOGGER.info(

@@ -19,7 +19,7 @@ import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.framework.util.IdUtil;
 
 import java.util.List;
@@ -77,7 +77,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         // ctx附着会话ID
         IdUtil.attachSessionId(ctx);
         // 并且将ctx添加到组中，随后校验之后需要将sessionId和userId进行绑定
-        ClientChannelUtil.add(ctx);
+        ChannelUtil.add(ctx);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
         }
 
         // 移除客户端信道
-        ClientChannelUtil.remove(ctx);
+        ChannelUtil.remove(ctx);
 
         if (connAlreadyTransfer) {
             LOGGER.info("客户端连接已转移...");

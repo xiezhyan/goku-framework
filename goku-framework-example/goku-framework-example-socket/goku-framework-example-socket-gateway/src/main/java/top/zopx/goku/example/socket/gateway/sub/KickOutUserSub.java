@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.proto.common.Common;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
@@ -36,7 +36,7 @@ public class KickOutUserSub implements ISubscribe {
             return;
         }
 
-        Channel oldChannel = ClientChannelUtil.removeByUserId(kicket.userId);
+        Channel oldChannel = ChannelUtil.removeByUserId(kicket.userId);
         if (null == oldChannel) {
             return;
         }

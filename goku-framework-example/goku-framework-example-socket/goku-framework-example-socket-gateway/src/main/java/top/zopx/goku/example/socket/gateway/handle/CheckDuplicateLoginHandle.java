@@ -18,7 +18,7 @@ import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.framework.util.IdUtil;
 
 /**
@@ -55,7 +55,7 @@ public class CheckDuplicateLoginHandle extends ChannelInboundHandlerAdapter {
          */
         // 取出其中的sessionId
         final Integer sessionId = IdUtil.getSessionId(ctx);
-        final Channel channel = ClientChannelUtil.getChannelBySessionId(sessionId);
+        final Channel channel = ChannelUtil.getChannelBySessionId(sessionId);
 
         if (null == channel) {
             // 无需判断
@@ -68,7 +68,7 @@ public class CheckDuplicateLoginHandle extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        final Channel existsChannel = ClientChannelUtil.getChannelByUserId(userId);
+        final Channel existsChannel = ChannelUtil.getChannelByUserId(userId);
         if (null != existsChannel) {
             try {
                 LOGGER.warn(

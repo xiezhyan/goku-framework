@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.cluster.util.Timer;
@@ -125,7 +125,7 @@ public class ClientInnerMsgHandle extends BaseDefaultChannelHandler {
         // @see ClientMsgEncode
         //
         // 根据会话 Id 写出消息
-        ClientChannelUtil.writeAndFlushBySessionId(
+        ChannelUtil.writeAndFlushBySessionId(
                 innerMsg, // 该消息会经过 ClientMsgEncoder 编码
                 innerMsg.getRemoteSessionId()
         );

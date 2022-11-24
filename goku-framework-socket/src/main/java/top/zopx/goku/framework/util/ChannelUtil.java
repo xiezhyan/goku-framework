@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @email xiezhyan@126.com
  * @date 2022/11/14 20:59
  */
-public final class ClientChannelUtil {
-    private ClientChannelUtil() {
+public final class ChannelUtil {
+    private ChannelUtil() {
     }
 
     private static final Map<Long, Integer> USER_ID_AND_SESSION_ID_MAP = new ConcurrentHashMap<>(64);

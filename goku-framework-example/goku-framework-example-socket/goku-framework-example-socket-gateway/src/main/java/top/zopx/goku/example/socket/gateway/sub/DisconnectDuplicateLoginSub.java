@@ -13,7 +13,7 @@ import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.cluster.constant.PublishCons;
 import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
-import top.zopx.goku.framework.util.ClientChannelUtil;
+import top.zopx.goku.framework.util.ChannelUtil;
 
 import java.util.Objects;
 
@@ -42,7 +42,7 @@ public class DisconnectDuplicateLoginSub implements ISubscribe {
                 userId
         );
 
-        final Channel oldChannel = ClientChannelUtil.getChannelByUserId(userId);
+        final Channel oldChannel = ChannelUtil.getChannelByUserId(userId);
         if (null != oldChannel) {
             oldChannel.disconnect();
         } else {
