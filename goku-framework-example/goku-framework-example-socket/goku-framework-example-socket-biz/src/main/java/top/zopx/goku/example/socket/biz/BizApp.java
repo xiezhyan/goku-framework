@@ -17,10 +17,10 @@ import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisPublish;
 import top.zopx.goku.framework.biz.report.RedisReportServerInfo;
 import top.zopx.goku.framework.biz.report.ReportServer;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
-import top.zopx.goku.framework.cluster.entity.IServerInfo;
-import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.ServerCommandLineEnum;
+import top.zopx.goku.framework.biz.entity.IServerInfo;
+import top.zopx.goku.framework.netty.server.ServerAcceptor;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.netty.server.NettyServerAcceptor;
@@ -145,7 +145,7 @@ public class BizApp implements BaseChannelHandlerFactory {
 
     private static void startSubServer() {
         String[] channelArr = {
-                PublishCons.USER_LOGOUT_NOTICE
+                PublishEnum.USER_LOGOUT_NOTICE
         };
 
         ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();

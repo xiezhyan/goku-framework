@@ -1,18 +1,9 @@
 package top.zopx.goku.example.socket.common.entity;
 
-import com.google.gson.JsonObject;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
-import org.apache.commons.lang3.StringUtils;
 import top.zopx.goku.example.socket.common.recognizer.MsgRecognizer;
-import top.zopx.goku.framework.cluster.entity.BaseInnerMsg;
-import top.zopx.goku.framework.tools.entity.wrapper.R;
-import top.zopx.goku.framework.tools.exceptions.BusException;
-import top.zopx.goku.framework.tools.util.json.JsonUtil;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.stream.Collectors;
+import top.zopx.goku.framework.biz.entity.BaseInnerMsg;
 
 /**
  * @author 谢先生

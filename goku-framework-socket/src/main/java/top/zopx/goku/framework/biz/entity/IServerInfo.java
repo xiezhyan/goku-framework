@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.cluster.entity;
+package top.zopx.goku.framework.biz.entity;
 
 import java.util.*;
 

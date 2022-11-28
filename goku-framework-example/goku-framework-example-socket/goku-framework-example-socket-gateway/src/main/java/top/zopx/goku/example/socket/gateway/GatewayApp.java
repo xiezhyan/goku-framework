@@ -16,9 +16,9 @@ import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.redis.RedisSubscribe;
 import top.zopx.goku.framework.biz.ukey.UKey;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.ServerCommandLineEnum;
-import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.ServerCommandLineEnum;
+import top.zopx.goku.framework.netty.server.ServerAcceptor;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.netty.server.NettyServerAcceptor;
@@ -106,10 +106,10 @@ public class GatewayApp implements BaseChannelHandlerFactory {
 
     private static void startSubServer() {
         String[] channelArr = {
-                PublishCons.REGISTER_SERVER,
-                PublishCons.CONNECTION_TRANSFER_NOTICE,
-                PublishCons.KICK_OUT_USER_NOTICE,
-                PublishCons.DISCONNECT_DUPLICATE_LOGIN
+                PublishEnum.REGISTER_SERVER,
+                PublishEnum.CONNECTION_TRANSFER_NOTICE,
+                PublishEnum.KICK_OUT_USER_NOTICE,
+                PublishEnum.DISCONNECT_DUPLICATE_LOGIN
         };
 
         ISubscribe.SubscribeGroup group = new ISubscribe.SubscribeGroup();

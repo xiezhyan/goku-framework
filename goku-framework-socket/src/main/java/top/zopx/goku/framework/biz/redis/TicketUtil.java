@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ public final class TicketUtil {
         // 创建票据
         final String newTicket = UUID.randomUUID().toString();
         // 票据关键字
-        final String redisKey = RedisKeyCons.TICKET_X_PREFIX.format(newTicket);
+        final String redisKey = RedisKeyEnum.TICKET_X_PREFIX.format(newTicket);
 
         try (Jedis redisCache = RedisCache.getServerCache()) {
             // 将票据保存到 Redis,

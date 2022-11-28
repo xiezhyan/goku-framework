@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.util.Objects;
@@ -99,7 +99,7 @@ public final class RedisSubscribe implements ISubscribe{
             @Override
             public void onMsg(String channel, String msg) {
                 // 服务发布
-                if (!Objects.equals(channel, PublishCons.REGISTER_SERVER)) {
+                if (!Objects.equals(channel, PublishEnum.REGISTER_SERVER)) {
                     return;
                 }
                 // 服务ID
@@ -109,6 +109,6 @@ public final class RedisSubscribe implements ISubscribe{
             }
         });
         ISubscribe subscribe = new RedisSubscribe();
-        subscribe.subscribe(new String[]{PublishCons.REGISTER_SERVER}, subscribeGroup);
+        subscribe.subscribe(new String[]{PublishEnum.REGISTER_SERVER}, subscribeGroup);
     }
 }

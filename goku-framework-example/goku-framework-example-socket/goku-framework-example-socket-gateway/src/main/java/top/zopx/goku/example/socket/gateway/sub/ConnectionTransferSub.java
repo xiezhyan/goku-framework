@@ -10,7 +10,7 @@ import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.handle.ClientMsgHandle;
 import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.util.IdUtil;
 
@@ -28,7 +28,7 @@ public class ConnectionTransferSub implements ISubscribe {
 
     @Override
     public void onMsg(String channel, String msg) {
-        if (!Objects.equals(channel, PublishCons.CONNECTION_TRANSFER_NOTICE) || StringUtils.isBlank(msg)) {
+        if (!Objects.equals(channel, PublishEnum.CONNECTION_TRANSFER_NOTICE) || StringUtils.isBlank(msg)) {
             return;
         }
 

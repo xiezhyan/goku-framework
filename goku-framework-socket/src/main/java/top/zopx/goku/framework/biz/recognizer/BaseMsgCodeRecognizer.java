@@ -11,15 +11,36 @@ import top.zopx.goku.framework.biz.constant.IKey;
  * {@link CmdHandlerMsgRecognizer}
  * <pre>
  * {@code
- *  public class MsgCodeRecognizer extends BaseMsgCodeRecognizer {
- *     public static final MsgCodeRecognizer INSTANCE = new MsgCodeRecognizer();
+ *  public final class MsgRecognizer extends BaseMsgCodeRecognizer {
+ *
+ *     private MsgRecognizer() {
+ *     }
+ *
+ *     public static MsgRecognizer getInstance() {
+ *         return Holder.INSTANCE;
+ *     }
+ *
+ *     private static class Holder {
+ *         public static final MsgRecognizer INSTANCE = new MsgRecognizer();
+ *     }
+ *
  *     @Override
  *     protected void init() {
- *         // 针对各种消息服务器处理的类型，进行消息映射
- *         CmdHandlerMsgRecognizer.tryInit();
- *         CmdHandlerMsgRecognizer.tryInit();
+ *         for (IKey key : ServerTypeEnum.values()) {
+ *             CmdHandlerMsgRecognizer.tryInit(
+ *                     Common.class,
+ *                     Common.CommonDef.values(),
+ *                     key
+ *             );
+ *         }
+ *
+ *         CmdHandlerMsgRecognizer.tryInit(
+ *                 Auth.class,
+ *                 Auth.AuthDef.values(),
+ *                 ServerTypeEnum.AUTH
+ *         );
  *     }
- *  }
+ * }
  * }
  * </pre>
  *
@@ -54,14 +75,15 @@ public abstract class BaseMsgCodeRecognizer {
     /**
      * 尝试初始化
      * for (ServerType key : ServerType.values()) {
-     *     CmdHandlerMsgRecognizer.tryInit(
-     *             Core.class,
-     *             Core.CommMsgCodeDef.values(),
-     *             key
-     *     );
+     * CmdHandlerMsgRecognizer.tryInit(
+     * Core.class,
+     * Core.CommMsgCodeDef.values(),
+     * key
+     * );
      * }
      */
-    protected void init() {}
+    protected void init() {
+    }
 
     /**
      * 通过消息类获取消息编码

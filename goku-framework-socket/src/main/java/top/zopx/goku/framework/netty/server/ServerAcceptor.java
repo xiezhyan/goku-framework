@@ -1,5 +1,7 @@
-package top.zopx.goku.framework.netty.bind.entity;
+package top.zopx.goku.framework.netty.server;
 
+import top.zopx.goku.framework.netty.bind.entity.AppClient;
+import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 
 import java.time.Duration;

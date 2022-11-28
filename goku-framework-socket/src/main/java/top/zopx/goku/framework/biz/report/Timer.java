@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.cluster.util;
+package top.zopx.goku.framework.biz.report;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.constant.IKey;
-import top.zopx.goku.framework.biz.selector.Client;
+import top.zopx.goku.framework.netty.server.Client;
 import top.zopx.goku.framework.util.Out;
 
 import java.util.ArrayList;

@@ -9,7 +9,7 @@ import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.lock.DLock;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 
 /**
  * 客户端消息处理器
@@ -75,7 +75,7 @@ public class CheckInTicketCmdHandle extends ChannelInboundHandlerAdapter {
 
             try (Jedis redisCache = RedisCache.getServerCache()) {
                 // 获取期望值并清空数据
-                String key = RedisKeyCons.TICKET_X_PREFIX.format(ticket);
+                String key = RedisKeyEnum.TICKET_X_PREFIX.format(ticket);
                 String expectId = redisCache.get(key);
                 redisCache.del(key);
 

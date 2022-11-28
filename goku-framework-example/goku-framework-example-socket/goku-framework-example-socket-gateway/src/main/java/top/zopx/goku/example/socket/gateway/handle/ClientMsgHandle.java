@@ -15,8 +15,8 @@ import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgDecode;
 import top.zopx.goku.example.socket.gateway.codec.ClientMsgEncode;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.util.ChannelUtil;
@@ -115,8 +115,8 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
                         () -> {
                             try (Jedis jedis = RedisCache.getServerCache()) {
                                 // TODO 最好采用Lua脚本
-                                jedis.hdel(RedisKeyCons.KEY_USER_INFO.format(userId), Constant.USER_AT_PROXY_SERVER_ID);
-                                jedis.hdel(RedisKeyCons.GATEWAY_USER_LIST.format(GatewayApp.getServerId()), String.valueOf(userId));
+                                jedis.hdel(RedisKeyEnum.KEY_USER_INFO.format(userId), Constant.USER_AT_PROXY_SERVER_ID);
+                                jedis.hdel(RedisKeyEnum.GATEWAY_USER_LIST.format(GatewayApp.getServerId()), String.valueOf(userId));
                             }
 
                             try (Jedis redisPubSub = RedisCache.getPubsub()) {
@@ -135,7 +135,7 @@ public class ClientMsgHandle extends BaseDefaultChannelHandler {
 
                                 // 记录日志信息
                                 redisPubSub.publish(
-                                        PublishCons.USER_LOGOUT_NOTICE,
+                                        PublishEnum.USER_LOGOUT_NOTICE,
                                         offlineUserJsonObj.toString()
                                 );
                             } catch (Exception ex) {

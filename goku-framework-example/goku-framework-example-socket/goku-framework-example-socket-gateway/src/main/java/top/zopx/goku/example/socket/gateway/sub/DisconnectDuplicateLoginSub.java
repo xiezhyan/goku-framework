@@ -10,8 +10,8 @@ import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.util.ChannelUtil;
 
@@ -27,7 +27,7 @@ public class DisconnectDuplicateLoginSub implements ISubscribe {
 
     @Override
     public void onMsg(String channel, String msg) {
-        if (!Objects.equals(channel, PublishCons.DISCONNECT_DUPLICATE_LOGIN) || StringUtils.isBlank(msg)) {
+        if (!Objects.equals(channel, PublishEnum.DISCONNECT_DUPLICATE_LOGIN) || StringUtils.isBlank(msg)) {
             return;
         }
 
@@ -62,8 +62,8 @@ public class DisconnectDuplicateLoginSub implements ISubscribe {
 
         try(Jedis jedis = RedisCache.getServerCache()) {
             // TODO 最好采用Lua脚本
-            jedis.hdel(RedisKeyCons.KEY_USER_INFO.format(userId), Constant.USER_AT_PROXY_SERVER_ID);
-            jedis.hdel(RedisKeyCons.GATEWAY_USER_LIST.format(GatewayApp.getServerId()), String.valueOf(userId));
+            jedis.hdel(RedisKeyEnum.KEY_USER_INFO.format(userId), Constant.USER_AT_PROXY_SERVER_ID);
+            jedis.hdel(RedisKeyEnum.GATEWAY_USER_LIST.format(GatewayApp.getServerId()), String.valueOf(userId));
         }
     }
 }

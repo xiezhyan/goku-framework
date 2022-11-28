@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.cluster.constant;
+package top.zopx.goku.framework.biz.constant;
 
 import top.zopx.goku.framework.util.CommandLnUtil;
 
@@ -40,6 +40,10 @@ public enum ServerCommandLineEnum {
      * 服务器端口号
      */
     SERVER_PORT("p", "server_port", "服务器端口号", true),
+    /**
+     * 服务器请求地址
+     */
+    SERVER_PATH("path", "server_path", "服务器请求地址", true),
     /**
      * 配置文件
      */

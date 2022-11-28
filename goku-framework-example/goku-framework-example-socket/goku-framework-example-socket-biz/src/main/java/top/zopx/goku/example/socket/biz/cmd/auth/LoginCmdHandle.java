@@ -3,7 +3,7 @@ package top.zopx.goku.example.socket.biz.cmd.auth;
 import top.zopx.goku.example.socket.biz.entity.bo.LoginResult;
 import top.zopx.goku.example.socket.biz.service.user.UserService;
 import top.zopx.goku.example.socket.proto.auth.Auth;
-import top.zopx.goku.framework.cluster.entity.R;
+import top.zopx.goku.framework.biz.entity.R;
 import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
 import top.zopx.goku.framework.netty.bind.handler.ICmdContextHandler;
 

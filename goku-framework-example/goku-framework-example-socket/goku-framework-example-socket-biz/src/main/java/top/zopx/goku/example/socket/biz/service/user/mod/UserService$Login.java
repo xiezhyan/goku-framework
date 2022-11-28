@@ -15,8 +15,8 @@ import top.zopx.goku.example.socket.common.constant.ErrorBusEnum;
 import top.zopx.goku.framework.biz.lock.DLock;
 import top.zopx.goku.framework.biz.redis.RedisCache;
 import top.zopx.goku.framework.biz.ukey.UKey;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
-import top.zopx.goku.framework.cluster.entity.R;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
+import top.zopx.goku.framework.biz.entity.R;
 import top.zopx.goku.framework.util.Out;
 import top.zopx.goku.framework.biz.redis.TicketUtil;
 
@@ -82,7 +82,7 @@ public interface UserService$Login {
                 // 授权成功后,
                 // 清理用户详情缓存...
                 redisCache.hdel(
-                        RedisKeyCons.KEY_USER_INFO.format(userId),
+                        RedisKeyEnum.KEY_USER_INFO.format(userId),
                         Constant.USER_DETAIL
                 );
             }

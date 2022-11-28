@@ -15,8 +15,8 @@ import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 
 import java.util.concurrent.TimeUnit;
 
@@ -86,7 +86,7 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
         }
 
         try {
-            String userInfoKey = RedisKeyCons.KEY_USER_INFO.format(userId);
+            String userInfoKey = RedisKeyEnum.KEY_USER_INFO.format(userId);
             // 如果已经标记所在代理服务器,
             // 那么就删除这个标记!
             long delOther = jedis.hdel(
@@ -108,7 +108,7 @@ public class ReconnCmdHandle extends ChannelInboundHandlerAdapter {
                     joNotice.addProperty("userId", userId);
 
                     redisPubSub.publish(
-                            PublishCons.CONNECTION_TRANSFER_NOTICE,
+                            PublishEnum.CONNECTION_TRANSFER_NOTICE,
                             joNotice.toString()
                     );
                 }

@@ -2,7 +2,7 @@ package top.zopx.goku.framework.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import top.zopx.goku.framework.cluster.entity.BaseInnerMsg;
+import top.zopx.goku.framework.biz.entity.BaseInnerMsg;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -11,7 +11,7 @@ import top.zopx.goku.example.socket.common.async.MainThreadPoolExecutorSingleton
 import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.proto.common.Common;
-import top.zopx.goku.framework.cluster.util.GatewayUtil;
+import top.zopx.goku.framework.util.GatewayUtil;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
 

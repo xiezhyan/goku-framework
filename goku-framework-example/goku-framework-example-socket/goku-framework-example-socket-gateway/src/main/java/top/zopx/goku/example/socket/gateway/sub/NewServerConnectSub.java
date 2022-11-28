@@ -9,13 +9,13 @@ import top.zopx.goku.example.socket.common.constant.Constant;
 import top.zopx.goku.example.socket.gateway.handle.ClientInnerMsgHandle;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.biz.selector.Client;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
-import top.zopx.goku.framework.cluster.entity.IServerInfo;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
+import top.zopx.goku.framework.biz.entity.IServerInfo;
 import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.GatewayToBizServerAcceptor;
+import top.zopx.goku.framework.netty.server.Client;
+import top.zopx.goku.framework.netty.server.ClientToClientAcceptor;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
@@ -51,7 +51,7 @@ public class NewServerConnectSub implements
 
     @Override
     public void onMsg(String channel, String msg) {
-        if (!Objects.equals(channel, PublishCons.REGISTER_SERVER) || StringUtils.isBlank(msg)) {
+        if (!Objects.equals(channel, PublishEnum.REGISTER_SERVER) || StringUtils.isBlank(msg)) {
             return;
         }
 
@@ -61,7 +61,7 @@ public class NewServerConnectSub implements
 
         try (Jedis jedis = RedisCache.getServerCache()) {
             // 获取服务器信息
-            String key = RedisKeyCons.KEY_SERVER_X_PREFIX.format(bizServerId);
+            String key = RedisKeyEnum.KEY_SERVER_X_PREFIX.format(bizServerId);
             String serverInfoStr = jedis.get(key);
             if (StringUtils.isBlank(serverInfoStr)) {
                 LOGGER.error("未查询到服务的基本信息， serverId = {}", bizServerId);
@@ -126,7 +126,7 @@ public class NewServerConnectSub implements
     }
 
     @Override
-    public void apply(GatewayToBizServerAcceptor closeClient) {
+    public void apply(ClientToClientAcceptor closeClient) {
         if (null == closeClient) {
             return;
         }

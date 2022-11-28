@@ -15,8 +15,8 @@ import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
 import top.zopx.goku.example.socket.proto.auth.Auth;
 import top.zopx.goku.framework.biz.lock.DLock;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.framework.util.IdUtil;
@@ -130,8 +130,8 @@ public class CheckDuplicateLoginHandle extends ChannelInboundHandlerAdapter {
 
         try (Jedis jedis = RedisCache.getServerCache()) {
             // 先在用户信息中判断是否存在
-            String userKey = RedisKeyCons.KEY_USER_INFO.format(userId);
-            String gatewayListKey = RedisKeyCons.GATEWAY_USER_LIST.format(GatewayApp.getServerId());
+            String userKey = RedisKeyEnum.KEY_USER_INFO.format(userId);
+            String gatewayListKey = RedisKeyEnum.GATEWAY_USER_LIST.format(GatewayApp.getServerId());
             final String strUserAtGatewayServerId = jedis.hget(userKey, Constant.USER_AT_PROXY_SERVER_ID);
             if (StringUtils.isBlank(strUserAtGatewayServerId)) {
                 // 不存在
@@ -158,7 +158,7 @@ public class CheckDuplicateLoginHandle extends ChannelInboundHandlerAdapter {
             }
 
             // 2、这个数据和当前网关服务器 Id 不相同，就判断当前userId是否存在于gateway_N
-            if (jedis.hexists(RedisKeyCons.GATEWAY_USER_LIST.format(strUserAtGatewayServerId), String.valueOf(userId))) {
+            if (jedis.hexists(RedisKeyEnum.GATEWAY_USER_LIST.format(strUserAtGatewayServerId), String.valueOf(userId))) {
                 // 最后一种情况是 Redis 里存的服务器 Id 跟当前服务器 Id 不同,
                 // 那么就得通知对方: 放手吧...
 
@@ -167,7 +167,7 @@ public class CheckDuplicateLoginHandle extends ChannelInboundHandlerAdapter {
                     jsonObj.addProperty("gatewayServerId", strUserAtGatewayServerId);
                     jsonObj.addProperty("userId", userId);
                     pubsub.publish(
-                            PublishCons.DISCONNECT_DUPLICATE_LOGIN,
+                            PublishEnum.DISCONNECT_DUPLICATE_LOGIN,
                             jsonObj.toString()
                     );
                 }

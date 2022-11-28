@@ -4,9 +4,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.SetParams;
 import top.zopx.goku.framework.biz.redis.RedisPublish;
 import top.zopx.goku.framework.biz.redis.RedisCache;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
-import top.zopx.goku.framework.cluster.constant.RedisKeyCons;
-import top.zopx.goku.framework.cluster.entity.IServerInfo;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
+import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
+import top.zopx.goku.framework.biz.entity.IServerInfo;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 /**
@@ -26,7 +26,7 @@ public class RedisReportServerInfo implements IReportServerInfo{
     public void report(IServerInfo.ServerInfo newInfo) {
         try (Jedis redisCache = RedisCache.getServerCache()) {
             // 缓存关键字
-            final String redisKey = RedisKeyCons.KEY_SERVER_X_PREFIX.format(newInfo.getServerId());
+            final String redisKey = RedisKeyEnum.KEY_SERVER_X_PREFIX.format(newInfo.getServerId());
             // 缓存过期时间
             final int expireTime = 10;
 
@@ -34,7 +34,7 @@ public class RedisReportServerInfo implements IReportServerInfo{
             redisCache.set(redisKey, JsonUtil.getInstance().toJson(newInfo), SetParams.setParams().ex(expireTime));
 
             // 发布新服务器 Id
-            redisPublish.pub(PublishCons.REGISTER_SERVER, String.valueOf(newInfo.getServerId()));
+            redisPublish.pub(PublishEnum.REGISTER_SERVER, String.valueOf(newInfo.getServerId()));
         } catch (Exception ex) {
             // 记录错误日志
             LOGGER.error(ex.getMessage(), ex);

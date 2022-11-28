@@ -1,6 +1,6 @@
 package top.zopx.goku.framework.biz.result;
 
-import top.zopx.goku.framework.cluster.entity.R;
+import top.zopx.goku.framework.biz.entity.R;
 
 /**
  * 业务结果回调接口

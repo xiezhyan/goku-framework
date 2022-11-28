@@ -2,7 +2,7 @@ package top.zopx.goku.framework.biz.report;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.cluster.entity.IServerInfo;
+import top.zopx.goku.framework.biz.entity.IServerInfo;
 
 /**
  * @author 俗世游子

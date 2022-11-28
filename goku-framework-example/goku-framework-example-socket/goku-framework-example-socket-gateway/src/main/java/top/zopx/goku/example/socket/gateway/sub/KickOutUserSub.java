@@ -8,7 +8,7 @@ import top.zopx.goku.example.socket.proto.common.Common;
 import top.zopx.goku.framework.util.ChannelUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import java.io.Serializable;
@@ -26,7 +26,7 @@ public class KickOutUserSub implements ISubscribe {
 
     @Override
     public void onMsg(String channel, String msg) {
-        if (!Objects.equals(channel, PublishCons.KICK_OUT_USER_NOTICE) || StringUtils.isBlank(msg)) {
+        if (!Objects.equals(channel, PublishEnum.KICK_OUT_USER_NOTICE) || StringUtils.isBlank(msg)) {
             return;
         }
 

@@ -3,7 +3,7 @@ package top.zopx.goku.framework.netty.bind.entity;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.GatewayToBizServerAcceptor;
+import top.zopx.goku.framework.netty.server.ClientToClientAcceptor;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import java.text.MessageFormat;
@@ -303,7 +303,7 @@ public final class ConnectClient {
          *
          * @param closeClient 关闭客户端
          */
-        void apply(GatewayToBizServerAcceptor closeClient);
+        void apply(ClientToClientAcceptor closeClient);
     }
 
     public static void main(String[] args) {

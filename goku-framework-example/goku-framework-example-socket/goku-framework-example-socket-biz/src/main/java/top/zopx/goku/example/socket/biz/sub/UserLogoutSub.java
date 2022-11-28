@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
-import top.zopx.goku.framework.cluster.constant.PublishCons;
+import top.zopx.goku.framework.biz.constant.PublishEnum;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import java.io.Serializable;
@@ -21,7 +21,7 @@ public class UserLogoutSub implements ISubscribe {
 
     @Override
     public void onMsg(String channel, String msg) {
-        if (!Objects.equals(channel, PublishCons.USER_LOGOUT_NOTICE) || StringUtils.isBlank(msg)) {
+        if (!Objects.equals(channel, PublishEnum.USER_LOGOUT_NOTICE) || StringUtils.isBlank(msg)) {
             return;
         }
 

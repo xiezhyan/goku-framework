@@ -2,12 +2,68 @@ package top.zopx.goku.framework.biz.execute;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import top.zopx.goku.framework.biz.recognizer.CmdHandlerMsgRecognizer;
 
 import java.util.concurrent.*;
 
 /**
  * 异步操作处理器
  *
+ * 消息处理器，用来处理消息、编码、消息内容间的关系
+ * {@link CmdHandlerMsgRecognizer}
+ * <pre>
+ * {@code
+ *
+ * public final class AsyncOperationProcessorSingleton {
+ *
+ *     private static final Logger LOGGER = LoggerFactory.getLogger(AsyncOperationProcessorSingleton.class);
+ *
+ *     private AsyncOperationProcessorSingleton() {}
+ *
+ *
+ *     public static AsyncOperationProcessorSingleton getInstance() {
+ *         return AsyncOperationProcessorSingleton.Holder.INSTANCE;
+ *     }
+ *
+ *     private static class Holder {
+ *         public static final AsyncOperationProcessorSingleton INSTANCE = new AsyncOperationProcessorSingleton();
+ *     }
+ *
+ *
+ *     private static final AsyncOperationProcessor PROCESS = new AsyncOperationProcessor(
+ *             "bizServer_async_operation",
+ *             -1
+ *     );
+ *
+ *
+ *     private static final Executor MAIN_EXECUTOR = MainThreadPoolExecutorSingleton.getInstance()::process;
+ *
+ *
+ *
+ *     public void process(int bindId, Runnable op, Executor exec, Runnable co) {
+ *         PROCESS.process(bindId, op, exec, co);
+ *     }
+ *
+ *
+ *     public void process(int bindId, Runnable op,  Runnable co) {
+ *         process(
+ *                 bindId, op, MAIN_EXECUTOR, co
+ *         );
+ *     }
+ *
+ *
+ *     public void process(int bindId, Runnable op) {
+ *         process(bindId, op, null, null);
+ *     }
+ *
+ *
+ *     public void process(Runnable op) {
+ *         process(RandomUtils.nextInt(0, 1024), op, null, null);
+ *     }
+ * }
+ *
+ * }
+ * </pre>
  * @author 俗世游子
  * @date 2022/2/4
  * @email xiezhyan@126.com

@@ -1,7 +1,6 @@
-package top.zopx.goku.framework.biz.selector;
+package top.zopx.goku.framework.netty.server;
 
 import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
-import top.zopx.goku.framework.netty.server.GatewayToBizServerAcceptor;
 
 import java.util.Collections;
 import java.util.Set;
@@ -23,14 +22,14 @@ public class Client {
     /**
      * 客户端
      */
-    private final GatewayToBizServerAcceptor acceptor;
+    private final ClientToClientAcceptor acceptor;
 
     private final int clientId;
 
     private final String clientName;
 
     public Client(ConnectClient connectClient, int serverId) {
-        acceptor = new GatewayToBizServerAcceptor(connectClient);
+        acceptor = new ClientToClientAcceptor(connectClient);
         acceptor.putExtraInfo("gatewayId", String.valueOf(serverId));
         this.clientId = connectClient.getServerId();
         this.clientName = connectClient.getServerName();

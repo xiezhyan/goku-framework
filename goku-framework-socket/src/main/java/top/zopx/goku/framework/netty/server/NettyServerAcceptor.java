@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.netty.bind.entity.AppClient;
-import top.zopx.goku.framework.netty.bind.entity.ServerAcceptor;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
@@ -31,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
- * Server处理工具
+ * Server处理工具 启动类
  *
  * @author 俗世游子
  * @email xiezhyan@126.com
@@ -295,14 +294,5 @@ public class NettyServerAcceptor {
 
     private boolean isLinux() {
         return System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("linux");
-    }
-
-    public static void main(String[] args) {
-        NettyServerAcceptor acceptor = new NettyServerAcceptor(
-                ServerAcceptor.create()
-                        .setApp(AppClient.create().build())
-                        .build()
-        );
-        acceptor.start();
     }
 }

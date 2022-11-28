@@ -1,4 +1,4 @@
-package top.zopx.goku.framework.cluster.util;
+package top.zopx.goku.framework.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

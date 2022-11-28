@@ -30,17 +30,17 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 常用于网关和业务服务间的处理
+ * netty和netty间互联
  *
  * @author 俗世游子
  * @date 2022/2/3
  * @email xiezhyan@126.com
  */
-public final class GatewayToBizServerAcceptor {
+public final class ClientToClientAcceptor {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(GatewayToBizServerAcceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientToClientAcceptor.class);
 
     private static final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "goku-websocket-client-work");
 
@@ -73,7 +73,7 @@ public final class GatewayToBizServerAcceptor {
      *
      * @param client 使用配置
      */
-    public GatewayToBizServerAcceptor(ConnectClient client) {
+    public ClientToClientAcceptor(ConnectClient client) {
         if (null == client) {
             throw new BusException("usingConf is null");
         }
@@ -200,7 +200,7 @@ public final class GatewayToBizServerAcceptor {
             channel = f.channel();
             channel.closeFuture().addListener(x -> {
                 // 获取已关闭的客户端
-                GatewayToBizServerAcceptor closeClient = GatewayToBizServerAcceptor.this;
+                ClientToClientAcceptor closeClient = ClientToClientAcceptor.this;
 
                 LOGGER.warn(
                         "XXX 注意: 服务器连接关闭! {} XXX",

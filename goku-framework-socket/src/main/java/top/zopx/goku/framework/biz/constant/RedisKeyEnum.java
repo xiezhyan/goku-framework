@@ -1,11 +1,11 @@
-package top.zopx.goku.framework.cluster.constant;
+package top.zopx.goku.framework.biz.constant;
 
 /**
  * @author 俗世游子
  * @date 2021/10/9
  * @email xiezhyan@126.com
  */
-public enum RedisKeyCons {
+public enum RedisKeyEnum {
 
 
     /**
@@ -31,7 +31,7 @@ public enum RedisKeyCons {
 
     private final String key;
 
-    RedisKeyCons(String key) {
+    RedisKeyEnum(String key) {
         this.key = key;
     }
 
