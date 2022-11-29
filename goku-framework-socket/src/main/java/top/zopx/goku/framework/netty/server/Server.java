@@ -22,6 +22,7 @@ import top.zopx.goku.framework.netty.bind.entity.AppClient;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import java.time.Duration;
 import java.util.Locale;
@@ -45,7 +46,7 @@ public class Server {
      */
     private final AppClient app;
     /**
-     * ws端端口
+     * ws端
      */
     private final WebsocketClient ws;
 
@@ -163,7 +164,7 @@ public class Server {
      */
     public void start() {
         if (null == factory) {
-            throw new BusException("BaseChannelHandlerFactory is null ");
+            throw new BusException("BaseChannelHandlerFactory is null", IBus.ERROR_CODE, "");
         }
 
         if (null != app) {

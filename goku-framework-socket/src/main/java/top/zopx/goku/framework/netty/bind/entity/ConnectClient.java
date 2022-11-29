@@ -1,16 +1,49 @@
 package top.zopx.goku.framework.netty.bind.entity;
 
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.netty.server.ClientToClientAcceptor;
-import top.zopx.goku.framework.tools.util.json.JsonUtil;
 
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * <pre>
+ *  {@code
+ *      ConnectClient.create()
+ *          .setServerId(serverInfoObj.getServerId())
+ *          .setServerHost(serverInfoObj.getServerIp())
+ *          .setServerPort(serverInfoObj.getServerPort())
+ *          .setServerName(serverInfoObj.getServerName())
+ *          .setServerType(ConnectClient.Constant.WS)
+ *          .setPath(Constant.WEBSOCKET_PATH)
+ *          .setServerJobTypeSet(serverInfoObj.getServerJobTypeSet())
+ *          .setChannelHandlerFactory(this)
+ *          .setCloseCallback(this)
+ *          .build()
+ *
+ *      @Override
+ *     public ChannelHandler createWebsocketMsgHandler() {
+ *         return new ClientInnerMsgHandle();
+ *     }
+ *
+ *     @Override
+ *     public void apply(ClientToClientAcceptor closeClient) {
+ *         if (null == closeClient) {
+ *             return;
+ *         }
+ *
+ *         int serverId = closeClient.getServerId();
+ *         // 如果断线就删除
+ *         Client.ServerProfile sp = ID_SERVER_MAP.remove(serverId);
+ *         serverProfileList = null;
+ *         if (null != sp) {
+ *             sp.setClient(null);
+ *         }
+ *     }
+ *  }
+ * </pre>
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/22 20:31
@@ -242,20 +275,6 @@ public final class ConnectClient {
         public ConnectClient build() {
             return new ConnectClient(this);
         }
-
-        /**
-         * 从 JSON 对象中创建配置
-         *
-         * @param jsonObj JSON 对象
-         * @return 配置
-         */
-        public Builder fromJsonData(JsonObject jsonObj) {
-            if (null == jsonObj) {
-                return null;
-            }
-
-            return JsonUtil.getInstance().getGson().fromJson(jsonObj, Builder.class);
-        }
     }
 
     public int getServerType() {
@@ -304,11 +323,5 @@ public final class ConnectClient {
          * @param closeClient 关闭客户端
          */
         void apply(ClientToClientAcceptor closeClient);
-    }
-
-    public static void main(String[] args) {
-        ConnectClient client = ConnectClient.create().setServerHost("123").setServerPort(555).setPath("/ws").build();
-        System.out.println(client.getWebsocketPath());
-
     }
 }

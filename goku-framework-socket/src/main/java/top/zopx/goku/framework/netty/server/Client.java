@@ -14,6 +14,8 @@ import java.util.Set;
  */
 public class Client {
 
+    public static final String GATEWAY_ID = "GatewayId";
+
     /**
      * 是否已经连接成功
      */
@@ -28,9 +30,21 @@ public class Client {
 
     private final String clientName;
 
-    public Client(ConnectClient connectClient, int serverId) {
+    /**
+     * Client To Client
+     *
+     * @param connectClient 参数配置信息
+     * @param serverId      服务ID
+     * @param extraInfoArr  额外参数
+     *                      gatewayId, 1001, name,123
+     */
+    public Client(ConnectClient connectClient, int serverId, String... extraInfoArr) {
         acceptor = new ClientToClientAcceptor(connectClient);
-        acceptor.putExtraInfo("gatewayId", String.valueOf(serverId));
+        acceptor.putExtraInfo(GATEWAY_ID, String.valueOf(serverId));
+
+        for (int i = 0, size = extraInfoArr.length; i < size; i += 2) {
+            acceptor.putExtraInfo(extraInfoArr[i], extraInfoArr[i + 1]);
+        }
         this.clientId = connectClient.getServerId();
         this.clientName = connectClient.getServerName();
     }

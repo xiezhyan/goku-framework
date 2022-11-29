@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import java.net.URI;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public final class ClientToClientAcceptor {
      */
     public ClientToClientAcceptor(ConnectClient client) {
         if (null == client) {
-            throw new BusException("usingConf is null");
+            throw new BusException("usingConf is null", IBus.ERROR_CODE, "");
         }
 
         this.client = client;
@@ -108,7 +109,11 @@ public final class ClientToClientAcceptor {
      * 连接到服务器端
      */
     public void connect() {
-        connect(null);
+        connect(
+                isLinux() ?
+                        epollEventLoopGroup :
+                        nioEventLoopGroup
+        );
     }
 
     /**
@@ -137,22 +142,12 @@ public final class ClientToClientAcceptor {
             );
 
             Bootstrap b = new Bootstrap();
-            b.group(
-                    null == work ?
-                            isLinux() ?
-                                    epollEventLoopGroup :
-                                    nioEventLoopGroup :
-                            work
-            );
+            b.group(work);
 
             b.channel(
-                    null == work ?
-                            isLinux() ?
-                                    EpollSocketChannel.class :
-                                    NioSocketChannel.class :
-                            work instanceof EpollEventLoopGroup ?
-                                    EpollSocketChannel.class :
-                                    NioSocketChannel.class
+                    work instanceof EpollEventLoopGroup ?
+                            EpollSocketChannel.class :
+                            NioSocketChannel.class
             );
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
