@@ -18,13 +18,16 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
+ * 椭圆曲线公钥密码算法
+ *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/22 8:06
  */
 public class SM2Util {
 
-    private SM2Util() {}
+    private SM2Util() {
+    }
 
     public static RsaKey genKeyPair() {
         KeyPair keyGen = getKeyGen();

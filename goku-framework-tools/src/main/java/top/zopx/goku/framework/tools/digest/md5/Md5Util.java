@@ -5,8 +5,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 /**
  * @author 俗世游子
  * @date 2021/5/11
+ * @deprecated {@link top.zopx.goku.framework.tools.digest.sm3.SM3Util}
  */
-public enum  Md5Util {
+@Deprecated
+public enum Md5Util {
     /**
      * 单例
      */
@@ -15,6 +17,7 @@ public enum  Md5Util {
 
     /**
      * 加密
+     *
      * @param buffer 需要加密的字符串字节数组
      * @return 加密成功的字符串
      */
@@ -24,8 +27,9 @@ public enum  Md5Util {
 
     /**
      * 加密
+     *
      * @param buffer 需要加密的字符串字节数组
-     * @param num 加密次数
+     * @param num    加密次数
      * @return 加密成功的字符串
      */
     public String digest(byte[] buffer, int num) {

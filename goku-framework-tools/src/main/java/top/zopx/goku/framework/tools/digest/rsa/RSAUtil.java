@@ -61,14 +61,18 @@ public enum RSAUtil {
      *
      * @return 加密之后的数据
      */
-    public String encrypt(String text, String publicKey) throws Exception {
+    public String encrypt(String text, String publicKey) {
         //base64编码的公钥
         byte[] decoded = Base64Util.INSTANCE.decode(publicKey);
         RSAPublicKey pubKey = getPublicKey(decoded);
-        //RSA加密
-        Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
-        cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-        return Base64Util.INSTANCE.encode(cipher.doFinal(text.getBytes(StandardCharsets.UTF_8)));
+        try {
+            //RSA加密
+            Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
+            cipher.init(Cipher.ENCRYPT_MODE, pubKey);
+            return Base64Util.INSTANCE.encode(cipher.doFinal(text.getBytes(StandardCharsets.UTF_8)));
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
+        }
     }
 
     /**
@@ -76,16 +80,20 @@ public enum RSAUtil {
      *
      * @return 解密之后的数据，需要通过base64进行转码
      */
-    public String decrypt(String text, String privateKey) throws Exception {
+    public String decrypt(String text, String privateKey) {
         //64位解码加密后的字符串
         byte[] inputByte = Base64Util.INSTANCE.decode(text);
         //base64编码的私钥
         byte[] decoded = Base64Util.INSTANCE.decode(privateKey);
         RSAPrivateKey priKey = getPrivateKey(decoded);
-        //RSA解密
-        Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
-        cipher.init(Cipher.DECRYPT_MODE, priKey);
-        return Base64Util.INSTANCE.encode(cipher.doFinal(inputByte));
+        try {
+            //RSA解密
+            Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
+            cipher.init(Cipher.DECRYPT_MODE, priKey);
+            return Base64Util.INSTANCE.encode(cipher.doFinal(inputByte));
+        } catch (Exception e) {
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
+        }
     }
 
     /**

@@ -15,6 +15,8 @@ import java.security.Security;
 import java.util.Arrays;
 
 /**
+ * 对称算法
+ *
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/05/22 8:06
@@ -130,6 +132,7 @@ public class SM4Util {
     }
 
     /**
+     *
      */
     private static byte[] decryptEcbPadding(byte[] key, byte[] cipherText) {
         try {
