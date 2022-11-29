@@ -23,7 +23,7 @@ import top.zopx.goku.framework.biz.entity.IServerInfo;
 import top.zopx.goku.framework.netty.server.ServerAcceptor;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.NettyServerAcceptor;
+import top.zopx.goku.framework.netty.server.Server;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.time.Duration;
@@ -120,7 +120,7 @@ public class BizApp implements BaseChannelHandlerFactory {
     }
 
     private static void startBizServerApp() {
-        new NettyServerAcceptor(
+        new Server(
                 ServerAcceptor.create()
                         .setBossThreadPool(2)
                         .setWorkThreadPool(8)

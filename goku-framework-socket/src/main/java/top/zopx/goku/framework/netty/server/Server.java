@@ -36,9 +36,9 @@ import java.util.function.Consumer;
  * @email xiezhyan@126.com
  * @date 2021/9/10
  */
-public class NettyServerAcceptor {
+public class Server {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyServerAcceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     /**
      * APP端端口
@@ -94,7 +94,7 @@ public class NettyServerAcceptor {
 
     private final BaseChannelHandlerFactory factory;
 
-    public NettyServerAcceptor(ServerAcceptor server) {
+    public Server(ServerAcceptor server) {
         this.app = server.getApp();
         this.ws = server.getWs();
 
