@@ -50,3 +50,11 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: true
   type-aliases-package: top.zopx.goku.example.**.entity
+
+goku:
+  mysql:
+    binlog:
+      host: test.zopx.top
+      port: 13306
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}

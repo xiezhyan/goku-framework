@@ -1,5 +1,6 @@
 package top.zopx.goku.framework.support.mysql.binlog.properties;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -102,6 +103,10 @@ public class BootstrapBinlog implements Serializable {
 
         public void setPosition(Long position) {
             this.position = position;
+        }
+
+        public Long getServerId() {
+            return RandomUtils.nextLong(1L, 65535L);
         }
     }
 

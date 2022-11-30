@@ -28,6 +28,12 @@
 			<artifactId>goku-framework-starter-log</artifactId>
 			<version>${goku.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>top.zopx</groupId>
+			<artifactId>goku-framework-support-mysql-binlog</artifactId>
+			<version>${goku.version}</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

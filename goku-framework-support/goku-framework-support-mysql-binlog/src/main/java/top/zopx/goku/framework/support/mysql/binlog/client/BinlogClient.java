@@ -1,6 +1,8 @@
 package top.zopx.goku.framework.support.mysql.binlog.client;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
+import com.github.shyiko.mysql.binlog.event.deserialization.EventDeserializer;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -43,7 +45,10 @@ public class BinlogClient {
                     binlog.getPassword()
             );
 
-            if (StringUtil.isNotBlank(binlog.getBinlogName())) {
+            // serverId
+            binaryLogClient.setServerId(binlog.getServerId());
+
+            if (StringUtils.isNotBlank(binlog.getBinlogName())) {
                 binaryLogClient.setBinlogFilename(binlog.getBinlogName());
             }
             if (!Objects.equals(binlog.getPosition(), -1L)) {

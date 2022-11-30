@@ -21,11 +21,17 @@ import java.util.stream.Collectors;
  * @date 2022/05/24 22:45
  */
 @Component
-public class BinlogClientEventListener implements BinaryLogClient.EventListener{
+public class BinlogClientEventListener implements BinaryLogClient.EventListener {
+
+    @SuppressWarnings("all")
+    private static final List<EventType> EXCLUDE_POSITION_EVENT_TYPE = new ArrayList<EventType>(2) {{
+        add(EventType.FORMAT_DESCRIPTION);
+        add(EventType.HEARTBEAT);
+    }};
 
     private String database;
     private String tableName;
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BinlogClientEventListener.class);
 
     private final Map<String, ISendListener> listenerMap = new HashMap<>();
@@ -44,6 +50,8 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
 
         EventType type = event.getHeader().getEventType();
         LOGGER.debug("event type: {}", type);
+
+        doSavePositionEvent(event);
 
         if (type == EventType.TABLE_MAP) {
             TableMapEventData data = event.getData();
@@ -148,4 +156,38 @@ public class BinlogClientEventListener implements BinaryLogClient.EventListener{
 
         return rowData;
     }
+
+
+    private void doSavePositionEvent(Event event) {
+        EventType type = event.getHeader().getEventType();
+
+        if (!EXCLUDE_POSITION_EVENT_TYPE.contains(type)) {
+            //处理rotate事件,这里会替换调binlog fileName
+            if (event.getHeader().getEventType().equals(EventType.ROTATE)) {
+                RotateEventData rotateEventData = (RotateEventData) event.getData();
+                LOGGER.debug(
+                        "binlogFile = {}, binlogPosition = {}, serverId = {}",
+                        rotateEventData.getBinlogFilename(),
+                        rotateEventData.getBinlogPosition(),
+                        event.getHeader().getServerId()
+                );
+                // rotateEventData.getBinlogFilename()
+                // rotateEventData.getBinlogPosition()
+                // event.getHeader().getServerId()
+            } else {
+                //统一处理事件对应的binlog position
+                // 从Redis中取出
+                EventHeaderV4 eventHeaderV4 = (EventHeaderV4) event.getHeader();
+                LOGGER.debug(
+                        "binlogPosition = {}, serverId = {}",
+                        eventHeaderV4.getPosition(),
+                        event.getHeader().getServerId()
+                );
+                // eventHeaderV4.getPosition()
+                // event.getHeader().getServerId()
+            }
+            // save to redis
+        }
+    }
+
 }
