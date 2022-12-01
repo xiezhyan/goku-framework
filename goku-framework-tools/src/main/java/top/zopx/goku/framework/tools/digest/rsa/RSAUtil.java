@@ -31,6 +31,7 @@ public enum RSAUtil {
     ;
 
     private static final String SECRET_KEY_SPEC_RSA = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    private static final String RSA = "RSA";
 
     /**
      * 生成公钥和私钥
@@ -40,7 +41,7 @@ public enum RSAUtil {
     public RsaKey genKeyPair() {
         try {
             // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(RSA);
             // 初始化密钥对生成器
             keyPairGen.initialize(2048, new SecureRandom());
             // 生成一个密钥对，保存在keyPair中
@@ -105,7 +106,7 @@ public enum RSAUtil {
      */
     public RSAPublicKey getPublicKey(byte[] bytes) {
         try {
-            return (RSAPublicKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePublic(new X509EncodedKeySpec(bytes));
+            return (RSAPublicKey) KeyFactory.getInstance(RSA).generatePublic(new X509EncodedKeySpec(bytes));
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
@@ -120,7 +121,7 @@ public enum RSAUtil {
      */
     public RSAPrivateKey getPrivateKey(byte[] bytes) {
         try {
-            return (RSAPrivateKey) KeyFactory.getInstance(SECRET_KEY_SPEC_RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
+            return (RSAPrivateKey) KeyFactory.getInstance(RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
