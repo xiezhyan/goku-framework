@@ -34,7 +34,7 @@ public class RSAUtil {
     /**
      * 生成公私密钥对
      */
-    public static RsaKey createKey() {
+    public static RsaKey createKeys() {
         return createKeys(2048);
     }
 

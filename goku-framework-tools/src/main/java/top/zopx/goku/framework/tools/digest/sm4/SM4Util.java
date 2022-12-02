@@ -26,7 +26,7 @@ public class SM4Util {
     public static final String ENCODING = "UTF-8";
     private static final String ALGORIGTHM_NAME = "SM4";
     private static final String ALGORITHM_NAME_ECB_PADDING = "SM4/ECB/PKCS7Padding";
-    private static final int DEFAULT_KEY_SIZE = 2048;
+    private static final int DEFAULT_KEY_SIZE = 128;
 
     private SM4Util() {
     }
@@ -54,11 +54,11 @@ public class SM4Util {
      *
      * @return 秘钥
      */
-    public static String generateKey() {
-        return generateKey(DEFAULT_KEY_SIZE);
+    public static String createKeys() {
+        return createKeys(DEFAULT_KEY_SIZE);
     }
 
-    public static String generateKey(int keySize) {
+    public static String createKeys(int keySize) {
         try {
             KeyGenerator kg = KeyGenerator.getInstance(ALGORIGTHM_NAME, BouncyCastleProvider.PROVIDER_NAME);
             kg.init(keySize, new SecureRandom());

@@ -73,7 +73,7 @@
         <batik.version>1.8</batik.version>
 
         <!--国密-->
-        <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
+        <bcprov-jdk15to18.version>1.70</bcprov-jdk15to18.version>
     </properties>
 
     <dependencyManagement>

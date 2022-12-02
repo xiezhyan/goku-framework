@@ -1,6 +1,5 @@
 package top.zopx.goku.framework.tools.digest.sm2;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.digests.SM3Digest;
 import org.bouncycastle.crypto.engines.SM2Engine;
@@ -29,7 +28,7 @@ public class SM2Util {
     private SM2Util() {
     }
 
-    public static RsaKey genKeyPair() {
+    public static RsaKey createKeys() {
         KeyPair keyGen = getKeyGen();
         return new RsaKey(
                 Base64Util.INSTANCE.encode(keyGen.getPublic().getEncoded()),
@@ -42,7 +41,7 @@ public class SM2Util {
             Security.addProvider(new BouncyCastleProvider());
             // 获取椭圆曲线KEY生成器
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
-            byte[] publicKeyData = Base64.decodeBase64(publicKeyStr);
+            byte[] publicKeyData = Base64Util.INSTANCE.decode(publicKeyStr);
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyData);
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
             CipherParameters publicKeyParamerters = ECUtil.generatePublicKeyParameter(publicKey);
@@ -50,7 +49,7 @@ public class SM2Util {
             SM2Engine engine = new SM2Engine(new SM3Digest(), SM2Engine.Mode.C1C3C2);
             engine.init(true, new ParametersWithRandom(publicKeyParamerters));
             byte[] encryptData = engine.processBlock(data.getBytes(), 0, data.getBytes().length);
-            return Base64.encodeBase64String(encryptData);
+            return Base64Util.INSTANCE.encode(encryptData);
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
@@ -61,16 +60,16 @@ public class SM2Util {
         try {
             // 获取椭圆曲线KEY生成器
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
-            byte[] privateKeyData = Base64.decodeBase64(privateKeyStr);
+            byte[] privateKeyData = Base64Util.INSTANCE.decode(privateKeyStr);
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyData);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
             CipherParameters privateKeyParamerters = ECUtil.generatePrivateKeyParameter(privateKey);
             //数据解密
             SM2Engine engine = new SM2Engine(new SM3Digest(), SM2Engine.Mode.C1C3C2);
             engine.init(false, privateKeyParamerters);
-            byte[] decryptData = Base64.decodeBase64(encrypt);
+            byte[] decryptData = Base64Util.INSTANCE.decode(encrypt);
             byte[] plainText = engine.processBlock(decryptData, 0, decryptData.length);
-            return new String(plainText);
+            return Base64Util.INSTANCE.encode(plainText);
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
@@ -88,6 +87,15 @@ public class SM2Util {
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+
+        RsaKey rsaKey = createKeys();
+        System.out.println(decrypt(
+                encrypt("1111111111111111111111111111111111111111111111111111111111111111111111111111111111", rsaKey.getPublicKey()),
+                rsaKey.getPrivateKey()
+        ));
     }
 
 }

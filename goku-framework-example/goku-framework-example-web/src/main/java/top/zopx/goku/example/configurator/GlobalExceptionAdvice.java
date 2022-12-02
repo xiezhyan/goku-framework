@@ -15,8 +15,12 @@ public class GlobalExceptionAdvice extends BaseExceptionAdvice {
     @Override
     public String getErrorMsg(String sourceMsg, Throwable e) {
         if (e instanceof BusException) {
-            BusException busE = (BusException) e;
-            return MessageUtil.getMessage(busE.getKey());
+            try {
+                BusException busE = (BusException) e;
+                return MessageUtil.getMessage(busE.getKey());
+            } catch (Exception ex) {
+                super.getErrorMsg(sourceMsg, ex);
+            }
         }
         return super.getErrorMsg(sourceMsg, e);
     }
