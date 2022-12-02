@@ -1,76 +1,130 @@
 package top.zopx.goku.framework.tools.digest.rsa;
 
-
 import top.zopx.goku.framework.tools.digest.base64.Base64Util;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.tools.exceptions.IBus;
 
 import javax.crypto.Cipher;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
+import java.io.ByteArrayOutputStream;
+import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-/**
- * RSA 对称加密
- *
- * @author 俗世游子
- * @date 2021/5/11
- */
-public enum RSAUtil {
+public class RSAUtil {
 
     /**
-     * 单例
+     * 定义加密方式
      */
-    INSTANCE,
-    ;
-
-    private static final String SECRET_KEY_SPEC_RSA = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
-    private static final String RSA = "RSA";
+    public static final String KEY_RSA = "RSA";
+    public static final String ALGORITHM = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+    /**
+     * 定义签名算法
+     */
+    private final static String KEY_RSA_SIGNATURE = "MD5withRSA";
+    /**
+     * RSA最大加密大小
+     */
+    private final static int MAX_ENCRYPT_BLOCK = 117;
 
     /**
-     * 生成公钥和私钥
-     *
-     * @return RsaKey
+     * RSA最大解密大小
      */
-    public RsaKey genKeyPair() {
+    private final static int MAX_DECRYPT_BLOCK = 256;
+
+    /**
+     * 生成公私密钥对
+     */
+    public static RsaKey createKey() {
+        return createKeys(2048);
+    }
+
+    /**
+     * 生成公私密钥对
+     */
+    public static RsaKey createKeys(int keySize) {
+        // 为RSA算法创建一个KeyPairGenerator对象
+        KeyPairGenerator kpg;
         try {
-            // KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(RSA);
-            // 初始化密钥对生成器
-            keyPairGen.initialize(2048, new SecureRandom());
-            // 生成一个密钥对，保存在keyPair中
-            KeyPair keyPair = keyPairGen.generateKeyPair();
-            // 得到私钥
-            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-            // 得到公钥
-            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            // 将公钥和私钥保存   得到私钥字符串
-            return new RsaKey(Base64Util.INSTANCE.encode(publicKey.getEncoded()), Base64Util.INSTANCE.encode(privateKey.getEncoded()));
+            kpg = KeyPairGenerator.getInstance("RSA", "SunRsaSign"); //SunMSCAPI  SunRsaSign
         } catch (Exception e) {
-            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
         }
+
+        // 初始化KeyPairGenerator对象,密钥长度
+        kpg.initialize(keySize);
+        // 生成密匙对
+        KeyPair keyPair = kpg.generateKeyPair();
+        // 得到公钥
+        Key publicKey = keyPair.getPublic();
+        String publicKeyStr = Base64Util.INSTANCE.encode(publicKey.getEncoded());
+        // 得到私钥
+        Key privateKey = keyPair.getPrivate();
+        String privateKeyStr = Base64Util.INSTANCE.encode(privateKey.getEncoded());
+        // 返回map
+        return new RsaKey(publicKeyStr, privateKeyStr);
+    }
+
+    /**
+     * BASE64 解码
+     *
+     * @param key 需要Base64解码的字符串
+     * @return 字节数组
+     */
+    private static byte[] decryptBase64(String key) {
+        return Base64Util.INSTANCE.decode(key);
+    }
+
+    /**
+     * BASE64 编码
+     *
+     * @param key 需要Base64编码的字节数组
+     * @return 字符串
+     */
+    private static String encryptBase64(byte[] key) {
+        return Base64Util.INSTANCE.encode(key);
     }
 
     /**
      * 公钥加密
      *
-     * @return 加密之后的数据
+     * @param encryptingStr 待加密参数
+     * @param publicKeyStr  公钥
+     * @return String
      */
-    public String encrypt(String text, String publicKey) {
-        //base64编码的公钥
-        byte[] decoded = Base64Util.INSTANCE.decode(publicKey);
-        RSAPublicKey pubKey = getPublicKey(decoded);
+    public static String encryptByPublicKey(String encryptingStr, String publicKeyStr) {
         try {
-            //RSA加密
-            Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
-            cipher.init(Cipher.ENCRYPT_MODE, pubKey);
-            return Base64Util.INSTANCE.encode(cipher.doFinal(text.getBytes(StandardCharsets.UTF_8)));
+            // 将公钥由字符串转为UTF-8格式的字节数组
+            byte[] publicKeyBytes = decryptBase64(publicKeyStr);
+            // 获得公钥
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+            // 取得待加密数据
+            byte[] data = decryptBase64(encryptingStr);
+            KeyFactory factory;
+            factory = KeyFactory.getInstance(KEY_RSA);
+            PublicKey publicKey = factory.generatePublic(keySpec);
+            // 对数据加密
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            // 返回加密后由Base64编码的加密信息
+            int inputLen = data.length;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            // 对数据分段解密
+            while (inputLen - offSet > 0) {
+                if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
+                    cache = cipher.doFinal(data, offSet, MAX_ENCRYPT_BLOCK);
+                } else {
+                    cache = cipher.doFinal(data, offSet, inputLen - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * MAX_ENCRYPT_BLOCK;
+            }
+            byte[] decryptedData = out.toByteArray();
+            out.close();
+            return encryptBase64(decryptedData);
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
         }
@@ -79,51 +133,108 @@ public enum RSAUtil {
     /**
      * 私钥解密
      *
-     * @return 解密之后的数据，需要通过base64进行转码
+     * @param encryptedStr  待解密参数
+     * @param privateKeyStr 私钥
+     * @return String
      */
-    public String decrypt(String text, String privateKey) {
-        //64位解码加密后的字符串
-        byte[] inputByte = Base64Util.INSTANCE.decode(text);
-        //base64编码的私钥
-        byte[] decoded = Base64Util.INSTANCE.decode(privateKey);
-        RSAPrivateKey priKey = getPrivateKey(decoded);
+    public static String decryptByPrivateKey(String encryptedStr, String privateKeyStr) {
         try {
-            //RSA解密
-            Cipher cipher = Cipher.getInstance(SECRET_KEY_SPEC_RSA);
-            cipher.init(Cipher.DECRYPT_MODE, priKey);
-            return Base64Util.INSTANCE.encode(cipher.doFinal(inputByte));
+            // 对私钥解密
+            byte[] privateKeyBytes = decryptBase64(privateKeyStr);
+            // 获得私钥
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            // 获得待解密数据
+            byte[] data = decryptBase64(encryptedStr);
+            KeyFactory factory = KeyFactory.getInstance(KEY_RSA);
+            PrivateKey privateKey = factory.generatePrivate(keySpec);
+            // 对数据解密
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            // 返回UTF-8编码的解密信息
+            int inputLen = data.length;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            // 对数据分段解密
+            while (inputLen - offSet > 0) {
+                if (inputLen - offSet > MAX_DECRYPT_BLOCK) {
+                    cache = cipher.doFinal(data, offSet, MAX_DECRYPT_BLOCK);
+                } else {
+                    cache = cipher.doFinal(data, offSet, inputLen - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * MAX_DECRYPT_BLOCK;
+            }
+            byte[] decryptedData = out.toByteArray();
+            out.close();
+            return encryptBase64(decryptedData);
         } catch (Exception e) {
             throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
         }
     }
 
     /**
-     * 得到RSAPublicKey
+     * 用私钥对加密数据进行签名
      *
-     * @param bytes 公钥字符串  Base64Util.INSTANCE.decode(publicKey);
-     * @return RSAPublicKey
-     * @throws Exception 转换异常
+     * @param encryptedStr 待签名
+     * @param privateKey   私钥
+     * @return String
      */
-    public RSAPublicKey getPublicKey(byte[] bytes) {
+    public static String sign(String encryptedStr, String privateKey) {
+        String str = "";
         try {
-            return (RSAPublicKey) KeyFactory.getInstance(RSA).generatePublic(new X509EncodedKeySpec(bytes));
+            //将私钥加密数据字符串转换为字节数组
+            byte[] data = encryptedStr.getBytes();
+            // 解密由base64编码的私钥
+            byte[] bytes = decryptBase64(privateKey);
+            // 构造PKCS8EncodedKeySpec对象
+            PKCS8EncodedKeySpec pkcs = new PKCS8EncodedKeySpec(bytes);
+            // 指定的加密算法
+            KeyFactory factory = KeyFactory.getInstance(KEY_RSA);
+            // 取私钥对象
+            PrivateKey key = factory.generatePrivate(pkcs);
+            // 用私钥对信息生成数字签名
+            Signature signature = Signature.getInstance(KEY_RSA_SIGNATURE);
+            signature.initSign(key);
+            signature.update(data);
+            str = encryptBase64(signature.sign());
         } catch (Exception e) {
-            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
         }
+        return str;
     }
 
     /**
-     * 得到RSAPrivateKey
+     * 校验数字签名
      *
-     * @param bytes 私钥字符串 Base64Util.INSTANCE.decode(privateKey);
-     * @return RSAPrivateKey
-     * @throws Exception 转换异常
+     * @param encryptedStr 校验数字签名
+     * @param publicKey    公钥
+     * @param sign         签名
+     * @return 校验成功返回true，失败返回false
      */
-    public RSAPrivateKey getPrivateKey(byte[] bytes) {
+    public static boolean verify(String encryptedStr, String publicKey, String sign) {
+        boolean flag = false;
         try {
-            return (RSAPrivateKey) KeyFactory.getInstance(RSA).generatePrivate(new PKCS8EncodedKeySpec(bytes));
+            //将私钥加密数据字符串转换为字节数组
+            byte[] data = encryptedStr.getBytes();
+            // 解密由base64编码的公钥
+            byte[] bytes = decryptBase64(publicKey);
+            // 构造X509EncodedKeySpec对象
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(bytes);
+            // 指定的加密算法
+            KeyFactory factory = KeyFactory.getInstance(KEY_RSA);
+            // 取公钥对象
+            PublicKey key = factory.generatePublic(keySpec);
+            // 用公钥验证数字签名
+            Signature signature = Signature.getInstance(KEY_RSA_SIGNATURE);
+            signature.initVerify(key);
+            signature.update(data);
+            flag = signature.verify(decryptBase64(sign));
         } catch (Exception e) {
-            throw new BusException(e.getMessage(), IBus.ERROR_CODE, e.getMessage());
+            throw new BusException(e.getMessage(), IBus.ERROR_CODE, "");
         }
+        return flag;
     }
 }
