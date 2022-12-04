@@ -21,6 +21,7 @@
 	
 	<modules>
 		<module>goku-framework-example-web</module>
+		<module>goku-framework-example-webflux</module>
 		<module>goku-framework-example-socket</module>
 	</modules>
 	
