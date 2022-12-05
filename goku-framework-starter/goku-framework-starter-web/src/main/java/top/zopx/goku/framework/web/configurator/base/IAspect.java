@@ -26,13 +26,15 @@ public interface IAspect {
      * 在进入方法之前
      * 可以加入额外参数等信息
      */
-    default void doBefore() {
+    default void doBefore(JoinPoint joinPoint) {
+        LogHelper.getLogger(IAspect.class).debug("doBefore执行： clazzName = {}", this.getClass().getSimpleName());
     }
 
     /**
      * 在方法执行之后的操作
      */
-    default void doAfter() {
+    default void doAfter(JoinPoint joinPoint) {
+        LogHelper.getLogger(IAspect.class).debug("doAfter执行： clazzName = {}", this.getClass().getSimpleName());
     }
 
     /**
@@ -42,7 +44,7 @@ public interface IAspect {
      * @param returing  返回结果信息
      */
     default void doAfterReturn(JoinPoint joinPoint, Object returing) {
-        LogHelper.getLogger(IAspect.class).info("{}", JsonUtil.getInstance().getJson().toJson(returing));
+        LogHelper.getLogger(IAspect.class).debug("{}", JsonUtil.getInstance().toJson(returing));
     }
 
     /**

@@ -1,9 +1,14 @@
 package top.zopx.goku.framework.web.filter;
 
+import org.springframework.web.multipart.MultipartResolver;
+import top.zopx.goku.framework.web.context.SpringContext;
+
+import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author 俗世游子
@@ -17,11 +22,15 @@ public class ServletWrapperFilter implements Filter {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
-        RequestWrapper requestWrapper = new RequestWrapper(httpServletRequest);
         ResponseWrapper responseWrapper = new ResponseWrapper(httpServletResponse);
 
-        chain.doFilter(requestWrapper, responseWrapper);
+        String contentType = httpServletRequest.getContentType();
+        if (Objects.isNull(contentType) || Objects.equals(contentType, "application/json")) {
+            RequestWrapper requestWrapper = new RequestWrapper(httpServletRequest);
+            chain.doFilter(requestWrapper, responseWrapper);
+        } else {
+            chain.doFilter(SpringContext.getBean(MultipartResolver.class).resolveMultipart(httpServletRequest), responseWrapper);
+        }
 
         byte[] content = responseWrapper.getContent();
         if (content.length > 0) {

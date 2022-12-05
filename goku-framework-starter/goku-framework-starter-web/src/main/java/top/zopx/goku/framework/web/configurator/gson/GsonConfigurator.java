@@ -19,9 +19,4 @@ public class GsonConfigurator {
     public Gson writeGson() {
         return JsonUtil.getInstance().getGson();
     }
-
-    @Bean
-    public IJson json(Gson writeGson) {
-        return new GJson(writeGson);
-    }
 }

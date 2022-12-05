@@ -65,7 +65,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
                     paramData.put(k, v);
                 }
             });
-            return JsonUtil.getInstance().getJson().toJson(paramData).getBytes(StandardCharsets.UTF_8);
+            return JsonUtil.getInstance().toJson(paramData).getBytes(StandardCharsets.UTF_8);
         }
         return buff;
     }

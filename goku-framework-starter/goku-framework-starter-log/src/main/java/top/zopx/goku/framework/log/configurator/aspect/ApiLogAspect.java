@@ -38,7 +38,7 @@ public class ApiLogAspect implements IAspect, IAspectMethod {
     @Override
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 基本方法设置
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(64);
         final MethodSignature signature = resolveMethodSignature(joinPoint);
 
         map.put(LogConstant.PARAMS, SpringContext.getJson().toJson(resolveArgs(joinPoint)));
