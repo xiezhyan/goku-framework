@@ -1,2 +1,13 @@
 server:
   port: 8890
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: "beans"
+      base-path: /acc
+  endpoint:
+    shutdown:
+      enabled: true
