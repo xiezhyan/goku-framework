@@ -1,7 +1,5 @@
-package top.zopx.goku.framework.netty.server;
+package top.zopx.goku.framework.netty.bind.entity;
 
-import top.zopx.goku.framework.netty.bind.entity.AppClient;
-import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 
 import java.time.Duration;
@@ -11,7 +9,7 @@ import java.time.Duration;
  * @date 2021/10/3
  * @email xiezhyan@126.com
  */
-public class ServerAcceptor {
+public class Server {
 
     /**
      * 读操作检测时间
@@ -48,7 +46,7 @@ public class ServerAcceptor {
      */
     private final BaseChannelHandlerFactory factory;
 
-    public ServerAcceptor(Builder builder) {
+    public Server(Builder builder) {
         this.readTimeout = builder.readTimeout;
         this.writeTimeout = builder.writeTimeout;
         this.bossThreadPool = builder.bossThreadPool;
@@ -134,8 +132,8 @@ public class ServerAcceptor {
             return this;
         }
 
-        public ServerAcceptor build() {
-            return new ServerAcceptor(this);
+        public Server build() {
+            return new Server(this);
         }
     }
 

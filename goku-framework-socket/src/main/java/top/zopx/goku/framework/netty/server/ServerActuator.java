@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.netty.bind.entity.AppClient;
+import top.zopx.goku.framework.netty.bind.entity.Server;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
@@ -37,9 +38,9 @@ import java.util.function.Consumer;
  * @email xiezhyan@126.com
  * @date 2021/9/10
  */
-public class Server {
+public class ServerActuator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerActuator.class);
 
     /**
      * APP端端口
@@ -95,7 +96,7 @@ public class Server {
 
     private final BaseChannelHandlerFactory factory;
 
-    public Server(ServerAcceptor server) {
+    public ServerActuator(Server server) {
         this.app = server.getApp();
         this.ws = server.getWs();
 

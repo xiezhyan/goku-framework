@@ -12,7 +12,7 @@ import java.util.Set;
  * @email xiezhyan@126.com
  * @date 2022/04/28
  */
-public class Client {
+public class GatewayToClientActuator {
 
     public static final String GATEWAY_ID = "GatewayId";
 
@@ -24,7 +24,7 @@ public class Client {
     /**
      * 客户端
      */
-    private final ClientToClientAcceptor acceptor;
+    private final ClientToClientActuator acceptor;
 
     private final int clientId;
 
@@ -38,8 +38,8 @@ public class Client {
      * @param extraInfoArr  额外参数
      *                      gatewayId, 1001, name,123
      */
-    public Client(ConnectClient connectClient, int serverId, String... extraInfoArr) {
-        acceptor = new ClientToClientAcceptor(connectClient);
+    public GatewayToClientActuator(ConnectClient connectClient, int serverId, String... extraInfoArr) {
+        acceptor = new ClientToClientActuator(connectClient);
         acceptor.putExtraInfo(GATEWAY_ID, String.valueOf(serverId));
 
         for (int i = 0, size = extraInfoArr.length; i < size; i += 2) {
@@ -79,7 +79,7 @@ public class Client {
         /**
          * 客户端信息
          */
-        private Client client;
+        private GatewayToClientActuator gatewayToClientActuator;
 
         /**
          * 负载数量
@@ -87,15 +87,15 @@ public class Client {
         private int loadCount;
 
         public int getServerId() {
-            return client.getClientId();
+            return gatewayToClientActuator.getClientId();
         }
 
-        public Client getClient() {
-            return client;
+        public GatewayToClientActuator getClient() {
+            return gatewayToClientActuator;
         }
 
-        public void setClient(Client client) {
-            this.client = client;
+        public void setClient(GatewayToClientActuator gatewayToClientActuator) {
+            this.gatewayToClientActuator = gatewayToClientActuator;
         }
 
         public int getLoadCount() {
@@ -107,10 +107,10 @@ public class Client {
         }
 
         public Set<String> getServerJobTypeSet() {
-            if (null == client) {
+            if (null == gatewayToClientActuator) {
                 return Collections.emptySet();
             } else {
-                return client.getServerJobTypeSet();
+                return gatewayToClientActuator.getServerJobTypeSet();
             }
         }
     }

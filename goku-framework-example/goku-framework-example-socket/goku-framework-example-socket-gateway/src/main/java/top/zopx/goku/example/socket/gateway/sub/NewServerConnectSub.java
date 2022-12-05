@@ -14,8 +14,8 @@ import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 import top.zopx.goku.framework.biz.entity.IServerInfo;
 import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.Client;
-import top.zopx.goku.framework.netty.server.ClientToClientAcceptor;
+import top.zopx.goku.framework.netty.server.GatewayToClientActuator;
+import top.zopx.goku.framework.netty.server.ClientToClientActuator;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
@@ -35,9 +35,9 @@ public class NewServerConnectSub implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewServerConnectSub.class);
 
-    private static final Map<Integer, Client.ServerProfile> ID_SERVER_MAP = new ConcurrentHashMap<>(64);
+    private static final Map<Integer, GatewayToClientActuator.ServerProfile> ID_SERVER_MAP = new ConcurrentHashMap<>(64);
 
-    private List<Client.ServerProfile> serverProfileList;
+    private List<GatewayToClientActuator.ServerProfile> serverProfileList;
 
     private final AtomicLong REV = new AtomicLong(0);
 
@@ -70,10 +70,10 @@ public class NewServerConnectSub implements
 
             IServerInfo.ServerInfo serverInfoObj = JsonUtil.getInstance().toObject(serverInfoStr, IServerInfo.ServerInfo.class);
 
-            Client.ServerProfile profile = ID_SERVER_MAP.get(bizServerId);
+            GatewayToClientActuator.ServerProfile profile = ID_SERVER_MAP.get(bizServerId);
             if (null == profile) {
                 // 初始化
-                ID_SERVER_MAP.put(bizServerId, new Client.ServerProfile());
+                ID_SERVER_MAP.put(bizServerId, new GatewayToClientActuator.ServerProfile());
                 serverProfileList = null;
                 profile = ID_SERVER_MAP.get(bizServerId);
             }
@@ -96,8 +96,8 @@ public class NewServerConnectSub implements
         return REV.get();
     }
 
-    private Client renewClient(IServerInfo.ServerInfo serverInfoObj) {
-        Client client = new Client(
+    private GatewayToClientActuator renewClient(IServerInfo.ServerInfo serverInfoObj) {
+        GatewayToClientActuator gatewayToClientActuator = new GatewayToClientActuator(
                 ConnectClient.create()
                         .setServerId(serverInfoObj.getServerId())
                         .setServerHost(serverInfoObj.getServerIp())
@@ -111,11 +111,11 @@ public class NewServerConnectSub implements
                         .build(),
                 serverInfoObj.getServerId()
         );
-        client.connect();
+        gatewayToClientActuator.connect();
         // 设置版本号
         REV.set(System.currentTimeMillis());
-        if (client.isReady()) {
-            return client;
+        if (gatewayToClientActuator.isReady()) {
+            return gatewayToClientActuator;
         }
         return null;
     }
@@ -126,29 +126,29 @@ public class NewServerConnectSub implements
     }
 
     @Override
-    public void apply(ClientToClientAcceptor closeClient) {
+    public void apply(ClientToClientActuator closeClient) {
         if (null == closeClient) {
             return;
         }
 
         int serverId = closeClient.getServerId();
         // 如果断线就删除
-        Client.ServerProfile sp = ID_SERVER_MAP.remove(serverId);
+        GatewayToClientActuator.ServerProfile sp = ID_SERVER_MAP.remove(serverId);
         serverProfileList = null;
         if (null != sp) {
             sp.setClient(null);
         }
     }
 
-    public List<Client.ServerProfile> getServerProfileList() {
+    public List<GatewayToClientActuator.ServerProfile> getServerProfileList() {
         if (null == serverProfileList) {
             serverProfileList = new ArrayList<>(ID_SERVER_MAP.values());
-            serverProfileList.sort(Comparator.comparing(Client.ServerProfile::getServerId));
+            serverProfileList.sort(Comparator.comparing(GatewayToClientActuator.ServerProfile::getServerId));
         }
         return serverProfileList;
     }
 
-    public Client.ServerProfile getServerProfileById(int serverId) {
+    public GatewayToClientActuator.ServerProfile getServerProfileById(int serverId) {
         return ID_SERVER_MAP.get(serverId);
     }
 }

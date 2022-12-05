@@ -37,11 +37,11 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/2/3
  * @email xiezhyan@126.com
  */
-public final class ClientToClientAcceptor {
+public final class ClientToClientActuator {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientToClientAcceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientToClientActuator.class);
 
     private static final ThreadFactory THREAD_FACTORY = r -> new Thread(r, "goku-websocket-client-work");
 
@@ -74,7 +74,7 @@ public final class ClientToClientAcceptor {
      *
      * @param client 使用配置
      */
-    public ClientToClientAcceptor(ConnectClient client) {
+    public ClientToClientActuator(ConnectClient client) {
         if (null == client) {
             throw new BusException("usingConf is null", IBus.ERROR_CODE, "");
         }
@@ -195,7 +195,7 @@ public final class ClientToClientAcceptor {
             channel = f.channel();
             channel.closeFuture().addListener(x -> {
                 // 获取已关闭的客户端
-                ClientToClientAcceptor closeClient = ClientToClientAcceptor.this;
+                ClientToClientActuator closeClient = ClientToClientActuator.this;
 
                 LOGGER.warn(
                         "XXX 注意: 服务器连接关闭! {} XXX",

@@ -18,10 +18,10 @@ import top.zopx.goku.framework.biz.redis.RedisSubscribe;
 import top.zopx.goku.framework.biz.ukey.UKey;
 import top.zopx.goku.framework.biz.constant.PublishEnum;
 import top.zopx.goku.framework.biz.constant.ServerCommandLineEnum;
-import top.zopx.goku.framework.netty.server.Server;
-import top.zopx.goku.framework.netty.server.ServerAcceptor;
+import top.zopx.goku.framework.netty.bind.entity.Server;
 import top.zopx.goku.framework.netty.bind.entity.WebsocketClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
+import top.zopx.goku.framework.netty.server.ServerActuator;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
 
 import java.time.Duration;
@@ -85,8 +85,8 @@ public class GatewayApp implements BaseChannelHandlerFactory {
     }
 
     private static void startGatewayServerApp() {
-        new Server(
-                ServerAcceptor.create()
+        new ServerActuator(
+                Server.create()
                         .setBossThreadPool(2)
                         .setWorkThreadPool(8)
                         .setFactory(new GatewayApp())

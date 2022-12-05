@@ -2,7 +2,7 @@ package top.zopx.goku.framework.netty.bind.entity;
 
 import com.google.gson.annotations.Expose;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.ClientToClientAcceptor;
+import top.zopx.goku.framework.netty.server.ClientToClientActuator;
 
 import java.text.MessageFormat;
 import java.util.HashSet;
@@ -322,6 +322,6 @@ public final class ConnectClient {
          *
          * @param closeClient 关闭客户端
          */
-        void apply(ClientToClientAcceptor closeClient);
+        void apply(ClientToClientActuator closeClient);
     }
 }
