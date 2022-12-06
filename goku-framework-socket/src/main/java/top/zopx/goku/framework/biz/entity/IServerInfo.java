@@ -44,6 +44,11 @@ public interface IServerInfo {
         private int serverPort;
 
         /**
+         * websocket服务地址
+         */
+        private String path;
+
+        /**
          * 负载数量
          */
         private int loadCount = -1;
@@ -94,6 +99,14 @@ public interface IServerInfo {
 
         public void setServerPort(int serverPort) {
             this.serverPort = serverPort;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
         }
     }
 }
