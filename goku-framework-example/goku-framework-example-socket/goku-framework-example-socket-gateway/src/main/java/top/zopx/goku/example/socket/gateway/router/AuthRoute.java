@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.common.recognizer.MsgRecognizer;
-import top.zopx.goku.framework.netty.server.GatewayToClientActuator;
+import top.zopx.goku.framework.netty.server.ClientToClientProfileActuator;
 import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
@@ -59,7 +59,7 @@ public class AuthRoute extends ChannelInboundHandlerAdapter {
 
         // 获取服务器连接, 也就是本机到目标服务器的连接
         // 登录过程都是随机选择一个服务器
-        GatewayToClientActuator serverConn = ServerSelector.randomAServerConnByServerJobType(
+        ClientToClientProfileActuator serverConn = ServerSelector.randomAServerConnByServerJobType(
                 NewServerConnectSub.getInstance(), currJobType
         );
 
