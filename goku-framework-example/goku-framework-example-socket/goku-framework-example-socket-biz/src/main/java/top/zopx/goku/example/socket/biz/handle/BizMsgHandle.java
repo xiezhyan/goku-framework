@@ -11,6 +11,7 @@ import top.zopx.goku.example.socket.common.async.MainThreadPoolExecutorSingleton
 import top.zopx.goku.example.socket.common.codec.ClientInnerMsgCodec;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.proto.common.Common;
+import top.zopx.goku.framework.netty.server.ClientToClientProfileActuator;
 import top.zopx.goku.framework.util.GatewayUtil;
 import top.zopx.goku.framework.netty.bind.factory.BaseDefaultChannelHandler;
 import top.zopx.goku.framework.netty.bind.handler.BaseCmdHandleContext;
@@ -92,7 +93,7 @@ public class BizMsgHandle extends BaseDefaultChannelHandler {
                 handshakeComplete = (WebSocketServerProtocolHandler.HandshakeComplete) objEvent;
 
         // 获取代理服务器 Id
-        String strServerId = handshakeComplete.requestHeaders().get("gatewayId");
+        String strServerId = handshakeComplete.requestHeaders().get(ClientToClientProfileActuator.GATEWAY_ID);
 
         if (null == strServerId ||
                 strServerId.isEmpty()) {

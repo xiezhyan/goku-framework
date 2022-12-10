@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import top.zopx.goku.example.socket.common.constant.Constant;
+import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.handle.ClientInnerMsgHandle;
 import top.zopx.goku.framework.biz.pubsub.ISubscribe;
 import top.zopx.goku.framework.biz.redis.RedisCache;
@@ -14,7 +15,7 @@ import top.zopx.goku.framework.biz.constant.RedisKeyEnum;
 import top.zopx.goku.framework.biz.entity.IServerInfo;
 import top.zopx.goku.framework.netty.bind.entity.ConnectClient;
 import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
-import top.zopx.goku.framework.netty.server.GatewayToClientActuator;
+import top.zopx.goku.framework.netty.server.ClientToClientProfileActuator;
 import top.zopx.goku.framework.netty.server.ClientToClientActuator;
 import top.zopx.goku.framework.tools.util.json.JsonUtil;
 import top.zopx.goku.framework.tools.util.string.StringUtil;
@@ -35,9 +36,9 @@ public class NewServerConnectSub implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewServerConnectSub.class);
 
-    private static final Map<Integer, GatewayToClientActuator.ServerProfile> ID_SERVER_MAP = new ConcurrentHashMap<>(64);
+    private static final Map<Integer, ClientToClientProfileActuator.ServerProfile> ID_SERVER_MAP = new ConcurrentHashMap<>(64);
 
-    private List<GatewayToClientActuator.ServerProfile> serverProfileList;
+    private List<ClientToClientProfileActuator.ServerProfile> serverProfileList;
 
     private final AtomicLong REV = new AtomicLong(0);
 
@@ -70,10 +71,10 @@ public class NewServerConnectSub implements
 
             IServerInfo.ServerInfo serverInfoObj = JsonUtil.getInstance().toObject(serverInfoStr, IServerInfo.ServerInfo.class);
 
-            GatewayToClientActuator.ServerProfile profile = ID_SERVER_MAP.get(bizServerId);
+            ClientToClientProfileActuator.ServerProfile profile = ID_SERVER_MAP.get(bizServerId);
             if (null == profile) {
                 // 初始化
-                ID_SERVER_MAP.put(bizServerId, new GatewayToClientActuator.ServerProfile());
+                ID_SERVER_MAP.put(bizServerId, new ClientToClientProfileActuator.ServerProfile());
                 serverProfileList = null;
                 profile = ID_SERVER_MAP.get(bizServerId);
             }
@@ -96,8 +97,8 @@ public class NewServerConnectSub implements
         return REV.get();
     }
 
-    private GatewayToClientActuator renewClient(IServerInfo.ServerInfo serverInfoObj) {
-        GatewayToClientActuator gatewayToClientActuator = new GatewayToClientActuator(
+    private ClientToClientProfileActuator renewClient(IServerInfo.ServerInfo serverInfoObj) {
+        ClientToClientProfileActuator clientToClientProfileActuator = new ClientToClientProfileActuator(
                 ConnectClient.create()
                         .setServerId(serverInfoObj.getServerId())
                         .setServerHost(serverInfoObj.getServerIp())
@@ -109,13 +110,13 @@ public class NewServerConnectSub implements
                         .setChannelHandlerFactory(this)
                         .setCloseCallback(this)
                         .build(),
-                serverInfoObj.getServerId()
+                ClientToClientProfileActuator.GATEWAY_ID, String.valueOf(GatewayApp.getServerId())
         );
-        gatewayToClientActuator.connect();
+        clientToClientProfileActuator.connect();
         // 设置版本号
         REV.set(System.currentTimeMillis());
-        if (gatewayToClientActuator.isReady()) {
-            return gatewayToClientActuator;
+        if (clientToClientProfileActuator.isReady()) {
+            return clientToClientProfileActuator;
         }
         return null;
     }
@@ -133,22 +134,22 @@ public class NewServerConnectSub implements
 
         int serverId = closeClient.getServerId();
         // 如果断线就删除
-        GatewayToClientActuator.ServerProfile sp = ID_SERVER_MAP.remove(serverId);
+        ClientToClientProfileActuator.ServerProfile sp = ID_SERVER_MAP.remove(serverId);
         serverProfileList = null;
         if (null != sp) {
             sp.setClient(null);
         }
     }
 
-    public List<GatewayToClientActuator.ServerProfile> getServerProfileList() {
+    public List<ClientToClientProfileActuator.ServerProfile> getServerProfileList() {
         if (null == serverProfileList) {
             serverProfileList = new ArrayList<>(ID_SERVER_MAP.values());
-            serverProfileList.sort(Comparator.comparing(GatewayToClientActuator.ServerProfile::getServerId));
+            serverProfileList.sort(Comparator.comparing(ClientToClientProfileActuator.ServerProfile::getServerId));
         }
         return serverProfileList;
     }
 
-    public GatewayToClientActuator.ServerProfile getServerProfileById(int serverId) {
+    public ClientToClientProfileActuator.ServerProfile getServerProfileById(int serverId) {
         return ID_SERVER_MAP.get(serverId);
     }
 }

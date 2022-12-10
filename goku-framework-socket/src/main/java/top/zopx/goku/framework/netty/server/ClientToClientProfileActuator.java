@@ -12,9 +12,11 @@ import java.util.Set;
  * @email xiezhyan@126.com
  * @date 2022/04/28
  */
-public class GatewayToClientActuator {
+public class ClientToClientProfileActuator {
 
     public static final String GATEWAY_ID = "GatewayId";
+
+    public static final String CLIENT_ID = "ClientId";
 
     /**
      * 是否已经连接成功
@@ -34,14 +36,11 @@ public class GatewayToClientActuator {
      * Client To Client
      *
      * @param connectClient 参数配置信息
-     * @param serverId      服务ID
      * @param extraInfoArr  额外参数
      *                      gatewayId, 1001, name,123
      */
-    public GatewayToClientActuator(ConnectClient connectClient, int serverId, String... extraInfoArr) {
+    public ClientToClientProfileActuator(ConnectClient connectClient, String... extraInfoArr) {
         acceptor = new ClientToClientActuator(connectClient);
-        acceptor.putExtraInfo(GATEWAY_ID, String.valueOf(serverId));
-
         for (int i = 0, size = extraInfoArr.length; i < size; i += 2) {
             acceptor.putExtraInfo(extraInfoArr[i], extraInfoArr[i + 1]);
         }
@@ -79,7 +78,7 @@ public class GatewayToClientActuator {
         /**
          * 客户端信息
          */
-        private GatewayToClientActuator gatewayToClientActuator;
+        private ClientToClientProfileActuator clientToClientProfileActuator;
 
         /**
          * 负载数量
@@ -87,15 +86,15 @@ public class GatewayToClientActuator {
         private int loadCount;
 
         public int getServerId() {
-            return gatewayToClientActuator.getClientId();
+            return clientToClientProfileActuator.getClientId();
         }
 
-        public GatewayToClientActuator getClient() {
-            return gatewayToClientActuator;
+        public ClientToClientProfileActuator getClient() {
+            return clientToClientProfileActuator;
         }
 
-        public void setClient(GatewayToClientActuator gatewayToClientActuator) {
-            this.gatewayToClientActuator = gatewayToClientActuator;
+        public void setClient(ClientToClientProfileActuator clientToClientProfileActuator) {
+            this.clientToClientProfileActuator = clientToClientProfileActuator;
         }
 
         public int getLoadCount() {
@@ -107,10 +106,10 @@ public class GatewayToClientActuator {
         }
 
         public Set<String> getServerJobTypeSet() {
-            if (null == gatewayToClientActuator) {
+            if (null == clientToClientProfileActuator) {
                 return Collections.emptySet();
             } else {
-                return gatewayToClientActuator.getServerJobTypeSet();
+                return clientToClientProfileActuator.getServerJobTypeSet();
             }
         }
     }

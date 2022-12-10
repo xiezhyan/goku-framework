@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.common.constant.ServerTypeEnum;
 import top.zopx.goku.example.socket.common.entity.ClientInnerMsg;
 import top.zopx.goku.example.socket.common.recognizer.MsgRecognizer;
-import top.zopx.goku.framework.netty.server.GatewayToClientActuator;
+import top.zopx.goku.framework.netty.server.ClientToClientProfileActuator;
 import top.zopx.goku.framework.util.IdUtil;
 import top.zopx.goku.example.socket.gateway.GatewayApp;
 import top.zopx.goku.example.socket.gateway.codec.SemiClientMsgFinished;
@@ -60,7 +60,7 @@ public class ChatRoute extends ChannelInboundHandlerAdapter {
         // 最新版本号
         Out<Long> newRevOut = new Out<>();
 
-        GatewayToClientActuator serverConn = ServerSelector.getServerConnByServerId(
+        ClientToClientProfileActuator serverConn = ServerSelector.getServerConnByServerId(
                 NewServerConnectSub.getInstance(),
                 selectServerId,
                 newRevOut

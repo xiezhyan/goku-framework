@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.example.socket.gateway.sub.NewServerConnectSub;
 import top.zopx.goku.framework.biz.constant.IKey;
-import top.zopx.goku.framework.netty.server.GatewayToClientActuator;
+import top.zopx.goku.framework.netty.server.ClientToClientProfileActuator;
 import top.zopx.goku.framework.util.Out;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public final class ServerSelector {
      * @param currJobType         类型
      * @return Client
      */
-    public static GatewayToClientActuator randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType) {
+    public static ClientToClientProfileActuator randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType) {
         return randomAServerConnByServerJobType(
                 newServerConnectSub, currJobType, null
         );
@@ -45,15 +45,15 @@ public final class ServerSelector {
      * @param currJobType         类型
      * @return Client
      */
-    public static GatewayToClientActuator randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType, Out<Long> out) {
+    public static ClientToClientProfileActuator randomAServerConnByServerJobType(NewServerConnectSub newServerConnectSub, IKey currJobType, Out<Long> out) {
         if (null == currJobType) {
             return null;
         }
 
         // 创建一个临时列表
-        List<GatewayToClientActuator.ServerProfile> tempList = null;
+        List<ClientToClientProfileActuator.ServerProfile> tempList = null;
 
-        for (GatewayToClientActuator.ServerProfile sp : newServerConnectSub.getServerProfileList()) {
+        for (ClientToClientProfileActuator.ServerProfile sp : newServerConnectSub.getServerProfileList()) {
             if (null == sp ||
                     null == sp.getClient() ||
                     !sp.getClient().isReady()) {
@@ -80,22 +80,22 @@ public final class ServerSelector {
 
         // 选择一个服务器资料
         int selectedIndex = RandomUtils.nextInt(0, tempList.size());
-        GatewayToClientActuator.ServerProfile profile = tempList.get(selectedIndex);
+        ClientToClientProfileActuator.ServerProfile profile = tempList.get(selectedIndex);
 
         // 设置版本号
         Out.putVal(out, newServerConnectSub.getRev());
         return profile.getClient();
     }
 
-    public static GatewayToClientActuator getServerConnByServerId(NewServerConnectSub instance, int selectServerId) {
+    public static ClientToClientProfileActuator getServerConnByServerId(NewServerConnectSub instance, int selectServerId) {
         return getServerConnByServerId(
                 instance, selectServerId, null
         );
     }
 
-    public static GatewayToClientActuator getServerConnByServerId(NewServerConnectSub instance, int selectServerId, Out<Long> out) {
+    public static ClientToClientProfileActuator getServerConnByServerId(NewServerConnectSub instance, int selectServerId, Out<Long> out) {
         // 获取服务器资料
-        GatewayToClientActuator.ServerProfile profile = instance.getServerProfileById(selectServerId);
+        ClientToClientProfileActuator.ServerProfile profile = instance.getServerProfileById(selectServerId);
 
         if (null == profile ||
                 null == profile.getClient() ||
