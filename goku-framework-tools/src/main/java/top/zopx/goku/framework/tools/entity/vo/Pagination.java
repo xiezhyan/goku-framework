@@ -16,12 +16,12 @@ public class Pagination implements Serializable {
     /**
      * 当前显示的条数,默认显示10条
      */
-    private int pageSize = 10;
+    private int pageSize;
 
     /**
      * 当前显示的页数
      */
-    private int currentIndex = 1;
+    private int currentIndex;
 
     /**
      * 查询总数
