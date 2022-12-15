@@ -62,6 +62,6 @@ public class SpringContext implements ApplicationContextAware {
     }
 
     public static IJson getJson() {
-        return Optional.of(getBean(IJson.class)).orElse(JsonUtil.getInstance());
+        return JsonUtil.getInstance();
     }
 }

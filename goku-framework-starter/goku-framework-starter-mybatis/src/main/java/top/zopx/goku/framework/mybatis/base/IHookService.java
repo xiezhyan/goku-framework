@@ -33,6 +33,7 @@ public interface IHookService<DTO extends BaseEntity, Entity extends DataEntity>
      * 修改钩子函数
      *
      * @param data 入参
+     * @param body 入参
      */
     default void doUpdateAfter(Entity data, DTO body) {
 

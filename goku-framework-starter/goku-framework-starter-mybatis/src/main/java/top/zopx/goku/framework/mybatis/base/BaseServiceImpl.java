@@ -30,10 +30,12 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
         implements IBaseService<VO, DTO, DO>, IHookService<DTO, DO> {
 
     @Override
+    @SuppressWarnings("all")
     public List<VO> getList(Pagination pagination, DTO query, LongConsumer consumer) {
         Page<DO> page = null;
         List<Sorted> sorteds = null;
-        if (null != pagination) {
+        if (null != pagination &&
+                (pagination.getCurrentIndex() > 0 && pagination.getPageSize() > 0)) {
             page = PageMethod.startPage(pagination.getCurrentIndex(), Math.min(pagination.getPageSize(), 1000));
             sorteds = pagination.getSorteds();
         }
@@ -75,6 +77,7 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @SuppressWarnings("all")
     public Boolean deleteByPriKey(Long id) {
         DO data = doDeleteBefore(id);
         if (Objects.nonNull(data)) {

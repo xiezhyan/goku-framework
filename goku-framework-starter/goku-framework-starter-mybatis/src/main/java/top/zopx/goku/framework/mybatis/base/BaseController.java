@@ -38,7 +38,7 @@ public abstract class BaseController<
     @OperatorLogAnnotation(value = "获取数据列表")
     public R<Page<VO>> getList(Pagination pagination, DTO query) {
         LongConsumer consumer = null;
-        if (null != pagination) {
+        if (pagination.getCurrentIndex() > 0 && pagination.getPageSize() > 0) {
             consumer = pagination::setTotalCount;
         }
         return R.result(

@@ -24,6 +24,16 @@ public class Pagination implements Serializable {
     private int currentIndex;
 
     /**
+     * 开始行
+     */
+    private Long startRow;
+
+    /**
+     * 结束行
+     */
+    private Long endRow;
+
+    /**
      * 查询总数
      */
     private long totalCount;
@@ -76,5 +86,21 @@ public class Pagination implements Serializable {
 
     public void setSorteds(List<Sorted> sorteds) {
         this.sorteds = sorteds;
+    }
+
+    public Long getStartRow() {
+        return startRow;
+    }
+
+    public void setStartRow(Long startRow) {
+        this.startRow = startRow;
+    }
+
+    public Long getEndRow() {
+        return endRow;
+    }
+
+    public void setEndRow(Long endRow) {
+        this.endRow = endRow;
     }
 }
