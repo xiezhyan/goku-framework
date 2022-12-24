@@ -15,4 +15,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AnnoSearchByTenantId {
+
+    /**
+     * 字段名称
+     */
+    String fieldName() default "tenant_id";
 }
