@@ -76,11 +76,11 @@ public class ServerActuator {
     /**
      * 主线程池方法
      */
-    private final ThreadFactory bossFactory;
+    private final ThreadFactory bossFactory = r -> new Thread(r, "goku-socket-boss");
     /**
      * 工作线程池方法
      */
-    private final ThreadFactory workFactory;
+    private final ThreadFactory workFactory = r -> new Thread(r, "goku-socket-work");
 
     private final BaseChannelHandlerFactory factory;
 
@@ -90,9 +90,6 @@ public class ServerActuator {
         this.ws = server.getWs();
 
         this.factory = server.getFactory();
-
-        bossFactory = r -> new Thread(r, "goku-socket-boss");
-        workFactory = r -> new Thread(r, "goku-socket-work");
     }
 
     /**
