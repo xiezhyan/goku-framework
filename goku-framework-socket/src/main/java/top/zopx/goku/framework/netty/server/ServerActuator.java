@@ -11,6 +11,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
@@ -173,9 +174,14 @@ public class ServerActuator {
             final ChannelHandler msgHandler = factory.createWebsocketMsgHandler();
 
             ChannelHandler[] handlers = {
+                    // http支持
                     new HttpServerCodec(),
                     new HttpObjectAggregator(65535),
+                    // 应答数据压缩
+                    new WebSocketServerCompressionHandler(),
+                    // websocket支持
                     new WebSocketServerProtocolHandler(path, false),
+                    // 大型数据流
                     new ChunkedWriteHandler(),
                     msgHandler,
                     new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
@@ -275,6 +281,7 @@ public class ServerActuator {
 
     /**
      * 可重置服务端配置 模板方法
+     *
      * @param serverBootstrap serverBootstrap
      */
     public void updateOption(ServerBootstrap serverBootstrap) {
