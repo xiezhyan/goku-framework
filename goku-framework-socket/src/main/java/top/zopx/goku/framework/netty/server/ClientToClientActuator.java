@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/2/3
  * @email xiezhyan@126.com
  */
+@SuppressWarnings("all")
 public final class ClientToClientActuator {
     /**
      * 日志对象
@@ -141,52 +142,50 @@ public final class ClientToClientActuator {
                     header
             );
 
-            Bootstrap b = new Bootstrap();
-            b.group(work);
+            ChannelFuture f =
+                    new Bootstrap()
+                            .group(work)
+                            .channel(
+                                    work instanceof EpollEventLoopGroup ?
+                                            EpollSocketChannel.class :
+                                            NioSocketChannel.class
+                            )
+                            .handler(new ChannelInitializer<SocketChannel>() {
+                                @Override
+                                protected void initChannel(SocketChannel ch) {
+                                    // 获取信道处理器工厂
+                                    final BaseChannelHandlerFactory f = client.getChannelHandlerFactory();
+                                    // 消息处理器
+                                    ChannelHandler msgHandler = null;
 
-            b.channel(
-                    work instanceof EpollEventLoopGroup ?
-                            EpollSocketChannel.class :
-                            NioSocketChannel.class
-            );
-            b.handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel ch) {
-                    // 获取信道处理器工厂
-                    final BaseChannelHandlerFactory f = client.getChannelHandlerFactory();
-                    // 消息处理器
-                    ChannelHandler msgHandler = null;
+                                    if (null != f) {
+                                        msgHandler = f.createWebsocketMsgHandler();
+                                    }
 
-                    if (null != f) {
-                        msgHandler = f.createWebsocketMsgHandler();
-                    }
+                                    // 如果是WS的形式，那么才会加入这些
+                                    if (client.getServerType() == ConnectClient.Constant.WS) {
+                                        ChannelHandler[] hArray = {
+                                                new HttpClientCodec(), // Http 客户端编解码器
+                                                new HttpObjectAggregator(65535), // 内容长度限制
+                                                new WebSocketClientProtocolHandler(websocketHandShaker), // WebSocket 协议处理器, 在这里处理握手、ping、pong 等消息
+                                                msgHandler, // 消息处理器
+                                        };
 
-                    // 如果是WS的形式，那么才会加入这些
-                    if (client.getServerType() == ConnectClient.Constant.WS) {
-                        ChannelHandler[] hArray = {
-                                new HttpClientCodec(), // Http 客户端编解码器
-                                new HttpObjectAggregator(65535), // 内容长度限制
-                                new WebSocketClientProtocolHandler(websocketHandShaker), // WebSocket 协议处理器, 在这里处理握手、ping、pong 等消息
-                                msgHandler, // 消息处理器
-                        };
-
-                        for (ChannelHandler h : hArray) {
-                            if (null != h) {
-                                ch.pipeline().addLast(h);
-                            }
-                        }
-                    } else {
-                        ch.pipeline().addLast(msgHandler);
-                    }
-                }
-            });
-            b.option(ChannelOption.SO_KEEPALIVE, true);
-
-            // 客户端开启
-            ChannelFuture f = b.connect(
-                    client.getServerHost(),
-                    client.getServerPort()
-            ).sync();
+                                        for (ChannelHandler h : hArray) {
+                                            if (null != h) {
+                                                ch.pipeline().addLast(h);
+                                            }
+                                        }
+                                    } else {
+                                        ch.pipeline().addLast(msgHandler);
+                                    }
+                                }
+                            })
+                            .option(ChannelOption.SO_KEEPALIVE, true)
+                            .connect(
+                                    client.getServerHost(),
+                                    client.getServerPort()
+                            ).sync();
 
             if (!f.isSuccess()) {
                 return;

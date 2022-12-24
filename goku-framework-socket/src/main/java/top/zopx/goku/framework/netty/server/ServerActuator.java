@@ -25,7 +25,6 @@ import top.zopx.goku.framework.netty.bind.factory.BaseChannelHandlerFactory;
 import top.zopx.goku.framework.tools.exceptions.BusException;
 import top.zopx.goku.framework.tools.exceptions.IBus;
 
-import java.time.Duration;
 import java.util.Locale;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -52,21 +51,9 @@ public class ServerActuator {
     private final WebsocketClient ws;
 
     /**
-     * 读操作超时时间
+     * 系统参数
      */
-    private final Duration readTimeout;
-    /**
-     * 写操作超时时间
-     */
-    private final Duration writeTimeout;
-    /**
-     * 主线程数
-     */
-    private final int bossThreadPool;
-    /**
-     * 工作线程数
-     */
-    private final int workThreadPool;
+    private final Server server;
 
     /**
      * APP端主线程组
@@ -97,13 +84,9 @@ public class ServerActuator {
     private final BaseChannelHandlerFactory factory;
 
     public ServerActuator(Server server) {
+        this.server = server;
         this.app = server.getApp();
         this.ws = server.getWs();
-
-        this.readTimeout = server.getReadTimeout();
-        this.writeTimeout = server.getWriteTimeout();
-        this.bossThreadPool = server.getBossThreadPool();
-        this.workThreadPool = server.getWorkThreadPool();
 
         this.factory = server.getFactory();
 
@@ -116,11 +99,11 @@ public class ServerActuator {
      */
     private void createAppEventLoopGroup() {
         if (isLinux()) {
-            appBoss = new EpollEventLoopGroup(bossThreadPool, bossFactory);
-            appWork = new EpollEventLoopGroup(workThreadPool, workFactory);
+            appBoss = new EpollEventLoopGroup(server.getBossThreadPool(), bossFactory);
+            appWork = new EpollEventLoopGroup(server.getWorkThreadPool(), workFactory);
         } else {
-            appBoss = new NioEventLoopGroup(bossThreadPool, bossFactory);
-            appWork = new NioEventLoopGroup(workThreadPool, workFactory);
+            appBoss = new NioEventLoopGroup(server.getBossThreadPool(), bossFactory);
+            appWork = new NioEventLoopGroup(server.getWorkThreadPool(), workFactory);
         }
     }
 
@@ -129,11 +112,11 @@ public class ServerActuator {
      */
     private void createWebSocketEventLoopGroup() {
         if (isLinux()) {
-            websocketBoss = new EpollEventLoopGroup(bossThreadPool, bossFactory);
-            websocketWork = new EpollEventLoopGroup(workThreadPool, workFactory);
+            websocketBoss = new EpollEventLoopGroup(server.getBossThreadPool(), bossFactory);
+            websocketWork = new EpollEventLoopGroup(server.getWorkThreadPool(), workFactory);
         } else {
-            websocketBoss = new NioEventLoopGroup(bossThreadPool, bossFactory);
-            websocketWork = new NioEventLoopGroup(workThreadPool, workFactory);
+            websocketBoss = new NioEventLoopGroup(server.getBossThreadPool(), bossFactory);
+            websocketWork = new NioEventLoopGroup(server.getWorkThreadPool(), workFactory);
         }
     }
 
@@ -195,7 +178,7 @@ public class ServerActuator {
                     new WebSocketServerProtocolHandler(path, false),
                     new ChunkedWriteHandler(),
                     msgHandler,
-                    new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
+                    new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
                     new LoggingHandler(LogLevel.INFO),
             };
 
@@ -236,7 +219,7 @@ public class ServerActuator {
 
             ChannelHandler[] handlers = {
                     msgHandler, // 消息处理器
-                    new IdleStateHandler(readTimeout.getSeconds(), writeTimeout.getSeconds(), 0, TimeUnit.SECONDS),
+                    new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
                     new LoggingHandler(LogLevel.INFO)
             };
 
@@ -273,13 +256,13 @@ public class ServerActuator {
      * @return ChannelFuture
      */
     private ChannelFuture createServerBootstrap(String host, int port, Consumer<SocketChannel> consumer, EventLoopGroup boss, EventLoopGroup work) {
-        return new ServerBootstrap()
+        final ServerBootstrap serverBootstrap = new ServerBootstrap()
                 .group(boss, work)
-                .channel(this.getServerChannel())
-                .option(ChannelOption.SO_BACKLOG, 128)
-                .childOption(ChannelOption.TCP_NODELAY, true)
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .channel(this.getServerChannel());
+
+        updateOption(serverBootstrap);
+
+        return serverBootstrap
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
@@ -288,6 +271,18 @@ public class ServerActuator {
                 })
                 .bind(host, port)
                 .syncUninterruptibly();
+    }
+
+    /**
+     * 可重置服务端配置 模板方法
+     * @param serverBootstrap serverBootstrap
+     */
+    public void updateOption(ServerBootstrap serverBootstrap) {
+        serverBootstrap
+                .option(ChannelOption.SO_BACKLOG, 128)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
     }
 
     private Class<? extends ServerChannel> getServerChannel() {
