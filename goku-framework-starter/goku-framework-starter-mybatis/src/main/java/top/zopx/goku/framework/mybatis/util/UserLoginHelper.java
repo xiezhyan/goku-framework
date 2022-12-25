@@ -68,4 +68,28 @@ public class UserLoginHelper {
         final Optional<UserLoginVO> optional = getUserOrNull();
         return optional.map(UserLoginVO::getUserId).orElse(null);
     }
+
+
+    /**
+     * 获取登录用户租户信息
+     *
+     * @return 租户ID
+     */
+    public static Long getTenantId() {
+        if (isLogin()) {
+            return THREAD_LOCAL.get().getTenantId();
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取登录用户租户信息
+     *
+     * @return 租户ID
+     */
+    public static Long getTenantIdOrNull() {
+        final Optional<UserLoginVO> optional = getUserOrNull();
+        return optional.map(UserLoginVO::getTenantId).orElse(null);
+    }
 }
