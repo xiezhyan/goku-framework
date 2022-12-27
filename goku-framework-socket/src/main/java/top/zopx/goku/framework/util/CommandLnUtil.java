@@ -1,6 +1,7 @@
 package top.zopx.goku.framework.util;
 
 import org.apache.commons.cli.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +27,14 @@ public class CommandLnUtil {
     public static Map<String, String> create(String[] args, Config... configs) {
         final Options options = new Options();
         for (Config config : configs) {
-            options.addRequiredOption(
-                    config.getOpt(),
-                    config.getLongOpt(),
-                    config.isHasArg(),
-                    config.getDesc()
+            options.addOption(
+                    Option.builder()
+                            .option(config.getOpt())
+                            .longOpt(config.getLongOpt())
+                            .hasArg(true)
+                            .required(config.hasRequire)
+                            .desc(config.desc)
+                            .build()
             );
         }
         final CommandLineParser parser = new DefaultParser();
@@ -38,6 +42,7 @@ public class CommandLnUtil {
             CommandLine parse = parser.parse(options, args);
             return options.getOptions()
                     .stream()
+                    .filter(option -> StringUtils.isNotBlank(option.getLongOpt()) && StringUtils.isNotBlank(parse.getOptionValue(option)))
                     .collect(Collectors.toMap(Option::getLongOpt, parse::getOptionValue));
         } catch (ParseException e) {
             LOGGER.error(e.getMessage(), e);
@@ -55,13 +60,13 @@ public class CommandLnUtil {
         private final String opt;
         private final String longOpt;
         private final String desc;
-        private final boolean hasArg;
+        private final boolean hasRequire;
 
-        public Config(String opt, String longOpt, String desc, boolean hasArg) {
+        public Config(String opt, String longOpt, String desc, boolean hasRequire) {
             this.opt = opt;
             this.longOpt = longOpt;
             this.desc = desc;
-            this.hasArg = hasArg;
+            this.hasRequire = hasRequire;
         }
 
         public String getOpt() {
@@ -76,8 +81,8 @@ public class CommandLnUtil {
             return desc;
         }
 
-        public boolean isHasArg() {
-            return hasArg;
+        public boolean isHasRequire() {
+            return hasRequire;
         }
     }
 }

@@ -22,6 +22,7 @@ public enum ServerCommandLineEnum {
      * --server_job_type_set=PASSPORT,HALL,GAME,CLUB,CHAT,RECORD
      * -h 0.0.0.0
      * -p 20480
+     * -path /ws
      * -c ../etc/proxyserver_all.conf.json
      */
     /**
@@ -43,7 +44,7 @@ public enum ServerCommandLineEnum {
     /**
      * 服务器请求地址
      */
-    SERVER_PATH("path", "server_path", "服务器请求地址", true),
+    SERVER_PATH("path", "server_path", "服务器请求地址", false),
     /**
      * 配置文件
      */
@@ -56,13 +57,13 @@ public enum ServerCommandLineEnum {
     private final String opt;
     private final String longOpt;
     private final String desc;
-    private final boolean hasArg;
+    private final boolean hasRequire;
 
-    ServerCommandLineEnum(String opt, String longOpt, String desc, boolean hasArg) {
+    ServerCommandLineEnum(String opt, String longOpt, String desc, boolean hasRequire) {
         this.opt = opt;
         this.longOpt = longOpt;
         this.desc = desc;
-        this.hasArg = hasArg;
+        this.hasRequire = hasRequire;
     }
 
     public String getOpt() {
@@ -77,12 +78,12 @@ public enum ServerCommandLineEnum {
         return desc;
     }
 
-    public boolean isHasArg() {
-        return hasArg;
+    public boolean isHasRequire() {
+        return hasRequire;
     }
 
     public static List<CommandLnUtil.Config> create() {
-        return Arrays.stream(values()).map(cons -> new CommandLnUtil.Config(cons.opt, cons.longOpt, cons.desc, cons.isHasArg())).collect(Collectors.toList());
+        return Arrays.stream(values()).map(cons -> new CommandLnUtil.Config(cons.opt, cons.longOpt, cons.desc, cons.isHasRequire())).collect(Collectors.toList());
     }
 
     public static Map<String, String> createCommandLine(String[] args) {

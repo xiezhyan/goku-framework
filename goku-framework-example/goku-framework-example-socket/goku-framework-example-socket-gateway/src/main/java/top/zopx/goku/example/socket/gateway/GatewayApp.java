@@ -40,16 +40,22 @@ public class GatewayApp implements BaseChannelHandlerFactory {
     private static String serverName;
     private static String serverIp;
     private static int serverPort;
+    private static String serverPath;
 
     public static void main(String[] args) {
 
         /**
-         * --server_id=1001
-         * --server_name=proxy_server_1001
-         * --server_job_type_set=PASSPORT,HALL,GAME,CLUB,CHAT,RECORD
-         * -h 0.0.0.0
-         * -p 20480
-         * -c ../etc/proxyserver_all.conf.json
+         * --server_id=1002
+         * --server_name=proxy_server_1002
+         * --server_job_type_set=GATEWAY
+         * -h
+         * 127.0.0.1
+         * -p
+         * 20481
+         * -path
+         * /abc
+         * -c
+         * goku-framework-example/goku-framework-example-socket/doc/conf/gateway_conf.json
          */
         final Map<String, String> commandLnMap = ServerCommandLineEnum.createCommandLine(args);
         if (MapUtils.isEmpty(commandLnMap)) {
@@ -61,6 +67,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
         serverName = commandLnMap.get(ServerCommandLineEnum.SERVER_NAME.getLongOpt());
         serverIp = commandLnMap.get(ServerCommandLineEnum.SERVER_HOST.getLongOpt());
         serverPort = StringUtil.toInteger(commandLnMap.get(ServerCommandLineEnum.SERVER_PORT.getLongOpt()));
+        serverPath = commandLnMap.getOrDefault(ServerCommandLineEnum.SERVER_PATH.getLongOpt(), Constant.WEBSOCKET_PATH);
 
         // 读取配置文件
         JsonObject configObj = ReadFileUtil.read(commandLnMap.get(ServerCommandLineEnum.CONFIG.getLongOpt()));
@@ -96,7 +103,7 @@ public class GatewayApp implements BaseChannelHandlerFactory {
                                 WebsocketClient.create()
                                         .setHost(serverIp)
                                         .setPort(serverPort)
-                                        .setPath(Constant.WEBSOCKET_PATH)
+                                        .setPath(serverPath)
                                         .build()
                         )
                         .build()
