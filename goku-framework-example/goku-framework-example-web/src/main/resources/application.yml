@@ -58,3 +58,5 @@ goku:
       port: 13306
       username: ${spring.datasource.username}
       password: ${spring.datasource.password}
+  log:
+    level: info
