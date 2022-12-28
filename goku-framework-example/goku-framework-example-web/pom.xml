@@ -20,6 +20,12 @@
 		</dependency>
 		<dependency>
 			<groupId>top.zopx</groupId>
+			<artifactId>goku-framework-starter-material</artifactId>
+			<version>${goku.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>top.zopx</groupId>
 			<artifactId>goku-framework-starter-mybatis</artifactId>
 			<version>${goku.version}</version>
 		</dependency>

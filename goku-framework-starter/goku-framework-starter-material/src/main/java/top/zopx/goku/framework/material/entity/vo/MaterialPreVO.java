@@ -1,11 +1,13 @@
 package top.zopx.goku.framework.material.entity.vo;
 
+import java.io.Serializable;
+
 /**
  * @author 俗世游子
  * @email xiezhyan@126.com
  * @date 2022/5/31
  */
-public class MaterialPreVO {
+public class MaterialPreVO implements Serializable {
 
     /**
      *

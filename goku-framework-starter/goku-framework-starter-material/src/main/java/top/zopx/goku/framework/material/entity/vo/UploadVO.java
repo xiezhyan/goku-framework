@@ -5,12 +5,14 @@ import top.zopx.goku.framework.material.entity.UploadDTO;
 import top.zopx.goku.framework.material.entity.check.BucketName;
 import top.zopx.goku.framework.material.entity.check.Region;
 
+import java.io.Serializable;
+
 /**
  * @author 俗世游子
  * @date 2022/05/11
  * @email xiezhyan@126.com
  */
-public class UploadVO {
+public class UploadVO implements Serializable {
 
     /**
      * 归属用户

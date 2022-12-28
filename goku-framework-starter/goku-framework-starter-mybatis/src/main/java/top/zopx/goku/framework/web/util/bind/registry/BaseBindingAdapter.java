@@ -23,7 +23,7 @@ public abstract class BaseBindingAdapter implements SmartLifecycle {
 
     @Override
     public void start() {
-        LogHelper.getLogger(BaseBindingAdapter.class).info("ResultWrapperConvert 开始注入，加入到缓存中。。。");
+        LogHelper.getLogger(BaseBindingAdapter.class).debug("ResultWrapperConvert 开始注入，加入到缓存中。。。");
         bindingAdapter.convertToCache(addTranslateGenericConvert());
     }
 

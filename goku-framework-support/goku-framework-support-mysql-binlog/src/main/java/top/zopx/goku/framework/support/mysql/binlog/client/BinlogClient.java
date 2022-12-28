@@ -58,9 +58,9 @@ public class BinlogClient {
             binaryLogClient.registerEventListener(binlogClientEventListener);
 
             try {
-                LOGGER.info("connecting to mysql start");
+                LOGGER.debug("connecting to mysql start");
                 binaryLogClient.connect();
-                LOGGER.info("connecting to mysql done");
+                LOGGER.debug("connecting to mysql done");
             } catch (IOException ex) {
                 LOGGER.error(ex.getMessage(), ex);
             }

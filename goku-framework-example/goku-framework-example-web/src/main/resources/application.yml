@@ -35,6 +35,10 @@ spring:
 
   messages:
     basename: i18n/messages
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 
 mybatis-plus:
@@ -60,3 +64,18 @@ goku:
       password: ${spring.datasource.password}
   log:
     level: info
+    lasting: true
+    
+  #  mkdir -p /mnt/minio/{data,config}
+#  docker run -d -p 9001:9000 --name minio \
+#   -e "MINIO_ACCESS_KEY=minioAdmin" \
+#   -e "MINIO_SECRET_KEY=minioAdmin" \
+#   -v /mnt/minio/data:/data \
+#   -v /mnt/minio/config:/root/.minio \
+#   minio/minio server /data \
+#     --console-address ":9090" -address ":9000"
+  material:
+    minio:
+      endpoint: "http://192.168.86.200:9001"
+      app-secret-id: minioAdmin
+      app-secret-key: minioAdmin
