@@ -34,7 +34,7 @@ spring:
     name: goku-example-web
 
   messages:
-    basename: i18n/messages
+    basename: i18n/messages,i18n/ValidationMessages
   servlet:
     multipart:
       max-file-size: 20MB

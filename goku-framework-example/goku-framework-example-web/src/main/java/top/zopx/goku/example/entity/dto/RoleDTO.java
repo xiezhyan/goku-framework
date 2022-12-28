@@ -17,18 +17,18 @@ public class RoleDTO extends BaseEntity {
     /**
      * 角色名称
      */
-    @NotBlank(message = "角色名称不能为空")
+    @NotBlank(message = "NotBlank.role.roleName")
     private String roleName;
     /**
      * 角色标识
      */
-    @NotBlank(message = "角色标识不能为空")
+    @NotBlank(message = "NotBlank.role.roleKey")
     private String roleKey;
     /**
      * 状态
      */
-    @NotNull(message = "状态不能为空")
-    @Range(min = 0, max = 1, message = "角色状态：0.禁用 1.正常")
+    @NotNull(message = "NotNull.role.state")
+    @Range(min = 0, max = 1, message = "Range.role.state")
     private Integer state;
     /**
      * 显示位置

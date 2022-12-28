@@ -1,12 +1,8 @@
 package top.zopx.goku.framework.log.configurator.advice;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import top.zopx.goku.framework.log.constant.LogConstant;
@@ -34,8 +30,6 @@ import java.util.Map;
  */
 public abstract class BaseExceptionAdvice implements IMsg{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseExceptionAdvice.class);
-
     @ExceptionHandler(BusException.class)
     public R<String> handleBusException(BusException e) {
         doAfter(e);
@@ -51,20 +45,13 @@ public abstract class BaseExceptionAdvice implements IMsg{
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public R<String> handleValidationException(MethodArgumentNotValidException e) {
         doAfter(e);
-        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), e), HttpStatus.FORBIDDEN.value());
-
+        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), e), HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @ExceptionHandler(BindException.class)
     public R<String> handleValidationException(BindException e) {
-        Map<String, String> errorMap = new HashMap<>();
-        FieldError fieldError;
-        for (ObjectError error : e.getBindingResult().getAllErrors()) {
-            fieldError = (FieldError) error;
-            errorMap.put(fieldError.getObjectName() + "." + fieldError.getField(), getErrorMsg(error.getDefaultMessage(), e));
-        }
         doAfter(e);
-        return R.failure(SpringContext.getJson().toJson(errorMap), HttpStatus.FORBIDDEN.value());
+        return R.failure(getErrorMsg(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), e), HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @ExceptionHandler(Throwable.class)

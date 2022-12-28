@@ -1,9 +1,13 @@
 package top.zopx.goku.example.configurator;
 
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.zopx.goku.example.util.MessageUtil;
 import top.zopx.goku.framework.log.configurator.advice.BaseExceptionAdvice;
 import top.zopx.goku.framework.tools.exceptions.BusException;
+
+import javax.validation.ConstraintViolationException;
 
 /**
  * @author 俗世游子
@@ -19,9 +23,13 @@ public class GlobalExceptionAdvice extends BaseExceptionAdvice {
                 BusException busE = (BusException) e;
                 return MessageUtil.getMessage(busE.getKey());
             } catch (Exception ex) {
-                super.getErrorMsg(sourceMsg, ex);
+                return super.getErrorMsg(sourceMsg, ex);
             }
         }
-        return super.getErrorMsg(sourceMsg, e);
+        try {
+            return MessageUtil.getMessage(sourceMsg);
+        } catch (Exception ex) {
+            return super.getErrorMsg(sourceMsg, e);
+        }
     }
 }
