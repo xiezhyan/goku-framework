@@ -1,13 +1,9 @@
 package top.zopx.goku.example.configurator;
 
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.zopx.goku.example.util.MessageUtil;
 import top.zopx.goku.framework.log.configurator.advice.BaseExceptionAdvice;
 import top.zopx.goku.framework.tools.exceptions.BusException;
-
-import javax.validation.ConstraintViolationException;
 
 /**
  * @author 俗世游子
