@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @email xiezhyan@126.com
  * @date 2022/04/26
  */
-public enum ServerCommandLineEnum implements IServerCommandLineKey{
+public enum ServerCommandLineEnum implements IServerCommandLineKey {
 
     /**
      * --server_id=1001
@@ -84,6 +84,12 @@ public enum ServerCommandLineEnum implements IServerCommandLineKey{
         return hasRequire;
     }
 
+    /**
+     * 处理命令行参数
+     *
+     * @param commandLineKeys 额外参数
+     * @return List<CommandLnUtil.Config>
+     */
     public static List<CommandLnUtil.Config> create(IServerCommandLineKey... commandLineKeys) {
         List<IServerCommandLineKey> serverCommandLineKeys = new ArrayList<>(Arrays.asList(commandLineKeys));
         serverCommandLineKeys.addAll(Arrays.asList(values()));
@@ -91,7 +97,14 @@ public enum ServerCommandLineEnum implements IServerCommandLineKey{
                 .map(cons -> new CommandLnUtil.Config(cons.getOpt(), cons.getLongOpt(), cons.getDesc(), cons.isHasRequire())).collect(Collectors.toList());
     }
 
-    public static Map<String, String> createCommandLine(String[] args) {
-        return CommandLnUtil.create(args, create().toArray(new CommandLnUtil.Config[0]));
+    /**
+     * 将命令行参数封装
+     *
+     * @param args            命令行获取到的参数
+     * @param commandLineKeys 额外参数
+     * @return Map<String, String>
+     */
+    public static Map<String, String> createCommandLine(String[] args, IServerCommandLineKey... commandLineKeys) {
+        return CommandLnUtil.create(args, create(commandLineKeys).toArray(new CommandLnUtil.Config[0]));
     }
 }
