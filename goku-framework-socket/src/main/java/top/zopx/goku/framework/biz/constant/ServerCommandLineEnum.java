@@ -2,9 +2,7 @@ package top.zopx.goku.framework.biz.constant;
 
 import top.zopx.goku.framework.util.CommandLnUtil;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -14,7 +12,7 @@ import java.util.stream.Collectors;
  * @email xiezhyan@126.com
  * @date 2022/04/26
  */
-public enum ServerCommandLineEnum {
+public enum ServerCommandLineEnum implements IServerCommandLineKey{
 
     /**
      * --server_id=1001
@@ -66,24 +64,31 @@ public enum ServerCommandLineEnum {
         this.hasRequire = hasRequire;
     }
 
+    @Override
     public String getOpt() {
         return opt;
     }
 
+    @Override
     public String getLongOpt() {
         return longOpt;
     }
 
+    @Override
     public String getDesc() {
         return desc;
     }
 
+    @Override
     public boolean isHasRequire() {
         return hasRequire;
     }
 
-    public static List<CommandLnUtil.Config> create() {
-        return Arrays.stream(values()).map(cons -> new CommandLnUtil.Config(cons.opt, cons.longOpt, cons.desc, cons.isHasRequire())).collect(Collectors.toList());
+    public static List<CommandLnUtil.Config> create(IServerCommandLineKey... commandLineKeys) {
+        List<IServerCommandLineKey> serverCommandLineKeys = new ArrayList<>(Arrays.asList(commandLineKeys));
+        serverCommandLineKeys.addAll(Arrays.asList(values()));
+        return serverCommandLineKeys.stream()
+                .map(cons -> new CommandLnUtil.Config(cons.getOpt(), cons.getLongOpt(), cons.getDesc(), cons.isHasRequire())).collect(Collectors.toList());
     }
 
     public static Map<String, String> createCommandLine(String[] args) {
