@@ -63,7 +63,7 @@ goku:
       username: ${spring.datasource.username}
       password: ${spring.datasource.password}
   log:
-    level: info
+    level: debug
     lasting: true
     
   #  mkdir -p /mnt/minio/{data,config}

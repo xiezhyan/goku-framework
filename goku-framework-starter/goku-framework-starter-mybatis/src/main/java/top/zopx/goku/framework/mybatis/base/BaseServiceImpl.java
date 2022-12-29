@@ -33,11 +33,10 @@ public abstract class BaseServiceImpl<VO, DTO extends BaseEntity, DO extends Dat
     @SuppressWarnings("all")
     public List<VO> getList(Pagination pagination, DTO query, LongConsumer consumer) {
         Page<DO> page = null;
-        List<Sorted> sorteds = null;
+        List<Sorted> sorteds = Optional.ofNullable(pagination).orElse(new Pagination()).getSorteds();
         if (null != pagination &&
                 (pagination.getCurrentIndex() > 0 && pagination.getPageSize() > 0)) {
             page = PageMethod.startPage(pagination.getCurrentIndex(), Math.min(pagination.getPageSize(), 1000));
-            sorteds = pagination.getSorteds();
         }
         doSearchBefore(query);
         List<DO> list = baseMapper.getListOrder(query, sorteds);
