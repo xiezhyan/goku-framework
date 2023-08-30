@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>top.zopx</groupId>
+        <artifactId>goku-framework-dependency</artifactId>
+        <version>2.0.05_10</version>
+        <relativePath>../goku-framework-dependency/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>goku-framework-starter</artifactId>
+    <description>汇总</description>
+    <name>${groupId}:${artifactId}:${parent.version}</name>
+    
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>goku-framework-starter-data-jpa</module>
+        <module>goku-framework-starter-data-mybatis</module>
+        <module>goku-framework-starter-data-redis</module>
+        <module>goku-framework-starter-data-oss</module>
+        <module>goku-framework-starter-support-http</module>
+        <module>goku-framework-starter-support-primary</module>
+        <module>goku-framework-starter-support-binlog</module>
+        <module>goku-framework-starter-support-activiti</module>
+    </modules>
+    
+    <dependencies>
+        <dependency>
+            <groupId>top.zopx</groupId>
+            <artifactId>goku-framework-tools</artifactId>
+            <version>${goku.version}</version>
+        </dependency>
+    
+        <!--配置解析-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    
+        <!-- 监控上报 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>${project.artifactId}-${version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.9.19</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

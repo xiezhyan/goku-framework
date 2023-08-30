@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package msg;
+option java_package = "top.zopx.goku.example.socket.proto.msg";
+
+enum MsgDef {
+  _Dummy = 0;
+  _SendMsgRequest = 300;
+  _SendMsgResponse = 301;
+}
+
+message SendMsgRequest {
+  // 0：单聊消息、1：群消息
+  sint32 ope = 1;
+  // ope=0: 用户ID、 ope=1：群号
+  int64 to = 2;
+  // 0：文本消息
+  // 1：图片消息
+  // 2：语音消息
+  // 3：视频消息
+  // 4：地理位置消息
+  // 6：文件消息
+  // 10：提示消息
+  sint32 msg = 3;
+  // 消息JSON
+  string body = 4;
+  // 漫游
+  bool roam = 5;
+  // 存云端历史
+  bool history = 6;
+  // 发送方多端同步
+  bool sendersync = 7;
+  // 通知栏推送
+  bool push = 8;
+  // 未读计数
+  bool badge = 9;
+  // 推送文案昵称
+  bool needPushNick = 10;
+  // 存离线消息
+  bool persistent = 11;
+  // 更新会话列表服务里本会话的最后一条消息
+  bool sessionUpdate = 12;
+}
+
+// 文本消息&提示消息
+message TextMsg {
+  string msg = 1;
+}
+
+message ImageMsg {
+  string name = 1;
+  string md5 = 2;
+  string url = 3;
+  // 格式
+  string ext = 4;
+  int64 w = 5;
+  int64 h = 6;
+  int64 size = 7;
+}
+
+message VoiceMsg {
+  int32 dur = 1;
+  string md5 = 2;
+  string url = 3;
+  string ext = 4;
+  int64 size = 5;
+}
+
+message VideoMsg {
+  // 持续时长
+  int32 dur = 1;
+  string md5 = 2;
+  string url = 3;
+  int64 w = 4;
+  int64 h = 5;
+  string ext = 6;
+  int64 size = 7;
+}
+
+message LocationMsg {
+  string title = 1;
+  // 经度
+  double lng = 2;
+  // 纬度
+  double lat = 3;
+}
+
+message FileMsg {
+  string name = 1;
+  string md5 = 2;
+  string url = 3;
+  // 后缀类型
+  string ext = 4;
+  int64 size = 5;
+}
+
+message SendMsgResponse {
+  string msgId = 1;
+  int64 timestamp = 2;
+}

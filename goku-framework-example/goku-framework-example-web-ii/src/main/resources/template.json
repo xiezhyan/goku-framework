@@ -1,0 +1,28 @@
+[
+  {
+    "database": "test",
+    "tableList": [
+      {
+        "tableName": "tbl_role",
+        "insert": [
+          {
+            "column": "role_name"
+          },
+          {
+            "column": "state"
+          }
+        ],
+        "update": [
+          {
+            "column": "role_name"
+          }
+        ],
+        "delete": [
+          {
+            "column": ""
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "ukey": {
+    "uKeyPassword": "123456",
+    "uKeyTTL": 2592000000
+  },
+  "redis": {
+    "server": {
+      "host": "test.zopx.top",
+      "port": 16379,
+      "index": 10,
+      "password": ""
+    },
+    "lock": {
+      "host": "test.zopx.top",
+      "port": 16379,
+      "index": 11,
+      "password": ""
+    }
+  },
+  "mysql": {
+    "biz": {
+      "driverClassName": "com.mysql.cj.jdbc.Driver",
+      "jdbc": "jdbc:mysql://test.zopx.top:13306/test",
+      "userName": "root",
+      "password": "JKLjkl789**.."
+    }
+  }
+}
