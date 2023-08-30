@@ -1,13 +1,23 @@
 package top.zopx.goku.framework.http.configurator.mvn;
 
+import jakarta.annotation.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.zopx.goku.framework.http.properties.WebProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +29,29 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
+@EnableConfigurationProperties(WebProperties.class)
 public class WebMvcConfiguration implements WebMvcConfigurer {
+
+    @Resource
+    private WebProperties webProperties;
+
+    @Override
+    public void configurePathMatch(@NotNull PathMatchConfigurer configurer) {
+        configurePathMatch(configurer, webProperties.getApp());
+        configurePathMatch(configurer, webProperties.getAdmin());
+    }
+
+    private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
+        if (null == api) {
+            return;
+        }
+
+        AntPathMatcher antPathMatcher = new AntPathMatcher(".");
+        configurer.addPathPrefix(
+                api.getPrefix(), clazz -> clazz.isAnnotationPresent(RestController.class)
+                        && antPathMatcher.match(api.getController(), clazz.getPackage().getName())
+        );
+    }
 
     @Bean
     @ConditionalOnMissingBean(name = "objectMapper")
@@ -58,7 +90,30 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         supportedMediaTypes.add(MediaType.TEXT_XML);
         messageConverter.setSupportedMediaTypes(supportedMediaTypes);
         //通过设置索引，让自己的转换器放在最前面，否则默认的jackson转换器会在前面，用不上自己配置的转换器
-        converters.add(0,messageConverter);
+        converters.add(0, messageConverter);
     }
 
+    // 跨域
+    @Bean
+    public CorsFilter corsFilter() {
+        //1.添加CORS配置信息
+        CorsConfiguration config = new CorsConfiguration();
+        //放行哪些原始域
+        config.addAllowedOrigin("*");
+        //是否发送Cookie信息
+        config.setAllowCredentials(false);
+        //放行哪些原始域(请求方式)
+        config.addAllowedMethod("*");
+        //放行哪些原始域(头部信息)
+        config.addAllowedHeader("*");
+        //暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）
+        config.addExposedHeader("*");
+
+        //2.添加映射路径
+        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
+        configSource.registerCorsConfiguration("/**", config);
+
+        //3.返回新的CorsFilter.
+        return new CorsFilter(configSource);
+    }
 }
