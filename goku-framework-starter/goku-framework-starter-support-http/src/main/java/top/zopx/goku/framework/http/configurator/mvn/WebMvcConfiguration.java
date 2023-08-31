@@ -2,6 +2,8 @@ package top.zopx.goku.framework.http.configurator.mvn;
 
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +33,7 @@ import java.util.List;
 @EnableWebMvc
 @EnableConfigurationProperties(WebProperties.class)
 public class WebMvcConfiguration implements WebMvcConfigurer {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfiguration.class);
     @Resource
     private WebProperties webProperties;
 
@@ -45,6 +47,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         if (null == api) {
             return;
         }
+
+        LOGGER.debug("api prefix = {},", api.getPrefix());
 
         AntPathMatcher antPathMatcher = new AntPathMatcher(".");
         configurer.addPathPrefix(
