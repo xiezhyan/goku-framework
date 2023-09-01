@@ -3,6 +3,7 @@ package top.zopx.goku.framework.http.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author Mr.Xie
@@ -12,24 +13,14 @@ import java.io.Serializable;
 @ConfigurationProperties(value = "goku.web")
 public class WebProperties implements Serializable {
 
-    private Api app;
+    private Map<String, Api>  match;
 
-    private Api admin;
-
-    public Api getApp() {
-        return app;
+    public Map<String, Api> getMatch() {
+        return match;
     }
 
-    public void setApp(Api app) {
-        this.app = app;
-    }
-
-    public Api getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Api admin) {
-        this.admin = admin;
+    public void setMatch(Map<String, Api> match) {
+        this.match = match;
     }
 
     public static class Api implements Serializable {

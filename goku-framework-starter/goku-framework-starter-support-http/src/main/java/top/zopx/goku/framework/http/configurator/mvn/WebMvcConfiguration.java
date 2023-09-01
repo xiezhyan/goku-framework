@@ -1,6 +1,7 @@
 package top.zopx.goku.framework.http.configurator.mvn;
 
 import jakarta.annotation.Resource;
+import org.apache.commons.collections4.MapUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +40,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void configurePathMatch(@NotNull PathMatchConfigurer configurer) {
-        configurePathMatch(configurer, webProperties.getApp());
-        configurePathMatch(configurer, webProperties.getAdmin());
+        if (MapUtils.isEmpty(webProperties.getMatch())) {
+            return;
+        }
+        webProperties.getMatch().forEach((k, v) -> configurePathMatch(configurer, v));
     }
 
     private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
