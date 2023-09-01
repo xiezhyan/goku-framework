@@ -15,7 +15,7 @@
     <name>${groupId}:${artifactId}:${parent.version}</name>
 
     <properties>
-        <s3.version>1.12.430</s3.version>
+        <s3.version>1.12.539</s3.version>
     </properties>
 
     <dependencies>
