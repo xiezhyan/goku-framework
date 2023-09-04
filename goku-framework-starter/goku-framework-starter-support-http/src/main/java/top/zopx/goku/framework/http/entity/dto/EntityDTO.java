@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class EntityDTO implements Serializable {
 
-    @NotNull(message = "主键不能为空", groups = {ValidGroup.Update.class, ValidGroup.Delete.class})
+    @NotNull(message = "entity.id.isnull", groups = {ValidGroup.Update.class, ValidGroup.Delete.class})
     private Long id;
     /**
      * 自定义参数

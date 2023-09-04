@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class SingleEntityDTO<T extends Serializable> implements Serializable {
 
-    @NotNull(message = "data不能为空")
+    @NotNull(message = "single.data.isnull")
     @Valid
     private T data;
 

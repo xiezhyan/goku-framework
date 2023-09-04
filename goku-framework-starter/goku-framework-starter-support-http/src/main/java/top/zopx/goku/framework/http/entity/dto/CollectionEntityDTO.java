@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public class CollectionEntityDTO<T extends Serializable> implements Serializable {
 
-    @NotNull(message = "操作对象不能为空")
+    @NotNull(message = "collection.data.isnull")
     @Valid
     private Collection<T> data;
 
