@@ -1,5 +1,6 @@
 package top.zopx.goku.framework.oss.service.impl;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import org.slf4j.Logger;
@@ -10,6 +11,11 @@ import top.zopx.goku.framework.tools.exception.BusException;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -18,7 +24,7 @@ import java.util.List;
  * @date 2023/3/22
  */
 public class OSSTemplateImpl implements OSSTemplate {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OSSTemplate.class);
 
     private final AmazonS3 amazonS3;
@@ -219,5 +225,16 @@ public class OSSTemplateImpl implements OSSTemplate {
             LOGGER.error(e.getMessage(), e);
         }
         throw new BusException(OssErrorEnum.LIST_PART_ERROR);
+    }
+
+    @Override
+    public URL generatePresignedUrl(String bucketName, String key, long expireTime, ChronoUnit unit, HttpMethod method) {
+        GeneratePresignedUrlRequest request =
+                new GeneratePresignedUrlRequest(bucketName, key, method)
+                        .withExpiration(
+                                Date.from(LocalDateTime.now().plus(expireTime, unit).atZone(ZoneId.systemDefault()).toInstant())
+                        )
+                        .withContentType("application/octet-stream");
+        return amazonS3.generatePresignedUrl(request);
     }
 }

@@ -1,9 +1,12 @@
 package top.zopx.goku.framework.oss.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.model.*;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -93,7 +96,7 @@ public interface OSSTemplate {
      * @return CopyObjectResult
      */
     Boolean copyObject(String sourceBucketName, String sourceKey,
-                                String destinationBucketName, String destinationKey);
+                       String destinationBucketName, String destinationKey);
 
 
     /**
@@ -195,4 +198,51 @@ public interface OSSTemplate {
      * @return PartListing
      */
     PartListing listParts(ListPartsRequest request);
+
+    /**
+     * 生成预上传链接
+     *
+     * @param bucketName bucketName
+     * @param key        key
+     * @return URL
+     */
+    default URL preUpload(String bucketName, String key) {
+        return preUpload(bucketName, key, 2L, ChronoUnit.MINUTES);
+    }
+
+    /**
+     * 生成预上传链接
+     *
+     * @param bucketName bucketName
+     * @param key        key
+     * @return URL
+     */
+    default URL preUpload(String bucketName, String key, long expireTime, ChronoUnit unit) {
+        return generatePresignedUrl(bucketName, key, expireTime, unit, HttpMethod.PUT);
+    }
+
+    /**
+     * 生成预下载链接
+     *
+     * @param bucketName bucketName
+     * @param key        key
+     * @return URL
+     */
+    default URL downloadURL(String bucketName, String key) throws Exception {
+        return downloadURL(bucketName, key, 2L, ChronoUnit.MINUTES);
+    }
+
+    /**
+     * 生成预下载链接
+     *
+     * @param bucketName bucketName
+     * @param key        key
+     * @return URL
+     */
+    default URL downloadURL(String bucketName, String key, long expireTime, ChronoUnit unit) throws Exception {
+        return generatePresignedUrl(bucketName, key, expireTime, unit, HttpMethod.GET);
+    }
+
+    URL generatePresignedUrl(String bucketName, String key, long expireTime, ChronoUnit unit, HttpMethod method);
+
 }
