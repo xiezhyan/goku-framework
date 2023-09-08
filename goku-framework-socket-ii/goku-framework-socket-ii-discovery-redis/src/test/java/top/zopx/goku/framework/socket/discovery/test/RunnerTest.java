@@ -7,6 +7,7 @@ import top.zopx.goku.framework.socket.core.circuit.chain.ReadConfRequestHandler;
 import top.zopx.goku.framework.socket.core.circuit.chain.RequestHandler;
 import top.zopx.goku.framework.socket.core.circuit.chain.StartServerRequestHandler;
 import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.msg.BaseMsgChannelAdapter;
 import top.zopx.goku.framework.socket.core.server.Server;
 import top.zopx.goku.framework.socket.core.server.Websocket;
 import top.zopx.goku.framework.socket.discovery.constant.RedisKeyEnum;
@@ -41,12 +42,7 @@ public class RunnerTest {
                                                 .setPath(Context.getServerPath())
                                                 .build()
                                 )
-                                .setChannelHandle(new IChannelHandle() {
-                                    @Override
-                                    public ChannelHandler createWebsocketMsgHandler() {
-                                        return IChannelHandle.super.createWebsocketMsgHandler();
-                                    }
-                                })
+                                .setChannelHandle(new HandlerChannelMsg())
                                 .build()
                 )
         );
@@ -70,4 +66,23 @@ public class RunnerTest {
         context.execute();
     }
 
+    public static class HandlerChannelMsg implements IChannelHandle {
+        @Override
+        public ChannelHandler createWebsocketMsgHandler() {
+            return new BaseMsgChannelAdapter() {
+                // 额外需要处理的流程
+                @Override
+                protected ChannelHandler[] getChannelHandlerArray() {
+                    return new ChannelHandler[0];
+                }
+
+                // 处理上线、下线、内部链接参数传递
+            };
+        }
+
+        @Override
+        public ChannelHandler createAppMsgHandler() {
+            return IChannelHandle.super.createAppMsgHandler();
+        }
+    }
 }
