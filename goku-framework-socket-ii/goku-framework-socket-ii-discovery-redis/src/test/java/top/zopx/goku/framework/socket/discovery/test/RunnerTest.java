@@ -2,10 +2,6 @@ package top.zopx.goku.framework.socket.discovery.test;
 
 import io.netty.channel.ChannelHandler;
 import org.junit.Test;
-import top.zopx.goku.framework.socket.core.circuit.Context;
-import top.zopx.goku.framework.socket.core.circuit.chain.ReadConfRequestHandler;
-import top.zopx.goku.framework.socket.core.circuit.chain.RequestHandler;
-import top.zopx.goku.framework.socket.core.circuit.chain.StartServerRequestHandler;
 import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
 import top.zopx.goku.framework.socket.core.cmd.msg.BaseMsgChannelAdapter;
 import top.zopx.goku.framework.socket.core.server.Server;
@@ -15,6 +11,11 @@ import top.zopx.goku.framework.socket.discovery.handle.RedisConfigureInitRequest
 import top.zopx.goku.framework.socket.discovery.handle.RedisReportServerInfoRequestHandler;
 import top.zopx.goku.framework.socket.discovery.handle.RedisSubRequestHandler;
 import top.zopx.goku.framework.socket.discovery.pubsub.ServerConnectSub;
+import top.zopx.goku.framework.socket.tools.circuit.Context;
+import top.zopx.goku.framework.socket.tools.circuit.chain.ReadConfRequestHandler;
+import top.zopx.goku.framework.socket.tools.circuit.chain.RequestHandler;
+import top.zopx.goku.framework.socket.tools.circuit.chain.StartServerRequestHandler;
+import top.zopx.goku.framework.socket.tools.reader.YamlReadStrategy;
 
 /**
  * @author Mr.Xie
@@ -31,7 +32,7 @@ public class RunnerTest {
     public static void main(String[] args) {
         Context context = new Context(args);
 
-        context.add(new ReadConfRequestHandler());
+        context.add(new ReadConfRequestHandler(new YamlReadStrategy()));
         context.add(new RedisConfigureInitRequestHandler());
         context.add(
                 new StartServerRequestHandler(

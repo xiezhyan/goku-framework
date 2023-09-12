@@ -1,8 +1,8 @@
 package top.zopx.goku.framework.socket.data.test;
 
 import org.junit.Test;
-import top.zopx.goku.framework.socket.core.circuit.Context;
-import top.zopx.goku.framework.socket.core.circuit.chain.RequestHandler;
+import top.zopx.goku.framework.socket.tools.circuit.Context;
+import top.zopx.goku.framework.socket.tools.circuit.chain.RequestHandler;
 import top.zopx.goku.framework.socket.data.mybatis.handle.MyBatisDaoConfigureInitRequestHandler;
 
 /**

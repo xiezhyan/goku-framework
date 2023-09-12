@@ -16,6 +16,10 @@
     <description>基于Netty的网络框架</description>
     <name>${groupId}:${artifactId}:${parent.version}</name>
 
+    <properties>
+        <jackson.yaml.version>2.12.5</jackson.yaml.version>
+    </properties>
+
     <modules>
         <module>goku-framework-socket-ii-core</module>
         <module>goku-framework-socket-ii-discovery-redis</module>

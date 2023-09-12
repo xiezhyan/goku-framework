@@ -2,7 +2,7 @@ package top.zopx.goku.framework.socket.core.constant.enums;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
-import top.zopx.goku.framework.socket.core.circuit.Context;
+import top.zopx.goku.framework.socket.tools.circuit.Context;
 import top.zopx.goku.framework.tools.exception.BusException;
 import top.zopx.goku.framework.tools.exception.IBus;
 
