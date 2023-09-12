@@ -19,6 +19,26 @@ import java.util.stream.Collectors;
  */
 public class ReadConfRequestHandler implements RequestHandler {
 
+    /**
+     * 配置文件解析器： JSON/YAML
+     *         <!-- Jackson data-binding -->
+     *         <dependency>
+     *             <groupId>com.fasterxml.jackson.core</groupId>
+     *             <artifactId>jackson-databind</artifactId>
+     *             <version>2.12.5</version>
+     *         </dependency>
+     *
+     *         <!-- Jackson YAML data-format -->
+     *         <dependency>
+     *             <groupId>com.fasterxml.jackson.dataformat</groupId>
+     *             <artifactId>jackson-dataformat-yaml</artifactId>
+     *             <version>2.12.5</version>
+     *         </dependency>
+     *
+     *      ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+     *         JsonNode config = objectMapper.readValue(Thread.currentThread().getContextClassLoader().getResource("application.yaml"), JsonNode.class);
+     */
+
     @Override
     public void handleRequest(Context context) {
         if (Boolean.FALSE.equals(context.hasKey(CommandLineEnum.SERVER_CONF.getLongOpt()))) {
