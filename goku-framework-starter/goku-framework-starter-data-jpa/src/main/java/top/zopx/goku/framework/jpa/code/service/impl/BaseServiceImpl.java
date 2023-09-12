@@ -54,7 +54,6 @@ public abstract class BaseServiceImpl
     public Boolean save(E body) {
         T entity = struct().copyToT(body);
         startToSave(body, entity);
-        buildToSave(entity);
         r.saveAndFlush(entity);
         stopToSave(body, entity);
         return Boolean.TRUE;
@@ -67,11 +66,7 @@ public abstract class BaseServiceImpl
             throw new BusException(ErrorEnum.ERROR_CREATE);
         }
         List<T> entityList = data.stream()
-                .map(item -> {
-                    T entity = struct().copyToT(item);
-                    buildToSave(entity);
-                    return entity;
-                })
+                .map(item -> struct().copyToT(item))
                 .toList();
         r.saveAllAndFlush(entityList);
         return Boolean.TRUE;
@@ -84,8 +79,6 @@ public abstract class BaseServiceImpl
         startToUpdate(body, entity);
         struct().copyIgnoreNull(body, entity);
         entity.setId(id);
-        entity.setUpdater(UserLoginHelper.getUserId());
-        entity.setUpdateTime(LocalDateTime.now());
         r.saveAndFlush(entity);
         stopToUpdate(body, entity);
         return Boolean.TRUE;
@@ -95,7 +88,7 @@ public abstract class BaseServiceImpl
     @Transactional(rollbackFor = Exception.class)
     public Boolean delete(Long id) {
         T entity = getById(id);
-        buildToDelete(entity);
+        entity.setIsDelete(1);
         startToDelete(entity);
         r.saveAndFlush(entity);
         stopToDelete(id);
@@ -107,10 +100,6 @@ public abstract class BaseServiceImpl
     public Boolean delete(Collection<Long> data) {
         List<T> entityList = r.findAll((Specification<T>) (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            // 不删除数据
-            predicates.add(
-                    criteriaBuilder.equal(root.get("isDelete"), 0)
-            );
             predicates.add(
                     root.get("id").in(data)
             );
@@ -125,10 +114,7 @@ public abstract class BaseServiceImpl
 
         r.saveAll(
                 entityList.stream()
-                        .map(item -> {
-                            buildToDelete(item);
-                            return item;
-                        }).toList()
+                        .peek(item -> item.setIsDelete(1)).toList()
         );
         stopToDelete(data);
         return Boolean.TRUE;
@@ -219,17 +205,4 @@ public abstract class BaseServiceImpl
     }
 
     protected abstract IStructMapping<E, V, T> struct();
-
-    private void buildToSave(T entity) {
-        entity.setCreater(UserLoginHelper.getUserId());
-        entity.setCreateTime(LocalDateTime.now());
-        entity.setIsDelete(0);
-    }
-
-    private void buildToDelete(T entity) {
-        entity.setDeleter(UserLoginHelper.getUserId());
-        entity.setDeleteTime(LocalDateTime.now());
-        entity.setIsDelete(1);
-    }
-
 }

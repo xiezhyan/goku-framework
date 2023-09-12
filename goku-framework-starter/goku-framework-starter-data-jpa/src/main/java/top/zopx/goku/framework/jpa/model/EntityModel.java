@@ -1,9 +1,6 @@
 package top.zopx.goku.framework.jpa.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serial;
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
  * @date 2022/3/4
  */
 @MappedSuperclass
+@EntityListeners(AutoPersistListener.class)
 public abstract class EntityModel implements Serializable {
 
     @Serial
