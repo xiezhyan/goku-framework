@@ -179,7 +179,7 @@ public class ServerRunner {
                     // 大型数据流
                     new ChunkedWriteHandler(),
                     new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
-                    new HeartBeatHandler(),
+                    new HeartBeatHandler(buildHeartBeat()),
                     new LoggingHandler(LogLevel.valueOf(server.getLogLevel().toUpperCase())),
                     msgHandler,
             };
@@ -212,12 +212,17 @@ public class ServerRunner {
     static class HeartBeatHandler extends ChannelDuplexHandler {
 
         private static final AtomicInteger COUNT = new AtomicInteger(0);
+        private final Consumer<ChannelHandlerContext> consumer;
+
+        public HeartBeatHandler(Consumer<ChannelHandlerContext> consumer) {
+            this.consumer = consumer;
+        }
 
         @Override
         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
             if (evt instanceof IdleStateEvent && COUNT.getAndIncrement() >= 3) {
-                LOGGER.warn("~~~{} 未发送数据，将强制下线~~~", ctx.channel().remoteAddress());
-                ctx.channel().disconnect().sync().await(2, TimeUnit.SECONDS);
+                LOGGER.warn("~~~ {} 长时间未发送数据，将对其进行处理~~~", ctx.channel().remoteAddress());
+                consumer.accept(ctx);
             }
         }
     }
@@ -236,7 +241,7 @@ public class ServerRunner {
             ChannelHandler[] handlers = {
                     msgHandler, // 消息处理器
                     new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
-                    new HeartBeatHandler(),
+                    new HeartBeatHandler(buildHeartBeat()),
                     new LoggingHandler(LogLevel.valueOf(server.getLogLevel().toUpperCase())),
             };
 
@@ -303,6 +308,16 @@ public class ServerRunner {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+    }
+
+    protected Consumer<ChannelHandlerContext> buildHeartBeat() {
+        return ctx -> {
+            try {
+                ctx.channel().disconnect().sync().await(2, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        };
     }
 
     private Class<? extends ServerChannel> getServerChannel() {
