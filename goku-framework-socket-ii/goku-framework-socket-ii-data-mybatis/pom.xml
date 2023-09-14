@@ -33,6 +33,6 @@
     </dependencies>
 
     <build>
-        <finalName>${name}</finalName>
+        <finalName>${project.artifactId}-${version}</finalName>
     </build>
 </project>

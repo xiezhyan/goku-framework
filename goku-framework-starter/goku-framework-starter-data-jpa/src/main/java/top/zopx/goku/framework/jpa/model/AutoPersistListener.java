@@ -29,10 +29,7 @@ public class AutoPersistListener {
     @PreUpdate
     public void preUpdate(EntityModel entity) {
         // 在修改之前设置相关字段的值
-        if (Objects.equals(1, entity.getIsDelete())) {
-            entity.setDeleter(UserLoginHelper.getUserId());
-            entity.setDeleteTime(LocalDateTime.now());
-        } else {
+        if (Objects.equals(0, entity.getIsDelete())) {
             entity.setUpdater(UserLoginHelper.getUserId());
             entity.setUpdateTime(LocalDateTime.now());
         }

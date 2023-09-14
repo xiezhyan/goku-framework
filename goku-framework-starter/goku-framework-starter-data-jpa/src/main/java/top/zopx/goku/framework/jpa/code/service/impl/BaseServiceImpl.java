@@ -87,10 +87,8 @@ public abstract class BaseServiceImpl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean delete(Long id) {
-        T entity = getById(id);
-        entity.setIsDelete(1);
-        startToDelete(entity);
-        r.saveAndFlush(entity);
+        startToDelete(id);
+        r.delete(id);
         stopToDelete(id);
         return Boolean.TRUE;
     }
@@ -98,24 +96,11 @@ public abstract class BaseServiceImpl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean delete(Collection<Long> data) {
-        List<T> entityList = r.findAll((Specification<T>) (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(
-                    root.get("id").in(data)
-            );
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        });
-
-        if (CollectionUtils.isEmpty(entityList)) {
+        if (CollectionUtils.isEmpty(data)) {
             return Boolean.TRUE;
         }
-
-        startToDelete(entityList);
-
-        r.saveAll(
-                entityList.stream()
-                        .peek(item -> item.setIsDelete(1)).toList()
-        );
+        startToDelete(data);
+        data.forEach(this.r::delete);
         stopToDelete(data);
         return Boolean.TRUE;
     }

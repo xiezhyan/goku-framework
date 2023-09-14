@@ -28,9 +28,9 @@ public interface LifeCycle<E extends EntityDTO, T extends EntityModel, V extends
 
     default void stopToUpdate(E body, T data) {}
 
-    default void startToDelete(List<T> data) {}
+    default void startToDelete(Collection<Long> data) {}
 
-    default void startToDelete(T data) {}
+    default void startToDelete(Long id) {}
 
     default void stopToDelete(Long id) {}
 

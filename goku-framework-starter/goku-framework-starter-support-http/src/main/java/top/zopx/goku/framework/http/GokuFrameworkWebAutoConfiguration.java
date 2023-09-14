@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import top.zopx.goku.framework.http.configurator.record.ApiLogAspect;
+import top.zopx.goku.framework.http.util.binding.aspect.TranslatorAspect;
 import top.zopx.goku.framework.http.util.log.LogHelper;
 
 /**
@@ -25,6 +26,11 @@ public class GokuFrameworkWebAutoConfiguration {
     @ConditionalOnProperty(prefix = "goku.record", name = "persist", havingValue = "true")
     public ApiLogAspect apiLogAspect() {
         return new ApiLogAspect();
+    }
+
+    @Bean
+    public TranslatorAspect translatorAspect() {
+        return new TranslatorAspect();
     }
 
     @PostConstruct

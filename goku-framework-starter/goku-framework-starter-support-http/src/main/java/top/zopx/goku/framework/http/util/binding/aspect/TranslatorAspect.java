@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import top.zopx.goku.framework.http.configurator.aop.IAspect;
 import top.zopx.goku.framework.http.context.SpringContext;
@@ -23,10 +24,17 @@ import java.util.Objects;
 
 @Order(2)
 @SuppressWarnings("all")
-public abstract class BaseTranslatorAspect implements IAspect {
+public class TranslatorAspect implements IAspect {
 
     @Resource
     private BindingAdapterFactory bindingAdapter;
+
+    @Override
+    @Pointcut("@annotation(top.zopx.goku.framework.http.util.binding.annotation.Bind) " +
+            "|| @within(top.zopx.goku.framework.http.util.binding.annotation.Bind))")
+    public void doPointcut() {
+        // document why this method is empty
+    }
 
     @Override
     @AfterReturning(pointcut = "doPointcut()", returning = "returing")
