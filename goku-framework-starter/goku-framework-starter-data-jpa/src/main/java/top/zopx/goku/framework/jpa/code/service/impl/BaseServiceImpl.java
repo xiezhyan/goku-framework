@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.zopx.goku.framework.http.constant.ErrorEnum;
 import top.zopx.goku.framework.http.entity.dto.EntityDTO;
 import top.zopx.goku.framework.http.entity.vo.EntityVO;
-import top.zopx.goku.framework.http.util.login.UserLoginHelper;
 import top.zopx.goku.framework.jpa.code.repository.BaseRepository;
 import top.zopx.goku.framework.jpa.code.service.IService;
 import top.zopx.goku.framework.jpa.model.EntityModel;
@@ -23,8 +23,10 @@ import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.exception.BusException;
 import top.zopx.goku.framework.tools.util.copy.IStructMapping;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Mr.Xie
@@ -170,6 +172,14 @@ public abstract class BaseServiceImpl
             predicates.add(
                     criteriaBuilder.equal(root.get("isDelete"), 0)
             );
+
+            if (MapUtils.isNotEmpty(body.getMap())) {
+                body.getMap().forEach((k, v) -> {
+                    predicates.add(
+                            criteriaBuilder.equal(root.get(k), v)
+                    );
+                });
+            }
 
             BaseServiceImpl.this.toPredicate(body, root, query, criteriaBuilder, predicates);
 
