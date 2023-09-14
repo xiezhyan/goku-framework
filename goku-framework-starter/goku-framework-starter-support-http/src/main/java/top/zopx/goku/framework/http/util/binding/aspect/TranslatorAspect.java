@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.collections4.CollectionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import top.zopx.goku.framework.http.configurator.aop.IAspect;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Order(2)
+@Aspect
 @SuppressWarnings("all")
 public class TranslatorAspect implements IAspect {
 
