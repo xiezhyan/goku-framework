@@ -25,8 +25,6 @@ public class Server {
 
     private final IChannelHandle channelHandle;
 
-    private final String logLevel;
-
     public Server(Builder builder) {
         this.readTimeout = builder.readTimeout;
         this.writeTimeout = builder.writeTimeout;
@@ -35,7 +33,6 @@ public class Server {
         this.app = builder.app;
         this.websocket = builder.websocket;
         this.channelHandle = builder.channelHandle;
-        this.logLevel = builder.logLevel;
     }
 
     public static Builder create() {
@@ -70,10 +67,6 @@ public class Server {
         return channelHandle;
     }
 
-    public String getLogLevel() {
-        return logLevel;
-    }
-
     public static class Builder {
 
         private Duration readTimeout = Duration.ofSeconds(45L);
@@ -89,8 +82,6 @@ public class Server {
         private App app;
 
         private IChannelHandle channelHandle;
-
-        private  String logLevel = "INFO";
 
         public Builder setReadTimeout(Duration readTimeout) {
             this.readTimeout = readTimeout;
@@ -124,11 +115,6 @@ public class Server {
 
         public Builder setChannelHandle(IChannelHandle channelHandle) {
             this.channelHandle = channelHandle;
-            return this;
-        }
-
-        public Builder setLogLevel(String logLevel) {
-            this.logLevel = logLevel;
             return this;
         }
 

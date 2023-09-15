@@ -17,6 +17,7 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.util.internal.logging.InternalLogLevel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +181,6 @@ public class ServerRunner {
                     new ChunkedWriteHandler(),
                     new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
                     new HeartBeatHandler(buildHeartBeat()),
-                    new LoggingHandler(LogLevel.valueOf(server.getLogLevel().toUpperCase())),
                     msgHandler,
             };
 
@@ -242,7 +242,6 @@ public class ServerRunner {
                     msgHandler, // 消息处理器
                     new IdleStateHandler(server.getReadTimeout().getSeconds(), server.getWriteTimeout().getSeconds(), 0, TimeUnit.SECONDS),
                     new HeartBeatHandler(buildHeartBeat()),
-                    new LoggingHandler(LogLevel.valueOf(server.getLogLevel().toUpperCase())),
             };
 
             for (ChannelHandler h : handlers) {

@@ -56,8 +56,8 @@
 
 
         <!-- netty 系列 start -->
-        <netty.version>4.1.90.Final</netty.version>
-        <protobuf.java.version>3.22.2</protobuf.java.version>
+        <netty.version>4.1.97.Final</netty.version>
+        <protobuf.java.version>3.24.3</protobuf.java.version>
         <guava.version>31.1-jre</guava.version>
         <cli.version>1.5.0</cli.version>
 
