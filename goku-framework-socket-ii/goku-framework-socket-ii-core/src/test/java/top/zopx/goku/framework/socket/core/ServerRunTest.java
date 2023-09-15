@@ -3,7 +3,7 @@ package top.zopx.goku.framework.socket.core;
 import io.netty.channel.ChannelHandler;
 import org.junit.Test;
 import top.zopx.goku.framework.socket.tools.circuit.Context;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.entity.ReportServerInfo;
 import top.zopx.goku.framework.socket.core.pubsub.IReport;
 import top.zopx.goku.framework.socket.core.server.Server;
@@ -30,10 +30,10 @@ public class ServerRunTest {
         context.add(
                 new StartServerRequestHandler(
                         () -> Server.create()
-                                .setChannelHandle(new IChannelHandle() {
+                                .setChannelHandle(new ISocketBusHandle() {
                                     @Override
                                     public ChannelHandler createWebsocketMsgHandler() {
-                                        return IChannelHandle.super.createWebsocketMsgHandler();
+                                        return ISocketBusHandle.super.createWebsocketMsgHandler();
                                     }
                                 })
                                 .build()

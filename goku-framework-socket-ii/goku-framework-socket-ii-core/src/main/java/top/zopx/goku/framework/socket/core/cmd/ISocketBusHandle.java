@@ -53,7 +53,7 @@ import io.netty.channel.ChannelHandler;
  * @email xiezhyan@126.com
  * @date 2023/3/23
  */
-public interface IChannelHandle {
+public interface ISocketBusHandle {
     /**
      * 创建APP消息处理器
      * @return ChannelHandler

@@ -8,7 +8,7 @@ import java.util.concurrent.*;
 
 /**
  * 异步操作处理器
- *
+ * <p>
  * 消息处理器，用来处理消息、编码、消息内容间的关系
  *
  * @author Mr.Xie
@@ -35,7 +35,7 @@ public final class AsyncOperationProcessor {
     }
 
     public AsyncOperationProcessor() {
-            int threadCount = Runtime.getRuntime().availableProcessors() << 2;
+        int threadCount = Runtime.getRuntime().availableProcessors() << 2;
 
         esArray = new ExecutorService[threadCount];
 

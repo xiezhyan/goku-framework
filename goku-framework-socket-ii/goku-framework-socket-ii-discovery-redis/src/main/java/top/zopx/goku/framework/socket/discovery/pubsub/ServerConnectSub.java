@@ -3,7 +3,7 @@ package top.zopx.goku.framework.socket.discovery.pubsub;
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
 import top.zopx.goku.framework.socket.tools.circuit.Context;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.entity.ReportServerInfo;
 import top.zopx.goku.framework.socket.core.pubsub.ISubscribe;
 import top.zopx.goku.framework.socket.core.selector.ClientProfile;
@@ -26,10 +26,10 @@ public class ServerConnectSub implements
         ISubscribe,
         MultiServer.ICloseCallback {
 
-    private final IChannelHandle channelHandle;
+    private final ISocketBusHandle channelHandle;
     private final String[] args;
 
-    public ServerConnectSub(IChannelHandle channelHandle, String... args) {
+    public ServerConnectSub(ISocketBusHandle channelHandle, String... args) {
         this.channelHandle = channelHandle;
         this.args = args;
     }

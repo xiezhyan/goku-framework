@@ -12,16 +12,13 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.internal.logging.InternalLogLevel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.util.Util;
 
 import java.util.Objects;
@@ -81,7 +78,7 @@ public class ServerRunner {
      */
     private final ThreadFactory workFactory = r -> new Thread(r, "goku-socket-work");
 
-    private final IChannelHandle channelHandle;
+    private final ISocketBusHandle channelHandle;
 
     public ServerRunner(Server server) {
         this.server = server;
@@ -209,7 +206,7 @@ public class ServerRunner {
                 .addListener(future -> this.destroy(this.websocketBoss, this.websocketWork));
     }
 
-    static class HeartBeatHandler extends ChannelDuplexHandler {
+    public static class HeartBeatHandler extends ChannelDuplexHandler {
 
         private static final AtomicInteger COUNT = new AtomicInteger(0);
         private final Consumer<ChannelHandlerContext> consumer;

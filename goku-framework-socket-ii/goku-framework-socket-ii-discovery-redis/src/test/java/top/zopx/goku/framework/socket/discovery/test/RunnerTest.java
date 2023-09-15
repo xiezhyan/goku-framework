@@ -2,7 +2,7 @@ package top.zopx.goku.framework.socket.discovery.test;
 
 import io.netty.channel.ChannelHandler;
 import org.junit.Test;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.cmd.msg.BaseMsgChannelAdapter;
 import top.zopx.goku.framework.socket.core.server.Server;
 import top.zopx.goku.framework.socket.core.server.Websocket;
@@ -43,17 +43,17 @@ public class RunnerTest {
                                                 .setPath(Context.getServerPath())
                                                 .build()
                                 )
-                                .setChannelHandle(new HandlerChannelMsg())
+                                .setChannelHandle(new HandlerSocketBusMsg())
                                 .build()
                 )
         );
         context.add(new RedisReportServerInfoRequestHandler());
         context.add(new RedisSubRequestHandler(
                 new String[]{RedisKeyEnum.REGISTER_SERVER.getKey()},
-                new ServerConnectSub(new IChannelHandle() {
+                new ServerConnectSub(new ISocketBusHandle() {
                     @Override
                     public ChannelHandler createWebsocketMsgHandler() {
-                        return IChannelHandle.super.createWebsocketMsgHandler();
+                        return ISocketBusHandle.super.createWebsocketMsgHandler();
                     }
                 }, "gateway_id", Context.getServerId() + "")
         ));
@@ -67,7 +67,7 @@ public class RunnerTest {
         context.execute();
     }
 
-    public static class HandlerChannelMsg implements IChannelHandle {
+    public static class HandlerSocketBusMsg implements ISocketBusHandle {
         @Override
         public ChannelHandler createWebsocketMsgHandler() {
             return new BaseMsgChannelAdapter() {
@@ -83,7 +83,7 @@ public class RunnerTest {
 
         @Override
         public ChannelHandler createAppMsgHandler() {
-            return IChannelHandle.super.createAppMsgHandler();
+            return ISocketBusHandle.super.createAppMsgHandler();
         }
     }
 }

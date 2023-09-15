@@ -1,7 +1,7 @@
 package top.zopx.goku.framework.socket.core.selector.connect;
 
 import com.google.gson.annotations.Expose;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class MultiServer {
     private final String websocketPath;
 
     @Expose(serialize = false, deserialize = false)
-    private final IChannelHandle channelHandle;
+    private final ISocketBusHandle channelHandle;
 
     @Expose(serialize = false, deserialize = false)
     private ICloseCallback closeCallback;
@@ -87,7 +87,7 @@ public class MultiServer {
         return websocketPath;
     }
 
-    public IChannelHandle getChannelHandle() {
+    public ISocketBusHandle getChannelHandle() {
         return channelHandle;
     }
 
@@ -114,7 +114,7 @@ public class MultiServer {
         private Boolean safe = Boolean.FALSE;
 
         @Expose(serialize = false, deserialize = false)
-        private IChannelHandle channelHandle;
+        private ISocketBusHandle channelHandle;
 
         @Expose(serialize = false, deserialize = false)
         private ICloseCallback closeCallback;
@@ -154,7 +154,7 @@ public class MultiServer {
             return this;
         }
 
-        public Builder setChannelHandle(IChannelHandle channelHandle) {
+        public Builder setChannelHandle(ISocketBusHandle channelHandle) {
             this.channelHandle = channelHandle;
             return this;
         }

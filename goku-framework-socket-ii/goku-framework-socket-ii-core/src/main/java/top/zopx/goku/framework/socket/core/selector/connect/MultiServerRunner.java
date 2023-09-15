@@ -17,7 +17,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.util.Util;
 
 import java.net.URI;
@@ -107,7 +107,7 @@ public class MultiServerRunner {
                                 @Override
                                 protected void initChannel(SocketChannel ch) {
                                     // 获取信道处理器工厂
-                                    IChannelHandle channelHandle = server.getChannelHandle();
+                                    ISocketBusHandle channelHandle = server.getChannelHandle();
                                     // 消息处理器
                                     ChannelHandler msgHandler = null;
 

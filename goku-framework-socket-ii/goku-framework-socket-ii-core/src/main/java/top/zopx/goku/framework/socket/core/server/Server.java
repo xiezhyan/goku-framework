@@ -1,6 +1,6 @@
 package top.zopx.goku.framework.socket.core.server;
 
-import top.zopx.goku.framework.socket.core.cmd.IChannelHandle;
+import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 
 import java.time.Duration;
 
@@ -23,7 +23,7 @@ public class Server {
 
     private final Websocket websocket;
 
-    private final IChannelHandle channelHandle;
+    private final ISocketBusHandle channelHandle;
 
     public Server(Builder builder) {
         this.readTimeout = builder.readTimeout;
@@ -63,7 +63,7 @@ public class Server {
         return websocket;
     }
 
-    public IChannelHandle getChannelHandle() {
+    public ISocketBusHandle getChannelHandle() {
         return channelHandle;
     }
 
@@ -81,7 +81,7 @@ public class Server {
 
         private App app;
 
-        private IChannelHandle channelHandle;
+        private ISocketBusHandle channelHandle;
 
         public Builder setReadTimeout(Duration readTimeout) {
             this.readTimeout = readTimeout;
@@ -113,7 +113,7 @@ public class Server {
             return this;
         }
 
-        public Builder setChannelHandle(IChannelHandle channelHandle) {
+        public Builder setChannelHandle(ISocketBusHandle channelHandle) {
             this.channelHandle = channelHandle;
             return this;
         }
