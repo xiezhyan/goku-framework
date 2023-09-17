@@ -111,7 +111,7 @@ public abstract class BaseMsgCodeRecognizer {
 
         for (Enum<?> enumVal : enumValArray) {
             if (!(enumVal instanceof Internal.EnumLite) ||
-                    Objects.equals(enumVal.name(), "_Dummy") ||
+                    Objects.equals(enumVal.name(), "_ZERO") ||
                     Objects.equals(enumVal.name(), "UNRECOGNIZED")) {
                 continue;
             }
