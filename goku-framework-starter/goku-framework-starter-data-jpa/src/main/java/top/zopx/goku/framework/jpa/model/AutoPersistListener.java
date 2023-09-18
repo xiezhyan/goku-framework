@@ -22,7 +22,9 @@ public class AutoPersistListener {
     public void prePersist(EntityModel entity) {
         // 在保存之前设置相关字段的值
         entity.setIsDelete(0);
-        entity.setCreater(UserLoginHelper.getUserId());
+        if (Objects.isNull(entity.getCreater())) {
+            entity.setCreater(UserLoginHelper.getUserId());
+        }
         entity.setCreateTime(LocalDateTime.now());
     }
 
