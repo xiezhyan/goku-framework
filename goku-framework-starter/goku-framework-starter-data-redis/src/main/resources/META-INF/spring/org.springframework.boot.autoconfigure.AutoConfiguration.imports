@@ -1,0 +1,3 @@
+top.zopx.goku.framework.redis.core.GokuFrameworkCacheAutoConfiguration
+top.zopx.goku.framework.redis.lock.GokuFrameworkLockAutoConfiguration
+top.zopx.goku.framework.redis.bus.GokuFrameworkBusAutoConfiguration

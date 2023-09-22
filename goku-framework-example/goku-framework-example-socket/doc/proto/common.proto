@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "proto/common";
+option java_package = "top.zopx.goku.example.socket.proto.common";
+
+enum CommonDef {
+  _Dummy = 0;
+  _PingRequest = 1;
+  _PingResponse = 2;
+  _Response = 3;
+  _KickOutUserResponse = 4;
+  _CheckInTicketRequest = 11;
+  _CheckInTicketResponse = 12;
+  _ReconnRequest = 13;
+  _ReconnResponse = 14;
+
+}
+
+// Ping 
+// =========================== //
+// 指令
+message PingRequest {
+  sint32 pingId = 1;
+}
+
+// 响应结果
+message PingResponse {
+  sint32 pingId = 1;
+}
+
+// 检票
+// =========================== //
+// 指令
+message CheckInTicketRequest {
+  // 用户 Id
+  int64 userId = 1;
+  // 票据, 该票据是在登录服务器上生成的
+  string ticket = 2;
+}
+
+// 响应结果
+message CheckInTicketResponse {
+  // 用户 Id
+  int64 userId = 1;
+  // 成功标志
+  bool succezz = 2;
+}
+
+// 断线重连
+// =========================== //
+// 指令
+message ReconnRequest {
+  // 用户 Id
+  int64 userId = 1;
+  // Ukey 字符串
+  string ukey = 2;
+  // Ukey 过期时间
+  sint64 ukeyExpireAt = 3;
+}
+
+// 响应结果
+message ReconnResponse {
+  // 用户 Id
+  int64 userId = 1;
+  // Ukey 字符串
+  string ukey = 2;
+  // Ukey 过期时间
+  sint64 ukeyExpire = 3;
+  // 是否成功
+  bool ok = 4;
+}
+
+
+// 提示
+// =========================== //
+// 结果
+message Response {
+  // 消息码
+  sint32 code = 1;
+  // 消息内容
+  string msg = 2;
+}
+
+//
+// 踢出用户
+// =========================== //
+// 结果
+message KickOutUserResponse {
+  // 理由
+  string reason = 1;
+}

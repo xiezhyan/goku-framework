@@ -1,0 +1,36 @@
+{
+  "ukey": {
+    "uKeyPassword": "123456",
+    "uKeyTTL": 2592000000
+  },
+  "redis": {
+    "server": {
+      "serverHost": "test.zopx.top",
+      "serverPort": 16379,
+      "index": 10,
+      "password": ""
+    },
+    "pubsub": {
+      "serverHost": "test.zopx.top",
+      "serverPort": 16379,
+      "index": 11,
+      "password": ""
+    }
+  },
+  "db": {
+    "biz": {
+      "serverHost": "test.zopx.top",
+      "serverPort": 13306,
+      "db": "test",
+      "userName": "root",
+      "password": "JKLjkl789**.."
+    },
+    "log": {
+      "serverHost": "test.zopx.top",
+      "serverPort": 13306,
+      "db": "test",
+      "userName": "root",
+      "password": "JKLjkl789**.."
+    }
+  }
+}

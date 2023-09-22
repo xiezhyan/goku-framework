@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package auth;
+
+option java_package = "top.zopx.goku.example.socket.proto.auth";
+
+enum AuthDef {
+  _Dummy = 0;
+  _LoginRequest = 100;
+  _LoginResponse = 101;
+  _LogoutRequest = 102;
+}
+
+// Ping 
+// =========================== //
+// 指令
+message LoginRequest {
+  // 登录方式,
+  // 0 = 测试登录, 1 = 账密登录, 2 = Ukey 登录, 3 = 手机号+验证码登录, 4 = 微信登录, 5 = 微信公众号登录, 6 = auth中台登录
+  sint32 loginType = 1;
+  // JSON 字符串, 可能会包含用户名称和密码
+  string login = 2;
+}
+
+// 响应结果
+message LoginResponse {
+  // 用户 Id,
+  // 如果是 -1 则说明登录失败
+  int64 userId = 1;
+  // 用户名称
+  string userName = 2;
+  // 入场票据
+  string ticket = 3;
+  // 数字证书字符串
+  string ukey = 4;
+  // 数字正说过期时间
+  sint64 ukeyExpireAt = 5;
+}
+
+message LogoutRequest {
+}

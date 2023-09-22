@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>goku-framework-dependency</artifactId>
+		<groupId>top.zopx</groupId>
+		<version>2.0.05_10</version>
+		<relativePath>../goku-framework-dependency/pom.xml</relativePath>
+	</parent>
+	
+	<groupId>top.zopx.goku</groupId>
+	<artifactId>goku-framework-example</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	
+	<name>goku-framework-example</name>
+	<packaging>pom</packaging>
+	<url>http://www.example.com</url>
+	
+	<modules>
+		<module>goku-framework-example-web-ii</module>
+		<module>goku-framework-example-socket</module>
+	</modules>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>17</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+ 
+	</build>
+</project>

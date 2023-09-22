@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zopx.goku.example.mapper.RoleMapper">
+
+    <resultMap type="top.zopx.goku.example.entity.Role" id="RoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="creater" column="creater" jdbcType="INTEGER"/>
+        <result property="deleteTime" column="delete_time" jdbcType="TIMESTAMP"/>
+        <result property="deleter" column="deleter" jdbcType="INTEGER"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="INTEGER"/>
+        <result property="key" column="key" jdbcType="VARCHAR"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="getById" resultMap="RoleMap">
+        select `id`,
+               `create_time`,
+               `creater`,
+               `delete_time`,
+               `deleter`,
+               `is_delete`,
+               `update_time`,
+               `updater`,
+               `key`,
+               `role_name`,
+               `status`
+        from tbl_test_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="getList" resultMap="RoleMap">
+        select
+        `id`, `create_time`, `creater`, `delete_time`, `deleter`, `is_delete`, `update_time`, `updater`, `key`,
+        `role_name`, `status`
+        from tbl_test_role
+        <where>
+            is_delete = 0
+            <if test="body.key != null and body.key != ''">
+                and `key` = #{body.key}
+            </if>
+            <if test="body.roleName != null and body.roleName != ''">
+                and `role_name` = #{body.roleName}
+            </if>
+            <if test="body.status != null">
+                and `status` = #{body.status}
+            </if>
+            <if test="startRow != null">
+                and id <![CDATA[ > ]]> #{startRow}
+            </if>
+            <if test="endRow != null">
+                and id <![CDATA[ < ]]> #{endRow}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="save">
+        insert into tbl_test_role(`id`, `create_time`, `creater`, `delete_time`, `deleter`, `is_delete`, `update_time`,
+                                  `updater`, `key`, `role_name`, `status`)
+        values (#{id}, #{createTime}, #{creater}, #{deleteTime}, #{deleter}, #{isDelete}, #{updateTime}, #{updater},
+                #{key}, #{roleName}, #{status})
+    </insert>
+
+    <insert id="saveBatch">
+        insert into tbl_test_role(`id`, `create_time`, `creater`, `delete_time`, `deleter`, `is_delete`, `update_time`,
+        `updater`, `key`, `role_name`, `status`)
+        values
+        <foreach collection="data" item="entity" separator=",">
+            (#{entity.id}, #{entity.createTime}, #{entity.creater}, #{entity.deleteTime}, #{entity.deleter},
+            #{entity.isDelete}, #{entity.updateTime}, #{entity.updater}, #{entity.key}, #{entity.roleName},
+            #{entity.status})
+        </foreach>
+    </insert>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tbl_test_role
+        <set>
+            <if test="body.createTime != null">
+                `create_time` = #{body.createTime},
+            </if>
+            <if test="body.creater != null">
+                `creater` = #{body.creater},
+            </if>
+            <if test="body.deleteTime != null">
+                `delete_time` = #{body.deleteTime},
+            </if>
+            <if test="body.deleter != null">
+                `deleter` = #{body.deleter},
+            </if>
+            <if test="body.isDelete != null">
+                `is_delete` = #{body.isDelete},
+            </if>
+            <if test="body.updateTime != null">
+                `update_time` = #{body.updateTime},
+            </if>
+            <if test="body.updater != null">
+                `updater` = #{body.updater},
+            </if>
+            <if test="body.key != null and body.key != ''">
+                `key` = #{body.key},
+            </if>
+            <if test="body.roleName != null and body.roleName != ''">
+                `role_name` = #{body.roleName},
+            </if>
+            <if test="body.status != null">
+                `status` = #{body.status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <update id="updateIsDeleteToYes">
+        update tbl_test_role
+        set is_delete  = 1,
+            deleter=#{deleter},
+            delete_time=now()
+        where id = #{id}
+    </update>
+
+    <update id="updateIsDeleteToYesBatch">
+        update tbl_test_role set is_delete = 1, deleter=#{deleter}, delete_time=now() where id in
+        (<foreach collection="data" item="entity" separator=",">#{entity}</foreach>)
+    </update>
+
+</mapper>
+

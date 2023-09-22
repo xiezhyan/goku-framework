@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%red(【%d{yyyy-MM-dd HH:mm:ss.SSS}】) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger) %cyan(%msg %n)</pattern>
+		</encoder>
+	</appender>
+	
+	<springProperty scope="context" name="appName" source="spring.application.name"/>
+	<springProperty scope="context" name="level" source="goku.log.level"/>
+	
+	<appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>.\logs\${appName}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>.\logs\${appName}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
+			<maxFileSize>100MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
+<!--		<encoder>-->
+<!--			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} |#| [%thread] |#| %-5level |#| %logger |#| %msg %n</pattern>-->
+<!--		</encoder>-->
+		<encoder charset="UTF-8" class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+			<providers>
+				<pattern>
+					<pattern>
+						{
+						<!--服务名称-->
+						"appName": "${appName}",
+						<!--打印时间-->
+						"time": "%date{yyyy-MM-dd HH:mm:ss.SSS}",
+						<!--日志级别-->
+						"level": "%level",
+						<!--进程ID-->
+						"pid": "${PID:-}",
+						<!--线程名-->
+						"thread": "%thread",
+						<!--全限定类名-->
+						"class": "%logger",
+						<!--类中的哪个方法-->
+						"method": "%method",
+						<!--类中的第几行-->
+						"line": "%line",
+						<!--日志打印的信息-->
+						"message": "%message",
+						<!--堆栈异常信息-->
+						"statck_trace":"%xEx"
+						}
+					</pattern>
+				</pattern>
+			</providers>
+		</encoder>
+	</appender>
+	
+	<root level="${level}">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="ROLLING"/>
+	</root>
+</configuration>

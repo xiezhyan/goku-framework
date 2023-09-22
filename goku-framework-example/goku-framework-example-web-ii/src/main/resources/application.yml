@@ -1,0 +1,91 @@
+host: ${GOKU_EXAMPLE_HOST:test.zopx.top}
+
+server:
+  port: 8889
+spring:
+  application:
+    name: goku-example-web
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${host}:13306/test?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: JKLjkl123**..
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+  messages:
+    basename: i18n/messages,i18n/ValidationMessages
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  data:
+    redis:
+      host: ${host}
+      port: 16379
+  profiles:
+    active: local
+
+  cloud:
+    nacos:
+      server-addr: ${host}
+      username: nacos
+      password: nacos
+      discovery:
+        namespace: ${spring.profiles.active}
+        group: ${ENJOY_NACOS_GROUP:DEFAULT_GROUP}
+      config:
+        namespace: ${spring.profiles.active}
+        file-extension: yaml
+        group: ${ENJOY_NACOS_GROUP:DEFAULT_GROUP}
+  security:
+    user:
+      name: admin
+      password: $2a$10$L5i4z9iKePtPinZs6iZZLeaJuPgqan/aUeNvhJON8BExFWMGZ79xe
+
+
+goku:
+  mysql:
+    binlog:
+      host: ${host}
+      port: 13306
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+  log:
+    level: info
+
+  oss:
+    end-point:  http://192.168.86.200:9000
+    access-key: minioAdmin
+    secret-key: minioAdmin
+
+  #  mkdir -p /mnt/minio/{data,config}
+#  docker run -d -p 9001:9000 --name minio \
+#   -e "MINIO_ACCESS_KEY=minioAdmin" \
+#   -e "MINIO_SECRET_KEY=minioAdmin" \
+#   -v /mnt/minio/data:/data \
+#   -v /mnt/minio/config:/root/.minio \
+#   minio/minio server /data \
+#     --console-address ":9090" -address ":9000"
+
+logging:
+  level:
+    top:
+      zopx:
+        goku:
+          example: debug
+          framework:
+            redis:
+              lock: debug
+    com:
+      alibaba: error
+    org:
+      redisson: error
+mybatis:
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  configuration:
+    shrink-whitespaces-in-sql: true
+
