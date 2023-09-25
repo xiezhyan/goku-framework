@@ -1,6 +1,7 @@
 package top.zopx.goku.framework.socket.discovery.test;
 
 import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelPipeline;
 import org.junit.Test;
 import top.zopx.goku.framework.socket.core.cmd.ISocketBusHandle;
 import top.zopx.goku.framework.socket.core.cmd.msg.BaseMsgChannelAdapter;
@@ -73,10 +74,9 @@ public class RunnerTest {
             return new BaseMsgChannelAdapter() {
                 // 额外需要处理的流程
                 @Override
-                protected ChannelHandler[] getChannelHandlerArray() {
-                    return new ChannelHandler[0];
-                }
+                public void handlerAdded(ChannelPipeline pipeline) {
 
+                }
                 // 处理上线、下线、内部链接参数传递
             };
         }

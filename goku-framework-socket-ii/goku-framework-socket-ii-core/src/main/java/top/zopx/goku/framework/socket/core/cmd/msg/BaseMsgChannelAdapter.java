@@ -14,17 +14,9 @@ import io.netty.channel.ChannelPipeline;
  */
 public abstract class BaseMsgChannelAdapter extends ChannelDuplexHandler {
 
-    /**
-     * 输出对应的 ChannelHandler信息
-     * example:
-     *  ChannelHandler[] hArray = {
-     *     new InternalMsgDecoder(),
-     *     new InternalMsgEncoder(),
-     * };
-     *
-     * @return ChannelHandler[]
-     */
-    protected abstract ChannelHandler[] getChannelHandlerArray();
+    public void handlerAdded(ChannelPipeline pipeline) {
+
+    }
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -32,16 +24,6 @@ public abstract class BaseMsgChannelAdapter extends ChannelDuplexHandler {
             return;
         }
 
-        ChannelPipeline pl = ctx.pipeline();
-
-        for (ChannelHandler h : getChannelHandlerArray()) {
-            // 获取处理器类
-            Class<? extends ChannelHandler>
-                    hClazz = h.getClass();
-
-            if (null == pl.get(hClazz)) {
-                pl.addBefore(ctx.name(), hClazz.getSimpleName(), h);
-            }
-        }
+        handlerAdded(ctx.pipeline());
     }
 }
