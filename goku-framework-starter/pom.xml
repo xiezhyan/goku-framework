@@ -24,7 +24,6 @@
         <module>goku-framework-starter-data-oss</module>
         <module>goku-framework-starter-support-http</module>
         <module>goku-framework-starter-support-primary</module>
-        <module>goku-framework-starter-support-binlog</module>
         <module>goku-framework-starter-support-activiti</module>
     </modules>
     

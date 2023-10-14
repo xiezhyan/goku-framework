@@ -43,12 +43,6 @@
             <version>${goku.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>top.zopx</groupId>
-            <artifactId>goku-framework-starter-support-binlog</artifactId>
-            <version>${goku.version}</version>
-        </dependency>
-
         <!--Kaptcha-->
         <dependency>
             <groupId>com.github.penggle</groupId>
