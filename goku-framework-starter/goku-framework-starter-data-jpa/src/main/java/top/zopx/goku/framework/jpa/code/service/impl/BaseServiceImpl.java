@@ -23,10 +23,7 @@ import top.zopx.goku.framework.tools.entity.vo.Pagination;
 import top.zopx.goku.framework.tools.exception.BusException;
 import top.zopx.goku.framework.tools.util.copy.IStructMapping;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Mr.Xie
@@ -90,7 +87,7 @@ public abstract class BaseServiceImpl
     @Transactional(rollbackFor = Exception.class)
     public Boolean delete(Long id) {
         startToDelete(id);
-        r.delete(id);
+        r.delete(Collections.singleton(id));
         stopToDelete(id);
         return Boolean.TRUE;
     }
@@ -102,7 +99,7 @@ public abstract class BaseServiceImpl
             return Boolean.TRUE;
         }
         startToDelete(data);
-        data.forEach(this.r::delete);
+        this.r.delete(data);
         stopToDelete(data);
         return Boolean.TRUE;
     }

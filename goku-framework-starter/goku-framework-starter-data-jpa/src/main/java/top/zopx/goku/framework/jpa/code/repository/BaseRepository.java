@@ -17,7 +17,7 @@ import java.util.Collection;
 public interface BaseRepository<T extends EntityModel> extends JpaRepository<T, Long>, JpaSpecificationExecutor<T> {
 
     @Transactional
-    @Query("UPDATE #{#entityName} SET isDelete = 1, deleteTime = now() WHERE id = ?1")
+    @Query("UPDATE #{#entityName} SET isDelete = 1, deleteTime = now() WHERE id IN (?1)")
     @Modifying
-    void delete(Long id);
+    void delete(Collection<Long> id);
 }
