@@ -2,12 +2,14 @@ package top.zopx.goku.framework.socket.data.mybatis;
 
 import com.google.gson.JsonObject;
 import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.zopx.goku.framework.socket.data.mybatis.annotation.DAO;
@@ -20,7 +22,6 @@ import top.zopx.goku.framework.tools.util.reflection.PackageUtil;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -95,14 +96,27 @@ public final class MybatisDao {
                                 clazz -> null != clazz && null != clazz.getAnnotation(DAO.class)
                         );
 
-                        // MySql 会话工厂
-                        final SqlSessionFactory ssf = new SqlSessionFactoryBuilder().build(
-                                Resources.getResourceAsStream("mybatis.config.xml"),
-                                buildSessionProp(configure)
-                        );
+                        //<environments default="OFFICIAL">
+                        //        <environment id="OFFICIAL">
+                        //            <transactionManager type="JDBC"/>
+                        //            <dataSource type="top.zopx.goku.framework.socket.data.mybatis.CustomDataSourceFactory">
+                        //                <property name="hikari" value="${hikari}"/>
+                        //            </dataSource>
+                        //        </environment>
+                        //    </environments>
 
                         // 获取工厂配置
-                        Configuration mybatisConf = ssf.getConfiguration();
+                        buildSessionProp(configure);
+
+                        Configuration mybatisConf =
+                                new Configuration(
+                                        new Environment(
+                                                "OFFICIAL",
+                                                new JdbcTransactionFactory(),
+                                                new HikariDataSource(configure.getHikari())
+                                        )
+                                );
+
 
                         for (Class<?> daoClazz : daoClazzSet) {
                             if (null != daoClazz) {
@@ -110,6 +124,9 @@ public final class MybatisDao {
                                 mybatisConf.addMapper(daoClazz);
                             }
                         }
+
+                        // MySql 会话工厂
+                        final SqlSessionFactory ssf = new SqlSessionFactoryBuilder().build(mybatisConf);
 
                         // 测试数据库会话
                         try (SqlSession testSession = ssf.openSession()) {
@@ -132,16 +149,13 @@ public final class MybatisDao {
                 });
     }
 
-    private static Properties buildSessionProp(JdbcConfigure configure) {
-        Properties newProp = new Properties();
+    private static void buildSessionProp(JdbcConfigure configure) {
         HikariConfig hikari = configure.getHikari();
         hikari.setDriverClassName(configure.getDriverClassName());
         hikari.setJdbcUrl(configure.getJdbc());
         hikari.setUsername(configure.getUserName());
         hikari.setPassword(configure.getPassword());
         hikari.setPoolName("goku-socket-mysql");
-        newProp.setProperty("hikari", GsonUtil.getInstance().toJson(hikari));
-        return newProp;
     }
 
     public static SqlSession getMain() {

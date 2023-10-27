@@ -1,13 +1,4 @@
 {
-  "application": {
-    "serverId": 1001,
-    "name": "",
-    "job": [],
-    "server": {
-      "port": 12345,
-      "path": "/ws"
-    }
-  },
   "ukey": {
     "password": "abc12345",
     "ttl": 2592000
@@ -25,7 +16,7 @@
       "driverClassName": "com.mysql.cj.jdbc.Driver",
       "jdbc": "jdbc:mysql://test.zopx.top:13306/test",
       "userName": "root",
-      "password": "JKLjkl789**.."
+      "password": "JKLjkl123**.."
     }
   }
 }
